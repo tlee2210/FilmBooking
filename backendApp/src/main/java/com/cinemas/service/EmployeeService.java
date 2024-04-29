@@ -1,12 +1,13 @@
 package com.cinemas.service;
 
 import com.cinemas.dto.EmployeeDTO;
+import com.cinemas.dto.request.EmployeeRequest;
 import com.cinemas.entity.Employee;
 
 import java.util.List;
 
 public interface EmployeeService {
-    void addEmployee(Employee employee);
+    void addEmployee(EmployeeRequest employee);
 
     List<Employee> getAllEmployee();
 

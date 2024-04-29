@@ -1,15 +1,23 @@
 package com.cinemas.controller;
 
 import com.cinemas.dto.EmployeeDTO;
+import com.cinemas.dto.request.EmployeeRequest;
 import com.cinemas.entity.Employee;
 import com.cinemas.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import lombok.RequiredArgsConstructor;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
 
+@RestController
+@RequestMapping("/api/employees")
+@RequiredArgsConstructor
+@Tag(name = " admin User Controller")
 public class EmployeeController {
     @Autowired
     private EmployeeService service;
@@ -22,7 +30,7 @@ public class EmployeeController {
      */
     @Operation(method = "POST", summary = "Add new employee", description = "Send a request via this API to create new employee")
     @PostMapping("/add")
-    public String addEmployee(@RequestBody Employee employee) {
+    public String addEmployee(@RequestBody EmployeeRequest employee) {
         service.addEmployee(employee);
         return "Success add Employes";
     }
@@ -32,9 +40,14 @@ public class EmployeeController {
      *
      * @return
      */
+//    @GetMapping()
+//    public List<Employee> getAllEmployee() {
+//        return service.getAllEmployee();
+//    }
     @GetMapping()
-    public List<Employee> getAllEmployee() {
-        return service.getAllEmployee();
+    public ResponseEntity<List<Employee>> getAllEmployee() {
+        List<Employee> employees = service.getAllEmployee();
+        return new ResponseEntity<>(employees, HttpStatus.OK);
     }
 
     /**

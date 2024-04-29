@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @Entity
 @NoArgsConstructor
@@ -20,4 +22,6 @@ public class Employee {
     private String no;
     @Column
     private String name;
+    @Column
+    private LocalDate DOB;
 }
