@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
                 String errorMessage = Objects.nonNull(attributes)
                         ? mapAttribute(errortype.getMessageDetail(), attributes)
                         : errortype.getMessageDetail();
-
+                errorMessage = errorMessage.replace("{field}", error.getField());
                 errors.put(error.getField(), errorMessage);
             });
 
@@ -81,6 +81,7 @@ public class GlobalExceptionHandler {
         apiResponse.setCode(errorCode.getStatusCode().value());
         apiResponse.setMessage(errorCode.getMessage());
         apiResponse.setResult(errors);
+
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
