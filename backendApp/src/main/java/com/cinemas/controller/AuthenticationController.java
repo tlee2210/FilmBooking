@@ -7,6 +7,7 @@ import com.cinemas.dto.response.APIResponse;
 import com.cinemas.dto.response.JwtAuthenticationResponse;
 import com.cinemas.entity.User;
 import com.cinemas.service.AuthenticationService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@Tag(name = "Authentication Controller")
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
 

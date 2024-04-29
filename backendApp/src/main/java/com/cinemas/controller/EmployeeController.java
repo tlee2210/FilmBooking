@@ -5,6 +5,7 @@ import com.cinemas.dto.request.EmployeeRequest;
 import com.cinemas.entity.Employee;
 import com.cinemas.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/employees")
 @RequiredArgsConstructor
-@Tag(name = " admin User Controller")
+@Tag(name = "User Controller")
 public class EmployeeController {
     @Autowired
     private EmployeeService service;
@@ -30,7 +31,7 @@ public class EmployeeController {
      */
     @Operation(method = "POST", summary = "Add new employee", description = "Send a request via this API to create new employee")
     @PostMapping("/add")
-    public String addEmployee(@RequestBody EmployeeRequest employee) {
+    public String addEmployee(@RequestBody @Valid EmployeeRequest employee) {
         service.addEmployee(employee);
         return "Success add Employes";
     }
