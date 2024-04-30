@@ -1,0 +1,253 @@
+@if $theme-minimal {
+
+    // Google Font
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
+
+    [data-theme="minimal"] { 
+
+        $primary:                   #25a0e2;
+        $secondary:                 #878a99;
+        $danger:                    #f06548;
+        $warning:                   #FFBC0A;
+        $info:                      #32ccff;
+        $success:                   #00bd9d;
+        $dark:                      #343a40;
+        $light:                     #f1f4f7;
+        
+        //Typography
+        $font-sizes: (
+            "10":          0.625rem,
+            "11":          0.6875rem,
+            "12":          0.75rem,
+            "13":          0.8125rem,
+            "14":          0.875rem,
+            "base":        0.875rem, //14px
+            "15":          0.9375rem,
+            "16":          1rem,
+            "17":          1.0625rem,
+            "18":          1.125rem,
+            "19":          1.1875rem,
+            "20":          1.25rem,
+            "21":          1.3125rem,
+            "22":          1.375rem,
+            "23":          0.8125rem,
+            "24":          1.5rem,            
+            "36":          2.25rem,
+            "48":          3rem,
+        );
+
+        $font-weights: (
+            "light"         300,
+            "normal"        400,
+            "medium"        500,
+            "semibold"      600,
+            "bold"          700,
+        );
+
+        // Font Family
+        --#{$prefix}font-family-primary:                                     'Open Sans', sans-serif;
+        --#{$prefix}font-family-secondary:                                   'Open Sans', sans-serif;
+        
+        --#{$prefix}grid-gutter-width:                              1.5rem;
+
+        --#{$prefix}body-bg:                                        #ffffff;
+        --#{$prefix}body-bg-rgb:                                    #(to-rgb(#ffffff));
+
+        --#{$prefix}headings-font-weight:                           600;
+        --#{$prefix}btn-font-weight-custom:                         500;
+
+        --#{$prefix}element-shadow:                                 none;
+
+        //cards
+        --#{$prefix}card-border-width-custom:                       1px;
+        --#{$prefix}card-header-border-width:                       1px;
+        --#{$prefix}card-shadow:                                    none;
+        
+        //sidebar menu
+        --#{$prefix}vertical-menu-item-font-size:                   0.9375rem;
+        --#{$prefix}vertical-menu-sub-item-font-size:               0.875rem;
+
+        --#{$prefix}vertical-menu-bg:                                   #f6f8fa;
+        --#{$prefix}vertical-menu-border:                               var(--#{$prefix}border-color);
+        --#{$prefix}vertical-menu-item-color:                           #{darken($gray-600, 10%)};
+        --#{$prefix}vertical-menu-item-bg:                              #{rgba(var(--#{$prefix}primary-rgb), .15)};
+        --#{$prefix}vertical-menu-item-hover-color:                     var(--#{$prefix}primary);
+        --#{$prefix}vertical-menu-item-active-color:                    var(--#{$prefix}primary);
+        --#{$prefix}vertical-menu-item-active-bg:                       #{rgba(var(--#{$prefix}primary-rgb), .15)};
+        --#{$prefix}vertical-menu-sub-item-color:                       #{darken($gray-600, 4%)};
+        --#{$prefix}vertical-menu-sub-item-hover-color:                 var(--#{$prefix}primary);
+        --#{$prefix}vertical-menu-sub-item-active-color:                var(--#{$prefix}primary);
+        --#{$prefix}vertical-menu-title-color:                          #919da9;
+        --#{$prefix}vertical-menu-box-shadow:                           none;
+        --#{$prefix}vertical-menu-dropdown-box-shadow:                  0 2px 4px rgba(15, 34, 58, 0.12);
+        --#{$prefix}sidebar-user-bg:                                    #{$light};
+        --#{$prefix}sidebar-user-name-text:                             #{darken($gray-700, 10%)};
+        --#{$prefix}sidebar-user-name-sub-text:                         #{darken($gray-600, 4%)};
+
+        &[data-sidebar="dark"] {
+            //vertical dark
+            --#{$prefix}vertical-menu-bg:                               #0A2B3D;
+            --#{$prefix}vertical-menu-border:                           #0A2B3D;
+            --#{$prefix}vertical-menu-item-color:                       #9aaab3;
+            --#{$prefix}vertical-menu-item-bg:                          #{rgba($white, .15)};
+            --#{$prefix}vertical-menu-item-hover-color:                 #{$white};
+            --#{$prefix}vertical-menu-item-active-color:                #{$white};
+            --#{$prefix}vertical-menu-item-active-bg:                   #{rgba($white, .15)};
+            --#{$prefix}vertical-menu-sub-item-color:                   #9aaab3;
+            --#{$prefix}vertical-menu-sub-item-hover-color:             #{$white};
+            --#{$prefix}vertical-menu-sub-item-active-color:            #{$white};
+            --#{$prefix}vertical-menu-title-color:                      #aeafaf;
+            --#{$prefix}twocolumn-menu-iconview-bg:                     #092534;
+            --#{$prefix}vertical-menu-box-shadow:                       none;
+            --#{$prefix}vertical-menu-dropdown-box-shadow:              0 2px 4px rgba(15, 34, 58, 0.12);
+            --#{$prefix}sidebar-user-bg:                                #{rgba($white, .08)};
+            --#{$prefix}sidebar-user-name-text:                         #{$white};
+            --#{$prefix}sidebar-user-name-sub-text:                     #{tint-color(#0A2B3D, 65%)};
+        }
+
+        // Topbar - (Default Light)
+        --#{$prefix}header-bg:                                          #{$white};
+        --#{$prefix}header-border:                                      #{$border-color};
+        --#{$prefix}header-item-color:                                  #{$gray-700};
+        --#{$prefix}header-item-bg:                                     #{rgba($secondary, .12)};
+        --#{$prefix}header-item-sub-color:                              #878a99;
+        --#{$prefix}topbar-search-bg:                                   #f3f3f9;
+        --#{$prefix}topbar-user-bg:                                     #f3f3f9;
+        --#{$prefix}topbar-search-color:                                #{$gray-700};
+        
+        // Topbar - Dark
+        &[data-topbar="dark"] {
+            --#{$prefix}header-bg:                                      #133b50;
+            --#{$prefix}header-border:                                  #133b50;
+            --#{$prefix}header-item-color:                              #{rgba($white, .85)};
+            --#{$prefix}header-item-bg:                                 #16445c;
+            --#{$prefix}header-item-sub-color:                          #b0c4d9;
+            --#{$prefix}topbar-user-bg:                                 #214c62;
+            --#{$prefix}topbar-search-bg:                               #{rgba($white, .05)};
+            --#{$prefix}topbar-search-color:                            #{$white};
+        }
+
+        &[data-sidebar="gradient"] {
+            --#{$prefix}vertical-menu-bg:                               #{linear-gradient(to right, var(--#{$prefix}primary), var(--#{$prefix}success))};
+            --#{$prefix}vertical-menu-border:                           var(--#{$prefix}success);
+            --#{$prefix}twocolumn-menu-iconview-bg:                     var(--#{$prefix}primary);
+        }
+        
+        &[data-sidebar="gradient-2"] {
+            --#{$prefix}vertical-menu-bg:                               #{linear-gradient(to right, var(--#{$prefix}info), var(--#{$prefix}secondary))};
+            --#{$prefix}vertical-menu-border:                           var(--#{$prefix}secondary); 
+            --#{$prefix}twocolumn-menu-iconview-bg:                     var(--#{$prefix}info);
+        }
+        
+        &[data-sidebar="gradient-3"] {
+            --#{$prefix}vertical-menu-bg:                               #{linear-gradient(to right, var(--#{$prefix}info), var(--#{$prefix}success))};
+            --#{$prefix}vertical-menu-border:                           var(--#{$prefix}success);
+            --#{$prefix}twocolumn-menu-iconview-bg:                     var(--#{$prefix}info);
+        }
+        
+        &[data-sidebar="gradient-4"] {
+            --#{$prefix}vertical-menu-bg:                               #{linear-gradient(to right, #1a1d21, var(--#{$prefix}primary))};
+            --#{$prefix}vertical-menu-border:                           var(--#{$prefix}primary);
+            --#{$prefix}twocolumn-menu-iconview-bg:                     #1a1d21;
+        }
+
+        //page title 
+        --#{$prefix}page-title-box-shadow:                              none;
+        --#{$prefix}page-title-border:                                  var(--#{$prefix}border-color);
+
+        //footer
+        --#{$prefix}footer-bg:                                          #f6f8fa;
+        --#{$prefix}footer-color:                                       #98a6ad;
+        
+        //Boxed layout
+        --#{$prefix}boxed-body-bg:                                      #f5f5f5;
+        
+        --#{$prefix}timeline-color:                                     var(--#{$prefix}border-color);
+
+        --#{$prefix}chat-primary-bg:                                    var(--#{$prefix}light);
+        --#{$prefix}chat-secondary-bg:                                  rgba(var(--#{$prefix}primary-rgb), 0.15);
+        --#{$prefix}chat-secondary-color:                               var(--#{$prefix}primary);
+
+        $custom-theme-colors: (
+            "primary":          $primary,
+            "secondary":        $secondary,
+            "danger":           $danger,
+            "warning":          $warning,
+            "info":             $info,
+            "success":          $success,
+            "dark":             $dark,
+            "light":            $light
+        );
+        
+        @each $name, $value in $custom-theme-colors {   
+            --#{$prefix}#{$name}:                                        #{$value};
+            --#{$prefix}#{$name}-rgb:                                    #{to-rgb($value)};
+            --#{$prefix}#{$name}-bg-subtle:                              #{rgba($value, 0.15)};
+            --#{$prefix}#{$name}-border-subtle:                          #{rgba($value, 0.30)};
+            --#{$prefix}#{$name}-text-emphasis:                          #{shade-color($value, 25%)};
+        }
+
+        --#{$prefix}link-color:                                         #{$primary};
+        --#{$prefix}link-color-rgb:                                     #{to-rgb($primary)};
+        --#{$prefix}link-hover-color:                                   #{shade-color($primary, 20%)};
+        --#{$prefix}link-hover-color-rgb:                               #{to-rgb(shade-color($primary, 20%))};
+
+        @each $name, $value in $font-sizes { 
+            --#{$prefix}font-#{$name}:          #{$value};
+        }
+    
+        @each $name, $value in $font-weights { 
+            --#{$prefix}font-weight-#{$name}:   #{$value};
+        }
+
+        .minimal-border {
+            border: 1px solid #{var(--#{$prefix}border-color)};
+        }
+
+        &[data-theme-colors="green"] {
+            --#{$prefix}primary:                                        #{$green-600};
+            --#{$prefix}primary-rgb:                                    #{to-rgb($green-600)};
+            --#{$prefix}primary-bg-subtle:                              #{rgba($green-600, 0.15)};
+            --#{$prefix}primary-border-subtle:                          #{rgba($green-600, 0.30)};
+            --#{$prefix}primary-text-emphasis:                          #{shade-color($green-600, 25%)};
+        }
+
+        &[data-theme-colors="purple"] {
+            --#{$prefix}primary:                                        #{$purple-600};
+            --#{$prefix}primary-rgb:                                    #{to-rgb($purple-600)};
+            --#{$prefix}primary-bg-subtle:                              #{rgba($purple-600, 0.15)};
+            --#{$prefix}primary-border-subtle:                          #{rgba($purple-600, 0.30)};
+            --#{$prefix}primary-text-emphasis:                          #{shade-color($purple-600, 25%)};
+        }
+
+        &[data-theme-colors="blue"] {
+            --#{$prefix}primary:                                        #{$blue-600};
+            --#{$prefix}primary-rgb:                                    #{to-rgb($blue-600)};
+            --#{$prefix}primary-bg-subtle:                              #{rgba($blue-600, 0.15)};
+            --#{$prefix}primary-border-subtle:                          #{rgba($blue-600, 0.30)};
+            --#{$prefix}primary-text-emphasis:                          #{shade-color($blue-600, 25%)};
+        }
+
+        .card-radio {
+            .form-check-label {
+                &[for="themeColor-01"] {
+                    background-color: $primary;
+                }
+
+                &[for="themeColor-02"] {
+                    background-color: $green-600; 
+                }
+
+                &[for="themeColor-03"] {
+                    background-color: $purple-600; 
+                }
+
+                &[for="themeColor-04"] {
+                    background-color: $blue-600; 
+                }
+            }
+        }
+
+    }
+
+}

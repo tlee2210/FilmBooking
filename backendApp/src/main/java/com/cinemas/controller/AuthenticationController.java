@@ -30,8 +30,15 @@ public class AuthenticationController {
      * @return
      */
     @PostMapping("/signup")
-    public ResponseEntity<User> signup(@RequestBody SignUpRequest signUpRequest) {
-        return ResponseEntity.ok(authenticationService.signup(signUpRequest));
+    public APIResponse<User> signup(@RequestBody SignUpRequest signUpRequest) {
+        User response = authenticationService.signup(signUpRequest);
+
+        APIResponse<User> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setMessage("Signin successful");
+        apiResponse.setResult(response);
+
+        return apiResponse;
     }
 
     /**
@@ -46,7 +53,7 @@ public class AuthenticationController {
 
         APIResponse<JwtAuthenticationResponse> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
-//        apiResponse.setMessage("Signin successful");
+        apiResponse.setMessage("Signin successful");
         apiResponse.setResult(response);
 
         return apiResponse;
@@ -59,7 +66,14 @@ public class AuthenticationController {
      * @return
      */
     @PostMapping("/refresh")
-    public ResponseEntity<JwtAuthenticationResponse> refresh(@RequestBody RefreshTokenRequest refreshTokenRequest) {
-        return ResponseEntity.ok(authenticationService.refreshToken(refreshTokenRequest));
+    public APIResponse<JwtAuthenticationResponse> refresh(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        JwtAuthenticationResponse response = authenticationService.refreshToken(refreshTokenRequest);
+
+        APIResponse<JwtAuthenticationResponse> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setMessage("Signin successful");
+        apiResponse.setResult(response);
+
+        return apiResponse;
     }
 }

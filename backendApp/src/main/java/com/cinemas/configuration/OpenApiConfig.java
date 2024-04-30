@@ -35,15 +35,15 @@ public class OpenApiConfig {
                         .description("API documents")
                         .version(version)
                         .license(new License().name("Apache 2.0").url("https://springdoc.org")))
-//                .components(
-//                        new Components()
-//                                .addSecuritySchemes(
-//                                        "bearerAuth",
-//                                        new SecurityScheme()
-//                                                .type(SecurityScheme.Type.HTTP)
-//                                                .scheme("bearer")
-//                                                .bearerFormat("JWT")))
-//                .security(List.of(new SecurityRequirement().addList("bearerAuth")))
+                .components(
+                        new Components()
+                                .addSecuritySchemes(
+                                        "bearerAuth",
+                                        new SecurityScheme()
+                                                .type(SecurityScheme.Type.HTTP)
+                                                .scheme("bearer")
+                                                .bearerFormat("JWT")))
+                .security(List.of(new SecurityRequirement().addList("bearerAuth")))
                 ;
     }
 }

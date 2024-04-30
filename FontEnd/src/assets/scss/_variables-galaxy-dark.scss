@@ -1,0 +1,226 @@
+// Dark color mode variables
+//
+// Custom variables for the `[data-bs-theme="dark"]` theme. Use this as a starting point for your own custom color modes by creating a new theme-specific file like `_variables-galaxy-dark.scss` and adding the variables you need.
+
+//
+// Global colors
+//
+
+$body-bg-galaxy-dark:                                                      #041324;
+
+$card-bg-fill-dark:                                                 transparent;
+$body-bg-image-1-dark:                                              url('../../images/galaxy/img-1.png');
+$body-bg-image-2-dark:                                              url('../../images/galaxy/img-2.png');
+// $body-bg-image-3-dark:                                              url('../../images/galaxy/img-3.png');
+
+[data-theme=galaxy][data-bs-theme=dark]:root {
+
+    $theme-colors-text-galaxy-dark: (
+        "primary": tint-color($primary, 20%),
+        "secondary": tint-color($secondary, 20%),
+        "success": tint-color($success, 20%),
+        "info": tint-color($info, 20%),
+        "warning": tint-color($warning, 20%),
+        "danger": tint-color($danger, 20%),
+        "light": tint-color($body-bg-galaxy-dark, 25%),
+        "dark": tint-color($body-bg-galaxy-dark, 30%),
+    );
+    // scss-docs-end theme-text-dark-map
+
+    // scss-docs-start theme-bg-subtle-dark-map
+    $theme-colors-bg-subtle-galaxy-dark: (
+        "primary": rgba($primary, 0.15),
+        "secondary": rgba($secondary, 0.15),
+        "success": rgba($success, 0.15),
+        "info": rgba($info, 0.15),
+        "warning": rgba($warning, 0.15),
+        "danger": rgba($danger, 0.15),
+        "light": tint-color($body-bg-galaxy-dark, 5%),
+        "dark": tint-color($body-bg-galaxy-dark, 10%),
+    );
+    // scss-docs-end theme-bg-subtle-galaxy-dark-map
+
+    // scss-docs-start theme-border-subtle-galaxy-dark-map
+    $theme-colors-border-subtle-galaxy-dark: (
+        "primary": shade-color($primary, 35%),
+        "secondary": shade-color($secondary, 50%),
+        "success": shade-color($success, 50%),
+        "info": shade-color($info, 50%),
+        "warning": shade-color($warning, 50%),
+        "danger": shade-color($danger, 50%),
+        "light": tint-color($body-bg-galaxy-dark, 12%),
+        "dark": tint-color($body-bg-galaxy-dark, 15%),
+    );
+
+    @each $color,
+    $value in $theme-colors-text-galaxy-dark {
+        --#{$prefix}#{$color}-text-emphasis: #{$value};
+    }
+
+    @each $color,
+    $value in $theme-colors-bg-subtle-galaxy-dark {
+        --#{$prefix}#{$color}-bg-subtle: #{$value};
+    }
+
+    @each $color,
+    $value in $theme-colors-border-subtle-galaxy-dark {
+        --#{$prefix}#{$color}-border-subtle: #{$value};
+    }
+
+    --#{$prefix}body-color: #ced4da;
+    --#{$prefix}body-color-rgb: #{to-rgb(#ced4da)};
+    --#{$prefix}body-bg: #{$body-bg-galaxy-dark};
+    --#{$prefix}body-bg-rgb: #{to-rgb($body-bg-galaxy-dark)};
+
+    --#{$prefix}emphasis-color: #{$body-emphasis-color-dark};
+    --#{$prefix}emphasis-color-rgb: #{to-rgb($body-emphasis-color-dark)};
+
+    --#{$prefix}secondary-color: #{#878a99};
+    --#{$prefix}secondary-color-rgb: #{to-rgb(#878a99)};
+    --#{$prefix}secondary-bg: #05192f;
+    --#{$prefix}secondary-bg-rgb: #{to-rgb(#05192f)};
+
+    --#{$prefix}tertiary-color: #{#a6afb8};
+    --#{$prefix}tertiary-color-rgb: #{to-rgb(#a6afb8)};
+    --#{$prefix}tertiary-bg: #{#061f3b};
+    --#{$prefix}tertiary-bg-rgb: #{to-rgb(#061f3b)};
+
+    --#{$prefix}link-color: #{tint-color($primary, 80%)};
+    --#{$prefix}link-hover-color: #{shift-color($link-color-dark, -$link-shade-percentage)};
+    --#{$prefix}link-color-rgb: #{tint-color($primary, 80%)};
+    --#{$prefix}link-hover-color-rgb: #{shift-color($link-color-dark, -$link-shade-percentage)};
+
+    //border-color
+    --#{$prefix}border-color: #{#2a4562};
+    --#{$prefix}border-color-translucent: #{#2a4562};
+
+    --#{$prefix}light: #{#061e39};
+    --#{$prefix}light-rgb: #{to-rgb(#061e39)};
+    --#{$prefix}light-text-emphasis: #{tint-color($body-bg-galaxy-dark, 25%)};
+    --#{$prefix}light-bg-subtle: #{tint-color($body-bg-galaxy-dark, 5%)};
+    --#{$prefix}light-border-subtle: #{tint-color($body-bg-galaxy-dark, 12%)};
+
+    --#{$prefix}dark: #{tint-color($body-bg-galaxy-dark, 10%)};
+    --#{$prefix}dark-rgb: #{to-rgb(tint-color($body-bg-galaxy-dark, 10%))};
+    --#{$prefix}dark-text-emphasis: #{tint-color($body-bg-galaxy-dark, 30%)};
+    --#{$prefix}dark-bg-subtle: #{tint-color($body-bg-galaxy-dark, 10%)};
+    --#{$prefix}dark-border-subtle: #{tint-color($body-bg-galaxy-dark, 15%)};
+
+    --#{$prefix}code-color: #{$code-color-dark};
+
+    @if $headings-color-dark !=null {
+        --#{$prefix}heading-color: #{#ced4da};
+    }
+
+    --#{$prefix}form-valid-color: #{$form-valid-color-dark};
+    --#{$prefix}form-valid-border-color: #{$form-valid-border-color-dark};
+    --#{$prefix}form-invalid-color: #{$form-invalid-color-dark};
+    --#{$prefix}form-invalid-border-color: #{$form-invalid-border-color-dark};
+
+    // card
+    --#{$prefix}card-logo-dark: none;
+    --#{$prefix}card-logo-light: block;
+
+    //footer
+    --#{$prefix}footer-bg: #{$footer-bg-dark};
+    --#{$prefix}footer-color: #{$footer-color-dark};
+
+    .table-light {
+        --#{$prefix}table-color: #{lighten($light-dark, 100%)};
+        --#{$prefix}table-bg: var(--#{$prefix}light);
+        --#{$prefix}table-border-color: var(--#{$prefix}border-color);
+        --#{$prefix}table-striped-bg: var(--#{$prefix}light);
+        --#{$prefix}table-striped-color: #{lighten($light-dark, 100%)};
+        --#{$prefix}table-active-bg: var(--#{$prefix}light);
+        --#{$prefix}table-active-color: #{lighten($light-dark, 100%)};
+        --#{$prefix}table-hover-bg: var(--#{$prefix}light);
+        --#{$prefix}table-hover-color: #{lighten($light-dark, 100%)};
+    }
+
+    .btn-light,
+    .btn-outline-light {
+        --#{$prefix}btn-color: #{tint-color($body-bg-galaxy-dark, 60%)};
+        --#{$prefix}btn-active-color: #{$white};
+        --#{$prefix}btn-hover-color: #{$white};
+    }
+
+    .btn-outline-dark,
+    .btn-subtle-dark {
+        --#{$prefix}btn-color: #{$white};
+    }
+
+    --#{$prefix}vertical-menu-bg:                                   #{$white};
+    --#{$prefix}vertical-menu-border:                               #{$white};
+    --#{$prefix}vertical-menu-item-color:                           #{darken($gray-600, 10%)};
+    --#{$prefix}vertical-menu-item-bg:                              #{rgba(var(--#{$prefix}primary-rgb), .15)};
+    --#{$prefix}vertical-menu-item-hover-color:                     var(--#{$prefix}primary);
+    --#{$prefix}vertical-menu-item-active-color:                    var(--#{$prefix}primary);
+    --#{$prefix}vertical-menu-item-active-bg:                       #{rgba(var(--#{$prefix}primary-rgb), .15)};
+    --#{$prefix}vertical-menu-sub-item-color:                       #{darken($gray-600, 4%)};
+    --#{$prefix}vertical-menu-sub-item-hover-color:                 var(--#{$prefix}primary);
+    --#{$prefix}vertical-menu-sub-item-active-color:                var(--#{$prefix}primary);
+    --#{$prefix}vertical-menu-title-color:                          #919da9;
+    --#{$prefix}vertical-menu-box-shadow:                           0 2px 4px rgba(15, 34, 58, 0.12);
+    --#{$prefix}vertical-menu-dropdown-box-shadow:                  0 2px 4px rgba(15, 34, 58, 0.12);
+    --#{$prefix}twocolumn-menu-iconview-bg:                         #{$white};
+
+    &[data-sidebar="dark"] {
+        //vertical dark
+        --#{$prefix}vertical-menu-bg:                               transparent;
+        --#{$prefix}vertical-menu-border:                           #2a4562;
+        --#{$prefix}vertical-menu-item-color:                       #A4AAC7;
+        --#{$prefix}vertical-menu-item-bg:                          #{rgba($white, .15)};
+        --#{$prefix}vertical-menu-item-hover-color:                 #{$white};
+        --#{$prefix}vertical-menu-item-active-color:                #{$white};
+        --#{$prefix}vertical-menu-item-active-bg:                   #{rgba($white, .15)};
+        --#{$prefix}vertical-menu-sub-item-color:                   #9ba5af;
+        --#{$prefix}vertical-menu-sub-item-hover-color:             #{$white};
+        --#{$prefix}vertical-menu-sub-item-active-color:            #{$white};
+        --#{$prefix}vertical-menu-title-color:                      #798694;
+        --#{$prefix}twocolumn-menu-iconview-bg:                     rgba(6, 30, 57, 0.3);
+        --#{$prefix}vertical-menu-box-shadow:                       0 2px 4px rgba(15, 34, 58, 0.12);
+        --#{$prefix}vertical-menu-dropdown-box-shadow:              0 2px 4px rgba(15, 34, 58, 0.12);
+    }
+
+    // Topbar - (Default Light)
+    --#{$prefix}header-bg:                                          transparent;
+    --#{$prefix}header-border:                                      #2a4562;
+    --#{$prefix}header-item-color:                                  #e9ecef;
+    --#{$prefix}header-item-bg:                                     #092748;
+    --#{$prefix}header-item-sub-color:                              #878a99;
+    --#{$prefix}topbar-search-bg:                                   #{rgba(6, 21, 40, 0.80)};
+    --#{$prefix}topbar-user-bg:                                     transparent;
+    --#{$prefix}topbar-search-color:                                #{$white};
+    
+    // Topbar - Dark
+    &[data-topbar="dark"] {
+        --#{$prefix}header-bg:                                      #8c68cd;
+        --#{$prefix}header-border:                                  #8c68cd;
+        --#{$prefix}header-item-color:                              #{rgba($white, .85)};
+        --#{$prefix}header-item-bg:                                 #966de1;
+        --#{$prefix}header-item-sub-color:                          #e2c4ff;
+        --#{$prefix}topbar-user-bg:                                 #7958b5;
+        --#{$prefix}topbar-search-bg:                               #{rgba($white, .05)};
+        --#{$prefix}topbar-search-color:                            #{$white};
+    }
+
+    --#{$prefix}page-title-box-shadow:                              none;
+    --#{$prefix}page-title-border:                                  #2a4562;
+
+    --#{$prefix}footer-bg:                                      #transparent;
+    --#{$prefix}footer-color:                                   #{#a6afb8};
+
+    //form
+    --#{$prefix}input-bg-custom:                                transparent;
+    --#{$prefix}input-border-custom:                            var(--#{$prefix}border-color);
+
+    .dropdown-menu {
+            --#{$prefix}dropdown-bg:                                #05192f;
+            --#{$prefix}dropdown-link-color:                        #a6afb8;
+            --#{$prefix}dropdown-link-hover-color:                  #b9bfc4;
+            --#{$prefix}dropdown-link-hover-bg:                     #061f3b;
+            --#{$prefix}dropdown-border-width:                      1px;
+            --#{$prefix}dropdown-link-active-color:                 #a6afb8;
+            --#{$prefix}dropdown-link-active-bg:                    #061f3b;
+        }
+}

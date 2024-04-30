@@ -1,0 +1,73 @@
+//
+// custom-variables
+//
+
+// Vertical menu
+$vertical-menu-width:                             250px;
+$vertical-menu-width-md:                          180px;
+$vertical-menu-width-sm:                          70px;
+
+$vertical-menu-z-index:                           1002;
+$vertical-menu-item-padding-x:                    1.5rem;
+$vertical-menu-item-padding-y:                    0.625rem;
+$vertical-menu-item-icon-width:                   1.75rem;
+$vertical-menu-sub-item-padding-x:                1.5rem;
+$vertical-menu-sub-item-padding-y:                0.55rem;
+
+// Brand 
+$navbar-brand-box-width:                          240px;
+
+//semibox layout
+$semibox-width:                                   110px;
+
+//topbar
+$header-height:                                   70px;
+
+//sidebar gradient
+$vertical-menu-item-color-gradient:               rgba($white, .5);
+$vertical-menu-item-bg-gradient:                  rgba($white, .15);
+$vertical-menu-item-hover-color-gradient:         $white;
+$vertical-menu-item-active-color-gradient:        $white;
+$vertical-menu-item-active-bg-gradient:           rgba($white, .15);
+$vertical-menu-sub-item-color-gradient:           rgba($white, .5);
+$vertical-menu-sub-item-hover-color-gradient:     $white;
+$vertical-menu-sub-item-active-color-gradient:    $white;
+$vertical-menu-title-color-gradient:              rgba($white, .5);
+$vertical-menu-box-shadow-gradient:               0 2px 4px rgba(15,34,58,0.12);
+$vertical-menu-dropdown-box-shadow-gradient:      0 2px 4px rgba(15,34,58,0.12);
+
+//gradient one
+$vertical-menu-bg-gradient:                       linear-gradient(to right, var(--#{$prefix}primary), var(--#{$prefix}success));
+//gradient-2
+$vertical-menu-bg-gradient-2:                     linear-gradient(to right, var(--#{$prefix}info), var(--#{$prefix}secondary));
+
+//gradient-3
+$vertical-menu-bg-gradient-3:                     linear-gradient(to right, var(--#{$prefix}info), var(--#{$prefix}success));
+
+//gradient-4
+$vertical-menu-bg-gradient-4:                     linear-gradient(to right, #1a1d21, var(--#{$prefix}primary));
+
+// Horizontal Menu
+$horizontal-menu-box-shadow:                      0 2px 4px rgba(15,34,58,0.12);
+$horizontal-menu-dropdown-box-shadow:             0 0px 5px rgba(15,34,58,0.15);
+$horizontal-menu-dropdown-min-width:              12rem; 
+$horizontal-menu-item-padding-x:                  1.5rem;
+$horizontal-menu-item-padding-y:                  0.75rem;
+$topnav-bg:                                       $white;
+$topnav-item-color:                               darken($gray-600, 10%);
+$topnav-item-active-color:                        var(--#{$prefix}primary);
+
+// Two Column Menu (Default Light)
+$twocolumn-menu-iconview-width:                   70px;
+$twocolumn-menu-width:                            220px;
+$twocolumn-menu-box-shadow:                       0 2px 4px rgba(15,34,58,0.12);
+$twocolumn-menu-z-index:                          1002;
+
+// Boxed layout width
+$boxed-layout-width:                              1300px;
+
+// Footer
+$footer-height:                                   60px;   
+
+$input-bg-custom:                                 $body-secondary-bg;
+$input-border-custom:                             $border-color-translucent;

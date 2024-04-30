@@ -1,0 +1,20 @@
+//
+// toast.scss
+//
+
+
+// toast
+.toast {
+    &:not(:last-child) {
+        margin-bottom: $toast-padding-x;
+    }
+}
+
+@each $state in map-keys($theme-colors) {
+    .toast-border-#{$state} {
+        .toast-body {
+            color: var(--#{$prefix}#{$state});
+            border-bottom: 3px solid var(--#{$prefix}#{$state});
+        }
+    }
+}

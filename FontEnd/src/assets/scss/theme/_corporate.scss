@@ -1,0 +1,272 @@
+@if $theme-corporate {
+
+    //Google Font
+    @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap');
+
+    [data-theme="corporate"] { 
+
+        $primary:                   #687cfe;
+        $secondary:                 #ff7f5d;
+        $danger:                    #f7666e;
+        $warning:                   #e8bc52;
+        $info:                      #0ac7fb;
+        $success:                   #3cd188;
+        $dark:                      #272a3a;
+        $light:                     #f1f4f7;
+        
+        //Typography
+        $font-sizes: (
+            "10":          0.625rem,
+            "11":          0.6875rem,
+            "12":          0.75rem,
+            "13":          0.8125rem,
+            "14":          0.875rem,
+            "base":        0.875rem, //14px
+            "15":          0.9375rem,
+            "16":          1rem,
+            "17":          1.0625rem,
+            "18":          1.125rem,
+            "19":          1.1875rem,
+            "20":          1.25rem,
+            "21":          1.3125rem,
+            "22":          1.375rem,
+            "23":          0.8125rem,
+            "24":          1.5rem,            
+            "36":          2.25rem,
+            "48":          3rem,
+        );
+
+        $font-weights: (
+            "light"         300,
+            "normal"        400,
+            "medium"        500,
+            "semibold"      600,
+            "bold"          700,
+        );
+
+        // Font Family
+        --#{$prefix}font-family-primary:                                     'Public Sans', sans-serif;
+        --#{$prefix}font-family-secondary:                                   'Public Sans', sans-serif;
+        
+        --#{$prefix}grid-gutter-width:                              1.5rem;
+
+        --#{$prefix}body-bg:                                        #fbf7f4;
+        --#{$prefix}body-bg-rgb:                                    #{to-rgb(#fbf7f4)};
+
+        --#{$prefix}headings-font-weight:                           600;
+        --#{$prefix}btn-font-weight-custom:                         400;
+
+        //shadow
+        --#{$prefix}shadow:                                        rgba(100, 98, 92, 0.06) 0 0 15px 4px;
+        --#{$prefix}element-shadow:                                 none;
+
+        //cards
+        --#{$prefix}card-border-width-custom:                       0;
+        --#{$prefix}card-header-border-width:                       1px;
+        --#{$prefix}card-shadow:                                    var(--#{$prefix}shadow);
+        
+        //sidebar menu
+        --#{$prefix}vertical-menu-item-font-size:                   0.9375rem;
+        --#{$prefix}vertical-menu-sub-item-font-size:               0.875rem;
+
+        --#{$prefix}vertical-menu-bg:                                   #{$white};
+        --#{$prefix}vertical-menu-border:                               #{$white};
+        --#{$prefix}vertical-menu-item-color:                           #{darken($gray-600, 10%)};
+        --#{$prefix}vertical-menu-item-bg:                              #{rgba(var(--#{$prefix}primary-rgb), .15)};
+        --#{$prefix}vertical-menu-item-hover-color:                     #{var(--#{$prefix}primary)};
+        --#{$prefix}vertical-menu-item-active-color:                    #{var(--#{$prefix}primary)};
+        --#{$prefix}vertical-menu-item-active-bg:                       #{rgba(var(--#{$prefix}primary-rgb), .15)};
+        --#{$prefix}vertical-menu-sub-item-color:                       #{darken($gray-600, 4%)};
+        --#{$prefix}vertical-menu-sub-item-hover-color:                 #{var(--#{$prefix}primary)};
+        --#{$prefix}vertical-menu-sub-item-active-color:                #{var(--#{$prefix}primary)};
+        --#{$prefix}vertical-menu-title-color:                          #919da9;
+        --#{$prefix}vertical-menu-box-shadow:                           0 2px 4px rgba(15, 34, 58, 0.12);
+        --#{$prefix}vertical-menu-dropdown-box-shadow:                  0 2px 4px rgba(15, 34, 58, 0.12);
+        --#{$prefix}sidebar-user-bg:                                    #{$light};
+        --#{$prefix}sidebar-user-name-text:                             #{darken($gray-700, 10%)};
+        --#{$prefix}sidebar-user-name-sub-text:                         #{darken($gray-600, 4%)};
+
+        &[data-sidebar="dark"] {
+            //vertical dark
+            --#{$prefix}vertical-menu-bg:                               #{shade-color($primary, 60%)};
+            --#{$prefix}vertical-menu-border:                           #{shade-color($primary, 60%)};
+            --#{$prefix}vertical-menu-item-color:                       #abb9e8;
+            --#{$prefix}vertical-menu-item-bg:                          #{rgba($white, .15)};
+            --#{$prefix}vertical-menu-item-hover-color:                 #{$white};
+            --#{$prefix}vertical-menu-item-active-color:                #{$white};
+            --#{$prefix}vertical-menu-item-active-bg:                   #{rgba($white, .15)};
+            --#{$prefix}vertical-menu-sub-item-color:                   #abb9e8;
+            --#{$prefix}vertical-menu-sub-item-hover-color:             #{$white};
+            --#{$prefix}vertical-menu-sub-item-active-color:            #{$white};
+            --#{$prefix}vertical-menu-title-color:                      #838fb9;
+            --#{$prefix}twocolumn-menu-iconview-bg:                     #272e5f;
+            --#{$prefix}vertical-menu-box-shadow:                       0 2px 4px rgba(15, 34, 58, 0.12);
+            --#{$prefix}vertical-menu-dropdown-box-shadow:              0 2px 4px rgba(15, 34, 58, 0.12);
+            --#{$prefix}sidebar-user-bg:                                #{rgba($white, .08)};
+            --#{$prefix}sidebar-user-name-text:                         #{$white};
+            --#{$prefix}sidebar-user-name-sub-text:                     #{tint-color($primary, 65%)};
+        }
+
+        // Topbar - (Default Light)
+        --#{$prefix}header-bg:                                          #{$white};
+        --#{$prefix}header-border:                                      #{$border-color};
+        --#{$prefix}header-item-color:                                  #{$gray-700};
+        --#{$prefix}header-item-bg:                                     #{rgba($secondary, .12)};
+        --#{$prefix}header-item-sub-color:                              #878a99;
+        --#{$prefix}topbar-search-bg:                                   #f3f3f9;
+        --#{$prefix}topbar-user-bg:                                     #f3f3f9;
+        --#{$prefix}topbar-search-color:                                #262a2f;
+        
+        // Topbar - Dark
+        &[data-topbar="dark"] {
+            --#{$prefix}header-bg:                                      #{$primary};
+            --#{$prefix}header-border:                                  #{$primary};
+            --#{$prefix}header-item-color:                              #{rgba($white, .85)};
+            --#{$prefix}header-item-bg:                                 #6275f5;
+            --#{$prefix}header-item-sub-color:                          #c2d3e5;
+            --#{$prefix}topbar-user-bg:                                 #5e72f1;
+            --#{$prefix}topbar-search-bg:                               #{rgba($white, .05)};
+            --#{$prefix}topbar-search-color:                            #{$white};
+        }
+
+        &[data-sidebar="gradient"] {
+            --#{$prefix}vertical-menu-bg:                               #{linear-gradient(to right, $purple-900, $purple-800)};
+            --#{$prefix}vertical-menu-border:                           #{$purple-800};
+            --#{$prefix}twocolumn-menu-iconview-bg:                     #{$purple-900};
+        }
+        
+        &[data-sidebar="gradient-2"] {
+            --#{$prefix}vertical-menu-bg:                               #{linear-gradient(to right, $cyan-900, $cyan-800)};
+            --#{$prefix}vertical-menu-border:                           #{$cyan-800}; 
+            --#{$prefix}twocolumn-menu-iconview-bg:                     #{$cyan-800};
+        }
+        
+        &[data-sidebar="gradient-3"] {
+            --#{$prefix}vertical-menu-bg:                               #{linear-gradient(to right, $green-900, $green-800)};
+            --#{$prefix}vertical-menu-border:                           #{$green-800};
+            --#{$prefix}twocolumn-menu-iconview-bg:                     #{$green-900};
+        }
+        
+        &[data-sidebar="gradient-4"] {
+            --#{$prefix}vertical-menu-bg:                               #{linear-gradient(to right, $orange-900, $orange-800)};
+            --#{$prefix}vertical-menu-border:                           #{$orange-800};
+            --#{$prefix}twocolumn-menu-iconview-bg:                     #{$orange-900};
+        }
+
+        //page title 
+        --#{$prefix}page-title-box-shadow:                              0 1px 2px rgba(56, 65, 74, 0.15);
+        --#{$prefix}page-title-border:                                  none;
+
+        //footer
+        --#{$prefix}footer-bg:                                          #{$white};
+        --#{$prefix}footer-color:                                       #98a6ad;
+        
+        //Boxed layout
+        --#{$prefix}boxed-body-bg:                                      #f6ece5;
+        
+        --#{$prefix}timeline-color:                                     var(--#{$prefix}secondary-bg);
+
+        --#{$prefix}chat-primary-bg:                                    var(--#{$prefix}light);
+        --#{$prefix}chat-secondary-bg:                                  rgba(var(--#{$prefix}success-rgb), 0.15);
+        --#{$prefix}chat-secondary-color:                               var(--#{$prefix}success);
+
+        $custom-theme-colors: (
+            "primary":          $primary,
+            "secondary":        $secondary,
+            "danger":           $danger,
+            "warning":          $warning,
+            "info":             $info,
+            "success":          $success,
+            "dark":             $dark,
+            "light":            $light
+        );
+        
+        @each $name, $value in $custom-theme-colors {   
+            --#{$prefix}#{$name}:                                        #{$value};
+            --#{$prefix}#{$name}-rgb:                                    #{to-rgb($value)};
+            --#{$prefix}#{$name}-bg-subtle:                              #{rgba($value, 0.15)};
+            --#{$prefix}#{$name}-border-subtle:                          #{rgba($value, 0.30)};
+            --#{$prefix}#{$name}-text-emphasis:                          #{shade-color($value, 25%)};
+        }
+
+        --#{$prefix}link-color:                                         #{$primary};
+        --#{$prefix}link-color-rgb:                                     #{to-rgb($primary)};
+        --#{$prefix}link-hover-color:                                   #{shade-color($primary, 20%)};
+        --#{$prefix}link-hover-color-rgb:                               #{to-rgb(shade-color($primary, 20%))};
+
+        @each $name, $value in $font-sizes { 
+            --#{$prefix}font-#{$name}:          #{$value};
+        }
+    
+        @each $name, $value in $font-weights { 
+            --#{$prefix}font-weight-#{$name}:   #{$value};
+        }
+
+        &[data-theme-colors="green"] {
+            --#{$prefix}primary:                                        #{#348f6c};
+            --#{$prefix}primary-rgb:                                    #{to-rgb(#348f6c)};
+            --#{$prefix}primary-bg-subtle:                              #{rgba(#348f6c, 0.15)};
+            --#{$prefix}primary-border-subtle:                          #{rgba(#348f6c, 0.30)};
+            --#{$prefix}primary-text-emphasis:                          #{shade-color(#348f6c, 25%)};
+
+            --#{$prefix}secondary:                                        #{#f1cfa3};
+            --#{$prefix}secondary-rgb:                                    #{to-rgb(#f1cfa3)};
+            --#{$prefix}secondary-bg-subtle:                              #{rgba(#f1cfa3, 0.15)};
+            --#{$prefix}secondary-border-subtle:                          #{rgba(#f1cfa3, 0.30)};
+            --#{$prefix}secondary-text-emphasis:                          #{shade-color(#f1cfa3, 25%)};
+        }
+
+        &[data-theme-colors="purple"] {
+            --#{$prefix}primary:                                        #{#9b5de5};
+            --#{$prefix}primary-rgb:                                    #{to-rgb(#9b5de5)};
+            --#{$prefix}primary-bg-subtle:                              #{rgba(#9b5de5, 0.15)};
+            --#{$prefix}primary-border-subtle:                          #{rgba(#9b5de5, 0.30)};
+            --#{$prefix}primary-text-emphasis:                          #{shade-color(#9b5de5, 25%)};
+
+            --#{$prefix}secondary:                                        #{#f15bb5};
+            --#{$prefix}secondary-rgb:                                    #{to-rgb(#f15bb5)};
+            --#{$prefix}secondary-bg-subtle:                              #{rgba(#f15bb5, 0.15)};
+            --#{$prefix}secondary-border-subtle:                          #{rgba(#f15bb5, 0.30)};
+            --#{$prefix}secondary-text-emphasis:                          #{shade-color(#f15bb5, 25%)};
+        }
+
+        &[data-theme-colors="blue"] {
+            --#{$prefix}primary:                                        #{#00bbf9};
+            --#{$prefix}primary-rgb:                                    #{to-rgb(#00bbf9)};
+            --#{$prefix}primary-bg-subtle:                              #{rgba(#00bbf9, 0.15)};
+            --#{$prefix}primary-border-subtle:                          #{rgba(#00bbf9, 0.30)};
+            --#{$prefix}primary-text-emphasis:                          #{shade-color(#00bbf9, 25%)};
+
+            --#{$prefix}secondary:                                        #{#0582ca};
+            --#{$prefix}secondary-rgb:                                    #{to-rgb(#0582ca)};
+            --#{$prefix}secondary-bg-subtle:                              #{rgba(#0582ca, 0.15)};
+            --#{$prefix}secondary-border-subtle:                          #{rgba(#0582ca, 0.30)};
+            --#{$prefix}secondary-text-emphasis:                          #{shade-color(#0582ca, 25%)};
+        }
+
+        .card-radio {
+            .form-check-label {
+                &[for="themeColor-01"] {
+                    background-color: $primary;
+                }
+
+                &[for="themeColor-02"] {
+                    background-color: #348f6c; 
+                }
+
+                &[for="themeColor-03"] {
+                    background-color: #9b5de5; 
+                }
+
+                &[for="themeColor-04"] {
+                    background-color: #00bbf9; 
+                }
+            }
+        }
+
+        .cfs-22 {
+            font-size: 22px !important;
+        }
+    }
+
+}

@@ -1,0 +1,260 @@
+@if $theme-vintage {
+
+    //Google Font
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+    [data-theme="vintage"] { 
+
+        $primary:                   #119cf1;
+        $secondary:                 #7967e9;
+        $danger:                    #ef697f;
+        $warning:                   #fbb740;
+        $info:                      #58caea;
+        $success:                   #83d159;
+        $dark:                      #212529;
+        $light:                     #f1f4f7;
+        
+        //Typography
+        $font-sizes: (
+            "10":          0.625rem,
+            "11":          0.6875rem,
+            "12":          0.75rem,
+            "13":          0.8125rem,
+            "14":          0.875rem,
+            "base":        0.875rem, //14px
+            "15":          0.9375rem,
+            "16":          1rem,
+            "17":          1.0625rem,
+            "18":          1.125rem,
+            "19":          1.1875rem,
+            "20":          1.25rem,
+            "21":          1.3125rem,
+            "22":          1.375rem,
+            "23":          0.8125rem,
+            "24":          1.5rem,            
+            "36":          2.25rem,
+            "48":          3rem,
+        );
+
+        $font-weights: (
+            "light"         300,
+            "normal"        400,
+            "medium"        500,
+            "semibold"      600,
+            "bold"          700,
+        );
+
+        // Font Family
+        --#{$prefix}font-family-primary:                                     'Roboto', sans-serif;
+        --#{$prefix}font-family-secondary:                                   'Roboto', sans-serif;
+        
+        --#{$prefix}grid-gutter-width:                              1.5rem;
+
+        --#{$prefix}body-bg:                                        #f4f8f9;
+        --#{$prefix}body-bg-rgb:                                    #{to-rgb(#f4f8f9)};
+
+        --#{$prefix}headings-font-weight:                           500;
+        --#{$prefix}btn-font-weight-custom:                         400;
+
+        //shadow
+        --#{$prefix}shadow:                                         rgb(0, 0, 0, 0.04) 0px 6px 24px 0px;
+        --#{$prefix}element-shadow:                                 none;
+
+        //cards
+        --#{$prefix}card-border-width-custom:                       0;
+        --#{$prefix}card-header-border-width:                       1px;
+        --#{$prefix}card-shadow:                                    #{var(--#{$prefix}shadow)};
+        
+        //sidebar menu
+        --#{$prefix}vertical-menu-item-font-size:                   0.925rem;
+        --#{$prefix}vertical-menu-sub-item-font-size:               0.875rem;
+
+        --#{$prefix}vertical-menu-bg:                                   #{$white};
+        --#{$prefix}vertical-menu-border:                               #{$white};
+        --#{$prefix}vertical-menu-item-color:                           #{darken($gray-600, 10%)};
+        --#{$prefix}vertical-menu-item-bg:                              rgba(var(--#{$prefix}primary-rgb), .15);
+        --#{$prefix}vertical-menu-item-hover-color:                     var(--#{$prefix}primary);
+        --#{$prefix}vertical-menu-item-active-color:                    var(--#{$prefix}primary);
+        --#{$prefix}vertical-menu-item-active-bg:                       rgba(var(--#{$prefix}primary-rgb), .15);
+        --#{$prefix}vertical-menu-sub-item-color:                       #{darken($gray-600, 4%)};
+        --#{$prefix}vertical-menu-sub-item-hover-color:                 var(--#{$prefix}primary);
+        --#{$prefix}vertical-menu-sub-item-active-color:                var(--#{$prefix}primary);
+        --#{$prefix}vertical-menu-title-color:                          #919da9;
+        --#{$prefix}vertical-menu-box-shadow:                           var(--#{$prefix}shadow);
+        --#{$prefix}vertical-menu-dropdown-box-shadow:                  0 2px 4px rgba(15, 34, 58, 0.12);
+        --#{$prefix}twocolumn-menu-iconview-bg:                         #{$white};
+        --#{$prefix}sidebar-user-bg:                                    #{$light};
+        --#{$prefix}sidebar-user-name-text:                             #{darken($gray-700, 10%)};
+        --#{$prefix}sidebar-user-name-sub-text:                         #{darken($gray-600, 4%)};
+
+        &[data-sidebar="dark"] {
+            //vertical dark
+            --#{$prefix}vertical-menu-bg:                               #2e3230;
+            --#{$prefix}vertical-menu-border:                           #2e3230;
+            --#{$prefix}vertical-menu-item-color:                       #a4b0bf;
+            --#{$prefix}vertical-menu-item-bg:                          #{rgba($white, .15)};
+            --#{$prefix}vertical-menu-item-hover-color:                 #{$white};
+            --#{$prefix}vertical-menu-item-active-color:                #{$white};
+            --#{$prefix}vertical-menu-item-active-bg:                   #{rgba($white, .15)};
+            --#{$prefix}vertical-menu-sub-item-color:                   #a4b0bf;
+            --#{$prefix}vertical-menu-sub-item-hover-color:             #{$white};
+            --#{$prefix}vertical-menu-sub-item-active-color:            #{$white};
+            --#{$prefix}vertical-menu-title-color:                      #a4b0bf;
+            --#{$prefix}twocolumn-menu-iconview-bg:                     #344044;
+            --#{$prefix}vertical-menu-box-shadow:                       0 2px 4px rgba(15, 34, 58, 0.12);
+            --#{$prefix}vertical-menu-dropdown-box-shadow:              0 2px 4px rgba(15, 34, 58, 0.12);
+            --#{$prefix}sidebar-user-bg:                                #{rgba($white, .08)};
+            --#{$prefix}sidebar-user-name-text:                         #{$white};
+            --#{$prefix}sidebar-user-name-sub-text:                     #{tint-color(#2e3230, 65%)};
+        }
+
+        // Topbar - (Default Light)
+        --#{$prefix}header-bg:                                          transparent;
+        --#{$prefix}header-border:                                      transparent;
+        --#{$prefix}header-item-color:                                  #{$gray-700};
+        --#{$prefix}header-item-bg:                                     #{rgba($secondary, .12)};
+        --#{$prefix}header-item-sub-color:                              #878a99;
+        --#{$prefix}topbar-search-bg:                                   transparent;
+        --#{$prefix}topbar-user-bg:                                     transparent;
+        --#{$prefix}topbar-search-color:                                #262a2f;
+        
+        // Topbar - Dark
+        &[data-topbar="dark"] {
+            --#{$prefix}header-bg:                                      #323835;
+            --#{$prefix}header-border:                                  #323835;
+            --#{$prefix}header-item-color:                              #{rgba($white, .85)};
+            --#{$prefix}header-item-bg:                                 #3c423f;
+            --#{$prefix}header-item-sub-color:                          #a4b0bf;
+            --#{$prefix}topbar-user-bg:                                 #39423e;
+            --#{$prefix}topbar-search-bg:                               #{rgba($white, .05)};
+            --#{$prefix}topbar-search-color:                            #{$white};
+        }
+
+        &[data-sidebar="gradient"] {
+            --#{$prefix}vertical-menu-bg:                               #{linear-gradient(to right, var(--#{$prefix}primary), var(--#{$prefix}success))};
+            --#{$prefix}vertical-menu-border:                           var(--#{$prefix}success);
+            --#{$prefix}twocolumn-menu-iconview-bg:                     var(--#{$prefix}primary);
+        }
+        
+        &[data-sidebar="gradient-2"] {
+            --#{$prefix}vertical-menu-bg:                               #{linear-gradient(to right, var(--#{$prefix}info), var(--#{$prefix}secondary))};
+            --#{$prefix}vertical-menu-border:                           var(--#{$prefix}secondary); 
+            --#{$prefix}twocolumn-menu-iconview-bg:                     var(--#{$prefix}info);
+        }
+        
+        &[data-sidebar="gradient-3"] {
+            --#{$prefix}vertical-menu-bg:                               #{linear-gradient(to right, var(--#{$prefix}info), var(--#{$prefix}success))};
+            --#{$prefix}vertical-menu-border:                           var(--#{$prefix}success);
+            --#{$prefix}twocolumn-menu-iconview-bg:                     var(--#{$prefix}info);
+        }
+        
+        &[data-sidebar="gradient-4"] {
+            --#{$prefix}vertical-menu-bg:                               #{linear-gradient(to right, #1a1d21, var(--#{$prefix}primary))};
+            --#{$prefix}vertical-menu-border:                           var(--#{$prefix}primary);
+            --#{$prefix}twocolumn-menu-iconview-bg:                     #1a1d21;
+        }
+
+        //page title 
+        --#{$prefix}page-title-box-shadow:                              none;
+        --#{$prefix}page-title-border:                                  none;
+
+        //footer
+        --#{$prefix}footer-bg:                                          #{$white};
+        --#{$prefix}footer-color:                                       #98a6ad;
+        
+        //Boxed layout
+        --#{$prefix}boxed-body-bg:                                      #e7e7e7;
+        
+        --#{$prefix}timeline-color:                                     var(--#{$prefix}secondary-bg);
+
+        --#{$prefix}chat-primary-bg:                                    var(--#{$prefix}light);
+        --#{$prefix}chat-secondary-bg:                                  rgba(var(--#{$prefix}secondary-rgb), 0.15);
+        --#{$prefix}chat-secondary-color:                               var(--#{$prefix}secondary);
+
+        $custom-theme-colors: (
+            "primary":          $primary,
+            "secondary":        $secondary,
+            "danger":           $danger,
+            "warning":          $warning,
+            "info":             $info,
+            "success":          $success,
+            "dark":             $dark,
+            "light":            $light
+        );
+        
+        @each $name, $value in $custom-theme-colors {   
+            --#{$prefix}#{$name}:                                        #{$value};
+            --#{$prefix}#{$name}-rgb:                                    #{to-rgb($value)};
+            --#{$prefix}#{$name}-bg-subtle:                              #{rgba($value, 0.15)};
+            --#{$prefix}#{$name}-border-subtle:                          #{rgba($value, 0.30)};
+            --#{$prefix}#{$name}-text-emphasis:                          #{shade-color($value, 25%)};
+        }
+
+        --#{$prefix}link-color:                                         #{$primary};
+        --#{$prefix}link-color-rgb:                                     #{to-rgb($primary)};
+        --#{$prefix}link-hover-color:                                   #{shade-color($primary, 20%)};
+        --#{$prefix}link-hover-color-rgb:                               #{to-rgb(shade-color($primary, 20%))};
+
+        @each $name, $value in $font-sizes { 
+            --#{$prefix}font-#{$name}:          #{$value};
+        }
+    
+        @each $name, $value in $font-weights { 
+            --#{$prefix}font-weight-#{$name}:   #{$value};
+        }
+
+        &[data-theme-colors="green"] {
+            --#{$prefix}primary:                                        #{#a5b96f};
+            --#{$prefix}primary-rgb:                                    #{to-rgb(#a5b96f)};
+            --#{$prefix}primary-bg-subtle:                              #{rgba(#a5b96f, 0.15)};
+            --#{$prefix}primary-border-subtle:                          #{rgba(#a5b96f, 0.30)};
+            --#{$prefix}primary-text-emphasis:                          #{shade-color(#a5b96f, 25%)};
+        }
+
+        &[data-theme-colors="purple"] {
+            --#{$prefix}primary:                                        #{#9f86c0};
+            --#{$prefix}primary-rgb:                                    #{to-rgb(#9f86c0)};
+            --#{$prefix}primary-bg-subtle:                              #{rgba(#9f86c0, 0.15)};
+            --#{$prefix}primary-border-subtle:                          #{rgba(#9f86c0, 0.30)};
+            --#{$prefix}primary-text-emphasis:                          #{shade-color(#9f86c0, 25%)};
+        }
+
+        &[data-theme-colors="blue"] {
+            --#{$prefix}primary:                                        #{#6096ba};
+            --#{$prefix}primary-rgb:                                    #{to-rgb(#6096ba)};
+            --#{$prefix}primary-bg-subtle:                              #{rgba(#6096ba, 0.15)};
+            --#{$prefix}primary-border-subtle:                          #{rgba(#6096ba, 0.30)};
+            --#{$prefix}primary-text-emphasis:                          #{shade-color(#6096ba, 25%)};
+        }
+
+        .card-radio {
+            .form-check-label {
+                &[for="themeColor-01"] {
+                    background-color: $primary;
+                }
+
+                &[for="themeColor-02"] {
+                    background-color: #a5b96f; 
+                }
+
+                &[for="themeColor-03"] {
+                    background-color: #9f86c0; 
+                }
+
+                &[for="themeColor-04"] {
+                    background-color: #6096ba; 
+                }
+            }
+        }
+
+        .page-title-box {
+            background-color: transparent;
+            padding: 10px $grid-gutter-width;
+            margin: -15px calc(#{$grid-gutter-width} * -1) calc(#{$grid-gutter-width} * 0.4) calc(#{$grid-gutter-width} * -1);
+        }
+
+        #page-topbar.topbar-shadow {
+            background-color: var(--#{$prefix}secondary-bg);
+        }
+    }
+}
