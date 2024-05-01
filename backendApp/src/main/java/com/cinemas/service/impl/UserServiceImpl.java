@@ -1,6 +1,6 @@
 package com.cinemas.service.impl;
 
-import com.cinemas.repository.UserRepository;
+import com.cinemas.repositories.UserRepository;
 import com.cinemas.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

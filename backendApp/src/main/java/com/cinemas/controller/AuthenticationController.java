@@ -3,18 +3,17 @@ package com.cinemas.controller;
 import com.cinemas.dto.request.RefreshTokenRequest;
 import com.cinemas.dto.request.SignUpRequest;
 import com.cinemas.dto.request.SigninRequest;
+import com.cinemas.dto.request.verifyMailrequest;
 import com.cinemas.dto.response.APIResponse;
 import com.cinemas.dto.response.JwtAuthenticationResponse;
-import com.cinemas.entity.User;
+import com.cinemas.entities.ChangePassword;
+import com.cinemas.entities.User;
 import com.cinemas.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -72,6 +71,44 @@ public class AuthenticationController {
         apiResponse.setCode(200);
         apiResponse.setMessage("Signin successful");
         apiResponse.setResult(response);
+
+        return apiResponse;
+    }
+
+    @PostMapping("/verifyMail")
+    public APIResponse<String> verifyEmail(@RequestBody verifyMailrequest email) {
+
+        String response = authenticationService.verifyEmail(email);
+
+        APIResponse<String> apiResponse = new APIResponse<>();
+
+        apiResponse.setCode(200);
+        apiResponse.setMessage(response);
+
+        return apiResponse;
+    }
+
+    @PostMapping("/verifyOtp/{otp}/{email}")
+    public APIResponse<String> verifyOtp(@PathVariable String email, @PathVariable Integer otp) {
+        String response = authenticationService.verifyOtp(otp, email);
+
+        APIResponse<String> apiResponse = new APIResponse<>();
+
+        apiResponse.setCode(200);
+        apiResponse.setMessage(response);
+
+        return apiResponse;
+    }
+
+    @PostMapping("/changePassword/{email}")
+    public APIResponse<String> changePasswordHandler(@RequestBody ChangePassword changePassword,
+                                                     @PathVariable String email){
+        String response = authenticationService.changePasswordHandler(changePassword, email);
+
+        APIResponse<String> apiResponse = new APIResponse<>();
+
+        apiResponse.setCode(200);
+        apiResponse.setMessage(response);
 
         return apiResponse;
     }

@@ -2,7 +2,7 @@ package com.cinemas.controller;
 
 import com.cinemas.dto.EmployeeDTO;
 import com.cinemas.dto.request.EmployeeRequest;
-import com.cinemas.entity.Employee;
+import com.cinemas.entities.Employee;
 import com.cinemas.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;

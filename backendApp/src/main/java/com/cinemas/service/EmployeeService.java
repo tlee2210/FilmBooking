@@ -2,7 +2,7 @@ package com.cinemas.service;
 
 import com.cinemas.dto.EmployeeDTO;
 import com.cinemas.dto.request.EmployeeRequest;
-import com.cinemas.entity.Employee;
+import com.cinemas.entities.Employee;
 
 import java.util.List;
 

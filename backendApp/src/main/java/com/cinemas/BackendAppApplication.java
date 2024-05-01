@@ -1,9 +1,9 @@
 package com.cinemas;
 
-import com.cinemas.entity.User;
+import com.cinemas.entities.User;
 import com.cinemas.enums.Gender;
 import com.cinemas.enums.RoleType;
-import com.cinemas.repository.UserRepository;
+import com.cinemas.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

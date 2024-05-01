@@ -1,4 +1,4 @@
-package com.cinemas.entity;
+package com.cinemas.entities;
 
 import com.cinemas.enums.Gender;
 import com.cinemas.enums.RoleType;
@@ -39,6 +39,9 @@ public class User implements UserDetails {
     private Gender gender;
     @Column
     private RoleType role;
+
+    @OneToOne(mappedBy = "user")
+    private ForgotPassword forgotPassword;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -2,10 +2,8 @@ package com.cinemas.service.impl;
 
 import com.cinemas.dto.EmployeeDTO;
 import com.cinemas.dto.request.EmployeeRequest;
-import com.cinemas.entity.Employee;
-import com.cinemas.exception.AppException;
-import com.cinemas.exception.ErrorCode;
-import com.cinemas.repository.EmployeeRepository;
+import com.cinemas.entities.Employee;
+import com.cinemas.repositories.EmployeeRepository;
 import com.cinemas.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
