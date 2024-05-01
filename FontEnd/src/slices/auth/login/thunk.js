@@ -9,16 +9,23 @@ import {
 } from "./reducer";
 
 export const loginUser = (user, history) => async (dispatch) => {
-  await axios
-    .post(`http://localhost:8081/api/auth/signin`, user)
-    .then((res) => {
-      console.log(res);
-      // const { token, user: userLogin } = res.data;
-      // sessionStorage.setItem("authUser", JSON.stringify(res.data));
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+  return new Promise(async (resolve, reject) => {
+    await axios
+      .post("http://localhost:8081/api/auth/signin", user)
+      .then((res) => {
+        console.log(res);
+        const { token, user: userLogin } = res.data.result;
+        const tokenObj = { accessToken: token };
+        const validUserObj = { ...userLogin, ...tokenObj };
+        sessionStorage.setItem("authUser", JSON.stringify(res.data.result));
+        loginSuccess(res.data.result.user);
+        history("/pages-starter");
+        resolve([200, validUserObj]);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  });
 };
 
 export const logoutUser = () => async (dispatch) => {

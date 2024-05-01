@@ -1,104 +1,196 @@
-import React from "react";
+import React, { useState } from "react";
+import Flatpickr from "react-flatpickr";
 import { Link } from "react-router-dom";
 import {
   Card,
+  CardBody,
+  CardHeader,
   Col,
   Container,
   Form,
   Input,
+  Label,
+  Nav,
+  NavItem,
+  NavLink,
   Row,
-  UncontrolledTooltip,
+  TabContent,
+  TabPane,
 } from "reactstrap";
+import classnames from "classnames";
 
-// import Avatar3 from "../../../assets/images/users/avatar-3.jpg";
-// import Avatar9 from "../../../assets/images/users/avatar-9.jpg";
-// import Avatar10 from "../../../assets/images/users/avatar-10.jpg";
-// import JobProfile2 from "../../../assets/images/job-profile2.png";
+// Swiper
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import "swiper/css/scrollbar";
+import "swiper/css/effect-fade";
+import "swiper/css/effect-flip";
+import {
+  Pagination,
+  Navigation,
+  Scrollbar,
+  EffectFade,
+  EffectCreative,
+  Mousewheel,
+  EffectFlip,
+  EffectCoverflow,
+  Autoplay,
+} from "swiper/modules";
+
+import img1 from "../../assets/images/galaxy/img-1.png";
 
 const Home = () => {
+  const [activeTab, setActiveTab] = useState("1");
+
+  const tabChange = (tab) => {
+    if (activeTab !== tab) setActiveTab(tab);
+  };
+
   return (
     <React.Fragment>
-      <section className="section job-hero-section bg-light pb-0" id="hero">
-        <Container>
-          <Row className="justify-content-between align-items-center">
-            <Col lg={6}>
-            <div>
-                <h1 className="display-6 fw-semibold text-capitalize mb-3 lh-base">
-                  Find your next job and build your dream here
-                </h1>
-                <p className="lead text-muted lh-base mb-4">
-                  Find jobs, create trackable resumes and enrich your
-                  applications. Carefully crafted after analyzing the needs of
-                  different industries.
-                </p>
-                <Form action="#" className="job-panel-filter">
-                  <Row className="g-md-0 g-2">
-                    <Col className="col-md-4">
-                      <div>
-                        <Input
-                          type="search"
-                          id="job-title"
-                          className="form-control filter-input-box"
-                          placeholder="Job, Company name..."
-                        />
-                      </div>
-                    </Col>
-                    <Col className="col-md-4">
-                      <div>
-                        <select className="form-control" data-choices>
-                          <option value="">Select job type</option>
-                          <option value="Full Time">Full Time</option>
-                          <option value="Part Time">Part Time</option>
-                          <option value="Freelance">Freelance</option>
-                          <option value="Intership">Intership</option>
-                        </select>
-                      </div>
-                    </Col>
-                    <Col className="col-md-4">
-                      <div className="h-100">
-                        <button
-                          className="btn btn-primary submit-btn w-100 h-100"
-                          type="submit"
-                        >
-                          <i className="ri-search-2-line align-bottom me-1"></i>{" "}
-                          Find Job
-                        </button>
-                      </div>
-                    </Col>
-                  </Row>
-                </Form>
-
-                <ul className="treding-keywords list-inline mb-0 mt-3 fs-13">
-                  <li className="list-inline-item text-danger fw-semibold">
-                    <i className="mdi mdi-tag-multiple-outline align-middle"></i>{" "}
-                    Trending Keywords:
-                  </li>
-                  <li className="list-inline-item">
-                    <Link to="#!">
-                      Design,
-                    </Link>
-                  </li>
-                  <li className="list-inline-item">
-                    <Link to="#!">
-                      Development,
-                    </Link>
-                  </li>
-                  <li className="list-inline-item">
-                    <Link to="#!">
-                      Manager,
-                    </Link>
-                  </li>
-                  <li className="list-inline-item">
-                    <Link to="#!">
-                      Senior
-                    </Link>
-                  </li>
-                </ul>
+      <section className="section job-hero-section pb-0" id="hero">
+        <Swiper
+          pagination={{ clickable: true, dynamicBullets: true }}
+          modules={[Pagination, Autoplay]}
+          loop={true}
+          centeredSlides={true}
+          autoplay={{ delay: 2500, disableOnInteraction: false }}
+          className="mySwiper swiper pagination-dynamic-swiper rounded bg-light"
+        >
+          <div className="swiper-wrapper">
+            <SwiperSlide>
+              <div class="swiper-slide d-flex justify-content-center align-items-center">
+                <img src={img1} alt="" className="img-fluid" />
               </div>
-            </Col>
-           
-          </Row>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div class="swiper-slide d-flex justify-content-center align-items-center">
+                <img src={img1} alt="" className="img-fluid" />
+              </div>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div class="swiper-slide d-flex justify-content-center align-items-center">
+                <img src={img1} alt="" className="img-fluid" />
+              </div>
+            </SwiperSlide>
+          </div>
+        </Swiper>
+        <Container>
+          <div
+            className="position-relative mb-5"
+            style={{
+              marginTop: "-20px",
+              position: "relative",
+              zIndex: 1,
+              marginBottom: "100px",
+            }}
+          >
+            <Form action="#" className="job-panel-filter border shadow">
+              <Row className="g-md-0 g-2">
+                <Col className="col-md-3">
+                  <div>
+                    <select className="form-control border" data-choices>
+                      <option value="">Choose Movie</option>
+                      <option value="Full Time">Full Time</option>
+                      <option value="Part Time">Part Time</option>
+                      <option value="Freelance">Freelance</option>
+                      <option value="Intership">Intership</option>
+                    </select>
+                  </div>
+                </Col>
+                <Col className="col-md-3">
+                  <div>
+                    <select className="form-control border" data-choices>
+                      <option value="">Choose Theater</option>
+                      <option value="Full Time">Full Time</option>
+                      <option value="Part Time">Part Time</option>
+                      <option value="Freelance">Freelance</option>
+                      <option value="Intership">Intership</option>
+                    </select>
+                  </div>
+                </Col>
+                <Col className="col-md-2">
+                  <div>
+                    <select className="form-control border" data-choices>
+                      <option value="">Choose Date</option>
+                      <option value="Full Time">Full Time</option>
+                      <option value="Part Time">Part Time</option>
+                      <option value="Freelance">Freelance</option>
+                      <option value="Intership">Intership</option>
+                    </select>
+                  </div>
+                </Col>
+                <Col className="col-md-2">
+                  <div>
+                    <select
+                      className="form-control border rounded-1"
+                      data-choices
+                    >
+                      <option value="">Choose Time</option>
+                      <option value="Full Time">Full Time</option>
+                      <option value="Part Time">Part Time</option>
+                      <option value="Freelance">Freelance</option>
+                      <option value="Intership">Intership</option>
+                    </select>
+                  </div>
+                </Col>
+                <Col className="col-md-2">
+                  <div className="h-100">
+                    <button
+                      className="btn submit-btn w-100 h-100 bg-warning-subtle"
+                      type="submit"
+                    >
+                      <i className="ri-search-2-line align-bottom me-1"></i> Buy
+                      Tickets Quickly
+                    </button>
+                  </div>
+                </Col>
+              </Row>
+            </Form>
+          </div>
+          <Card className="mt-xxl-n5" style={{ marginTop: "50px" }}>
+            <CardHeader>
+              <Nav
+                className="nav-tabs-custom rounded card-header-tabs border-bottom-0"
+                role="tablist"
+              >
+                <NavItem>
+                  <NavLink
+                    className={classnames({ active: activeTab === "1" })}
+                    onClick={() => {
+                      tabChange("1");
+                    }}
+                  >
+                    <i className="fas fa-home"></i>
+                    Đang chiếu
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink
+                    to="#"
+                    className={classnames({ active: activeTab === "2" })}
+                    onClick={() => {
+                      tabChange("2");
+                    }}
+                    type="button"
+                  >
+                    <i className="far fa-user"></i>
+                    Sắp chiếu
+                  </NavLink>
+                </NavItem>
+              </Nav>
+            </CardHeader>
+            <CardBody className="p-4">
+              <TabContent activeTab={activeTab}>
+                <TabPane tabId="1">a</TabPane>
+                <TabPane tabId="2">b</TabPane>
+              </TabContent>
+            </CardBody>
+          </Card>
         </Container>
+        <Container className="mt-5"></Container>
       </section>
     </React.Fragment>
   );

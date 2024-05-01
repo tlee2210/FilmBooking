@@ -95,11 +95,11 @@ const UserProfile = () => {
                 <CardBody>
                   <div className="d-flex">
                     <div className="mx-3">
-                      <img
+                      {/* <img
                         src={avatar}
                         alt=""
                         className="avatar-md rounded-circle img-thumbnail"
-                      />
+                      /> */}
                     </div>
                     <div className="flex-grow-1 align-self-center">
                       <div className="text-muted">

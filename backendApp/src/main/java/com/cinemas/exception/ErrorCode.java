@@ -19,6 +19,8 @@ public enum ErrorCode {
 
     USER_EXISTED(HttpStatus.BAD_REQUEST, "User existed"),
 
+    EMAIL_EXISTED(HttpStatus.BAD_REQUEST, "Email existed"),
+
     //    USERNAME_INVALID("{field} must be at least {min} characters", HttpStatus.BAD_REQUEST, "Validation Error"),
     INVALID_EMAIL("Invalid email format", HttpStatus.BAD_REQUEST, "Validation Error"),
 

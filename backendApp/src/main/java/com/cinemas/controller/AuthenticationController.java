@@ -30,13 +30,12 @@ public class AuthenticationController {
      * @return
      */
     @PostMapping("/signup")
-    public APIResponse<User> signup(@RequestBody SignUpRequest signUpRequest) {
-        User response = authenticationService.signup(signUpRequest);
+    public APIResponse<User> signup(@RequestBody @Valid SignUpRequest signUpRequest) {
+        String response = authenticationService.signup(signUpRequest);
 
         APIResponse<User> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
-        apiResponse.setMessage("Signin successful");
-        apiResponse.setResult(response);
+        apiResponse.setMessage(response);
 
         return apiResponse;
     }

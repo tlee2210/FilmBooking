@@ -137,7 +137,7 @@ const Footer = () => {
             <Col className="col-sm-6">
               <div>
                 <p className="copy-rights mb-0">
-                  {new Date().getFullYear()} ©Themesbrand -Tlee
+                  {new Date().getFullYear()} ©Themesbrand - Tlee
                 </p>
               </div>
             </Col>

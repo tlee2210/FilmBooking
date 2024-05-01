@@ -1,6 +1,8 @@
 package com.cinemas.entity;
 
+import com.cinemas.enums.Gender;
 import com.cinemas.enums.RoleType;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -17,6 +20,7 @@ import java.util.List;
 @Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User implements UserDetails {
     @Id
     @GeneratedValue
@@ -27,6 +31,12 @@ public class User implements UserDetails {
     private String email;
     @Column
     private String password;
+    @Column
+    private String phone;
+    @Column
+    private LocalDate DOB;
+    @Column
+    private Gender gender;
     @Column
     private RoleType role;
 

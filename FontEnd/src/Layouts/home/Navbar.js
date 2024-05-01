@@ -4,6 +4,9 @@ import Scrollspy from "react-scrollspy";
 import { Collapse, Container, NavbarToggler, NavLink } from "reactstrap";
 import LogoDark from "../../assets/images/logo-dark.png";
 import LogoLight from "../../assets/images/logo-light.png";
+
+import Ticket from "../../assets/images/Ticket.png";
+
 const Navbar = () => {
   const [isOpenMenu, setisOpenMenu] = useState(false);
   const [navClass, setnavClass] = useState("");
@@ -107,6 +110,17 @@ const Navbar = () => {
               className="navbar-nav mx-auto mt-2 mt-lg-0"
               id="navbar-example"
             >
+              <li className="nav-item">
+                <NavLink
+                  className="fs-16"
+                  href="#Movies"
+                  style={{
+                    marginTop: "-5px",
+                  }}
+                >
+                  <img src={Ticket} height={36} width={112} />
+                </NavLink>
+              </li>
               <li className="nav-item">
                 <NavLink className="fs-16" href="#Movies">
                   Movies

@@ -5,7 +5,6 @@ public class AppException extends RuntimeException {
         super(errorCode.getMessageDetail());
         this.errorCode = errorCode;
     }
-
     private ErrorCode errorCode;
 
     public ErrorCode getErrorCode() {

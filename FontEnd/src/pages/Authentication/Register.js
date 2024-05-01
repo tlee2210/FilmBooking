@@ -11,12 +11,13 @@ import {
   Form,
   FormFeedback,
 } from "reactstrap";
-
+import Flatpickr from "react-flatpickr";
+import withRouter from "../../Components/Common/withRouter";
 // Formik Validation
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { message } from "antd";
 
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // action
@@ -32,7 +33,7 @@ import logoLight from "../../assets/images/logo-light.png";
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 import { createSelector } from "reselect";
 
-const Register = () => {
+const Register = (props) => {
   const history = useNavigate();
   const dispatch = useDispatch();
 
@@ -42,20 +43,60 @@ const Register = () => {
 
     initialValues: {
       email: "",
-      first_name: "",
+      name: "",
       password: "",
       confirm_password: "",
+      phone: "",
+      dateOfBirth: "",
+      Gender: "",
     },
     validationSchema: Yup.object({
-      email: Yup.string().required("Please Enter Your Email"),
-      first_name: Yup.string().required("Please Enter Your Username"),
-      password: Yup.string().required("Please enter your password"),
+      name: Yup.string().required("Please Enter Your name"),
+      email: Yup.string()
+        .email("Invalid email address")
+        .required("Please Enter Your Email"),
+      password: Yup.string()
+        .min(8, "Password must be at least 8 characters long")
+        .required("Please enter your password"),
       confirm_password: Yup.string()
+        .min(8, "confirm Password must be at least 8 characters long")
         .oneOf([Yup.ref("password")], "Passwords do not match")
         .required("Please confirm your password"),
+      phone: Yup.string()
+        .matches(/^\d{10}$/, "Please enter a valid 10-digit phone number")
+        .required("Phone number is required"),
+      dateOfBirth: Yup.date()
+        .min(new Date().fp_incr(-65 * 365), "Minimum age is 65 years")
+        .max(new Date().fp_incr(-12 * 365), "Maximum age is 12 years")
+        .required("Please select a date of birth"),
+      Gender: Yup.string()
+        .oneOf(
+          ["Male", "Female"],
+          "Invalid gender. Please choose either Male or Female."
+        )
+        .required("Please Enter a Gender"),
     }),
     onSubmit: (values) => {
-      dispatch(registerUser(values));
+      // dispatch(registerUser(values));
+      console.log(values);
+      const formData = new FormData();
+      formData.append("email", values.email);
+      formData.append("name", values.name);
+      formData.append("password", values.password);
+      formData.append("phone", values.phone);
+      formData.append("gender", values.Gender);
+      if (values.dateOfBirth) {
+        const dob = new Date(values.dateOfBirth);
+        const formattedDate = [
+          dob.getFullYear(),
+          ("0" + (dob.getMonth() + 1)).slice(-2),
+          ("0" + dob.getDate()).slice(-2),
+        ].join("-"); // Format: YYYY-MM-DD
+
+        formData.append("dob", formattedDate);
+      }
+      // console.log(formData.values());
+      dispatch(registerUser(formData));
     },
   });
 
@@ -63,25 +104,37 @@ const Register = () => {
   const registerdatatype = createSelector(selectLayoutState, (account) => ({
     success: account.success,
     error: account.error,
+    messageSuccess: account.message,
   }));
   // Inside your component
-  const { error, success } = useSelector(registerdatatype);
+  const { error, success, messageSuccess } = useSelector(registerdatatype);
 
   useEffect(() => {
     dispatch(apiError(""));
   }, [dispatch]);
 
+  // useEffect(() => {
+  //   console.log("Current validation errors:", validation.errors);
+  // }, [validation.errors]);
+
   useEffect(() => {
     if (success) {
-      setTimeout(() => history("/login"), 3000);
+      history("/login");
+      if (messageSuccess != null) {
+        message.success(messageSuccess);
+      }
     }
-
+    if (error) {
+      if (messageSuccess != null) {
+        message.error(messageSuccess);
+      }
+    }
     setTimeout(() => {
       dispatch(resetRegisterFlag());
     }, 3000);
   }, [dispatch, success, error, history]);
 
-  document.title = "Basic SignUp | Velzon - React Admin & Dashboard Template";
+  document.title = "SignUp";
 
   return (
     <React.Fragment>
@@ -123,32 +176,6 @@ const Register = () => {
                         className="needs-validation"
                         action="#"
                       >
-                        {success && success ? (
-                          <>
-                            {toast("Your Redirect To Login Page...", {
-                              position: "top-right",
-                              hideProgressBar: false,
-                              className: "bg-success text-white",
-                              progress: undefined,
-                              toastId: "",
-                            })}
-                            <ToastContainer autoClose={2000} limit={1} />
-                            <Alert color="success">
-                              Register User Successfully and Your Redirect To
-                              Login Page...
-                            </Alert>
-                          </>
-                        ) : null}
-
-                        {error && error ? (
-                          <Alert color="danger">
-                            <div>
-                              Email has been Register Before, Please Use Another
-                              Email Address...{" "}
-                            </div>
-                          </Alert>
-                        ) : null}
-
                         <div className="mb-3">
                           <Label htmlFor="useremail" className="form-label">
                             Email <span className="text-danger">*</span>
@@ -177,27 +204,107 @@ const Register = () => {
                           ) : null}
                         </div>
                         <div className="mb-3">
-                          <Label htmlFor="username" className="form-label">
-                            Username <span className="text-danger">*</span>
+                          <Label htmlFor="name" className="form-label">
+                            name <span className="text-danger">*</span>
                           </Label>
                           <Input
-                            name="first_name"
+                            name="name"
                             type="text"
-                            placeholder="Enter username"
+                            placeholder="Enter name"
                             onChange={validation.handleChange}
                             onBlur={validation.handleBlur}
-                            value={validation.values.first_name || ""}
+                            value={validation.values.name || ""}
                             invalid={
-                              validation.touched.first_name &&
-                              validation.errors.first_name
+                              validation.touched.name && validation.errors.name
                                 ? true
                                 : false
                             }
                           />
-                          {validation.touched.first_name &&
-                          validation.errors.first_name ? (
+                          {validation.touched.name && validation.errors.name ? (
                             <FormFeedback type="invalid">
-                              <div>{validation.errors.first_name}</div>
+                              <div>{validation.errors.name}</div>
+                            </FormFeedback>
+                          ) : null}
+                        </div>
+                        <div className="mb-3">
+                          <Label htmlFor="username" className="form-label">
+                            phone number<span className="text-danger">*</span>
+                          </Label>
+                          <Input
+                            name="phone"
+                            type="text"
+                            placeholder="Enter username"
+                            onChange={validation.handleChange}
+                            onBlur={validation.handleBlur}
+                            value={validation.values.phone || ""}
+                            invalid={
+                              validation.touched.phone &&
+                              validation.errors.phone
+                                ? true
+                                : false
+                            }
+                          />
+                          {validation.touched.phone &&
+                          validation.errors.phone ? (
+                            <FormFeedback type="invalid">
+                              <div>{validation.errors.phone}</div>
+                            </FormFeedback>
+                          ) : null}
+                        </div>
+                        <div className="mb-3">
+                          <Label htmlFor="username" className="form-label">
+                            date Of Birth<span className="text-danger">*</span>
+                          </Label>
+                          <Flatpickr
+                            className="form-control"
+                            placeholder="date Of Birth"
+                            value={validation.values.dateOfBirth}
+                            onChange={([selectedDate]) => {
+                              validation.setFieldValue(
+                                "dateOfBirth",
+                                selectedDate
+                              );
+                            }}
+                            options={{
+                              minDate: new Date().fp_incr(-65 * 365),
+                              maxDate: new Date().fp_incr(-12 * 365),
+                            }}
+                          />
+                          {validation.errors.dateOfBirth &&
+                          validation.touched.dateOfBirth ? (
+                            <div className="text-danger">
+                              {validation.errors.dateOfBirth}
+                            </div>
+                          ) : null}
+                        </div>
+
+                        <div className="mb-3">
+                          <Label
+                            className="form-label"
+                            htmlFor="product-title-input"
+                          >
+                            Gender
+                          </Label>
+                          <Input
+                            type="text"
+                            className="form-control"
+                            id="product-title-input"
+                            placeholder="Enter Gender"
+                            name="Gender"
+                            value={validation.values.Gender || ""}
+                            onBlur={validation.handleBlur}
+                            onChange={validation.handleChange}
+                            invalid={
+                              validation.errors.Gender &&
+                              validation.touched.Gender
+                                ? true
+                                : false
+                            }
+                          />
+                          {validation.errors.Gender &&
+                          validation.touched.Gender ? (
+                            <FormFeedback type="invalid">
+                              {validation.errors.Gender}
                             </FormFeedback>
                           ) : null}
                         </div>
@@ -258,18 +365,6 @@ const Register = () => {
                           ) : null}
                         </div>
 
-                        <div className="mb-4">
-                          <p className="mb-0 fs-12 text-muted fst-italic">
-                            By registering you agree to the Velzon
-                            <Link
-                              to="#"
-                              className="text-primary text-decoration-underline fst-normal fw-medium"
-                            >
-                              Terms of Use
-                            </Link>
-                          </p>
-                        </div>
-
                         <div className="mt-4">
                           <button
                             className="btn btn-success w-100"
@@ -277,41 +372,6 @@ const Register = () => {
                           >
                             Sign Up
                           </button>
-                        </div>
-
-                        <div className="mt-4 text-center">
-                          <div className="signin-other-title">
-                            <h5 className="fs-13 mb-4 title text-muted">
-                              Create account with
-                            </h5>
-                          </div>
-
-                          <div>
-                            <button
-                              type="button"
-                              className="btn btn-primary btn-icon waves-effect waves-light"
-                            >
-                              <i className="ri-facebook-fill fs-16"></i>
-                            </button>{" "}
-                            <button
-                              type="button"
-                              className="btn btn-danger btn-icon waves-effect waves-light"
-                            >
-                              <i className="ri-google-fill fs-16"></i>
-                            </button>{" "}
-                            <button
-                              type="button"
-                              className="btn btn-dark btn-icon waves-effect waves-light"
-                            >
-                              <i className="ri-github-fill fs-16"></i>
-                            </button>{" "}
-                            <button
-                              type="button"
-                              className="btn btn-info btn-icon waves-effect waves-light"
-                            >
-                              <i className="ri-twitter-fill fs-16"></i>
-                            </button>
-                          </div>
                         </div>
                       </Form>
                     </div>
@@ -338,4 +398,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default withRouter(Register);

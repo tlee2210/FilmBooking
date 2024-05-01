@@ -115,8 +115,8 @@ const NotificationDropdown = () => {
 
                                 <div className="text-reset notification-item d-block dropdown-item position-relative active">
                                     <div className="d-flex">
-                                        <img src={avatar2}
-                                            className="me-3 rounded-circle avatar-xs" alt="user-pic" />
+                                        {/* <img src={avatar2}
+                                            className="me-3 rounded-circle avatar-xs" alt="user-pic" /> */}
                                         <div className="flex-grow-1">
                                             <Link to="#" className="stretched-link"><h6 className="mt-0 mb-1 fs-13 fw-semibold">Angela Bernier</h6></Link>
                                             <div className="fs-13 text-muted">
@@ -165,7 +165,7 @@ const NotificationDropdown = () => {
 
                                 <div className="text-reset notification-item d-block dropdown-item position-relative">
                                     <div className="d-flex">
-                                        <img src={avatar8} className="me-3 rounded-circle avatar-xs" alt="user-pic" />
+                                        {/* <img src={avatar8} className="me-3 rounded-circle avatar-xs" alt="user-pic" /> */}
                                         <div className="flex-grow-1">
                                             <Link to="#" className="stretched-link"><h6 className="mt-0 mb-1 fs-13 fw-semibold">Maureen Gibson</h6></Link>
                                             <div className="fs-13 text-muted">
@@ -197,8 +197,8 @@ const NotificationDropdown = () => {
                             <SimpleBar style={{ maxHeight: "300px" }} className="pe-2">
                                 <div className="text-reset notification-item d-block dropdown-item">
                                     <div className="d-flex">
-                                        <img src={avatar3}
-                                            className="me-3 rounded-circle avatar-xs" alt="user-pic" />
+                                        {/* <img src={avatar3}
+                                            className="me-3 rounded-circle avatar-xs" alt="user-pic" /> */}
                                         <div className="flex-grow-1">
                                             <Link to="#" className="stretched-link"><h6 className="mt-0 mb-1 fs-13 fw-semibold">James Lemire</h6></Link>
                                             <div className="fs-13 text-muted">
@@ -220,8 +220,8 @@ const NotificationDropdown = () => {
 
                                 <div className="text-reset notification-item d-block dropdown-item">
                                     <div className="d-flex">
-                                        <img src={avatar2}
-                                            className="me-3 rounded-circle avatar-xs" alt="user-pic" />
+                                        {/* <img src={avatar2}
+                                            className="me-3 rounded-circle avatar-xs" alt="user-pic" /> */}
                                         <div className="flex-grow-1">
                                             <Link to="#" className="stretched-link"><h6 className="mt-0 mb-1 fs-13 fw-semibold">Angela Bernier</h6></Link>
                                             <div className="fs-13 text-muted">
@@ -244,8 +244,8 @@ const NotificationDropdown = () => {
 
                                 <div className="text-reset notification-item d-block dropdown-item">
                                     <div className="d-flex">
-                                        <img src={avatar6}
-                                            className="me-3 rounded-circle avatar-xs" alt="user-pic" />
+                                        {/* <img src={avatar6}
+                                            className="me-3 rounded-circle avatar-xs" alt="user-pic" /> */}
                                         <div className="flex-grow-1">
                                             <Link to="#" className="stretched-link"><h6 className="mt-0 mb-1 fs-13 fw-semibold">Kenneth Brown</h6></Link>
                                             <div className="fs-13 text-muted">
@@ -267,8 +267,8 @@ const NotificationDropdown = () => {
 
                                 <div className="text-reset notification-item d-block dropdown-item">
                                     <div className="d-flex">
-                                        <img src={avatar8}
-                                            className="me-3 rounded-circle avatar-xs" alt="user-pic" />
+                                        {/* <img src={avatar8}
+                                            className="me-3 rounded-circle avatar-xs" alt="user-pic" /> */}
                                         <div className="flex-grow-1">
                                             <Link to="#" className="stretched-link"><h6 className="mt-0 mb-1 fs-13 fw-semibold">Maureen Gibson</h6></Link>
                                             <div className="fs-13 text-muted">

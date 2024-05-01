@@ -125,11 +125,11 @@ const SearchOption = () => {
             <div className="notification-list">
               <Link to="#" className="dropdown-item notify-item py-2">
                 <div className="d-flex">
-                  <img
+                  {/* <img
                     src={image2}
                     className="me-3 rounded-circle avatar-xs"
                     alt="user-pic"
-                  />
+                  /> */}
                   <div className="flex-grow-1">
                     <h6 className="m-0">Angela Bernier</h6>
                     <span className="fs-11 mb-0 text-muted">Manager</span>
@@ -139,11 +139,11 @@ const SearchOption = () => {
 
               <Link to="#" className="dropdown-item notify-item py-2">
                 <div className="d-flex">
-                  <img
+                  {/* <img
                     src={image3}
                     className="me-3 rounded-circle avatar-xs"
                     alt="user-pic"
-                  />
+                  /> */}
                   <div className="flex-grow-1">
                     <h6 className="m-0">David Grasso</h6>
                     <span className="fs-11 mb-0 text-muted">Web Designer</span>
@@ -153,11 +153,11 @@ const SearchOption = () => {
 
               <Link to="#" className="dropdown-item notify-item py-2">
                 <div className="d-flex">
-                  <img
+                  {/* <img
                     src={image5}
                     className="me-3 rounded-circle avatar-xs"
                     alt="user-pic"
-                  />
+                  /> */}
                   <div className="flex-grow-1">
                     <h6 className="m-0">Mike Bunch</h6>
                     <span className="fs-11 mb-0 text-muted">

@@ -13,7 +13,7 @@ public class SigninRequest {
     @Email(message = "INVALID_EMAIL")
     private String email;
 
-    @Size(min = 5, max = 10, message = "FIELD_TOO_LENGTH")
+    @Size(min = 5, message = "FIELD_TOO_LENGTH")
     @NotEmpty(message = "VALIDATION")
     private String password;
 }

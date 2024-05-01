@@ -1,11 +1,14 @@
 package com.cinemas.service.impl;
 
+import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.RefreshTokenRequest;
 import com.cinemas.dto.request.SignUpRequest;
 import com.cinemas.dto.request.SigninRequest;
 import com.cinemas.dto.response.JwtAuthenticationResponse;
+import com.cinemas.dto.response.UserSignInRepose;
 import com.cinemas.entity.User;
 import com.cinemas.enums.RoleType;
+import com.cinemas.exception.AppException;
 import com.cinemas.repository.UserRepository;
 import com.cinemas.service.AuthenticationService;
 import com.cinemas.service.JWTService;
@@ -15,7 +18,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.HashMap;
+
+import static com.cinemas.exception.ErrorCode.EMAIL_EXISTED;
 
 @Service
 @RequiredArgsConstructor
@@ -28,14 +34,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final JWTService jwtService;
 
-    public User signup(SignUpRequest signUpRequest) {
+    public String signup(SignUpRequest signUpRequest) {
+        if (userRepository.existsByEmail(signUpRequest.getEmail()))
+            throw new AppException(EMAIL_EXISTED);
         User user = new User();
-        user.setEmail(signUpRequest.getEmail());
-        user.setName(signUpRequest.getName());
+        ObjectUtils.copyFields(signUpRequest, user);
         user.setRole(RoleType.USER);
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+        user.setDOB(signUpRequest.getDOB());
+        System.out.println(user);
 
-        return userRepository.save(user);
+        if (user == null)
+            throw new IllegalArgumentException("User creation failed");
+
+        userRepository.save(user);
+
+        return "Registration successful";
     }
 
     public JwtAuthenticationResponse signin(SigninRequest signinRequest) {
@@ -46,12 +60,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var user = userRepository.findByEmail(signinRequest.getEmail()).orElseThrow(
                 () -> new IllegalArgumentException("Invalid email or password"));
         var jwt = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
 
         JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
 
+        UserSignInRepose userRepo = new UserSignInRepose();
+
+        ObjectUtils.copyFields(user, userRepo);
+
         jwtAuthenticationResponse.setToken(jwt);
-        jwtAuthenticationResponse.setRefreshToken(refreshToken);
+        jwtAuthenticationResponse.setUser(userRepo);
 
         return jwtAuthenticationResponse;
     }
@@ -79,11 +96,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         if (jwtService.isTokenValid(refreshTokenRequest.getToken(), user)) {
             var jwt = jwtService.generateToken(user);
-            var newRefreshToken = jwtService.generateRefreshToken(new HashMap<>(), user); // Generate a new refresh token
+            var newRefreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
 
             JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
             jwtAuthenticationResponse.setToken(jwt);
-            jwtAuthenticationResponse.setRefreshToken(newRefreshToken); // Set new refresh token
+//            jwtAuthenticationResponse.setRefreshToken(newRefreshToken); // Set new refresh token
 
             return jwtAuthenticationResponse;
         }

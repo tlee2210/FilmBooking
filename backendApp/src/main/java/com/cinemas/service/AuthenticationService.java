@@ -7,7 +7,7 @@ import com.cinemas.dto.response.JwtAuthenticationResponse;
 import com.cinemas.entity.User;
 
 public interface AuthenticationService {
-    User signup(SignUpRequest signUpRequest);
+    String signup(SignUpRequest signUpRequest);
 
     JwtAuthenticationResponse signin(SigninRequest signinRequest);
 

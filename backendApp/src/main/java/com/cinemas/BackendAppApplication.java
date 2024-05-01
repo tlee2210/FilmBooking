@@ -1,6 +1,7 @@
 package com.cinemas;
 
 import com.cinemas.entity.User;
+import com.cinemas.enums.Gender;
 import com.cinemas.enums.RoleType;
 import com.cinemas.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.time.LocalDate;
 
 @SpringBootApplication
 public class BackendAppApplication implements CommandLineRunner {
@@ -24,10 +27,13 @@ public class BackendAppApplication implements CommandLineRunner {
         if (null == adminAccount) {
             User user = new User();
 
-            user.setEmail("admin@gmail.com");
+            user.setEmail("thienle255@gmail.com");
             user.setName("Tlee");
+            user.setGender(Gender.Male);
+            user.setPhone("0905028073");
+            user.setDOB(LocalDate.of(2001, 10, 22));
             user.setRole(RoleType.ADMIN);
-            user.setPassword(new BCryptPasswordEncoder().encode("admin"));
+            user.setPassword(new BCryptPasswordEncoder().encode("thienle2210"));
             userRepository.save(user);
         }
     }
