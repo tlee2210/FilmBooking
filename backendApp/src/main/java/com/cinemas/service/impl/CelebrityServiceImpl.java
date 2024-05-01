@@ -2,7 +2,7 @@ package com.cinemas.service.impl;
 
 import com.cinemas.dto.request.CelebrityRequest;
 import com.cinemas.entity.Celebrity;
-import com.cinemas.repository.CelebrityRepository;
+import com.cinemas.repositories.CelebrityRepository;
 import com.cinemas.service.CelebrityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

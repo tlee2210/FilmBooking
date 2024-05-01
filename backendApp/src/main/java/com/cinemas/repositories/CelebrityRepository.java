@@ -1,4 +1,4 @@
-package com.cinemas.repository;
+package com.cinemas.repositories;
 
 import com.cinemas.entity.Celebrity;
 import org.springframework.data.jpa.repository.JpaRepository;
