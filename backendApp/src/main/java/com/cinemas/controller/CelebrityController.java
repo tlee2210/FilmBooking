@@ -1,13 +1,12 @@
 package com.cinemas.controller;
 
 import com.cinemas.dto.request.CelebrityRequest;
-import com.cinemas.entity.Celebrity;
+import com.cinemas.entities.Celebrity;
 import com.cinemas.enums.RoleCeleb;
 import com.cinemas.service.CelebrityService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -19,10 +18,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,7 +43,8 @@ public class CelebrityController {
     public ResponseEntity<?> createCelebrity(@ModelAttribute CelebrityRequest celebrity) {
         try{
             MultipartFile file =celebrity.getFile();
-            if(file != null){
+            String fileName = null;
+            if(file != null && !file.isEmpty()){
                 if(file.getSize() > 10 * 1024 * 1024){
                     return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("File is too large, maximum is 10MB");
                 }
@@ -58,17 +54,13 @@ public class CelebrityController {
                 if(contentType == null || !contentType.startsWith("image/")){
                     return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body("File must be an image");
                 }
-                String fileName = storeFile(file, celebrity.getRole());
-//                Celebrity addCeleb = new Celebrity();
-//                addCeleb.setName(celebrity.getName());
-//                addCeleb.setBiography(celebrity.getBiography());
-//                addCeleb.setDescription(celebrity.getDescription());
-//                addCeleb.setNationality(celebrity.getNationality());
-//                addCeleb.setRole(celebrity.getRole());
-//                addCeleb.setDateOfBirth(celebrity.getDateOfBirth());
+                fileName = storeFile(file, celebrity.getRole());
                 celebrity.setImage(fileName);
-                celebrityService.addCelebrity(celebrity);
             }
+            if (celebrity.getImage() == null) {
+                celebrity.setImage("");
+            }
+            celebrityService.addCelebrity(celebrity);
             return ResponseEntity.ok("Successfully added celeb");
         }
         catch(Exception e){
@@ -130,7 +122,7 @@ public class CelebrityController {
             MultipartFile fileImg = celebrity.getFile();
             Celebrity celeb = celebrityService.getCelebrity(id);
 
-            if (fileImg != null) {
+            if (fileImg != null && !fileImg.isEmpty()) {
                 deleteExistingImage(celeb.getImage());
                 String fileName = storeFile(fileImg, celebrity.getRole());
                 celeb.setImage(fileName);

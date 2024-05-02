@@ -1,7 +1,7 @@
 package com.cinemas.service;
 
 import com.cinemas.dto.request.CelebrityRequest;
-import com.cinemas.entity.Celebrity;
+import com.cinemas.entities.Celebrity;
 
 import java.util.List;
 

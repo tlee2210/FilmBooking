@@ -1,4 +1,4 @@
-package com.cinemas.entity;
+package com.cinemas.entities;
 
 import com.cinemas.enums.RoleCeleb;
 import jakarta.persistence.Column;

@@ -1,8 +1,9 @@
 package com.cinemas.dto.request;
 
 import com.cinemas.enums.RoleCeleb;
-import jakarta.persistence.Column;
+import com.cinemas.validator.DobConstraint;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Null;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +19,7 @@ public class CelebrityRequest {
     @NotEmpty(message = "VALIDATION")
     private String name;
 
+    @DobConstraint(min = 18, message = "INVALID_DOB")
     private LocalDate dateOfBirth;
 
     private String nationality;
