@@ -21,6 +21,15 @@ public enum ErrorCode {
 
     EMAIL_EXISTED(HttpStatus.BAD_REQUEST, "Email existed"),
 
+    PROVIDE_VALID(HttpStatus.BAD_REQUEST, "please provide an valid email"),
+
+    OTP_EXPIRED(HttpStatus.EXPECTATION_FAILED, "OTP has expired!"),
+
+    CONFIRM_PASSWORD(HttpStatus.EXPECTATION_FAILED, "please enter the Password again!"),
+
+
+    EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "Email not found"),
+
     //    USERNAME_INVALID("{field} must be at least {min} characters", HttpStatus.BAD_REQUEST, "Validation Error"),
     INVALID_EMAIL("Invalid email format", HttpStatus.BAD_REQUEST, "Validation Error"),
 

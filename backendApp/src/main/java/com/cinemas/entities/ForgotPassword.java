@@ -19,7 +19,7 @@ public class ForgotPassword {
     private Integer fpid;
 
     @Column(nullable = false)
-    private Integer otp;
+    private String otp;
 
     @Column(nullable = false)
     private Date expirationTime;

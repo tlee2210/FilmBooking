@@ -1,35 +1,37 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
-  isNotificationVisible: false,
-  notificationMessage: "",
-  isErrorNotificationVisible: false,
-  errorMessage: "",
+  // isNotificationVisible: false,
+  // notificationMessage: "",
+  // isErrorNotificationVisible: false,
+  // errorMessage: "",
+  messageSuccess: null,
+  messageError: null,
+  success: false,
+  error: false,
 };
 
 const MessageSlice = createSlice({
   name: "MessageSlice",
   initialState,
   reducers: {
-    setMessage(state, action) {
-      state.notificationMessage = action.payload;
-      state.isNotificationVisible = true;
+    Success(state, action) {
+      state.messageSuccess = action.payload;
+      state.success = true;
     },
-    clearNotificationMessage(state) {
-      state.isNotificationVisible = false;
-      state.errorNotification = false;
-      state.notificationMessage = "";
-      state.isErrorNotificationVisible = null;
-      state.errorMessage = "";
+    clearNotification(state) {
+      state.success = false;
+      state.error = false;
+      state.messageSuccess = null;
+      state.messageError = null;
     },
-    errorMessage(state, action) {
-      state.isErrorNotificationVisible = true;
-      state.errorMessage = action.payload;
+    Error(state, action) {
+      state.messageError = action.payload;
+      state.error = true;
     },
   },
 });
 
-export const { setMessage, clearNotificationMessage, errorMessage } =
-  MessageSlice.actions;
+export const { Success, clearNotification, Error } = MessageSlice.actions;
 
 export default MessageSlice.reducer;

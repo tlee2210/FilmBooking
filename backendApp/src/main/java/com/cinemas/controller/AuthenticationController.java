@@ -10,6 +10,7 @@ import com.cinemas.entities.ChangePassword;
 import com.cinemas.entities.User;
 import com.cinemas.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -76,7 +77,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/verifyMail")
-    public APIResponse<String> verifyEmail(@RequestBody verifyMailrequest email) {
+    public APIResponse<String> verifyEmail(@RequestBody verifyMailrequest email) throws MessagingException {
 
         String response = authenticationService.verifyEmail(email);
 
@@ -88,9 +89,9 @@ public class AuthenticationController {
         return apiResponse;
     }
 
-    @PostMapping("/verifyOtp/{otp}/{email}")
-    public APIResponse<String> verifyOtp(@PathVariable String email, @PathVariable Integer otp) {
-        String response = authenticationService.verifyOtp(otp, email);
+    @GetMapping("/verifyOtp/{otp}/{id}")
+    public APIResponse<String> verifyOtp(@PathVariable String otp, @PathVariable String id) {
+        String response = authenticationService.verifyOtp(otp, id);
 
         APIResponse<String> apiResponse = new APIResponse<>();
 
@@ -100,10 +101,10 @@ public class AuthenticationController {
         return apiResponse;
     }
 
-    @PostMapping("/changePassword/{email}")
+    @PostMapping("/changePassword/{id}")
     public APIResponse<String> changePasswordHandler(@RequestBody ChangePassword changePassword,
-                                                     @PathVariable String email){
-        String response = authenticationService.changePasswordHandler(changePassword, email);
+                                                     @PathVariable int id) {
+        String response = authenticationService.changePasswordHandler(changePassword, id);
 
         APIResponse<String> apiResponse = new APIResponse<>();
 

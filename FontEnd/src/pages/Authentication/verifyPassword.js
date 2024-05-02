@@ -24,7 +24,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 
 // action
-import { ForgetPassword } from "../../slices/auth/forgetpwd/thunk";
+import { GetverifyOtp, ResetPassword } from "../../slices/auth/forgetpwd/thunk";
 import { message } from "antd";
 
 // import profile from "../../assets/images/bg.png";
@@ -35,9 +35,17 @@ import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 // import { clearNotification } from "../../slices/thunks";
 import { clearNotification } from "../../slices/message/reducer";
 
-const ForgetPasswordPage = (props) => {
+const verifyPassword = (props) => {
   const dispatch = useDispatch();
   const history = useNavigate();
+
+  // console.log(props.router.params);
+  const id = props.router.params.id;
+  const opt = props.router.params.opt;
+
+  useEffect(() => {
+    dispatch(GetverifyOtp(id, opt, props.router.navigate));
+  }, []);
 
   const selectForgetPasswordState = (state) => state.Message;
 
@@ -55,49 +63,46 @@ const ForgetPasswordPage = (props) => {
 
   useEffect(() => {
     if (success) {
-      history("/login");
+      // history("/login");
       if (messageSuccess != null) {
         message.success(messageSuccess);
       }
     }
     if (error) {
+      history("/login");
       if (messageError != null) {
         message.error(messageError);
       }
     }
-    setTimeout(() => {
-      dispatch(clearNotification());
-    }, 3000);
+    dispatch(clearNotification());
   }, [dispatch, success, error, history]);
 
   const validation = useFormik({
     enableReinitialize: true,
 
     initialValues: {
-      email: "",
+      password: "",
+      confirm_password: "",
     },
     validationSchema: Yup.object({
-      email: Yup.string()
-        .required("Please Enter Your Email")
-        .email("Invalid email address"),
+      password: Yup.string()
+        .min(8, "Password must be at least 8 characters long")
+        .required("Please enter your password"),
+      confirm_password: Yup.string()
+        .min(8, "confirm Password must be at least 8 characters long")
+        .oneOf([Yup.ref("password")], "Passwords do not match")
+        .required("Please confirm your password"),
     }),
     onSubmit: (values) => {
       // console.log(values);
       const formData = new FormData();
-      formData.append("email", values.email);
-      dispatch(ForgetPassword(formData, props.history));
+      formData.append("password", values.password);
+      formData.append("repeatPassword", values.confirm_password);
+      dispatch(ResetPassword(id, formData, props.history));
     },
   });
 
-  const selectLayoutState = (state) => state.ForgetPassword;
-  const selectLayoutProperties = createSelector(selectLayoutState, (state) => ({
-    forgetError: state.forgetError,
-    forgetSuccessMsg: state.forgetSuccessMsg,
-  }));
-  // Inside your component
-  const { forgetError, forgetSuccessMsg } = useSelector(selectLayoutProperties);
-
-  document.title = "Reset Password";
+  document.title = "Change Password";
   return (
     <ParticlesAuth>
       <div className="auth-page-content mt-lg-5">
@@ -110,7 +115,7 @@ const ForgetPasswordPage = (props) => {
                     <img src={logoLight} alt="" height="20" />
                   </Link>
                 </div>
-                <p className="mt-3 fs-15 fw-medium">Reset Password</p>
+                <p className="mt-3 fs-15 fw-medium">change Password</p>
               </div>
             </Col>
           </Row>
@@ -120,7 +125,7 @@ const ForgetPasswordPage = (props) => {
               <Card className="mt-4">
                 <CardBody className="p-4">
                   <div className="text-center mt-2">
-                    <h5 className="text-primary">Forgot Password?</h5>
+                    <h5 className="text-primary">change Password</h5>
                     <p className="text-muted">Reset password</p>
 
                     <lord-icon
@@ -132,23 +137,7 @@ const ForgetPasswordPage = (props) => {
                     ></lord-icon>
                   </div>
 
-                  <Alert
-                    className="border-0 alert-warning text-center mb-2 mx-2"
-                    role="alert"
-                  >
-                    Enter your email and instructions will be sent to you!
-                  </Alert>
                   <div className="p-2">
-                    {forgetError && forgetError ? (
-                      <Alert color="danger" style={{ marginTop: "13px" }}>
-                        {forgetError}
-                      </Alert>
-                    ) : null}
-                    {forgetSuccessMsg ? (
-                      <Alert color="success" style={{ marginTop: "13px" }}>
-                        {forgetSuccessMsg}
-                      </Alert>
-                    ) : null}
                     <Form
                       onSubmit={(e) => {
                         e.preventDefault();
@@ -156,51 +145,68 @@ const ForgetPasswordPage = (props) => {
                         return false;
                       }}
                     >
-                      <div className="mb-4">
-                        <Label className="form-label">Email</Label>
+                      <div className="mb-3">
+                        <Label htmlFor="userpassword" className="form-label">
+                          Password <span className="text-danger">*</span>
+                        </Label>
                         <Input
-                          name="email"
-                          className="form-control"
-                          placeholder="Enter email"
-                          type="email"
+                          name="password"
+                          type="password"
+                          placeholder="Enter Password"
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
-                          value={validation.values.email || ""}
+                          value={validation.values.password || ""}
                           invalid={
-                            validation.touched.email && validation.errors.email
+                            validation.touched.password &&
+                            validation.errors.password
                               ? true
                               : false
                           }
                         />
-                        {validation.touched.email && validation.errors.email ? (
+                        {validation.touched.password &&
+                        validation.errors.password ? (
                           <FormFeedback type="invalid">
-                            <div>{validation.errors.email}</div>
+                            <div>{validation.errors.password}</div>
+                          </FormFeedback>
+                        ) : null}
+                      </div>
+
+                      <div className="mb-2">
+                        <Label htmlFor="confirmPassword" className="form-label">
+                          Confirm Password{" "}
+                          <span className="text-danger">*</span>
+                        </Label>
+                        <Input
+                          name="confirm_password"
+                          type="password"
+                          placeholder="Confirm Password"
+                          onChange={validation.handleChange}
+                          onBlur={validation.handleBlur}
+                          value={validation.values.confirm_password || ""}
+                          invalid={
+                            validation.touched.confirm_password &&
+                            validation.errors.confirm_password
+                              ? true
+                              : false
+                          }
+                        />
+                        {validation.touched.confirm_password &&
+                        validation.errors.confirm_password ? (
+                          <FormFeedback type="invalid">
+                            <div>{validation.errors.confirm_password}</div>
                           </FormFeedback>
                         ) : null}
                       </div>
 
                       <div className="text-center mt-4">
                         <button className="btn btn-success w-100" type="submit">
-                          Send Reset Link
+                          change Password
                         </button>
                       </div>
                     </Form>
                   </div>
                 </CardBody>
               </Card>
-
-              <div className="mt-4 text-center">
-                <p className="mb-0">
-                  Wait, I remember my password...{" "}
-                  <Link
-                    to="/login"
-                    className="fw-semibold text-primary text-decoration-underline"
-                  >
-                    {" "}
-                    Click here{" "}
-                  </Link>{" "}
-                </p>
-              </div>
             </Col>
           </Row>
         </Container>
@@ -209,8 +215,8 @@ const ForgetPasswordPage = (props) => {
   );
 };
 
-ForgetPasswordPage.propTypes = {
+verifyPassword.propTypes = {
   history: PropTypes.object,
 };
 
-export default withRouter(ForgetPasswordPage);
+export default withRouter(verifyPassword);

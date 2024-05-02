@@ -1,5 +1,6 @@
 package com.cinemas.service.impl;
 
+import com.cinemas.Utils.Constants;
 import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.MailBody;
 import com.cinemas.dto.request.RefreshTokenRequest;
@@ -17,19 +18,17 @@ import com.cinemas.repositories.ForgotPasswordRepository;
 import com.cinemas.repositories.UserRepository;
 import com.cinemas.service.AuthenticationService;
 import com.cinemas.service.JWTService;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
 
-import static com.cinemas.exception.ErrorCode.EMAIL_EXISTED;
+import static com.cinemas.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -85,22 +84,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return jwtAuthenticationResponse;
     }
 
-    //    public JwtAuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
-//        String useremail = jwtService.extractUserName(refreshTokenRequest.getToken());
-//        User user = userRepository.findByEmail(useremail).orElseThrow();
-//        if (jwtService.isTokenValid(refreshTokenRequest.getToken(), user)) {
-//            var jwt = jwtService.generateToken(user);
-//
-//            JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
-//
-//            jwtAuthenticationResponse.setToken(jwt);
-//            jwtAuthenticationResponse.setRefreshToken(refreshTokenRequest.getToken());
-//
-//            return jwtAuthenticationResponse;
-//        }
-//
-//        return null;
-//    }
     public JwtAuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
         String userEmail = jwtService.extractUserName(refreshTokenRequest.getToken());
         User user = userRepository.findByEmail(userEmail)
@@ -122,39 +105,36 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public String verifyEmail(verifyMailrequest email) {
+    public String verifyEmail(verifyMailrequest email) throws MessagingException {
 
         User user = userRepository.findByEmail(email.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("User not found with email: " + email));
+                .orElseThrow(() -> new AppException(EMAIL_NOT_FOUND));
 
         ForgotPassword forgotPassword = forgotPasswordRepository.existsByUserId(user);
         if (forgotPassword != null) {
             forgotPasswordRepository.deleteById(forgotPassword.getFpid());
         }
 
-        int otp = optGenerator();
-        Map<String, String> placeholders = new HashMap<>();
-        placeholders.put("OTP", String.valueOf(otp));
-
-        String emailText;
-        try {
-            emailText = emailService.loadHtmlTemplate("templates/email_template_forgotpassword.html", placeholders);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        String otp = optGenerator();
+        Map<String, Object> placeholders = new HashMap<>();
+        placeholders.put("OTP", otp);
+        placeholders.put("id", user.getId());
+        placeholders.put("email", user.getEmail());
+        placeholders.put("name", user.getName());
 
         MailBody mailBody = MailBody.builder()
                 .to(email.getEmail())
-                .text(emailText)
-                .subject("OTP for Forgot Password request")
+                .subject(Constants.SEND_MAIL_SUBJECT.CLIENT_FORGOT_PASSWORD)
+                .props(placeholders)
                 .build();
         ForgotPassword fp = ForgotPassword.builder()
                 .otp(otp)
-                .expirationTime(new Date(System.currentTimeMillis() + 70 * 1000))
+//                .expirationTime(new Date(System.currentTimeMillis() + 70 * 1000))
+                .expirationTime(new Date(System.currentTimeMillis() + 5 * 60 * 1000))
                 .user(user)
                 .build();
 
-        emailService.sendSimpleMessage(mailBody);
+        emailService.sendHtmlMail(mailBody, Constants.TEMPLATE_FILE_NAME.CLIENT_FORGOT_PASSWORD);
 
         forgotPasswordRepository.save(fp);
 
@@ -163,38 +143,44 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public String verifyOtp(Integer otp, String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with email: " + email));
+    public String verifyOtp(String otp, String id) {
 
-        ForgotPassword fp = forgotPasswordRepository.findByOtpAndUser(otp, user)
-                .orElseThrow(() -> new RuntimeException("please provide an valid email" + email));
+        ForgotPassword fp = forgotPasswordRepository.findByOtpAndUserid(otp, Integer.parseInt(id))
+                .orElseThrow(() -> new AppException(PROVIDE_VALID));
 
         if (fp.getExpirationTime().before(Date.from(Instant.now()))) {
             forgotPasswordRepository.deleteById(fp.getFpid());
-//            ResponseEntity<>("OTP has expired!", HttpStatus.EXPECTATION_FAILED)
-            return "OTP has expired!";
+            throw new AppException(OTP_EXPIRED);
         }
 
         return "OTP verified";
     }
 
     @Override
-    public String changePasswordHandler(ChangePassword changePassword, String email) {
+    public String changePasswordHandler(ChangePassword changePassword, int id) {
         if (!Objects.equals(changePassword.password(), changePassword.repeatPassword())) {
-//            ResponseEntity<>("please enter the Password again!", HttpStatus.EXPECTATION_FAILED)
-            return null;
+            throw new AppException(CONFIRM_PASSWORD);
         }
 
         String encodePassword = passwordEncoder.encode(changePassword.password());
-        userRepository.updatePassword(email, encodePassword);
+        forgotPasswordRepository.deleteById(id);
+        userRepository.updatePassword(id, encodePassword);
 
         return "password has been changed!";
     }
 
-    private Integer optGenerator() {
+    public static String optGenerator() {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
-        return random.nextInt(100_000, 999_999);
+        StringBuilder sb = new StringBuilder(60);
+
+        for (int i = 0; i < 60; i++) {
+            int index = random.nextInt(characters.length());
+            sb.append(characters.charAt(index));
+        }
+
+        return sb.toString();
     }
+
 
 }

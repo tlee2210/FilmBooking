@@ -14,18 +14,20 @@ import {
   Spinner,
 } from "reactstrap";
 import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
+import { clearNotification } from "../../slices/message/reducer";
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
+import { message } from "antd";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import withRouter from "../../Components/Common/withRouter";
 // Formik validation
 import * as Yup from "yup";
 import { useFormik } from "formik";
 
 // actions
-import { loginUser, socialLogin, resetLoginFlag } from "../../slices/thunks";
+import { loginUser } from "../../slices/thunks";
 
 import logoLight from "../../assets/images/logo-light.png";
 import { createSelector } from "reselect";
@@ -33,15 +35,18 @@ import { createSelector } from "reselect";
 
 const Login = (props) => {
   const dispatch = useDispatch();
+  const history = useNavigate();
 
   const selectLayoutState = (state) => state;
   const loginpageData = createSelector(selectLayoutState, (state) => ({
-    error: state.Login.error,
-    loading: state.Login.loading,
-    errorMsg: state.Login.errorMsg,
+    success: state.success,
+    error: state.error,
+    messageSuccess: state.messageSuccess,
+    messageError: state.messageError,
   }));
   // Inside your component
-  const { error, loading, errorMsg } = useSelector(loginpageData);
+  const { error, success, messageSuccess, messageError } =
+    useSelector(loginpageData);
 
   const [passwordShow, setPasswordShow] = useState(false);
 
@@ -64,12 +69,20 @@ const Login = (props) => {
   });
 
   useEffect(() => {
-    if (errorMsg) {
-      setTimeout(() => {
-        dispatch(resetLoginFlag());
-      }, 3000);
+    if (success) {
+      history("/login");
+      if (messageSuccess != null) {
+        message.success(messageSuccess);
+      }
     }
-  }, [dispatch, errorMsg]);
+    if (error) {
+      if (messageError != null) {
+        message.error(messageError);
+      }
+    }
+    dispatch(clearNotification());
+  }, [dispatch, success, error, history]);
+
   document.title = "SignIn";
   return (
     <React.Fragment>
@@ -99,9 +112,9 @@ const Login = (props) => {
                         Sign in to continue to Velzon.
                       </p>
                     </div>
-                    {error && error ? (
+                    {/* {error && error ? (
                       <Alert color="danger"> {error} </Alert>
-                    ) : null}
+                    ) : null} */}
                     <div className="p-2 mt-4">
                       <Form
                         onSubmit={(e) => {
@@ -201,16 +214,9 @@ const Login = (props) => {
                         <div className="mt-4">
                           <Button
                             color="success"
-                            disabled={error ? null : loading ? true : false}
                             className="btn btn-success w-100"
                             type="submit"
                           >
-                            {loading ? (
-                              <Spinner size="sm" className="me-2">
-                                {" "}
-                                Loading...{" "}
-                              </Spinner>
-                            ) : null}
                             Sign In
                           </Button>
                         </div>

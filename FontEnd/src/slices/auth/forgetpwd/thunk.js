@@ -1,42 +1,43 @@
-import { userForgetPasswordSuccess, userForgetPasswordError } from "./reducer"
+// import { userForgetPasswordSuccess, userForgetPasswordError } from "./reducer";
+import { Success, Error } from "../../message/reducer";
+import axios from "axios";
 
-//Include Both Helper File with needed methods
-// import { getFirebaseBackend } from "../../../helpers/firebase_helper";
+export const ForgetPassword = (formData, history) => async (dispatch) => {
+  await axios
+    .post(`http://localhost:8081/api/auth/verifyMail`, formData)
+    .then((response) => {
+      console.log(response);
+      dispatch(Success(response.data.message));
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
 
-// import {
-//   postFakeForgetPwd,
-//   postJwtForgetPwd,
-// } from "../../../helpers/fakebackend_helper";
+export const GetverifyOtp = (id, otp, history) => async (dispatch) => {
+  await axios
+    .get(`http://localhost:8081/api/auth/verifyOtp/${otp}/${id}`)
+    .then((response) => {
+      console.log(response);
+      dispatch(Success(response.data.message));
+    })
+    .catch((error) => {
+      console.error(error);
+      dispatch(Error(error.response.data.message));
+    });
+};
 
-// const fireBaseBackend = getFirebaseBackend();
-
-// export const userForgetPassword = (user, history) => async (dispatch) => {
-//   try {
-//       let response;
-//       if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-
-//           response = fireBaseBackend.forgetPassword(
-//               user.email
-//           )
-
-//       } else if (process.env.REACT_APP_DEFAULTAUTH === "jwt") {
-//           response = postJwtForgetPwd(
-//               user.email
-//           )
-//       } else {
-//           response = postFakeForgetPwd(
-//               user.email
-//           )
-//       }
-
-//       const data = await response;
-
-//       if (data) {
-//           dispatch(userForgetPasswordSuccess(
-//               "Reset link are sended to your mailbox, check there first"
-//           ))
-//       }
-//   } catch (forgetError) {
-//       dispatch(userForgetPasswordError(forgetError))
-//   }
-// }
+export const ResetPassword = (id, formData, history) => async (dispatch) => {
+  await axios
+    .post(`http://localhost:8081/api/auth/changePassword/${id}`, formData)
+    .then((response) => {
+      console.log(response);
+      dispatch(Success(response.data.message));
+      history("/login");
+    })
+    .catch((err) => {
+      console.error(err);
+      const errorMessage = err.response?.data?.message || "An error occurred";
+      dispatch(Error(errorMessage));
+    });
+};
