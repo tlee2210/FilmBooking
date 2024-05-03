@@ -29,35 +29,37 @@ public class CelebrityServiceImpl implements CelebrityService {
     CelebrityRepository celebrityRepository;
 
     private String storeFile(MultipartFile file, RoleCeleb role) throws IOException {
-//        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-//        String uniqueFileName = UUID.randomUUID().toString() + "_" + fileName;
-//        Path uploadDir;
-//        if(role == ACTOR){
-//            uploadDir = Paths.get("C:/Users/Admin/source/repos/FilmBooking/backendApp/src/main/java/com/cinemas/image/actor");
-//        }
-//        else{
-//            uploadDir = Paths.get("C:/Users/Admin/source/repos/FilmBooking/backendApp/src/main/java/com/cinemas/image/director");
-//        }
-//
-//        if(!Files.exists(uploadDir)){
-//            Files.createDirectories(uploadDir);
-//        }
-//        Path destination = Paths.get(uploadDir.toString(), uniqueFileName);
-//        Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
-//        return uniqueFileName;
-
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        String uniqueFileName = UUID.randomUUID().toString() + "_" + fileName;
-        String roleCeleb = role == ACTOR ? "ACTOR" : "DIRECTOR";
-        String uploadDir = "image/" + roleCeleb;
-
-        Path uploadPath = Paths.get(uploadDir);
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectory(uploadPath);
+        if(file != null && !file.isEmpty()){
+            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+            String uniqueFileName = UUID.randomUUID().toString() + "_" + fileName;
+            String roleCeleb = role == RoleCeleb.ACTOR ? "actor" : "director";
+            String uploadDir = "images/" + roleCeleb;
+            String absoluteUploadDir = System.getProperty("user.dir") + "/src/main/java/com/cinemas/" + uploadDir;
+            Path uploadPath = Paths.get(absoluteUploadDir);
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+            Path filePath = uploadPath.resolve(uniqueFileName);
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+            return uniqueFileName;
         }
-        Path filePath = uploadPath.resolve(uniqueFileName);
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-        return uniqueFileName;
+        return "";
+    }
+
+    private void deleteExistingImage(String imagePath, RoleCeleb role) {
+        if (imagePath != null && !imagePath.isEmpty()) {
+            try {
+                String roleCeleb = role == RoleCeleb.ACTOR ? "actor" : "director";
+                String uploadDir = "images/" + roleCeleb;
+                String absoluteUploadDir = System.getProperty("user.dir") + "/src/main/java/com/cinemas/" + uploadDir;
+                Path root = Paths.get(absoluteUploadDir);
+                Path file = root.resolve(imagePath);
+                Files.deleteIfExists(file);
+            } catch (IOException e) {
+                System.err.println("Failed to delete image: " + imagePath);
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -88,7 +90,10 @@ public class CelebrityServiceImpl implements CelebrityService {
     public void deleteCelebrity(int id) {
         Celebrity celebrity = celebrityRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid id" + id));
-        celebrityRepository.delete(celebrity);
+        if (celebrity != null){
+            deleteExistingImage(celebrity.getImage(), celebrity.getRole());
+            celebrityRepository.delete(celebrity);
+        }
     }
 
     @Override
@@ -99,27 +104,37 @@ public class CelebrityServiceImpl implements CelebrityService {
     }
 
     @Override
-    public void updateCelebrity(int id, CelebrityRequest celebrity) {
-        Celebrity celeb = getCelebrity(id);
+    public void updateCelebrity(int id, CelebrityRequest celebrity, MultipartFile file) {
+        try {
+            Celebrity celeb = getCelebrity(id);
 
-        if (celebrity.getName() != null && !celebrity.getName().isEmpty()) {
-            celeb.setName(celebrity.getName());
+            if(file != null && !file.isEmpty()){
+                deleteExistingImage(celeb.getImage(), celeb.getRole());
+                celeb.setImage(storeFile(file, celebrity.getRole()));
+            }
+
+            if (celebrity.getName() != null && !celebrity.getName().isEmpty()) {
+                celeb.setName(celebrity.getName());
+            }
+            if (celebrity.getBiography() != null && !celebrity.getBiography().isEmpty()) {
+                celeb.setBiography(celebrity.getBiography());
+            }
+            if (celebrity.getDescription() != null && !celebrity.getDescription().isEmpty()) {
+                celeb.setDescription(celebrity.getDescription());
+            }
+            if (celebrity.getNationality() != null && !celebrity.getNationality().isEmpty()) {
+                celeb.setNationality(celebrity.getNationality());
+            }
+            if (celebrity.getRole() != null) {
+                celeb.setRole(celebrity.getRole());
+            }
+            if (celebrity.getDateOfBirth() != null) {
+                celeb.setDateOfBirth(celebrity.getDateOfBirth());
+            }
+            celebrityRepository.save(celeb);
         }
-        if (celebrity.getBiography() != null && !celebrity.getBiography().isEmpty()) {
-            celeb.setBiography(celebrity.getBiography());
+        catch(Exception e){
+            e.printStackTrace();
         }
-        if (celebrity.getDescription() != null && !celebrity.getDescription().isEmpty()) {
-            celeb.setDescription(celebrity.getDescription());
-        }
-        if (celebrity.getNationality() != null && !celebrity.getNationality().isEmpty()) {
-            celeb.setNationality(celebrity.getNationality());
-        }
-        if (celebrity.getRole() != null) {
-            celeb.setRole(celebrity.getRole());
-        }
-        if (celebrity.getDateOfBirth() != null) {
-            celeb.setDateOfBirth(celebrity.getDateOfBirth());
-        }
-        celebrityRepository.save(celeb);
     }
 }

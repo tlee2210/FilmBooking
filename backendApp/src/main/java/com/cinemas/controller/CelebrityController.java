@@ -50,30 +50,9 @@ public class CelebrityController {
         }
     }
 
-    private String storeFile(MultipartFile file, RoleCeleb role) throws IOException {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        String uniqueFileName = UUID.randomUUID().toString() + "_" + fileName;
-        Path uploadDir;
-        if(role == RoleCeleb.ACTOR){
-            uploadDir = Paths.get("C:/Users/Admin/source/repos/FilmBooking/backendApp/src/main/java/com/cinemas/image/actor");
-        }
-        else{
-            uploadDir = Paths.get("C:/Users/Admin/source/repos/FilmBooking/backendApp/src/main/java/com/cinemas/image/director");
-        }
-
-        if(!Files.exists(uploadDir)){
-            Files.createDirectories(uploadDir);
-        }
-        Path destination = Paths.get(uploadDir.toString(), uniqueFileName);
-        Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
-        return uniqueFileName;
-    }
-
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteCelebrity(@PathVariable int id) {
         try{
-            Celebrity celeb = celebrityService.getCelebrity(id);
-            deleteExistingImage(celeb.getImage());
             celebrityService.deleteCelebrity(id);
             return ResponseEntity.ok("Successfully deleted celeb");
         }
@@ -82,35 +61,10 @@ public class CelebrityController {
         }
     }
 
-    private void deleteExistingImage(String imagePath) {
-        if (imagePath != null && !imagePath.isEmpty()) {
-            try {
-                Path root = Paths.get("C:/Users/Admin/source/repos/FilmBooking/backendApp/src/main/java/com/cinemas/image/actor");
-                Path file = root.resolve(imagePath);
-                Files.deleteIfExists(file);
-                Path root2 = Paths.get("C:/Users/Admin/source/repos/FilmBooking/backendApp/src/main/java/com/cinemas/image/director");
-                Path file2 = root2.resolve(imagePath);
-                Files.deleteIfExists(file2);
-            } catch (IOException e) {
-                System.err.println("Failed to delete image: " + imagePath);
-                e.printStackTrace();
-            }
-        }
-    }
-
     @PutMapping(value = "/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateCelebrity(@PathVariable int id, @ModelAttribute CelebrityRequest celebrity) {
+    public ResponseEntity<?> updateCelebrity(@PathVariable int id, @ModelAttribute CelebrityRequest celebrity, MultipartFile file) {
         try {
-//            MultipartFile fileImg = celebrity.getFile();
-//            Celebrity celeb = celebrityService.getCelebrity(id);
-//
-//            if (fileImg != null && !fileImg.isEmpty()) {
-//                deleteExistingImage(celeb.getImage());
-//                String fileName = storeFile(fileImg, celebrity.getRole());
-//                celeb.setImage(fileName);
-//            }
-
-            celebrityService.updateCelebrity(id, celebrity);
+            celebrityService.updateCelebrity(id, celebrity, file);
             return ResponseEntity.ok("Successfully updated celebrity");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

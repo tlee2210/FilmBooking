@@ -11,5 +11,5 @@ public interface CelebrityService {
     void addCelebrity(CelebrityRequest celebrity, MultipartFile multipartFile);
     void deleteCelebrity(int id);
     Celebrity getCelebrity(Integer id);
-    void updateCelebrity(int id, CelebrityRequest celebrity);
+    void updateCelebrity(int id, CelebrityRequest celebrity, MultipartFile file);
 }
