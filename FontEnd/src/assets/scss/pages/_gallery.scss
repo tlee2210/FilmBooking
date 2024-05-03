@@ -61,7 +61,9 @@
             transition: all 0.4s ease-in-out 0s;
             display: flex;
             width: 100%;
-            align-items: flex-end;
+            // align-items: flex-end;
+            align-items: center;
+            justify-content: center;
             padding: 16px;
 
             .overlay-caption {

@@ -177,17 +177,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     public static String optGenerator() {
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&.";
         Random random = new Random();
-        StringBuilder sb = new StringBuilder(60);
+        StringBuilder sb = new StringBuilder(120);
 
-        for (int i = 0; i < 60; i++) {
+        for (int i = 0; i < 120; i++) {
             int index = random.nextInt(characters.length());
             sb.append(characters.charAt(index));
         }
 
         return sb.toString();
     }
-
-
 }
