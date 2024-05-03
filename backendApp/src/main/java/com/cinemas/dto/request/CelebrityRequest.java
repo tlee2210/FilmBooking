@@ -32,6 +32,4 @@ public class CelebrityRequest {
     private RoleCeleb role;
 
     private String image;
-
-    private MultipartFile file;
 }
