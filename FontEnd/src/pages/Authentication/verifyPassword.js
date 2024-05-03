@@ -98,7 +98,7 @@ const verifyPassword = (props) => {
       const formData = new FormData();
       formData.append("password", values.password);
       formData.append("repeatPassword", values.confirm_password);
-      dispatch(ResetPassword(id, formData, props.history));
+      dispatch(ResetPassword(id, formData, props.router.navigate));
     },
   });
 

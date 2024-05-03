@@ -64,12 +64,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     public JwtAuthenticationResponse signin(SigninRequest signinRequest) {
+        System.out.println("==================");
+        System.out.println(signinRequest.getEmail());
+        System.out.println(signinRequest.getPassword());
+        System.out.println("==================");
+
+        var user = userRepository.findByEmail(signinRequest.getEmail()).orElseThrow(
+                () -> new AppException(EMAIL_EXISTED));
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(signinRequest.getEmail(),
                         signinRequest.getPassword()));
 
-        var user = userRepository.findByEmail(signinRequest.getEmail()).orElseThrow(
-                () -> new IllegalArgumentException("Invalid email or password"));
+
         var jwt = jwtService.generateToken(user);
 
         JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
@@ -108,7 +115,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public String verifyEmail(verifyMailrequest email) throws MessagingException {
 
         User user = userRepository.findByEmail(email.getEmail())
-                .orElseThrow(() -> new AppException(EMAIL_NOT_FOUND));
+                .orElseThrow(() -> new AppException(EMAIL_EXISTED));
 
         ForgotPassword forgotPassword = forgotPasswordRepository.existsByUserId(user);
         if (forgotPassword != null) {

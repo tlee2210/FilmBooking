@@ -55,7 +55,6 @@ const ForgetPasswordPage = (props) => {
 
   useEffect(() => {
     if (success) {
-      history("/login");
       if (messageSuccess != null) {
         message.success(messageSuccess);
       }
@@ -65,9 +64,7 @@ const ForgetPasswordPage = (props) => {
         message.error(messageError);
       }
     }
-    setTimeout(() => {
-      dispatch(clearNotification());
-    }, 3000);
+    dispatch(clearNotification());
   }, [dispatch, success, error, history]);
 
   const validation = useFormik({
@@ -85,7 +82,7 @@ const ForgetPasswordPage = (props) => {
       // console.log(values);
       const formData = new FormData();
       formData.append("email", values.email);
-      dispatch(ForgetPassword(formData, props.history));
+      dispatch(ForgetPassword(formData, props.router.navigate));
     },
   });
 

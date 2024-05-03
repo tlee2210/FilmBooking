@@ -1,29 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const initialState = {
-  messageSuccess: null,
-  messageError: null,
-  success: false,
-  error: false,
-};
+export const initialState = {};
 
 const forgotPasswordSlice = createSlice({
   name: "forgotpwd",
   initialState,
-  reducers: {
-    ForgetPasswordSuccess(state, action) {
-      state.messageSuccess = action.payload;
-      state.success = true;
-    },
-    ForgetPasswordError(state, action) {
-      state.messageError = action.payload;
-      state.error = true;
-    },
-    
-  },
+  reducers: {},
 });
 
-export const { ForgetPasswordSuccess, ForgetPasswordError } =
-  forgotPasswordSlice.actions;
+export const {} = forgotPasswordSlice.actions;
 
 export default forgotPasswordSlice.reducer;

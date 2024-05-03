@@ -15,6 +15,10 @@ public enum ErrorCode {
 
     UNAUTHORIZED(HttpStatus.FORBIDDEN, "You do not have permission"),
 
+//    LOGIN_FAIL(HttpStatus.UNAUTHORIZED, "Invalid credentials provided"),
+
+    LOGIN_FAIL(HttpStatus.UNAUTHORIZED, "Invalid email or password"),
+
     USER_NOT_EXISTED("User not existed", HttpStatus.NOT_FOUND, "Not Found"),
 
     USER_EXISTED(HttpStatus.BAD_REQUEST, "User existed"),
@@ -23,10 +27,9 @@ public enum ErrorCode {
 
     PROVIDE_VALID(HttpStatus.BAD_REQUEST, "please provide an valid email"),
 
-    OTP_EXPIRED(HttpStatus.EXPECTATION_FAILED, "OTP has expired!"),
+    OTP_EXPIRED(HttpStatus.EXPECTATION_FAILED, "Invalid OTP!"),
 
     CONFIRM_PASSWORD(HttpStatus.EXPECTATION_FAILED, "please enter the Password again!"),
-
 
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "Email not found"),
 

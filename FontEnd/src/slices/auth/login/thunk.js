@@ -7,6 +7,7 @@ import {
   apiError,
   reset_login_flag,
 } from "./reducer";
+import { Success, Error } from "../../message/reducer";
 
 export const loginUser = (user, history) => async (dispatch) => {
   return new Promise(async (resolve, reject) => {
@@ -18,12 +19,13 @@ export const loginUser = (user, history) => async (dispatch) => {
         const tokenObj = { accessToken: token };
         const validUserObj = { ...userLogin, ...tokenObj };
         sessionStorage.setItem("authUser", JSON.stringify(res.data.result));
-        loginSuccess(res.data.result.user);
+        // dispatch(loginSuccess(res.data.result.user));
         history("/pages-starter");
         resolve([200, validUserObj]);
       })
       .catch((err) => {
         console.error(err);
+        dispatch(Error(err.response.data.message));
       });
   });
 };

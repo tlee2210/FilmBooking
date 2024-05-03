@@ -39,10 +39,10 @@ const Login = (props) => {
 
   const selectLayoutState = (state) => state;
   const loginpageData = createSelector(selectLayoutState, (state) => ({
-    success: state.success,
-    error: state.error,
-    messageSuccess: state.messageSuccess,
-    messageError: state.messageError,
+    success: state.Message.success,
+    error: state.Message.error,
+    messageSuccess: state.Message.messageSuccess,
+    messageError: state.Message.messageError,
   }));
   // Inside your component
   const { error, success, messageSuccess, messageError } =
@@ -70,7 +70,6 @@ const Login = (props) => {
 
   useEffect(() => {
     if (success) {
-      history("/login");
       if (messageSuccess != null) {
         message.success(messageSuccess);
       }

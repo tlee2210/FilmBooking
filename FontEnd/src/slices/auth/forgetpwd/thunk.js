@@ -8,9 +8,11 @@ export const ForgetPassword = (formData, history) => async (dispatch) => {
     .then((response) => {
       console.log(response);
       dispatch(Success(response.data.message));
+      history("/login");
     })
     .catch((err) => {
       console.error(err);
+      dispatch(Error(err.response.data.message));
     });
 };
 
@@ -33,11 +35,12 @@ export const ResetPassword = (id, formData, history) => async (dispatch) => {
     .then((response) => {
       console.log(response);
       dispatch(Success(response.data.message));
-      history("/login");
     })
     .catch((err) => {
       console.error(err);
-      const errorMessage = err.response?.data?.message || "An error occurred";
-      dispatch(Error(errorMessage));
+      dispatch(Error(err.response.data.message));
+    })
+    .finally(() => {
+      history("/login");
     });
 };
