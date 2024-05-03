@@ -40,27 +40,9 @@ public class CelebrityController {
     }
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> createCelebrity(@ModelAttribute CelebrityRequest celebrity) {
+    public ResponseEntity<?> createCelebrity(@ModelAttribute CelebrityRequest celebrity, MultipartFile file) {
         try{
-            MultipartFile file =celebrity.getFile();
-            String fileName = null;
-            if(file != null && !file.isEmpty()){
-                if(file.getSize() > 10 * 1024 * 1024){
-                    return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("File is too large, maximum is 10MB");
-                }
-
-                String contentType = file.getContentType();
-                System.out.println("Uploaded File Content Type: " + contentType);
-                if(contentType == null || !contentType.startsWith("image/")){
-                    return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body("File must be an image");
-                }
-                fileName = storeFile(file, celebrity.getRole());
-                celebrity.setImage(fileName);
-            }
-            if (celebrity.getImage() == null) {
-                celebrity.setImage("");
-            }
-            celebrityService.addCelebrity(celebrity);
+            celebrityService.addCelebrity(celebrity, file);
             return ResponseEntity.ok("Successfully added celeb");
         }
         catch(Exception e){
@@ -119,14 +101,14 @@ public class CelebrityController {
     @PutMapping(value = "/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateCelebrity(@PathVariable int id, @ModelAttribute CelebrityRequest celebrity) {
         try {
-            MultipartFile fileImg = celebrity.getFile();
-            Celebrity celeb = celebrityService.getCelebrity(id);
-
-            if (fileImg != null && !fileImg.isEmpty()) {
-                deleteExistingImage(celeb.getImage());
-                String fileName = storeFile(fileImg, celebrity.getRole());
-                celeb.setImage(fileName);
-            }
+//            MultipartFile fileImg = celebrity.getFile();
+//            Celebrity celeb = celebrityService.getCelebrity(id);
+//
+//            if (fileImg != null && !fileImg.isEmpty()) {
+//                deleteExistingImage(celeb.getImage());
+//                String fileName = storeFile(fileImg, celebrity.getRole());
+//                celeb.setImage(fileName);
+//            }
 
             celebrityService.updateCelebrity(id, celebrity);
             return ResponseEntity.ok("Successfully updated celebrity");
