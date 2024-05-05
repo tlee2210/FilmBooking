@@ -54,13 +54,9 @@ const Celebrity = (props) => {
   const selectLayoutState = (state) => state;
   const CelebrityProperties = createSelector(selectLayoutState, (state) => ({
     Celebrity: state.Celebrity.data,
-    totalPages: state.Celebrity.totalPages,
-    pageNumber: state.Celebrity.pageNumber,
-    totalElements: state.Celebrity.totalElements,
   }));
   // Inside your component
-  const { Celebrity, totalPages, pageNumber, totalElements } =
-    useSelector(CelebrityProperties);
+  const { Celebrity } = useSelector(CelebrityProperties);
 
   const [isEdit, setIsEdit] = useState(false);
   const [customer, setCustomer] = useState([]);
@@ -229,11 +225,9 @@ const Celebrity = (props) => {
                 <div className="card-body pt-0">
                   <TableContainer
                     columns={columns || []}
-                    data={Celebrity || []}
-                    // customPageSize={5}
-                    totalPages={totalPages}
-                    pageNumber={pageNumber}
-                    totalElements={totalElements}
+                    data={Celebrity.content || []}
+                    paginateData={Celebrity}
+                    customPageSize={Celebrity.size}
                     paginate={handlePagination}
                     tableClass="table-centered align-middle table-nowrap mb-0"
                     theadClass="text-muted table-light"

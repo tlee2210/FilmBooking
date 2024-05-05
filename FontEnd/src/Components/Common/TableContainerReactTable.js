@@ -79,10 +79,8 @@ const TableContainer = ({
   thClass,
   divClass,
   SearchPlaceholder,
-  totalPages,
+  paginateData,
   paginate,
-  pageNumber,
-  totalElements,
 }) => {
   const [columnFilters, setColumnFilters] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("");
@@ -173,7 +171,7 @@ const TableContainer = ({
                           header.column.columnDef.header,
                           header.getContext()
                         )}
-                        {{
+                        {/* {{
                           asc: " ",
                           desc: " ",
                         }[header.column.getIsSorted()] ?? null}
@@ -181,7 +179,7 @@ const TableContainer = ({
                           <div>
                             <Filter column={header.column} table={table} />
                           </div>
-                        ) : null}
+                        ) : null} */}
                       </React.Fragment>
                     )}
                   </th>
@@ -216,22 +214,25 @@ const TableContainer = ({
           <div className="text-muted">
             Showing
             <span className="fw-semibold ms-1">
-              {getState().pagination.pageSize}
+              {paginateData.numberOfElements}
             </span>{" "}
-            of <span className="fw-semibold">{totalElements}</span> Results
+            of <span className="fw-semibold">{paginateData.totalElements}</span>{" "}
+            Results
           </div>
         </div>
         <div className="col-sm-auto">
           <ul className="pagination pagination-separated pagination-md justify-content-center justify-content-sm-start mb-0">
             <li
-              className={pageNumber === 0 ? "page-item disabled" : "page-item"}
+              className={
+                paginateData.number === 0 ? "page-item disabled" : "page-item"
+              }
             >
               <Link
                 to="#"
                 className="page-link"
                 onClick={() => {
                   previousPage;
-                  paginate(pageNumber - 1);
+                  paginate(paginateData.number - 1);
                 }}
               >
                 Previous
@@ -244,7 +245,7 @@ const TableContainer = ({
                 </li>
               </React.Fragment>
             ))} */}
-            {[...Array(totalPages)].map(
+            {[...Array(paginateData.totalPages)].map(
               (
                 _,
                 index // Using totalPages to generate page numbers
@@ -253,10 +254,12 @@ const TableContainer = ({
                   <Link
                     to="#"
                     className={
-                      pageNumber === index ? "page-link active" : "page-link"
+                      paginateData.number === index
+                        ? "page-link active"
+                        : "page-link"
                     }
                     onClick={() => {
-                      if (pageNumber !== index) {
+                      if (paginateData.number !== index) {
                         setPageIndex(index);
                         paginate(index);
                       }
@@ -269,7 +272,7 @@ const TableContainer = ({
             )}
             <li
               className={
-                pageNumber === totalPages - 1
+                paginateData.number === paginateData.totalPages - 1
                   ? "page-item disabled"
                   : "page-item"
               }
@@ -279,7 +282,7 @@ const TableContainer = ({
                 className="page-link"
                 onClick={() => {
                   // nextPage;
-                  paginate(pageNumber + 1);
+                  paginate(paginateData.number + 1);
                 }}
               >
                 Next

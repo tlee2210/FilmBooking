@@ -11,7 +11,7 @@ import java.util.Objects;
 @Data
 public class PaginationHelper {
     private Integer pageNo = 0;
-    private Integer pageSize = 10;
+    private Integer pageSize = 15;
     private Sort.Direction sort = Sort.Direction.ASC;
     private  String sortByColumn = "id";
 

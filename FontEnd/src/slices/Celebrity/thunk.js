@@ -10,10 +10,7 @@ export const celebrity = (formData, history) => async (dispatch) => {
       console.log(response);
       dispatch(
         fetchSuccess({
-          data: response.data.result.content,
-          totalPages: response.data.result.totalPages,
-          pageNumber: response.data.result.pageable.pageNumber,
-          totalElements: response.data.result.totalElements,
+          data: response.data.result,
         })
       );
     })
