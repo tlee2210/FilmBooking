@@ -1,13 +1,18 @@
 package com.cinemas.service.impl;
 
 import com.cinemas.dto.request.CelebrityRequest;
+import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.entities.Celebrity;
 import com.cinemas.enums.RoleCeleb;
 import com.cinemas.repositories.CelebrityRepository;
 import com.cinemas.service.CelebrityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.MutableSortDefinition;
+import org.springframework.beans.support.PropertyComparator;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,15 +26,13 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.UUID;
 
-import static com.cinemas.enums.RoleCeleb.ACTOR;
-
 @Service
 public class CelebrityServiceImpl implements CelebrityService {
     @Autowired
     CelebrityRepository celebrityRepository;
 
     private String storeFile(MultipartFile file, RoleCeleb role) throws IOException {
-        if(file != null && !file.isEmpty()){
+        if (file != null && !file.isEmpty()) {
             String fileName = StringUtils.cleanPath(file.getOriginalFilename());
             String uniqueFileName = UUID.randomUUID().toString() + "_" + fileName;
             String roleCeleb = role == RoleCeleb.ACTOR ? "actor" : "director";
@@ -63,13 +66,25 @@ public class CelebrityServiceImpl implements CelebrityService {
     }
 
     @Override
-    public List<Celebrity> getAllCelebrity() {
-        return celebrityRepository.findAll();
+    public Page<Celebrity> getAllCelebrity(PaginationHelper PaginationHelper) {
+        List<Celebrity> celebrityList = celebrityRepository.findAll();
+
+        PagedListHolder<Celebrity> pagedListHolder = new PagedListHolder<Celebrity>(celebrityList);
+        pagedListHolder.setPage(PaginationHelper.getPageNo());
+        pagedListHolder.setPageSize(PaginationHelper.getPageSize());
+
+        List<Celebrity> pageList = pagedListHolder.getPageList();
+        boolean ascending = PaginationHelper.getSort().isAscending();
+        PropertyComparator.sort(pageList, new MutableSortDefinition(PaginationHelper.getSortByColumn(), true, ascending));
+
+        Page<Celebrity> celebrities = new PageImpl<>(pageList, new PaginationHelper().getPageable(PaginationHelper), celebrityList.size());
+
+        return celebrities;
     }
 
     @Override
     public void addCelebrity(CelebrityRequest celebrity, MultipartFile multipartFile) {
-        try{
+        try {
             String fileName = storeFile(multipartFile, celebrity.getRole());
             Celebrity addCeleb = new Celebrity();
             addCeleb.setName(celebrity.getName());
@@ -80,8 +95,7 @@ public class CelebrityServiceImpl implements CelebrityService {
             addCeleb.setDateOfBirth(celebrity.getDateOfBirth());
             addCeleb.setImage(fileName);
             celebrityRepository.save(addCeleb);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -90,7 +104,7 @@ public class CelebrityServiceImpl implements CelebrityService {
     public void deleteCelebrity(int id) {
         Celebrity celebrity = celebrityRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid id" + id));
-        if (celebrity != null){
+        if (celebrity != null) {
             deleteExistingImage(celebrity.getImage(), celebrity.getRole());
             celebrityRepository.delete(celebrity);
         }
@@ -108,7 +122,7 @@ public class CelebrityServiceImpl implements CelebrityService {
         try {
             Celebrity celeb = getCelebrity(id);
 
-            if(file != null && !file.isEmpty()){
+            if (file != null && !file.isEmpty()) {
                 deleteExistingImage(celeb.getImage(), celeb.getRole());
                 celeb.setImage(storeFile(file, celebrity.getRole()));
             }
@@ -132,8 +146,7 @@ public class CelebrityServiceImpl implements CelebrityService {
                 celeb.setDateOfBirth(celebrity.getDateOfBirth());
             }
             celebrityRepository.save(celeb);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

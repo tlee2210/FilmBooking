@@ -1,25 +1,17 @@
 package com.cinemas.controller;
 
 import com.cinemas.dto.request.CelebrityRequest;
+import com.cinemas.dto.request.PaginationHelper;
+import com.cinemas.dto.response.APIResponse;
 import com.cinemas.entities.Celebrity;
-import com.cinemas.enums.RoleCeleb;
 import com.cinemas.service.CelebrityService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("api/celebrity")
@@ -28,10 +20,15 @@ public class CelebrityController {
     @Autowired
     CelebrityService celebrityService;
 
-    @GetMapping
-    public ResponseEntity<List<Celebrity>> getAllCelebrity() {
-        List<Celebrity> celebrityList = celebrityService.getAllCelebrity();
-        return new ResponseEntity<>(celebrityList, HttpStatus.OK);
+    @PostMapping
+    public APIResponse<Page<Celebrity>> getAllCelebrity(@RequestBody(required = false) PaginationHelper PaginationHelper) {
+        System.out.println("ok");
+        Page<Celebrity> celebrityList = celebrityService.getAllCelebrity(PaginationHelper);
+        APIResponse<Page<Celebrity>> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setResult(celebrityList);
+
+        return apiResponse;
     }
 
     @GetMapping("/{id}")
@@ -39,7 +36,7 @@ public class CelebrityController {
         return celebrityService.getCelebrity(id);
     }
 
-    @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createCelebrity(@ModelAttribute CelebrityRequest celebrity, MultipartFile file) {
         try{
             celebrityService.addCelebrity(celebrity, file);

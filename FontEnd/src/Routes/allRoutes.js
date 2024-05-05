@@ -17,12 +17,13 @@ import UserProfile from "../pages/Authentication/user-profile";
 import Home from "../pages/home/index";
 
 import Starter from "../pages/dashboard/Starter";
+import Celebrity from "../pages/dashboard/Celebrity/index";
 
 const authProtectedRoutes = [
   //User Profile
   { path: "/profile", component: <UserProfile /> },
   { path: "/pages-starter", component: <Starter /> },
-
+  { path: "/celebrity", component: <Celebrity /> },
   // {
   //   path: "/",
   //   exact: true,
