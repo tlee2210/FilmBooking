@@ -18,7 +18,7 @@ public class CinemaImages {
     @Column(nullable = false)
     private String imgName;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cinema_id")
     private Cinema cinema;
 }

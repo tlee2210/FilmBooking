@@ -29,13 +29,13 @@ public class Cinema {
     private String hotline;
 
     @Column(nullable = false)
-    @Size(min = 10, max = 255, message = "Invalid")
+    @Size(min = 10, max = 255, message = "Max 255")
     private String information;
 
     @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;
 
-    @OneToMany(mappedBy = "cinema")
+    @OneToMany(mappedBy = "cinema", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CinemaImages> images;
 }

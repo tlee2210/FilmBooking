@@ -1,6 +1,9 @@
 package com.cinemas.controller;
 
 import com.cinemas.dto.request.CinemaImagesRequest;
+import com.cinemas.dto.response.CinemaImgResponse;
+import com.cinemas.dto.response.CinemaResponse;
+import com.cinemas.entities.Cinema;
 import com.cinemas.entities.CinemaImages;
 import com.cinemas.service.CinemaImagesService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -24,7 +28,15 @@ public class CinemaImagesController {
     public ResponseEntity<?> getAllCinemaImages() {
         try {
             List<CinemaImages> cinemaImagesList = cinemaImagesService.getAllCinemaImages();
-            return ResponseEntity.ok(cinemaImagesList);
+            List<CinemaImgResponse> cinemaImgResponseList = new ArrayList<>();
+            for (CinemaImages cinema : cinemaImagesList) {
+                CinemaImgResponse cinemaImgResponse = new CinemaImgResponse();
+                cinemaImgResponse.setId(cinema.getId());
+                cinemaImgResponse.setImgName(cinema.getImgName());
+                cinemaImgResponse.setCinema_id(cinema.getCinema().getId());
+                cinemaImgResponseList.add(cinemaImgResponse);
+            }
+            return ResponseEntity.ok(cinemaImgResponseList);
         }
         catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -35,7 +47,11 @@ public class CinemaImagesController {
     public ResponseEntity<?> getCinemaImageById(@PathVariable int id) {
         try {
             CinemaImages cinemaImages = cinemaImagesService.getCinemaImageById(id);
-            return ResponseEntity.ok(cinemaImages);
+            CinemaImgResponse cinemaImgResponse = new CinemaImgResponse();
+            cinemaImgResponse.setId(cinemaImages.getId());
+            cinemaImgResponse.setImgName(cinemaImages.getImgName());
+            cinemaImgResponse.setCinema_id(cinemaImages.getCinema().getId());
+            return ResponseEntity.ok(cinemaImgResponse);
         }
         catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -53,15 +69,9 @@ public class CinemaImagesController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteCinemaImage(@PathVariable int id) {
         cinemaImagesService.deleteCinemaImage(id);
         return ResponseEntity.ok("Successfully deleted Cinema image");
-    }
-
-    @PutMapping(value = "/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateCinemaImage(@ModelAttribute CinemaImagesRequest cinemaImagesRequest, @PathVariable int id) {
-        cinemaImagesService.updateCinemaImage(id, cinemaImagesRequest);
-        return ResponseEntity.ok("Successfully updated Cinema image");
     }
 }

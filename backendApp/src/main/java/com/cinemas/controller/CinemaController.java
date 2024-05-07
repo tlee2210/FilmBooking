@@ -1,6 +1,7 @@
 package com.cinemas.controller;
 
 import com.cinemas.dto.request.CinemaRequest;
+import com.cinemas.dto.response.CinemaResponse;
 import com.cinemas.entities.Cinema;
 import com.cinemas.service.CinemaService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -23,7 +25,18 @@ public class CinemaController {
     public ResponseEntity<?> listCinema() {
         try {
             List<Cinema> cinemaList = cinemaService.getAllCinemas();
-            return ResponseEntity.ok(cinemaList);
+            List<CinemaResponse> cinemaResponseList = new ArrayList<>();
+            for (Cinema cinema : cinemaList) {
+                CinemaResponse cinemaResponse = new CinemaResponse();
+                cinemaResponse.setId(cinema.getId());
+                cinemaResponse.setCinemaName(cinema.getCinemaName());
+                cinemaResponse.setCinemaAddress(cinema.getCinemaAddress());
+                cinemaResponse.setHotline(cinema.getHotline());
+                cinemaResponse.setInformation(cinema.getInformation());
+                cinemaResponse.setCity_id(cinema.getCity().getId());
+                cinemaResponseList.add(cinemaResponse);
+            }
+            return ResponseEntity.ok(cinemaResponseList);
         }
         catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -34,7 +47,14 @@ public class CinemaController {
     public ResponseEntity<?> getCinemaById(@PathVariable int id) {
         try {
             Cinema cinema = cinemaService.getCinemaById(id);
-            return ResponseEntity.ok(cinema);
+            CinemaResponse cinemaResponse = new CinemaResponse();
+            cinemaResponse.setId(cinema.getId());
+            cinemaResponse.setCinemaName(cinema.getCinemaName());
+            cinemaResponse.setCinemaAddress(cinema.getCinemaAddress());
+            cinemaResponse.setHotline(cinema.getHotline());
+            cinemaResponse.setInformation(cinema.getInformation());
+            cinemaResponse.setCity_id(cinema.getCity().getId());
+            return ResponseEntity.ok(cinemaResponse);
         }
         catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

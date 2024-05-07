@@ -11,7 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class CinemaImagesRequest {
-    private String imgName;
-
     private int cinema_id;
 }

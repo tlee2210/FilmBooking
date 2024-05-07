@@ -11,6 +11,5 @@ public interface CinemaImagesService {
     List<CinemaImages> getAllCinemaImages();
     CinemaImages getCinemaImageById(int id);
     void addCinemaImage(CinemaImagesRequest cinemaImage, MultipartFile[] files) throws IOException;
-    void updateCinemaImage(int id, CinemaImagesRequest cinemaImage);
     void deleteCinemaImage(int id);
 }

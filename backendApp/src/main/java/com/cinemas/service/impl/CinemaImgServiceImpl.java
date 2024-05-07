@@ -57,7 +57,7 @@ public class CinemaImgServiceImpl implements CinemaImagesService {
     @Override
     public CinemaImages getCinemaImageById(int id) {
         return cinemaImagesRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid id"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @Override
@@ -76,18 +76,26 @@ public class CinemaImgServiceImpl implements CinemaImagesService {
         }
     }
 
-    @Override
-    public void updateCinemaImage(int id, CinemaImagesRequest cinemaImage) {
-        CinemaImages existingImages = getCinemaImageById(id);
-        if (existingImages != null) {
-            existingImages.setImgName(cinemaImage.getImgName());
-            cinemaImagesRepository.save(existingImages);
+    private void deleteExistingImage(String imagePath, String id) {
+        if (imagePath != null && !imagePath.isEmpty()) {
+            try {
+                String uploadDir = "cinema_images/" + id;
+                String absoluteUploadDir = System.getProperty("user.dir") + "/src/main/java/com/cinemas/" + uploadDir;
+                Path root = Paths.get(absoluteUploadDir);
+                Path file = root.resolve(imagePath);
+                Files.deleteIfExists(file);
+            } catch (IOException e) {
+                System.err.println("Failed to delete image: " + imagePath);
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void deleteCinemaImage(int id) {
+        CinemaImages cinemaImage = getCinemaImageById(id);
         if (cinemaImagesRepository.existsById(id)) {
+            deleteExistingImage(cinemaImage.getImgName(), Integer.toString(cinemaImage.getCinema().getId()));
             cinemaImagesRepository.deleteById(id);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cinema image not found");
