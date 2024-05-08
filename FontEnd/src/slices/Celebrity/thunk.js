@@ -1,5 +1,5 @@
 // import { userForgetPasswordSuccess, userForgetPasswordError } from "./reducer";
-import { fetchSuccess, setSelectOption } from "./reducer";
+import { fetchSuccess, setSelectOption, removeItem } from "./reducer";
 import { Success, Error } from "../message/reducer";
 import axios from "axios";
 
@@ -49,5 +49,19 @@ export const CreateCelebrity = (formData, history) => async (dispatch) => {
       console.error(err);
       dispatch(Error(err.response.data.message));
       history("/dashboard/celebrity");
+    });
+};
+
+export const deleteCelebrity = (id, history) => async (dispatch) => {
+  await axios
+    .delete(`http://localhost:8081/api/celebrity/delete/${id}`)
+    .then((response) => {
+      console.log(response);
+      dispatch(Success(response.data.message));
+      dispatch(removeItem(response.data.result));
+    })
+    .catch((err) => {
+      console.error(err);
+      dispatch(Error(err.response.data.message));
     });
 };

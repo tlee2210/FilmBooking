@@ -25,6 +25,8 @@ public enum ErrorCode {
 
     EMAIL_EXISTED(HttpStatus.BAD_REQUEST, "Email existed"),
 
+    CELEBRITY_EXISTED(HttpStatus.BAD_REQUEST, "Celebrity existed"),
+
     PROVIDE_VALID(HttpStatus.BAD_REQUEST, "please provide an valid email"),
 
     OTP_EXPIRED(HttpStatus.EXPECTATION_FAILED, "Invalid OTP!"),

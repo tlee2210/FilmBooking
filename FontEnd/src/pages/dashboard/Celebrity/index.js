@@ -1,5 +1,14 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { Container, Row, Col, Card, CardHeader } from "reactstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  CardHeader,
+  Modal,
+  ModalBody,
+  Button,
+} from "reactstrap";
 
 import TableContainer from "../../../Components/Common/TableContainerReactTable";
 import { message } from "antd";
@@ -17,10 +26,14 @@ import { useSelector, useDispatch } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import { createSelector } from "reselect";
 
-import { celebrity } from "../../../slices/Celebrity/thunk";
+import { celebrity, deleteCelebrity } from "../../../slices/Celebrity/thunk";
 
 const Celebrity = (props) => {
   const dispatch = useDispatch();
+
+  const [modal_detele, setmodal_detele] = useState(false);
+  const [modal_togFirst, setmodal_togFirst] = useState(false);
+  const [Id, setId] = useState("");
 
   const CelebrityState = (state) => state;
   const CelebrityStateData = createSelector(CelebrityState, (state) => ({
@@ -63,6 +76,21 @@ const Celebrity = (props) => {
     formData.append("pageNo", page);
     dispatch(celebrity(formData, props.router.navigate));
   };
+
+  function tog_togdelete(id) {
+    setmodal_detele(!modal_togFirst);
+    // console.log(id);
+    if (id) {
+      setId(id);
+    }
+  }
+
+  function deleteitem(id) {
+    console.log("delete : " + id);
+    if (id) {
+      dispatch(deleteCelebrity(id));
+    }
+  }
 
   const columns = useMemo(
     () => [
@@ -128,7 +156,10 @@ const Celebrity = (props) => {
               <span className="bg-gradient me-3 fs-4 text-info">
                 <i className="ri-edit-2-fill"></i>
               </span>
-              <span className="fs-4 text-danger">
+              <span
+                className="fs-4 text-danger"
+                onClick={() => tog_togdelete(cell.getValue())}
+              >
                 <i className="ri-delete-bin-5-line"></i>
               </span>
             </React.Fragment>
@@ -191,6 +222,48 @@ const Celebrity = (props) => {
           </Row>
         </Container>
       </div>
+      {/* delete modal */}
+      <Modal
+        isOpen={modal_detele}
+        toggle={() => {
+          tog_togdelete();
+        }}
+        id="firstmodal"
+        centered
+      >
+        <ModalBody className="text-center p-5">
+          {/* <lord-icon
+              src="https://cdn.lordicon.com/tdrtiskw.json"
+              trigger="loop"
+              colors="primary:#f7b84b,secondary:#405189"
+              style={{ width: "130px", height: "130px" }}
+            ></lord-icon> */}
+          <div className="pt-4">
+            <h4>Confirm Deletion</h4>
+            <p className="text-muted">
+              {" "}
+              Are you sure you want to delete this item?
+            </p>
+          </div>
+          <div className="col-lg-12">
+            <div className="hstack gap-2 justify-content-center">
+              <Button color="light" onClick={() => setmodal_detele(false)}>
+                Cancel
+              </Button>
+              <Button
+                color="danger"
+                type="submit"
+                onClick={() => {
+                  deleteitem(Id);
+                  setmodal_detele(false);
+                }}
+              >
+                Yes, Delete
+              </Button>
+            </div>
+          </div>
+        </ModalBody>
+      </Modal>
     </React.Fragment>
   );
 };

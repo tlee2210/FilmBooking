@@ -64,10 +64,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     public JwtAuthenticationResponse signin(SigninRequest signinRequest) {
-        System.out.println("==================");
-        System.out.println(signinRequest.getEmail());
-        System.out.println(signinRequest.getPassword());
-        System.out.println("==================");
 
         var user = userRepository.findByEmail(signinRequest.getEmail()).orElseThrow(
                 () -> new AppException(EMAIL_EXISTED));
@@ -75,7 +71,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(signinRequest.getEmail(),
                         signinRequest.getPassword()));
-
 
         var jwt = jwtService.generateToken(user);
 
@@ -92,6 +87,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     public JwtAuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
+
         String userEmail = jwtService.extractUserName(refreshTokenRequest.getToken());
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with email: " + userEmail));

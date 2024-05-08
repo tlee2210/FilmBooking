@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.cinemas.exception.ErrorCode.*;
@@ -56,14 +57,8 @@ public class CelebrityController {
         return apiResponse;
     }
 
-    @GetMapping("/{id}")
-    public Celebrity getCelebrityById(@PathVariable int id) {
-        return celebrityService.getCelebrity(id);
-    }
-
     @PostMapping("/create")
     public APIResponse<String> createCelebrity(@ModelAttribute CelebrityRequest celebrityRequest) {
-//        System.out.println(celebrityRequest);
         boolean checkCreate = celebrityService.addCelebrity(celebrityRequest);
         if (checkCreate) {
             APIResponse<String> apiResponse = new APIResponse();
@@ -75,13 +70,22 @@ public class CelebrityController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteCelebrity(@PathVariable int id) {
-        try {
-            celebrityService.deleteCelebrity(id);
-            return ResponseEntity.ok("Successfully deleted celeb");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+    public APIResponse<Integer> deleteCelebrity(@PathVariable int id) throws IOException {
+
+        boolean checkDelete = celebrityService.deleteCelebrity(id);
+        if (checkDelete) {
+            APIResponse<Integer> apiResponse = new APIResponse();
+            apiResponse.setCode(200);
+            apiResponse.setMessage("Successfully deleted celeb");
+            apiResponse.setResult(id);
+            return apiResponse;
         }
+        throw new AppException(CREATE_FAILED);
+    }
+
+    @GetMapping("/{id}")
+    public Celebrity getCelebrityById(@PathVariable int id) {
+        return celebrityService.getCelebrity(id);
     }
 
     @PutMapping(value = "/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

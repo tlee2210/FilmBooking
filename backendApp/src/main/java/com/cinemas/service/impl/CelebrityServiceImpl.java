@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static java.lang.Integer.*;
+import static com.cinemas.exception.ErrorCode.*;
 
 @Service
 public class CelebrityServiceImpl implements CelebrityService {
@@ -81,6 +81,11 @@ public class CelebrityServiceImpl implements CelebrityService {
     public Page<Celebrity> getAllCelebrity(PaginationHelper PaginationHelper) {
         List<Celebrity> celebrityList = celebrityRepository.findAllWithCountry();
 
+        celebrityList.forEach(celebrity -> {
+            String imageUrl = fileStorageService.getUrlFromPublicId(celebrity.getImage());
+            celebrity.setImage(imageUrl);
+        });
+
         PagedListHolder<Celebrity> pagedListHolder = new PagedListHolder<Celebrity>(celebrityList);
         pagedListHolder.setPage(PaginationHelper.getPageNo());
         pagedListHolder.setPageSize(PaginationHelper.getPageSize());
@@ -102,10 +107,10 @@ public class CelebrityServiceImpl implements CelebrityService {
             ObjectUtils.copyFields(celebrity, addCeleb);
 
             int CountryId = Integer.parseInt(celebrity.getNationality());
-            Country Country  = countryRepository.findById(CountryId);
+            Country Country = countryRepository.findById(CountryId);
 
             addCeleb.setCountry(Country);
-            addCeleb.setImage(fileStorageService.uploadFile(celebrity.getFile()));
+            addCeleb.setImage(fileStorageService.uploadFile(celebrity.getFile(), String.valueOf(celebrity.getRole())));
 //            System.out.println(addCeleb);
             celebrityRepository.save(addCeleb);
             return true;
@@ -126,13 +131,14 @@ public class CelebrityServiceImpl implements CelebrityService {
     }
 
     @Override
-    public void deleteCelebrity(int id) {
+    public boolean deleteCelebrity(int id) throws IOException {
         Celebrity celebrity = celebrityRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid id" + id));
-        if (celebrity != null) {
-            deleteExistingImage(celebrity.getImage(), celebrity.getRole());
-            celebrityRepository.delete(celebrity);
-        }
+                .orElseThrow(() -> new AppException(CELEBRITY_EXISTED));
+
+        fileStorageService.deleteFile(celebrity.getImage());
+        celebrityRepository.delete(celebrity);
+
+        return true;
     }
 
     @Override

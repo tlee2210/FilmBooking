@@ -2,6 +2,7 @@ package com.cinemas.exception;
 
 import com.cinemas.dto.response.APIResponse;
 import jakarta.validation.ConstraintViolation;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -23,6 +25,13 @@ public class GlobalExceptionHandler {
         apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getStatusCode().value());
         apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
         return ResponseEntity.badRequest().body(apiResponse);
+    }
+    @ExceptionHandler(value = IOException.class)
+    ResponseEntity<APIResponse> handleIOException(IOException exception) {
+        APIResponse apiResponse = new APIResponse<>();
+        apiResponse.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        apiResponse.setMessage("An I/O error occurred: " + exception.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiResponse);
     }
 
     @ExceptionHandler(value = AuthenticationException.class)

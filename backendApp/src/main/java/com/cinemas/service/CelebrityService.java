@@ -8,6 +8,7 @@ import com.cinemas.entities.Country;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface CelebrityService {
@@ -17,7 +18,7 @@ public interface CelebrityService {
 
     List<SelectOptionReponse> getCreateCelebrity();
 
-    void deleteCelebrity(int id);
+    boolean deleteCelebrity(int id) throws IOException;
 
     Celebrity getCelebrity(Integer id);
 
