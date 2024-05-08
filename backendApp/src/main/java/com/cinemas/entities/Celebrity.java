@@ -1,10 +1,8 @@
 package com.cinemas.entities;
 
 import com.cinemas.enums.RoleCeleb;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +15,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Celebrity {
     @Id
     @GeneratedValue
@@ -28,8 +27,8 @@ public class Celebrity {
     @Column
     private LocalDate dateOfBirth;
 
-    @Column
-    private String nationality;
+//    @Column
+//    private String nationality;
 
     @Column
     private String biography;
@@ -42,4 +41,8 @@ public class Celebrity {
 
     @Column
     private String image;
+
+    @ManyToOne
+    @JoinColumn(name = "country_id")
+    private Country country;
 }

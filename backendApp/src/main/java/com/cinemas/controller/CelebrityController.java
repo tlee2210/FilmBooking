@@ -3,7 +3,9 @@ package com.cinemas.controller;
 import com.cinemas.dto.request.CelebrityRequest;
 import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.response.APIResponse;
+import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Celebrity;
+import com.cinemas.exception.AppException;
 import com.cinemas.service.CelebrityService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +15,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
+import static com.cinemas.exception.ErrorCode.*;
+
 @RestController
-@RequestMapping("api/celebrity")
+@RequestMapping("/api/celebrity")
 @Tag(name = "Celebrity Controller")
 public class CelebrityController {
     @Autowired
     CelebrityService celebrityService;
 
+    /**
+     * all list Celebrity
+     *
+     * @param PaginationHelper
+     * @return
+     */
     @PostMapping
     public APIResponse<Page<Celebrity>> getAllCelebrity(@RequestBody(required = false) PaginationHelper PaginationHelper) {
-        System.out.println("ok");
         Page<Celebrity> celebrityList = celebrityService.getAllCelebrity(PaginationHelper);
         APIResponse<Page<Celebrity>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
@@ -31,29 +42,44 @@ public class CelebrityController {
         return apiResponse;
     }
 
+    /**
+     * get country list create
+     *
+     * @return
+     */
+    @GetMapping("/create")
+    public APIResponse<List<SelectOptionReponse>> getCreateCelebrity() {
+        List<SelectOptionReponse> countryList = celebrityService.getCreateCelebrity();
+        APIResponse<List<SelectOptionReponse>> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setResult(countryList);
+        return apiResponse;
+    }
+
     @GetMapping("/{id}")
     public Celebrity getCelebrityById(@PathVariable int id) {
         return celebrityService.getCelebrity(id);
     }
 
-    @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> createCelebrity(@ModelAttribute CelebrityRequest celebrity, MultipartFile file) {
-        try{
-            celebrityService.addCelebrity(celebrity, file);
-            return ResponseEntity.ok("Successfully added celeb");
+    @PostMapping("/create")
+    public APIResponse<String> createCelebrity(@ModelAttribute CelebrityRequest celebrityRequest) {
+//        System.out.println(celebrityRequest);
+        boolean checkCreate = celebrityService.addCelebrity(celebrityRequest);
+        if (checkCreate) {
+            APIResponse<String> apiResponse = new APIResponse();
+            apiResponse.setCode(200);
+            apiResponse.setMessage("Celebrity created successfully");
+            return apiResponse;
         }
-        catch(Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        throw new AppException(CREATE_FAILED);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteCelebrity(@PathVariable int id) {
-        try{
+        try {
             celebrityService.deleteCelebrity(id);
             return ResponseEntity.ok("Successfully deleted celeb");
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

@@ -49,7 +49,7 @@ const Navdata = () => {
         {
           id: "celebrity",
           label: "Celebrity",
-          link: "/celebrity",
+          link: "/dashboard/celebrity",
           parentId: "dashboard",
         },
         {

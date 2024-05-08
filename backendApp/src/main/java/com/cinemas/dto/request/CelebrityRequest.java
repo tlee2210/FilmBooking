@@ -28,8 +28,8 @@ public class CelebrityRequest {
 
     private String description;
 
-    @NotEmpty(message = "VALIDATION")
+//    @NotEmpty(message = "VALIDATION")
     private RoleCeleb role;
 
-    private String image;
+    private MultipartFile file;
 }

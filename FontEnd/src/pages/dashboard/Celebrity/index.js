@@ -1,51 +1,51 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  CardHeader,
-  Modal,
-  Form,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-  Label,
-  Input,
-  FormFeedback,
-} from "reactstrap";
+import { Container, Row, Col, Card, CardHeader } from "reactstrap";
 
 import TableContainer from "../../../Components/Common/TableContainerReactTable";
+import { message } from "antd";
 
-import { Link } from "react-router-dom";
-import Flatpickr from "react-flatpickr";
-import { isEmpty } from "lodash";
-import * as moment from "moment";
-
-// Formik
-import * as Yup from "yup";
-import { useFormik } from "formik";
 import withRouter from "../../../Components/Common/withRouter";
-
-// Export Modal
-import ExportCSVModal from "../../../Components/Common/ExportCSVModal";
-
+import { Link } from "react-router-dom";
 //Import Breadcrumb
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
-import DeleteModal from "../../../Components/Common/DeleteModal";
+
+import { clearNotification } from "../../../slices/message/reducer";
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
 
-import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Loader from "../../../Components/Common/Loader";
 import { createSelector } from "reselect";
 
 import { celebrity } from "../../../slices/Celebrity/thunk";
 
 const Celebrity = (props) => {
   const dispatch = useDispatch();
+
+  const CelebrityState = (state) => state;
+  const CelebrityStateData = createSelector(CelebrityState, (state) => ({
+    success: state.Message.success,
+    error: state.Message.error,
+    messageSuccess: state.Message.messageSuccess,
+    messageError: state.Message.messageError,
+  }));
+  // Inside your component
+  const { error, success, messageSuccess, messageError } =
+    useSelector(CelebrityStateData);
+
+  useEffect(() => {
+    if (success) {
+      if (messageSuccess != null) {
+        message.success(messageSuccess);
+      }
+    }
+    if (error) {
+      if (messageError != null) {
+        message.error(messageError);
+      }
+    }
+    dispatch(clearNotification());
+  }, [dispatch, success, error]);
 
   useEffect(() => {
     dispatch(celebrity({}, props.router.navigate));
@@ -58,39 +58,24 @@ const Celebrity = (props) => {
   // Inside your component
   const { Celebrity } = useSelector(CelebrityProperties);
 
-  const [isEdit, setIsEdit] = useState(false);
-  const [customer, setCustomer] = useState([]);
-
   const handlePagination = (page) => {
     const formData = new FormData();
     formData.append("pageNo", page);
     dispatch(celebrity(formData, props.router.navigate));
   };
 
-  const customermocalstatus = [
-    {
-      options: [
-        { label: "Status", value: "Status" },
-        { label: "Active", value: "Active" },
-        { label: "Block", value: "Block" },
-      ],
-    },
-  ];
-
   const columns = useMemo(
     () => [
-      // {
-      //   header: "ID",
-      //   cell: ({ rowIndex, table }) => {
-      //     const realIndex =
-      //       rowIndex +
-      //       1 +
-      //       table.getState().pagination.pageIndex *
-      //         table.getState().pagination.pageSize;
-      //     return <span>{realIndex}</span>;
-      //   },
-      //   enableColumnFilter: false,
-      // },
+      {
+        header: "Avatar",
+        accessorKey: "image",
+        cell: (cell) => {
+          return (
+            <img src={cell.getValue()} alt={cell.getValue()} width={100} />
+          );
+        },
+        enableColumnFilter: false,
+      },
       {
         header: "Name",
         accessorKey: "name",
@@ -103,7 +88,10 @@ const Celebrity = (props) => {
       },
       {
         header: "nationality",
-        accessorKey: "nationality",
+        accessorKey: "country",
+        cell: (cell) => {
+          return <span>{cell.getValue().name}</span>;
+        },
         enableColumnFilter: false,
       },
       {
@@ -131,69 +119,36 @@ const Celebrity = (props) => {
       },
       {
         header: "Actions",
+        accessorKey: "id",
         enableColumnFilter: false,
         cell: (cell) => {
-          return <React.Fragment>Details</React.Fragment>;
+          // return <React.Fragment>Details</React.Fragment>;
+          return (
+            <React.Fragment>
+              <span className="bg-gradient me-3 fs-4 text-info">
+                <i className="ri-edit-2-fill"></i>
+              </span>
+              <span className="fs-4 text-danger">
+                <i className="ri-delete-bin-5-line"></i>
+              </span>
+            </React.Fragment>
+          );
         },
+        className: "sticky-right",
       },
     ],
     []
   );
 
-  // validation
-  const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
-
-    initialValues: {
-      customer: (customer && customer.customer) || "",
-      email: (customer && customer.email) || "",
-      phone: (customer && customer.phone) || "",
-      date: (customer && customer.date) || "",
-      status: (customer && customer.status) || "",
-    },
-    validationSchema: Yup.object({
-      customer: Yup.string().required("Please Enter Customer Name"),
-      email: Yup.string().required("Please Enter Your Email"),
-      phone: Yup.string().required("Please Enter Your Phone"),
-      status: Yup.string().required("Please Enter Your Status"),
-    }),
-    onSubmit: (values) => {
-      if (isEdit) {
-        const updateCustomer = {
-          _id: customer ? customer._id : 0,
-          customer: values.customer,
-          email: values.email,
-          phone: values.phone,
-          date: date,
-          status: values.status,
-        };
-        // update customer
-        dispatch(onUpdateCustomer(updateCustomer));
-        validation.resetForm();
-      } else {
-        const newCustomer = {
-          _id: (Math.floor(Math.random() * (30 - 20)) + 20).toString(),
-          customer: values["customer"],
-          email: values["email"],
-          phone: values["phone"],
-          date: date,
-          status: values["status"],
-        };
-        // save new customer
-        dispatch(onAddNewCustomer(newCustomer));
-        validation.resetForm();
-      }
-      toggle();
-    },
-  });
-
-  document.title = "Customers";
+  document.title = "Actors and Directors Manager";
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="Customers" pageTitle="Ecommerce" />
+          <BreadCrumb
+            title="Actors and Directors Manager"
+            pageTitle="Actors and Directors"
+          />
           <Row>
             <Col lg={12}>
               <Card id="customerList">
@@ -201,23 +156,20 @@ const Celebrity = (props) => {
                   <Row className="g-4 align-items-center">
                     <div className="col-sm">
                       <div>
-                        <h5 className="card-title mb-0">Customer List</h5>
+                        <h5 className="card-title mb-0">
+                          Actors and Directors Manager
+                        </h5>
                       </div>
                     </div>
                     <div className="col-sm-auto">
                       <div>
-                        <button
-                          type="button"
+                        <Link
                           className="btn btn-success add-btn"
-                          id="create-btn"
-                          onClick={() => {
-                            setIsEdit(false);
-                            toggle();
-                          }}
+                          to={`/dashboard/celebrity/create`}
                         >
                           <i className="ri-add-line align-bottom me-1"></i> Add
-                          Customer
-                        </button>{" "}
+                          New Profile
+                        </Link>
                       </div>
                     </div>
                   </Row>

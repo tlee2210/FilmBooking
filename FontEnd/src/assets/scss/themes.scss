@@ -2,15 +2,14 @@
 @import "../scss/bootstrap.scss";
 @import "../scss/app.scss";
 @import "../scss/custom.scss";
-@import"./shepherd.css";
+@import "./shepherd.css";
 @import "./mermaid.min.css";
 
-//RTL 
+//RTL
 // @import "../scss/rtl/components-rtl";
 // @import "../scss/rtl/layouts-rtl";
 // @import "../scss/rtl/plugins-rtl";
 // @import "../scss/rtl/pages-rtl";
-
 
 //Rigthsidebar offcanvas
 .offcanvas-header-dark {
@@ -23,6 +22,14 @@ body {
   * {
     outline: none;
   }
+}
+
+.sticky-right {
+  position: -webkit-sticky;
+  position: sticky;
+  right: 0;
+  background-color: white;
+  z-index: 1;
 }
 
 .noUi-horizontal .noUi-handle {
@@ -88,8 +95,8 @@ body {
 
   .fc {
     .fc-toolbar {
-      >* {
-        >* {
+      > * {
+        > * {
           float: none;
         }
       }
@@ -122,11 +129,10 @@ body {
 //   max-height: 43px !important;
 // }
 
-@each $color,
-$value in $theme-colors {
+@each $color, $value in $theme-colors {
   .simplebar-track-#{$color} {
     .simplebar-scrollbar:before {
-      background: $value  !important;
+      background: $value !important;
     }
   }
 }
@@ -144,7 +150,7 @@ $value in $theme-colors {
   height: 250px !important;
 }
 
-[data-layout="horizontal"] .chat-conversation{
+[data-layout="horizontal"] .chat-conversation {
   &.chatwidgets {
     height: 250px !important;
   }
@@ -189,128 +195,133 @@ $value in $theme-colors {
 
 // Tranfer List
 
-.rdl-filter, .rdl-control{
+.rdl-filter,
+.rdl-control {
   background-color: $input-bg;
   border: 1px solid $input-border-color !important;
   color: $input-color !important;
 }
 
-.rdl-move{
+.rdl-move {
   background: var(--#{$prefix}light) !important;
   border: 1px solid var(--#{$prefix}light) !important;
   color: var(--#{$prefix}body-color) !important;
 }
 
 .react-dual-listbox {
-  input:disabled, select:disabled{
+  input:disabled,
+  select:disabled {
     background-color: $input-disabled-bg !important;
     border: 1px solid $input-border-color !important;
   }
 }
 
-.css-26l3qy-menu{
+.css-26l3qy-menu {
   background-color: var(--#{$prefix}gray-200) !important;
   border-color: var(--#{$prefix}border-color) !important;
 }
 
-.css-1n7v3ny-option{
+.css-1n7v3ny-option {
   background-color: var(--#{$prefix}gray-300) !important;
   border-color: var(--#{$prefix}border-color) !important;
 }
 
-
-
 //datatables
-.kbunWL, .ddeqMG {
-  .cFDtZf, .efrTRK {
-      color: $table-color;
+.kbunWL,
+.ddeqMG {
+  .cFDtZf,
+  .efrTRK {
+    color: $table-color;
   }
-  
+
   :is(.kdYplh, .dUdLgu) {
-      background-color: var(--#{$prefix}secondary-bg);
-      border-bottom-color: var(--#{$prefix}border-color);
+    background-color: var(--#{$prefix}secondary-bg);
+    border-bottom-color: var(--#{$prefix}border-color);
   }
-  
+
   .dUdLgu {
-      color: $table-color;
-      &:not(:last-of-type) {
-          border-bottom-color: var(--#{$prefix}border-color);
-      }
+    color: $table-color;
+    &:not(:last-of-type) {
+      border-bottom-color: var(--#{$prefix}border-color);
+    }
   }
 }
 
 .card-body {
   .fjmwMg {
+    color: $table-color;
+    background-color: var(--#{$prefix}secondary-bg);
+    border-top-color: var(--#{$prefix}border-color);
+
+    .flbsZw {
       color: $table-color;
-      background-color: var(--#{$prefix}secondary-bg);
-      border-top-color: var(--#{$prefix}border-color);
-      
-      .flbsZw{
-          color: $table-color;
-          fill: $table-color;
-          &:disabled{
-              color: var(--#{$prefix}tertiary-color);
-              fill: var(--#{$prefix}tertiary-color);
-          }
+      fill: $table-color;
+      &:disabled {
+        color: var(--#{$prefix}tertiary-color);
+        fill: var(--#{$prefix}tertiary-color);
       }
+    }
   }
 }
 
 //react select
-.css-b62m3t-container{
+.css-b62m3t-container {
   .css-13cymwt-control {
-      background-color: var(--#{$prefix}secondary-bg);
-      color: var(--#{$prefix}body-color);
-      border-color: var(--#{$prefix}border-color);
-      &:hover, &:focus {
-          border-color: var(--#{$prefix}primary);
-      }
-      
-      .css-1p3m7a8-multiValue {
-          color: var(--#{$prefix}white);
-          background-color: var(--#{$prefix}primary);
-          .css-wsp0cs-MultiValueGeneric{
-              color: var(--#{$prefix}white);
-          }
+    background-color: var(--#{$prefix}secondary-bg);
+    color: var(--#{$prefix}body-color);
+    border-color: var(--#{$prefix}border-color);
+    &:hover,
+    &:focus {
+      border-color: var(--#{$prefix}primary);
+    }
 
-          .css-1u9des2-indicatorSeparator{
-              border-color: var(--#{$prefix}border-color);
-          }
+    .css-1p3m7a8-multiValue {
+      color: var(--#{$prefix}white);
+      background-color: var(--#{$prefix}primary);
+      .css-wsp0cs-MultiValueGeneric {
+        color: var(--#{$prefix}white);
       }
+
+      .css-1u9des2-indicatorSeparator {
+        border-color: var(--#{$prefix}border-color);
+      }
+    }
   }
 
   :is(.css-qbdosj-Input, .css-1dimb5e-singleValue) {
-      color: var(--#{$prefix}body-color);
+    color: var(--#{$prefix}body-color);
   }
 
-  .css-t3ipsp-control{
-      background-color: var(--#{$prefix}secondary-bg);
-      color: var(--#{$prefix}body-color);
-      border-color: var(--#{$prefix}border-color);
+  .css-t3ipsp-control {
+    background-color: var(--#{$prefix}secondary-bg);
+    color: var(--#{$prefix}body-color);
+    border-color: var(--#{$prefix}border-color);
 
-      .css-1p3m7a8-multiValue {
-          color: var(--#{$prefix}white);
-          background-color: var(--#{$prefix}primary);
-          .css-wsp0cs-MultiValueGeneric{
-              color: var(--#{$prefix}white);
-          }
-
-          .css-1u9des2-indicatorSeparator{
-              border-color: var(--#{$prefix}border-color);
-          }
+    .css-1p3m7a8-multiValue {
+      color: var(--#{$prefix}white);
+      background-color: var(--#{$prefix}primary);
+      .css-wsp0cs-MultiValueGeneric {
+        color: var(--#{$prefix}white);
       }
+
+      .css-1u9des2-indicatorSeparator {
+        border-color: var(--#{$prefix}border-color);
+      }
+    }
   }
 
-  .css-1nmdiq5-menu{
-      background-color: var(--#{$prefix}secondary-bg);
-      color: var(--#{$prefix}body-color);
-      border-color: var(--#{$prefix}border-color);
-      .css-d7l1ni-option {
-          color: $white;
-          background-color: var(--#{$prefix}primary);
-          &:hover, &:active, &:focus {
-              background-color: var(--#{$prefix}primary);
-          }
+  .css-1nmdiq5-menu {
+    background-color: var(--#{$prefix}secondary-bg);
+    color: var(--#{$prefix}body-color);
+    border-color: var(--#{$prefix}border-color);
+    .css-d7l1ni-option {
+      color: $white;
+      background-color: var(--#{$prefix}primary);
+      &:hover,
+      &:active,
+      &:focus {
+        background-color: var(--#{$prefix}primary);
       }
+    }
   }
 }

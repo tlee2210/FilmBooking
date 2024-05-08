@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
   data: [],
+  SelectOption: [],
 };
 
 const CelebritySlice = createSlice({
@@ -12,9 +13,12 @@ const CelebritySlice = createSlice({
       state.loading = false;
       state.data = action.payload.data;
     },
+    setSelectOption(state, action) {
+      state.SelectOption = action.payload;
+    },
   },
 });
 
-export const { fetchSuccess } = CelebritySlice.actions;
+export const { fetchSuccess, setSelectOption } = CelebritySlice.actions;
 
 export default CelebritySlice.reducer;

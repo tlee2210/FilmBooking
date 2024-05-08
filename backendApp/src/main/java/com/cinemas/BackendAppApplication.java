@@ -1,11 +1,13 @@
 package com.cinemas;
 
 import com.cinemas.entities.Celebrity;
+import com.cinemas.entities.Country;
 import com.cinemas.entities.User;
 import com.cinemas.enums.Gender;
 import com.cinemas.enums.RoleCeleb;
 import com.cinemas.enums.RoleType;
 import com.cinemas.repositories.CelebrityRepository;
+import com.cinemas.repositories.CountryRepository;
 import com.cinemas.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -22,8 +24,12 @@ import java.util.Random;
 public class BackendAppApplication implements CommandLineRunner {
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     CelebrityRepository celebrityRepository;
+
+    @Autowired
+    CountryRepository countryRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(BackendAppApplication.class, args);
@@ -44,48 +50,21 @@ public class BackendAppApplication implements CommandLineRunner {
             user.setPassword(new BCryptPasswordEncoder().encode("thienle2210"));
             userRepository.save(user);
         }
-        List<Celebrity> allCelebrities = celebrityRepository.findAll();
-        if(allCelebrities.isEmpty()){
-            String[] actorNames = {
-                    "Chris Evans", "Scarlett Johansson", "Robert Downey Jr.",
-                    "Tom Hanks", "Leonardo DiCaprio", "Meryl Streep", "Brad Pitt",
-                    "Angelina Jolie", "Denzel Washington", "Natalie Portman", "Johnny Depp",
-                    "Jennifer Lawrence", "Will Smith", "Emma Stone", "Tom Cruise",
-                    "Anne Hathaway", "George Clooney", "Jennifer Aniston", "Matt Damon",
-                    "Cate Blanchett", "Christian Bale", "Julia Roberts", "Nicole Kidman",
-                    "Jackie Chan", "Harrison Ford", "Kate Winslet", "Sandra Bullock",
-                    "Daniel Radcliffe", "Joaquin Phoenix", "Gal Gadot"};
+        List<Country> countryList = countryRepository.findAll();
+        if (countryList.size() == 0) {
             String[] nationalities = {
                     "American", "British", "Canadian", "Australian",
                     "French", "German", "Italian", "Spanish", "Japanese",
                     "Chinese", "Russian", "Brazilian", "Indian", "Mexican",
                     "South Korean", "Swedish", "Dutch", "Norwegian", "Swiss", "Greek"};
-
-            List<Celebrity> celebrities = new ArrayList<>();
-            Random random = new Random();
-            for (int i = 0; i < 30; i++) {
-
-                int year = random.nextInt(100) + 1900;
-                int month = random.nextInt(12) + 1;
-                int day = random.nextInt(28) + 1;
-
-                String nationality = nationalities[random.nextInt(nationalities.length)];
-
-                Celebrity celebrity = Celebrity.builder()
-                        .id(i + 1)
-                        .name(actorNames[i % actorNames.length])
-                        .dateOfBirth(LocalDate.of(year, month, day))
-                        .nationality(nationality)
-                        .biography("Biography content")
-                        .description("Description content")
-                        .role(RoleCeleb.ACTOR)
-                        .image("image_url")
+            List<Country> countries = new ArrayList<>();
+            for (String nationality : nationalities) {
+                Country country = Country.builder()
+                        .name(nationality)
                         .build();
-                celebrities.add(celebrity);
+                countries.add(country);
             }
-            celebrityRepository.saveAll(celebrities);
-
+            countryRepository.saveAll(countries);
         }
-
     }
 }

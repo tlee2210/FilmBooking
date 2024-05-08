@@ -1,10 +1,15 @@
 package com.cinemas.service.impl;
 
+import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.CelebrityRequest;
 import com.cinemas.dto.request.PaginationHelper;
+import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Celebrity;
+import com.cinemas.entities.Country;
 import com.cinemas.enums.RoleCeleb;
+import com.cinemas.exception.AppException;
 import com.cinemas.repositories.CelebrityRepository;
+import com.cinemas.repositories.CountryRepository;
 import com.cinemas.service.CelebrityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.MutableSortDefinition;
@@ -23,13 +28,20 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static java.lang.Integer.*;
 
 @Service
 public class CelebrityServiceImpl implements CelebrityService {
     @Autowired
     CelebrityRepository celebrityRepository;
+    @Autowired
+    CountryRepository countryRepository;
+    @Autowired
+    FileStorageService fileStorageService;
 
     private String storeFile(MultipartFile file, RoleCeleb role) throws IOException {
         if (file != null && !file.isEmpty()) {
@@ -67,7 +79,7 @@ public class CelebrityServiceImpl implements CelebrityService {
 
     @Override
     public Page<Celebrity> getAllCelebrity(PaginationHelper PaginationHelper) {
-        List<Celebrity> celebrityList = celebrityRepository.findAll();
+        List<Celebrity> celebrityList = celebrityRepository.findAllWithCountry();
 
         PagedListHolder<Celebrity> pagedListHolder = new PagedListHolder<Celebrity>(celebrityList);
         pagedListHolder.setPage(PaginationHelper.getPageNo());
@@ -83,21 +95,34 @@ public class CelebrityServiceImpl implements CelebrityService {
     }
 
     @Override
-    public void addCelebrity(CelebrityRequest celebrity, MultipartFile multipartFile) {
+    public boolean addCelebrity(CelebrityRequest celebrity) {
         try {
-            String fileName = storeFile(multipartFile, celebrity.getRole());
             Celebrity addCeleb = new Celebrity();
-            addCeleb.setName(celebrity.getName());
-            addCeleb.setBiography(celebrity.getBiography());
-            addCeleb.setDescription(celebrity.getDescription());
-            addCeleb.setNationality(celebrity.getNationality());
-            addCeleb.setRole(celebrity.getRole());
-            addCeleb.setDateOfBirth(celebrity.getDateOfBirth());
-            addCeleb.setImage(fileName);
+
+            ObjectUtils.copyFields(celebrity, addCeleb);
+
+            int CountryId = Integer.parseInt(celebrity.getNationality());
+            Country Country  = countryRepository.findById(CountryId);
+
+            addCeleb.setCountry(Country);
+            addCeleb.setImage(fileStorageService.uploadFile(celebrity.getFile()));
+//            System.out.println(addCeleb);
             celebrityRepository.save(addCeleb);
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
+    }
+
+    @Override
+    public List<SelectOptionReponse> getCreateCelebrity() {
+        List<Country> countryList = countryRepository.findAll();
+        List<SelectOptionReponse> options = new ArrayList<>();
+        for (Country country : countryList) {
+            options.add(new SelectOptionReponse(country.getId(), country.getName()));
+        }
+        return options;
     }
 
     @Override
@@ -137,7 +162,7 @@ public class CelebrityServiceImpl implements CelebrityService {
                 celeb.setDescription(celebrity.getDescription());
             }
             if (celebrity.getNationality() != null && !celebrity.getNationality().isEmpty()) {
-                celeb.setNationality(celebrity.getNationality());
+//                celeb.setNationality(celebrity.getNationality());
             }
             if (celebrity.getRole() != null) {
                 celeb.setRole(celebrity.getRole());

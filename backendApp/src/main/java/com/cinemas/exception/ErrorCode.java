@@ -41,7 +41,8 @@ public enum ErrorCode {
     VALIDATION("This {field} cannot be null. Please provide a valid value.", HttpStatus.BAD_REQUEST, "Validation Error"),
 
     FIELD_TOO_LENGTH("{field} must be at least {min} characters", HttpStatus.BAD_REQUEST, "Validation Error"),
-
+    //    Failed
+    CREATE_FAILED(HttpStatus.BAD_REQUEST, "Create failed"),
     ;
     private String messageDetail;
     private HttpStatusCode statusCode;
