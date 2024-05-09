@@ -23,6 +23,8 @@ public enum ErrorCode {
 
     USER_EXISTED(HttpStatus.BAD_REQUEST, "User existed"),
 
+    NAME_EXISTED(HttpStatus.BAD_REQUEST, "Name existed"),
+
     EMAIL_EXISTED(HttpStatus.BAD_REQUEST, "Email existed"),
 
     CELEBRITY_EXISTED(HttpStatus.BAD_REQUEST, "Celebrity existed"),
@@ -35,6 +37,8 @@ public enum ErrorCode {
 
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "Email not found"),
 
+    NOT_FOUND(HttpStatus.NOT_FOUND, "not found"),
+
     //    USERNAME_INVALID("{field} must be at least {min} characters", HttpStatus.BAD_REQUEST, "Validation Error"),
     INVALID_EMAIL("Invalid email format", HttpStatus.BAD_REQUEST, "Validation Error"),
 
@@ -43,9 +47,12 @@ public enum ErrorCode {
     VALIDATION("This {field} cannot be null. Please provide a valid value.", HttpStatus.BAD_REQUEST, "Validation Error"),
 
     FIELD_TOO_LENGTH("{field} must be at least {min} characters", HttpStatus.BAD_REQUEST, "Validation Error"),
-    //    Failed
+
     CREATE_FAILED(HttpStatus.BAD_REQUEST, "Create failed"),
+
+    UPDATE_FAILED(HttpStatus.BAD_REQUEST, "Update failed"),
     ;
+
     private String messageDetail;
     private HttpStatusCode statusCode;
     private String message;

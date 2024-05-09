@@ -86,7 +86,7 @@ const Celebrity = (props) => {
   }
 
   function deleteitem(id) {
-    console.log("delete : " + id);
+    // console.log("delete : " + id);
     if (id) {
       dispatch(deleteCelebrity(id));
     }
@@ -153,9 +153,12 @@ const Celebrity = (props) => {
           // return <React.Fragment>Details</React.Fragment>;
           return (
             <React.Fragment>
-              <span className="bg-gradient me-3 fs-4 text-info">
-                <i className="ri-edit-2-fill"></i>
-              </span>
+              <Link to={`/dashboard/celebrity/${cell.getValue()}/edit`}>
+                <span className="bg-gradient me-3 fs-4 text-info">
+                  <i className="ri-edit-2-fill"></i>
+                </span>
+              </Link>
+
               <span
                 className="fs-4 text-danger"
                 onClick={() => tog_togdelete(cell.getValue())}

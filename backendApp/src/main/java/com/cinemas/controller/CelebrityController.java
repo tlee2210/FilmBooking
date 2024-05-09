@@ -3,6 +3,7 @@ package com.cinemas.controller;
 import com.cinemas.dto.request.CelebrityRequest;
 import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.response.APIResponse;
+import com.cinemas.dto.response.EditSelectOptionReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Celebrity;
 import com.cinemas.exception.AppException;
@@ -58,7 +59,7 @@ public class CelebrityController {
     }
 
     @PostMapping("/create")
-    public APIResponse<String> createCelebrity(@ModelAttribute CelebrityRequest celebrityRequest) {
+    public APIResponse<String> createCelebrity(@ModelAttribute CelebrityRequest celebrityRequest) throws IOException {
         boolean checkCreate = celebrityService.addCelebrity(celebrityRequest);
         if (checkCreate) {
             APIResponse<String> apiResponse = new APIResponse();
@@ -69,6 +70,13 @@ public class CelebrityController {
         throw new AppException(CREATE_FAILED);
     }
 
+    /**
+     * delete Celebrity by id
+     *
+     * @param id
+     * @return
+     * @throws IOException
+     */
     @DeleteMapping("/delete/{id}")
     public APIResponse<Integer> deleteCelebrity(@PathVariable int id) throws IOException {
 
@@ -83,18 +91,26 @@ public class CelebrityController {
         throw new AppException(CREATE_FAILED);
     }
 
-    @GetMapping("/{id}")
-    public Celebrity getCelebrityById(@PathVariable int id) {
-        return celebrityService.getCelebrity(id);
+    @GetMapping("/{id}/edit")
+    public APIResponse<EditSelectOptionReponse<Celebrity>> getCelebrityById(@PathVariable int id) {
+        APIResponse<EditSelectOptionReponse<Celebrity>> apiResponse = new APIResponse();
+
+        apiResponse.setCode(200);
+        apiResponse.setResult(celebrityService.getCelebrityById(id));
+
+        return apiResponse;
     }
 
-    @PutMapping(value = "/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateCelebrity(@PathVariable int id, @ModelAttribute CelebrityRequest celebrity, MultipartFile file) {
-        try {
-            celebrityService.updateCelebrity(id, celebrity, file);
-            return ResponseEntity.ok("Successfully updated celebrity");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+    @PutMapping(value = "/update")
+    public APIResponse<String> updateCelebrity(@ModelAttribute CelebrityRequest celebrity) throws IOException {
+        System.out.println(celebrity);
+        boolean checkUpdate =celebrityService.updateCelebrity(celebrity);
+        if (checkUpdate) {
+            APIResponse<String> apiResponse = new APIResponse();
+            apiResponse.setCode(200);
+            apiResponse.setMessage("Celebrity Update successfully");
+            return apiResponse;
         }
+        throw new AppException(UPDATE_FAILED);
     }
 }

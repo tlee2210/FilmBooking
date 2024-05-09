@@ -11,11 +11,11 @@ export const registerUser = (formData, history) => async (dispatch) => {
   await axios
     .post(`http://localhost:8081/api/auth/signup`, formData)
     .then((res) => {
-      console.log(res);
+      // console.log(res);
       dispatch(registerSuccessful(res.data.message));
     })
     .catch((err) => {
-      console.error(err);
+      // console.error(err);
       dispatch(registerFailed(err.response.data.message));
     });
 };

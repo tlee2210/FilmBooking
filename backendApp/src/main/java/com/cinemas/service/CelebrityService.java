@@ -2,6 +2,7 @@ package com.cinemas.service;
 
 import com.cinemas.dto.request.CelebrityRequest;
 import com.cinemas.dto.request.PaginationHelper;
+import com.cinemas.dto.response.EditSelectOptionReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Celebrity;
 import com.cinemas.entities.Country;
@@ -14,13 +15,13 @@ import java.util.List;
 public interface CelebrityService {
     Page<Celebrity> getAllCelebrity(PaginationHelper PaginationHelper);
 
-    boolean addCelebrity(CelebrityRequest celebrity);
+    boolean addCelebrity(CelebrityRequest celebrity) throws IOException;
 
     List<SelectOptionReponse> getCreateCelebrity();
 
     boolean deleteCelebrity(int id) throws IOException;
 
-    Celebrity getCelebrity(Integer id);
+    EditSelectOptionReponse<Celebrity> getCelebrityById(Integer id);
 
-    void updateCelebrity(int id, CelebrityRequest celebrity, MultipartFile file);
+    boolean updateCelebrity(CelebrityRequest celebrity) throws IOException;
 }

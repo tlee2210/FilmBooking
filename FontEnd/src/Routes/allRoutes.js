@@ -20,6 +20,7 @@ import Starter from "../pages/dashboard/Starter";
 
 import Celebrity from "../pages/dashboard/Celebrity/index";
 import CelebrityCreate from "../pages/dashboard/Celebrity/create";
+import CelebrityEdit from "../pages/dashboard/Celebrity/edit";
 
 const authProtectedRoutes = [
   //User Profile
@@ -27,6 +28,7 @@ const authProtectedRoutes = [
   { path: "/pages-starter", component: <Starter /> },
   { path: "/dashboard/celebrity", component: <Celebrity /> },
   { path: "/dashboard/celebrity/create", component: <CelebrityCreate /> },
+  { path: "/dashboard/celebrity/:id/edit", component: <CelebrityEdit /> },
   // {
   //   path: "/",
   //   exact: true,

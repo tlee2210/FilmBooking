@@ -3,6 +3,7 @@ package com.cinemas.service.impl;
 import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.CelebrityRequest;
 import com.cinemas.dto.request.PaginationHelper;
+import com.cinemas.dto.response.EditSelectOptionReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Celebrity;
 import com.cinemas.entities.Country;
@@ -43,40 +44,6 @@ public class CelebrityServiceImpl implements CelebrityService {
     @Autowired
     FileStorageService fileStorageService;
 
-    private String storeFile(MultipartFile file, RoleCeleb role) throws IOException {
-        if (file != null && !file.isEmpty()) {
-            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-            String uniqueFileName = UUID.randomUUID().toString() + "_" + fileName;
-            String roleCeleb = role == RoleCeleb.ACTOR ? "actor" : "director";
-            String uploadDir = "images/" + roleCeleb;
-            String absoluteUploadDir = System.getProperty("user.dir") + "/src/main/java/com/cinemas/" + uploadDir;
-            Path uploadPath = Paths.get(absoluteUploadDir);
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-            Path filePath = uploadPath.resolve(uniqueFileName);
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-            return uniqueFileName;
-        }
-        return "";
-    }
-
-    private void deleteExistingImage(String imagePath, RoleCeleb role) {
-        if (imagePath != null && !imagePath.isEmpty()) {
-            try {
-                String roleCeleb = role == RoleCeleb.ACTOR ? "actor" : "director";
-                String uploadDir = "images/" + roleCeleb;
-                String absoluteUploadDir = System.getProperty("user.dir") + "/src/main/java/com/cinemas/" + uploadDir;
-                Path root = Paths.get(absoluteUploadDir);
-                Path file = root.resolve(imagePath);
-                Files.deleteIfExists(file);
-            } catch (IOException e) {
-                System.err.println("Failed to delete image: " + imagePath);
-                e.printStackTrace();
-            }
-        }
-    }
-
     @Override
     public Page<Celebrity> getAllCelebrity(PaginationHelper PaginationHelper) {
         List<Celebrity> celebrityList = celebrityRepository.findAllWithCountry();
@@ -100,24 +67,22 @@ public class CelebrityServiceImpl implements CelebrityService {
     }
 
     @Override
-    public boolean addCelebrity(CelebrityRequest celebrity) {
-        try {
-            Celebrity addCeleb = new Celebrity();
-
-            ObjectUtils.copyFields(celebrity, addCeleb);
-
-            int CountryId = Integer.parseInt(celebrity.getNationality());
-            Country Country = countryRepository.findById(CountryId);
-
-            addCeleb.setCountry(Country);
-            addCeleb.setImage(fileStorageService.uploadFile(celebrity.getFile(), String.valueOf(celebrity.getRole())));
-//            System.out.println(addCeleb);
-            celebrityRepository.save(addCeleb);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+    public boolean addCelebrity(CelebrityRequest celebrity) throws IOException {
+        Celebrity addCeleb = new Celebrity();
+        if (celebrityRepository.findByName(celebrity.getName()) != null) {
+            throw new AppException(NAME_EXISTED);
         }
+
+        ObjectUtils.copyFields(celebrity, addCeleb);
+
+        int CountryId = Integer.parseInt(celebrity.getNationality());
+        Country Country = countryRepository.findById(CountryId);
+
+        addCeleb.setCountry(Country);
+        addCeleb.setImage(fileStorageService.uploadFile(celebrity.getFile(), String.valueOf(celebrity.getRole())));
+//            System.out.println(addCeleb);
+        celebrityRepository.save(addCeleb);
+        return true;
     }
 
     @Override
@@ -142,43 +107,39 @@ public class CelebrityServiceImpl implements CelebrityService {
     }
 
     @Override
-    public Celebrity getCelebrity(Integer id) {
-        return celebrityRepository
+    public EditSelectOptionReponse<Celebrity> getCelebrityById(Integer id) {
+        Celebrity celebrity = celebrityRepository
                 .findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid id"));
+                .orElseThrow(() -> new AppException(NOT_FOUND));
+
+        celebrity.setImage(fileStorageService.getUrlFromPublicId(celebrity.getImage()));
+
+        List<Country> countryList = countryRepository.findAll();
+        List<SelectOptionReponse> options = new ArrayList<>();
+        for (Country country : countryList) {
+            options.add(new SelectOptionReponse(country.getId(), country.getName()));
+        }
+        return new EditSelectOptionReponse<>(options, celebrity);
     }
 
     @Override
-    public void updateCelebrity(int id, CelebrityRequest celebrity, MultipartFile file) {
-        try {
-            Celebrity celeb = getCelebrity(id);
+    public boolean updateCelebrity(CelebrityRequest celebrity) throws IOException {
 
-            if (file != null && !file.isEmpty()) {
-                deleteExistingImage(celeb.getImage(), celeb.getRole());
-                celeb.setImage(storeFile(file, celebrity.getRole()));
-            }
+        Celebrity cele = celebrityRepository
+                .findById(celebrity.getId())
+                .orElseThrow(() -> new AppException(NOT_FOUND));
 
-            if (celebrity.getName() != null && !celebrity.getName().isEmpty()) {
-                celeb.setName(celebrity.getName());
-            }
-            if (celebrity.getBiography() != null && !celebrity.getBiography().isEmpty()) {
-                celeb.setBiography(celebrity.getBiography());
-            }
-            if (celebrity.getDescription() != null && !celebrity.getDescription().isEmpty()) {
-                celeb.setDescription(celebrity.getDescription());
-            }
-            if (celebrity.getNationality() != null && !celebrity.getNationality().isEmpty()) {
-//                celeb.setNationality(celebrity.getNationality());
-            }
-            if (celebrity.getRole() != null) {
-                celeb.setRole(celebrity.getRole());
-            }
-            if (celebrity.getDateOfBirth() != null) {
-                celeb.setDateOfBirth(celebrity.getDateOfBirth());
-            }
-            celebrityRepository.save(celeb);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (celebrityRepository.findByNameWithId(celebrity.getName(), celebrity.getId()) != null) {
+            throw new AppException(NAME_EXISTED);
         }
+
+        if (celebrity.getFile() != null) {
+            fileStorageService.deleteFile(cele.getImage());
+            cele.setImage(fileStorageService.uploadFile(celebrity.getFile(), String.valueOf(celebrity.getRole())));
+        }
+        ObjectUtils.copyFields(celebrity, cele);
+        celebrityRepository.save(cele);
+
+        return true;
     }
 }

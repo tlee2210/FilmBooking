@@ -16,6 +16,9 @@ import java.time.LocalDate;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CelebrityRequest {
+
+    private int id;
+
     @NotEmpty(message = "VALIDATION")
     private String name;
 
@@ -28,7 +31,7 @@ public class CelebrityRequest {
 
     private String description;
 
-//    @NotEmpty(message = "VALIDATION")
+    //    @NotEmpty(message = "VALIDATION")
     private RoleCeleb role;
 
     private MultipartFile file;
