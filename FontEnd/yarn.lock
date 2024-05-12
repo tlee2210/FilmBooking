@@ -3835,6 +3835,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-oauth/google@npm:^0.12.1":
+  version: 0.12.1
+  resolution: "@react-oauth/google@npm:0.12.1"
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 10c0/fe23e3c0a4d0b9999fcd7b932b1a42bf94fdab526473931d780d08742455b8861fc647857b3b491e258ecef4a407dbf7321440c0d00890e23059d487795f92fb
+  languageName: node
+  linkType: hard
+
 "@reduxjs/toolkit@npm:^2.0.1":
   version: 2.0.1
   resolution: "@reduxjs/toolkit@npm:2.0.1"
@@ -5099,6 +5109,7 @@ __metadata:
     "@fullcalendar/list": "npm:^6.1.10"
     "@fullcalendar/multimonth": "npm:^6.1.10"
     "@fullcalendar/react": "npm:^6.1.10"
+    "@react-oauth/google": "npm:^0.12.1"
     "@reduxjs/toolkit": "npm:^2.0.1"
     "@south-paw/react-vector-maps": "npm:^3.2.0"
     "@tanstack/match-sorter-utils": "npm:^8.8.4"
@@ -5132,6 +5143,7 @@ __metadata:
     google-maps-react: "npm:^2.0.6"
     i18next: "npm:^23.7.11"
     i18next-browser-languagedetector: "npm:^7.2.0"
+    jwt-decode: "npm:^4.0.0"
     list.js: "npm:^2.3.1"
     lord-icon-element: "npm:^4.1.2"
     lottie-web: "npm:^5.12.2"
@@ -11347,6 +11359,13 @@ __metadata:
     object.assign: "npm:^4.1.4"
     object.values: "npm:^1.1.6"
   checksum: 10c0/a32679e9cb55469cb6d8bbc863f7d631b2c98b7fc7bf172629261751a6e7bc8da6ae374ddb74d5fbd8b06cf0eb4572287b259813d92b36e384024ed35e4c13e1
+  languageName: node
+  linkType: hard
+
+"jwt-decode@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "jwt-decode@npm:4.0.0"
+  checksum: 10c0/de75bbf89220746c388cf6a7b71e56080437b77d2edb29bae1c2155048b02c6b8c59a3e5e8d6ccdfd54f0b8bda25226e491a4f1b55ac5f8da04cfbadec4e546c
   languageName: node
   linkType: hard
 

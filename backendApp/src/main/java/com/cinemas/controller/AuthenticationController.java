@@ -9,12 +9,17 @@ import com.cinemas.dto.response.JwtAuthenticationResponse;
 import com.cinemas.entities.ChangePassword;
 import com.cinemas.entities.User;
 import com.cinemas.service.AuthenticationService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -112,5 +117,23 @@ public class AuthenticationController {
         apiResponse.setMessage(response);
 
         return apiResponse;
+    }
+
+
+    @PostMapping("/auth/google")
+    public APIResponse<String> signinWithgoogle(@RequestBody Map<String, String> tokenMap) {
+        String jwt = tokenMap.get("token");
+        String secretKey = "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";
+        Claims claims = Jwts.parser()
+                .setSigningKey(secretKey.getBytes())
+                .parseClaimsJws(jwt)
+                .getBody();
+        System.out.println(claims);
+
+        APIResponse<String> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+
+        return apiResponse;
+
     }
 }

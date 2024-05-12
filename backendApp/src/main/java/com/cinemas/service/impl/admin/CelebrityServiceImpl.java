@@ -1,4 +1,4 @@
-package com.cinemas.service.impl;
+package com.cinemas.service.impl.admin;
 
 import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.CelebrityRequest;
@@ -7,31 +7,22 @@ import com.cinemas.dto.response.EditSelectOptionReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Celebrity;
 import com.cinemas.entities.Country;
-import com.cinemas.enums.RoleCeleb;
 import com.cinemas.exception.AppException;
 import com.cinemas.repositories.CelebrityRepository;
 import com.cinemas.repositories.CountryRepository;
-import com.cinemas.service.CelebrityService;
+import com.cinemas.service.admin.CelebrityService;
+import com.cinemas.service.impl.FileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.http.HttpStatus;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static com.cinemas.exception.ErrorCode.*;
 

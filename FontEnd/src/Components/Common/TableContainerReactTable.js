@@ -245,31 +245,26 @@ const TableContainer = ({
                 </li>
               </React.Fragment>
             ))} */}
-            {[...Array(paginateData.totalPages)].map(
-              (
-                _,
-                index // Using totalPages to generate page numbers
-              ) => (
-                <li key={index} className="page-item">
-                  <Link
-                    to="#"
-                    className={
-                      paginateData.number === index
-                        ? "page-link active"
-                        : "page-link"
+            {[...Array(paginateData.totalPages)].map((_, index) => (
+              <li key={index} className="page-item">
+                <Link
+                  to="#"
+                  className={
+                    paginateData.number === index
+                      ? "page-link active"
+                      : "page-link"
+                  }
+                  onClick={() => {
+                    if (paginateData.number !== index) {
+                      setPageIndex(index);
+                      paginate(index);
                     }
-                    onClick={() => {
-                      if (paginateData.number !== index) {
-                        setPageIndex(index);
-                        paginate(index);
-                      }
-                    }}
-                  >
-                    {index + 1}
-                  </Link>
-                </li>
-              )
-            )}
+                  }}
+                >
+                  {index + 1}
+                </Link>
+              </li>
+            ))}
             <li
               className={
                 paginateData.number === paginateData.totalPages - 1

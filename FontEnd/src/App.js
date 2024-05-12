@@ -2,7 +2,7 @@ import React from "react";
 
 //import Scss
 import "./assets/scss/themes.scss";
-
+import { GoogleOAuthProvider } from "@react-oauth/google";
 //imoprt Route
 import Route from "./Routes";
 // const firebaseConfig = {
@@ -22,7 +22,9 @@ import Route from "./Routes";
 function App() {
   return (
     <React.Fragment>
-      <Route />
+      <GoogleOAuthProvider clientId="87556603754-d1csp22asir1b0933ikhag56aua1lie4.apps.googleusercontent.com">
+        <Route />
+      </GoogleOAuthProvider>
     </React.Fragment>
   );
 }

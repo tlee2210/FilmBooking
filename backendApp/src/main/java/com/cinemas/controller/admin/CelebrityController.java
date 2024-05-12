@@ -1,4 +1,4 @@
-package com.cinemas.controller;
+package com.cinemas.controller.admin;
 
 import com.cinemas.dto.request.CelebrityRequest;
 import com.cinemas.dto.request.PaginationHelper;
@@ -7,14 +7,11 @@ import com.cinemas.dto.response.EditSelectOptionReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Celebrity;
 import com.cinemas.exception.AppException;
-import com.cinemas.service.CelebrityService;
+import com.cinemas.service.admin.CelebrityService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,7 +19,7 @@ import java.util.List;
 import static com.cinemas.exception.ErrorCode.*;
 
 @RestController
-@RequestMapping("/api/celebrity")
+@RequestMapping("/api/admin/v1/celebrity")
 @Tag(name = "Celebrity Controller")
 public class CelebrityController {
     @Autowired
@@ -58,6 +55,13 @@ public class CelebrityController {
         return apiResponse;
     }
 
+    /**
+     * create new Celebrity
+     *
+     * @param celebrityRequest
+     * @return
+     * @throws IOException
+     */
     @PostMapping("/create")
     public APIResponse<String> createCelebrity(@ModelAttribute CelebrityRequest celebrityRequest) throws IOException {
         boolean checkCreate = celebrityService.addCelebrity(celebrityRequest);
@@ -91,6 +95,12 @@ public class CelebrityController {
         throw new AppException(CREATE_FAILED);
     }
 
+    /**
+     * get Celebrity by id
+     *
+     * @param id
+     * @return
+     */
     @GetMapping("/{id}/edit")
     public APIResponse<EditSelectOptionReponse<Celebrity>> getCelebrityById(@PathVariable int id) {
         APIResponse<EditSelectOptionReponse<Celebrity>> apiResponse = new APIResponse();
@@ -101,10 +111,17 @@ public class CelebrityController {
         return apiResponse;
     }
 
+    /**
+     * update Celebrity
+     *
+     * @param celebrity
+     * @return
+     * @throws IOException
+     */
     @PutMapping(value = "/update")
     public APIResponse<String> updateCelebrity(@ModelAttribute CelebrityRequest celebrity) throws IOException {
         System.out.println(celebrity);
-        boolean checkUpdate =celebrityService.updateCelebrity(celebrity);
+        boolean checkUpdate = celebrityService.updateCelebrity(celebrity);
         if (checkUpdate) {
             APIResponse<String> apiResponse = new APIResponse();
             apiResponse.setCode(200);

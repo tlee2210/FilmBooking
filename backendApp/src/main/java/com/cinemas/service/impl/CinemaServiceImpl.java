@@ -4,7 +4,7 @@ import com.cinemas.dto.request.CinemaRequest;
 import com.cinemas.entities.Cinema;
 import com.cinemas.repositories.CinemaRepository;
 import com.cinemas.service.CinemaService;
-import com.cinemas.service.CityService;
+import com.cinemas.service.admin.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -39,7 +39,7 @@ public class CinemaServiceImpl implements CinemaService {
         cinemaEntity.setHotline(cinema.getHotline());
         cinemaEntity.setInformation(cinema.getInformation());
         cinemaEntity.setHotline(cinema.getHotline());
-        cinemaEntity.setCity(cityService.getCity(cinema.getCity_id()));
+//        cinemaEntity.setCity(cityService.getCity(cinema.getCity_id()));
         cinemaRepository.save(cinemaEntity);
     }
 
@@ -51,7 +51,7 @@ public class CinemaServiceImpl implements CinemaService {
             existingCinema.setCinemaName(cinema.getCinemaName());
             existingCinema.setHotline(cinema.getHotline());
             existingCinema.setInformation(cinema.getInformation());
-            existingCinema.setCity(cityService.getCity(cinema.getCity_id()));
+//            existingCinema.setCity(cityService.getCity(cinema.getCity_id()));
             cinemaRepository.save(existingCinema);
         }
     }

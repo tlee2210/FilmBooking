@@ -21,14 +21,16 @@ import Starter from "../pages/dashboard/Starter";
 import Celebrity from "../pages/dashboard/Celebrity/index";
 import CelebrityCreate from "../pages/dashboard/Celebrity/create";
 import CelebrityEdit from "../pages/dashboard/Celebrity/edit";
+import City from "../pages/dashboard/city/index";
 
 const authProtectedRoutes = [
   //User Profile
   { path: "/profile", component: <UserProfile /> },
   { path: "/pages-starter", component: <Starter /> },
   { path: "/dashboard/celebrity", component: <Celebrity /> },
-  { path: "/dashboard/celebrity/create", component: <CelebrityCreate /> },
   { path: "/dashboard/celebrity/:id/edit", component: <CelebrityEdit /> },
+  { path: "/dashboard/celebrity/create", component: <CelebrityCreate /> },
+  { path: "/dashboard/city", component: <City /> },
   // {
   //   path: "/",
   //   exact: true,

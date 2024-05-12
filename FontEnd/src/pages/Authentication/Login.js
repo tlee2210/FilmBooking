@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Card,
   CardBody,
@@ -26,8 +26,10 @@ import withRouter from "../../Components/Common/withRouter";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 // actions
-import { loginUser } from "../../slices/thunks";
+import { loginUser, loginWithGoogle } from "../../slices/thunks";
 
 import logoLight from "../../assets/images/logo-light.png";
 import { createSelector } from "reselect";
@@ -51,7 +53,6 @@ const Login = (props) => {
   const [passwordShow, setPasswordShow] = useState(false);
 
   const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
 
     initialValues: {
@@ -219,11 +220,60 @@ const Login = (props) => {
                             Sign In
                           </Button>
                         </div>
+                        <div className="mt-4 text-center">
+                          <div className="signin-other-title">
+                            <h5 className="fs-13 mb-4 title">Sign In with</h5>
+                          </div>
+                          <div className="text-center justify-content-center center">
+                            {/* <Link
+                              to="#"
+                              className="btn btn-primary btn-icon me-1"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                socialResponse("facebook");
+                              }}
+                            >
+                              <i className="ri-facebook-fill fs-16" />
+                            </Link> */}
+                            <Link
+                              to="#"
+                              className="btn btn-danger btn-icon me-1"
+                              onClick={(e) => {
+                                e.preventDefault();
+                              }}
+                            >
+                              {/* <i className="ri-google-fill fs-16" /> */}
+                              <GoogleLogin
+                                onSuccess={(credentialResponse) => {
+                                  const decoded = jwtDecode(
+                                    credentialResponse?.credential
+                                  );
+                                  dispatch(
+                                    loginWithGoogle(
+                                      credentialResponse.credential,
+                                      props.router.navigate
+                                    )
+                                  );
+                                  // console.log(credentialResponse.credential);
+                                }}
+                                onError={() => {
+                                  console.log("Login Failed");
+                                }}
+                              />
+                            </Link>
+
+                            {/* <Button color="dark" className="btn-icon">
+                              <i className="ri-github-fill fs-16"></i>
+                            </Button>{" "}
+                            <Button color="info" className="btn-icon">
+                              <i className="ri-twitter-fill fs-16"></i>
+                            </Button> */}
+                          </div>
+                        </div>
                       </Form>
                     </div>
                   </CardBody>
                 </Card>
-
                 <div className="mt-4 text-center">
                   <p className="mb-0">
                     Don't have an account ?{" "}

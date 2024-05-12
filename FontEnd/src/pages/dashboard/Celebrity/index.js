@@ -41,9 +41,10 @@ const Celebrity = (props) => {
     error: state.Message.error,
     messageSuccess: state.Message.messageSuccess,
     messageError: state.Message.messageError,
+    Celebrity: state.Celebrity.data,
   }));
   // Inside your component
-  const { error, success, messageSuccess, messageError } =
+  const { error, success, messageSuccess, messageError, Celebrity } =
     useSelector(CelebrityStateData);
 
   useEffect(() => {
@@ -64,17 +65,11 @@ const Celebrity = (props) => {
     dispatch(celebrity({}, props.router.navigate));
   }, []);
 
-  const selectLayoutState = (state) => state;
-  const CelebrityProperties = createSelector(selectLayoutState, (state) => ({
-    Celebrity: state.Celebrity.data,
-  }));
-  // Inside your component
-  const { Celebrity } = useSelector(CelebrityProperties);
-
   const handlePagination = (page) => {
     const formData = new FormData();
     formData.append("pageNo", page);
-    dispatch(celebrity(formData, props.router.navigate));
+    console.log(page);
+    // dispatch(celebrity(formData, props.router.navigate));
   };
 
   function tog_togdelete(id) {

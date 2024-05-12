@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -41,10 +42,14 @@ public class EmployeeController {
      *
      * @return
      */
-//    @GetMapping()
-//    public List<Employee> getAllEmployee() {
-//        return service.getAllEmployee();
+//    @GetMapping("/user")
+//    public OAuth2User getUser(@AuthenticationPrincipal OAuth2User principal) {
+//        System.out.println("===================");
+//        System.out.println(principal);
+//        System.out.println("===================");
+//        return principal;
 //    }
+
     @GetMapping()
     public ResponseEntity<List<Employee>> getAllEmployee() {
         List<Employee> employees = service.getAllEmployee();

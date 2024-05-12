@@ -19,7 +19,9 @@ public class City {
     private int id;
 
     @Column(nullable = false)
-    private String cityName;
+    private String name;
+
+    private String slug;
 
     @OneToMany(mappedBy = "city", cascade = CascadeType.ALL)
     private List<Cinema> cinemas;

@@ -29,6 +29,26 @@ export const loginUser = (user, history) => async (dispatch) => {
       });
   });
 };
+export const loginWithGoogle = (user, history) => async (dispatch) => {
+  return new Promise(async (resolve, reject) => {
+    await axios
+      .post("http://localhost:8081/api/auth/signin", user)
+      .then((res) => {
+        console.log(res);
+        // const { token, user: userLogin } = res.data.result;
+        // const tokenObj = { accessToken: token };
+        // const validUserObj = { ...userLogin, ...tokenObj };
+        // sessionStorage.setItem("authUser", JSON.stringify(res.data.result));
+        // // dispatch(loginSuccess(res.data.result.user));
+        // history("/pages-starter");
+        // resolve([200, validUserObj]);
+      })
+      .catch((err) => {
+        console.error(err);
+        // dispatch(Error(err.response.data.message));
+      });
+  });
+};
 
 export const logoutUser = () => async (dispatch) => {
   try {

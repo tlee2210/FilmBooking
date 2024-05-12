@@ -11,6 +11,7 @@ import ProfileReducer from "./auth/profile/reducer";
 import MessageReducer from "./message/reducer";
 
 import CelebrityReducer from "./Celebrity/reducer";
+import CityReducer from "./city/reducer";
 
 const rootReducer = combineReducers({
   Layout: LayoutReducer,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   Profile: ProfileReducer,
   Message: MessageReducer,
   Celebrity: CelebrityReducer,
+  City: CityReducer,
 });
 
 export default rootReducer;

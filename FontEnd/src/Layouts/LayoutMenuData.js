@@ -53,9 +53,9 @@ const Navdata = () => {
           parentId: "dashboard",
         },
         {
-          id: "job",
-          label: "Job",
-          link: "/dashboard-job",
+          id: "city",
+          label: "City",
+          link: "/dashboard/city",
           parentId: "dashboard",
           // badgeColor: "success",
           // badgeName: "New",

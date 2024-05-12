@@ -1,10 +1,7 @@
 package com.cinemas.controller;
 
-import com.cinemas.dto.request.CityRequest;
 import com.cinemas.dto.request.MovieGenreRequest;
-import com.cinemas.entities.City;
 import com.cinemas.entities.MovieGenre;
-import com.cinemas.service.CityService;
 import com.cinemas.service.MovieGenreService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
