@@ -248,13 +248,13 @@ const Login = (props) => {
                                   const decoded = jwtDecode(
                                     credentialResponse?.credential
                                   );
-                                  dispatch(
-                                    loginWithGoogle(
-                                      credentialResponse.credential,
-                                      props.router.navigate
-                                    )
-                                  );
-                                  // console.log(credentialResponse.credential);
+                                  // dispatch(
+                                  //   loginWithGoogle(
+                                  //     credentialResponse.credential,
+                                  //     props.router.navigate
+                                  //   )
+                                  // );
+                                  console.log(credentialResponse);
                                 }}
                                 onError={() => {
                                   console.log("Login Failed");
