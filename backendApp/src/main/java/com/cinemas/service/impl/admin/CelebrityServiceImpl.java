@@ -11,7 +11,7 @@ import com.cinemas.exception.AppException;
 import com.cinemas.repositories.CelebrityRepository;
 import com.cinemas.repositories.CountryRepository;
 import com.cinemas.service.admin.CelebrityService;
-import com.cinemas.service.impl.FileStorageService;
+import com.cinemas.service.impl.FileStorageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
@@ -33,14 +33,14 @@ public class CelebrityServiceImpl implements CelebrityService {
     @Autowired
     CountryRepository countryRepository;
     @Autowired
-    FileStorageService fileStorageService;
+    FileStorageServiceImpl fileStorageServiceImpl;
 
     @Override
     public Page<Celebrity> getAllCelebrity(PaginationHelper PaginationHelper) {
         List<Celebrity> celebrityList = celebrityRepository.findAllWithCountry();
 
         celebrityList.forEach(celebrity -> {
-            String imageUrl = fileStorageService.getUrlFromPublicId(celebrity.getImage());
+            String imageUrl = fileStorageServiceImpl.getUrlFromPublicId(celebrity.getImage());
             celebrity.setImage(imageUrl);
         });
 
@@ -65,12 +65,13 @@ public class CelebrityServiceImpl implements CelebrityService {
         }
 
         ObjectUtils.copyFields(celebrity, addCeleb);
-
+        String slug = celebrity.getName().toLowerCase().replaceAll("\\s+", "-");
+        addCeleb.setSlug(slug);
         int CountryId = Integer.parseInt(celebrity.getNationality());
         Country Country = countryRepository.findById(CountryId);
 
         addCeleb.setCountry(Country);
-        addCeleb.setImage(fileStorageService.uploadFile(celebrity.getFile(), String.valueOf(celebrity.getRole())));
+        addCeleb.setImage(fileStorageServiceImpl.uploadFile(celebrity.getFile(), String.valueOf(celebrity.getRole())));
 //            System.out.println(addCeleb);
         celebrityRepository.save(addCeleb);
         return true;
@@ -91,25 +92,28 @@ public class CelebrityServiceImpl implements CelebrityService {
         Celebrity celebrity = celebrityRepository.findById(id)
                 .orElseThrow(() -> new AppException(CELEBRITY_EXISTED));
 
-        fileStorageService.deleteFile(celebrity.getImage());
+        fileStorageServiceImpl.deleteFile(celebrity.getImage());
         celebrityRepository.delete(celebrity);
 
         return true;
     }
 
     @Override
-    public EditSelectOptionReponse<Celebrity> getCelebrityById(Integer id) {
-        Celebrity celebrity = celebrityRepository
-                .findById(id)
-                .orElseThrow(() -> new AppException(NOT_FOUND));
+    public EditSelectOptionReponse<Celebrity> getEditCelebrityBySlug(String slug) {
 
-        celebrity.setImage(fileStorageService.getUrlFromPublicId(celebrity.getImage()));
+        Celebrity celebrity = celebrityRepository.findBySlug(slug);
+
+        if (celebrity == null) throw new AppException(NOT_FOUND);
+
+        celebrity.setImage(fileStorageServiceImpl.getUrlFromPublicId(celebrity.getImage()));
 
         List<Country> countryList = countryRepository.findAll();
         List<SelectOptionReponse> options = new ArrayList<>();
+
         for (Country country : countryList) {
             options.add(new SelectOptionReponse(country.getId(), country.getName()));
         }
+
         return new EditSelectOptionReponse<>(options, celebrity);
     }
 
@@ -125,10 +129,14 @@ public class CelebrityServiceImpl implements CelebrityService {
         }
 
         if (celebrity.getFile() != null) {
-            fileStorageService.deleteFile(cele.getImage());
-            cele.setImage(fileStorageService.uploadFile(celebrity.getFile(), String.valueOf(celebrity.getRole())));
+            fileStorageServiceImpl.deleteFile(cele.getImage());
+            cele.setImage(fileStorageServiceImpl.uploadFile(celebrity.getFile(), String.valueOf(celebrity.getRole())));
         }
+
         ObjectUtils.copyFields(celebrity, cele);
+        String slug = celebrity.getName().toLowerCase().replaceAll("\\s+", "-");
+        cele.setSlug(slug);
+
         celebrityRepository.save(cele);
 
         return true;

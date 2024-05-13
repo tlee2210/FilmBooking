@@ -1,6 +1,7 @@
 package com.cinemas.service.impl;
 
 import com.cinemas.dto.MailBody;
+import com.cinemas.service.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import java.nio.file.Files;
 import java.util.Map;
 
 @Service
-public class EmailService {
+public class EmailServiceimpl implements EmailService {
     @Value("${spring.mail.username}")
     private String mail;
 
@@ -27,7 +28,7 @@ public class EmailService {
 //    @Autowired
 //    private TemplateEngine templateEngine;
 
-    public EmailService(JavaMailSender javaMailSender) {
+    public EmailServiceimpl(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }
 
@@ -51,27 +52,27 @@ public class EmailService {
         javaMailSender.send(message);
     }
 
-    public void sendSimpleMessage(MailBody mailBody) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(mailBody.to());
-        message.setFrom(mail);
-        message.setSubject(mailBody.subject());
-        message.setText(mailBody.text());
-
-        javaMailSender.send(message);
-    }
+//    public void sendSimpleMessage(MailBody mailBody) {
+//        SimpleMailMessage message = new SimpleMailMessage();
+//        message.setTo(mailBody.to());
+//        message.setFrom(mail);
+//        message.setSubject(mailBody.subject());
+//        message.setText(mailBody.text());
+//
+//        javaMailSender.send(message);
+//    }
 
 //    void sendHtmlMail(DataMailDTO dataMail, String templateName) throws MessagingException;
 
-    public String loadHtmlTemplate(String filePath, Map<String, String> placeholders) throws IOException {
-        ClassPathResource resource = new ClassPathResource(filePath);
-        String content = new String(Files.readAllBytes(resource.getFile().toPath()));
-
-        for (Map.Entry<String, String> entry : placeholders.entrySet()) {
-            content = content.replace("{{" + entry.getKey() + "}}", entry.getValue());
-        }
-
-        return content;
-    }
+//    public String loadHtmlTemplate(String filePath, Map<String, String> placeholders) throws IOException {
+//        ClassPathResource resource = new ClassPathResource(filePath);
+//        String content = new String(Files.readAllBytes(resource.getFile().toPath()));
+//
+//        for (Map.Entry<String, String> entry : placeholders.entrySet()) {
+//            content = content.replace("{{" + entry.getKey() + "}}", entry.getValue());
+//        }
+//
+//        return content;
+//    }
 
 }

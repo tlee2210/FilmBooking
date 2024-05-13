@@ -28,7 +28,7 @@ const authProtectedRoutes = [
   { path: "/profile", component: <UserProfile /> },
   { path: "/pages-starter", component: <Starter /> },
   { path: "/dashboard/celebrity", component: <Celebrity /> },
-  { path: "/dashboard/celebrity/:id/edit", component: <CelebrityEdit /> },
+  { path: "/dashboard/celebrity/:slug/edit", component: <CelebrityEdit /> },
   { path: "/dashboard/celebrity/create", component: <CelebrityCreate /> },
   { path: "/dashboard/city", component: <City /> },
   // {

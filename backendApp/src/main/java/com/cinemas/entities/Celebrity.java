@@ -27,8 +27,8 @@ public class Celebrity {
     @Column
     private LocalDate dateOfBirth;
 
-//    @Column
-//    private String nationality;
+    @Column
+    private String slug;
 
     @Column
     private String biography;

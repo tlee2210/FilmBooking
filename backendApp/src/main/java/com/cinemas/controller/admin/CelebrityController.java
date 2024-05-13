@@ -101,12 +101,12 @@ public class CelebrityController {
      * @param id
      * @return
      */
-    @GetMapping("/{id}/edit")
-    public APIResponse<EditSelectOptionReponse<Celebrity>> getCelebrityById(@PathVariable int id) {
+    @GetMapping("/{slug}/edit")
+    public APIResponse<EditSelectOptionReponse<Celebrity>> getCelebrityById(@PathVariable String slug) {
         APIResponse<EditSelectOptionReponse<Celebrity>> apiResponse = new APIResponse();
 
         apiResponse.setCode(200);
-        apiResponse.setResult(celebrityService.getCelebrityById(id));
+        apiResponse.setResult(celebrityService.getEditCelebrityBySlug(slug));
 
         return apiResponse;
     }

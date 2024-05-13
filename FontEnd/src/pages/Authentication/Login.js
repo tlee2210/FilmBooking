@@ -254,7 +254,7 @@ const Login = (props) => {
                                   //     props.router.navigate
                                   //   )
                                   // );
-                                  console.log(credentialResponse);
+                                  console.log(decoded);
                                 }}
                                 onError={() => {
                                   console.log("Login Failed");

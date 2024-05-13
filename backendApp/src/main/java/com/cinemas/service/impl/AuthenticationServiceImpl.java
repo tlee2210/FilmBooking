@@ -41,7 +41,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final JWTService jwtService;
 
-    private final EmailService emailService;
+    private final EmailServiceimpl emailServiceimpl;
 
     private final ForgotPasswordRepository forgotPasswordRepository;
 
@@ -137,7 +137,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .user(user)
                 .build();
 
-        emailService.sendHtmlMail(mailBody, Constants.TEMPLATE_FILE_NAME.CLIENT_FORGOT_PASSWORD);
+        emailServiceimpl.sendHtmlMail(mailBody, Constants.TEMPLATE_FILE_NAME.CLIENT_FORGOT_PASSWORD);
 
         forgotPasswordRepository.save(fp);
 
@@ -173,9 +173,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     public static String optGenerator() {
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&.";
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
-        StringBuilder sb = new StringBuilder(120);
+        StringBuilder sb = new StringBuilder(220);
 
         for (int i = 0; i < 120; i++) {
             int index = random.nextInt(characters.length());

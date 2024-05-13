@@ -1,5 +1,6 @@
 package com.cinemas.service.impl;
 
+import com.cinemas.service.FileStorageService;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.RequiredArgsConstructor;
@@ -10,11 +11,10 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class FileStorageService {
+public class FileStorageServiceImpl implements FileStorageService {
 
     private final Cloudinary cloudinary;
 

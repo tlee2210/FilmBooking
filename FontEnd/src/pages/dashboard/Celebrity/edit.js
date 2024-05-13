@@ -57,7 +57,7 @@ import Flatpickr from "react-flatpickr";
 import Select from "react-select";
 
 const EditActorsOrDirectors = (props) => {
-  const id = props.router.params.id;
+  const slug = props.router.params.slug;
   // console.log(id);
 
   document.title = "Create Actors Or Directors";
@@ -66,8 +66,8 @@ const EditActorsOrDirectors = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(GetEditCelebrity(id, props.router.navigate));
-  }, [id]);
+    dispatch(GetEditCelebrity(slug, props.router.navigate));
+  }, [slug]);
 
   const selectState = (state) => state;
   const CelebrityProperties = createSelector(selectState, (state) => ({

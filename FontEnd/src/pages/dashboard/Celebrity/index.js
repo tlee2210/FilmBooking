@@ -142,7 +142,7 @@ const Celebrity = (props) => {
       },
       {
         header: "Actions",
-        accessorKey: "id",
+        accessorKey: "slug",
         enableColumnFilter: false,
         cell: (cell) => {
           // return <React.Fragment>Details</React.Fragment>;

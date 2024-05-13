@@ -20,17 +20,20 @@ public class Cinema {
     private int id;
 
     @Column(nullable = false)
-    private String cinemaName;
+    private String name;
 
     @Column(nullable = false)
-    private String cinemaAddress;
+    private String slug;
 
     @Column(nullable = false)
-    private String hotline;
+    private String address;
+
+    @Column(nullable = false)
+    private String phone;
 
     @Column(nullable = false)
     @Size(min = 10, max = 255, message = "Max 255")
-    private String information;
+    private String description;
 
     @ManyToOne
     @JoinColumn(name = "city_id")

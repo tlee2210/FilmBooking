@@ -16,4 +16,7 @@ public interface CelebrityRepository extends JpaRepository<Celebrity, Integer> {
     Celebrity findByName(String name);
     @Query("SELECT c FROM Celebrity c WHERE c.name = ?1 AND c.id != ?2")
     Celebrity findByNameWithId(String name, int id);
+
+    @Query("SELECT c FROM Celebrity c WHERE c.slug = ?1")
+    Celebrity findBySlug(String slug);
 }

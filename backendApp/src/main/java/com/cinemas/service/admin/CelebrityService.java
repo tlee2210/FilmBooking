@@ -21,7 +21,7 @@ public interface CelebrityService {
 
     boolean deleteCelebrity(int id) throws IOException;
 
-    EditSelectOptionReponse<Celebrity> getCelebrityById(Integer id);
+    EditSelectOptionReponse<Celebrity> getEditCelebrityBySlug(String slug);
 
     boolean updateCelebrity(CelebrityRequest celebrity) throws IOException;
 }
