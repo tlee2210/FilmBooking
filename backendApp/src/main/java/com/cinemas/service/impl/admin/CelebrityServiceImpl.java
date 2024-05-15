@@ -71,7 +71,7 @@ public class CelebrityServiceImpl implements CelebrityService {
         Country Country = countryRepository.findById(CountryId);
 
         addCeleb.setCountry(Country);
-        addCeleb.setImage(fileStorageServiceImpl.uploadFile(celebrity.getFile(), String.valueOf(celebrity.getRole())));
+            addCeleb.setImage(fileStorageServiceImpl.uploadFile(celebrity.getFile(), String.valueOf(celebrity.getRole())));
 //            System.out.println(addCeleb);
         celebrityRepository.save(addCeleb);
         return true;

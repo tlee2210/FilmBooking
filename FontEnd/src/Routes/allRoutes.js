@@ -22,6 +22,7 @@ import Celebrity from "../pages/dashboard/Celebrity/index";
 import CelebrityCreate from "../pages/dashboard/Celebrity/create";
 import CelebrityEdit from "../pages/dashboard/Celebrity/edit";
 import City from "../pages/dashboard/city/index";
+import CinemaCreate from "../pages/dashboard/Cinemas/create";
 
 const authProtectedRoutes = [
   //User Profile
@@ -49,6 +50,7 @@ const publicRoutes = [
 
   { path: "/auth-404-alt", component: <Alt404 /> },
   { path: "/auth-500", component: <Error500 /> },
+  { path: "/dashboard/cinema/create", component: <CinemaCreate /> },
 ];
 
 const homeRoutes = [{ path: "/", component: <Home /> }];

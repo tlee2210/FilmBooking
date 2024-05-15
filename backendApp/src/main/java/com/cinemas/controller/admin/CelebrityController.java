@@ -98,7 +98,7 @@ public class CelebrityController {
     /**
      * get Celebrity by id
      *
-     * @param id
+     * @param slug
      * @return
      */
     @GetMapping("/{slug}/edit")

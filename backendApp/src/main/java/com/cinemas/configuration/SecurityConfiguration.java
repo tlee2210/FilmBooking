@@ -34,10 +34,9 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(
                                 "/api/auth/**",
-                                "/api/employees/**",
                                 "/api/admin/v1/celebrity/**",
                                 "/api/admin/v1/city/**",
-                                "/api/cinema_img/**", "/api/cinema/**").permitAll()
+                                "/api/admin/v1/cinema/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 //                        .requestMatchers("/api/admin").hasAnyAuthority(RoleType.ADMIN.name(), RoleType.MANAGER.name())
                         .requestMatchers("/api/admin").hasAnyAuthority(RoleType.ADMIN.name())

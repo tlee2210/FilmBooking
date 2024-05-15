@@ -32,13 +32,13 @@ public class Cinema {
     private String phone;
 
     @Column(nullable = false)
-    @Size(min = 10, max = 255, message = "Max 255")
+//    @Size(min = 10, max = 255, message = "Max 255")
     private String description;
 
     @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;
 
-    @OneToMany(mappedBy = "cinema", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cinema", cascade = CascadeType.ALL)
     private List<CinemaImages> images;
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.minidev.json.annotate.JsonIgnore;
 
 @Data
 @AllArgsConstructor
@@ -13,12 +14,13 @@ import lombok.NoArgsConstructor;
 public class CinemaImages {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int uid;
 
     @Column(nullable = false)
-    private String imgName;
+    private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cinema_id")
-    private Cinema cinema;
+    @JsonIgnore
+    Cinema cinema;
 }

@@ -6,19 +6,28 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class CinemaRequest {
-    private String cinemaName;
 
-    private String cinemaAddress;
+    private int id;
 
-    private String hotline;
+    private String name;
 
-    private String information;
+    private String address;
+
+    private String phone;
+
+    private String description;
 
     private int city_id;
+
+//    private MultipartFile file;
+    private List<MultipartFile> files;
 }

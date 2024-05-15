@@ -12,6 +12,7 @@ import MessageReducer from "./message/reducer";
 
 import CelebrityReducer from "./Celebrity/reducer";
 import CityReducer from "./city/reducer";
+import CinemaReducer from "./Cinemas/reducer";
 
 const rootReducer = combineReducers({
   Layout: LayoutReducer,
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   Message: MessageReducer,
   Celebrity: CelebrityReducer,
   City: CityReducer,
+  Cinema: CinemaReducer,
 });
 
 export default rootReducer;

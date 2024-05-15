@@ -9,3 +9,4 @@ export * from "./auth/profile/thunk";
 
 export * from "./Celebrity/thunk";
 export * from "./city/thunk";
+export * from "./Cinemas/thunk";

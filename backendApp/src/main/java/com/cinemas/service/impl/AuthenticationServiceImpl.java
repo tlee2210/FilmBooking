@@ -173,7 +173,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     public static String optGenerator() {
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@$&*";
         Random random = new Random();
         StringBuilder sb = new StringBuilder(220);
 
