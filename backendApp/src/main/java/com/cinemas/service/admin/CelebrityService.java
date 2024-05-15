@@ -19,7 +19,7 @@ public interface CelebrityService {
 
     List<SelectOptionReponse> getCreateCelebrity();
 
-    boolean deleteCelebrity(int id) throws IOException;
+    Integer deleteCelebrity(String slug) throws IOException;
 
     EditSelectOptionReponse<Celebrity> getEditCelebrityBySlug(String slug);
 

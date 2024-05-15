@@ -66,5 +66,17 @@ public class CinemaController {
         }
         throw new AppException(CREATE_FAILED);
     }
+    @DeleteMapping("/delete/{slug}")
+    public APIResponse<Integer> deleteCinema(@PathVariable String slug) throws IOException {
+        int id = cinemaService.deleteCinema(slug);
+        if (id > 0) {
+            APIResponse<Integer> apiResponse = new APIResponse();
+            apiResponse.setCode(200);
+            apiResponse.setMessage("Successfully deleted Cinema");
+            apiResponse.setResult(id);
+            return apiResponse;
+        }
+        throw new AppException(CREATE_FAILED);
+    }
 
 }

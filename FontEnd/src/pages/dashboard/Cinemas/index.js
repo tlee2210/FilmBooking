@@ -11,7 +11,7 @@ import {
 } from "reactstrap";
 
 import TableContainer from "../../../Components/Common/TableContainerReactTable";
-import { message } from "antd";
+import { message, Image } from "antd";
 
 import withRouter from "../../../Components/Common/withRouter";
 import { Link } from "react-router-dom";
@@ -26,26 +26,26 @@ import { useSelector, useDispatch } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import { createSelector } from "reselect";
 
-import { celebrity, deleteCelebrity } from "../../../slices/Celebrity/thunk";
+import { getCinema } from "../../../slices/Cinemas/thunk";
 
-const Celebrity = (props) => {
+const Cinema = (props) => {
   const dispatch = useDispatch();
 
   const [modal_detele, setmodal_detele] = useState(false);
   const [modal_togFirst, setmodal_togFirst] = useState(false);
   const [slug, setSlug] = useState("");
 
-  const CelebrityState = (state) => state;
-  const CelebrityStateData = createSelector(CelebrityState, (state) => ({
+  const CinemaState = (state) => state;
+  const CinemaStateData = createSelector(CinemaState, (state) => ({
     success: state.Message.success,
     error: state.Message.error,
     messageSuccess: state.Message.messageSuccess,
     messageError: state.Message.messageError,
-    Celebrity: state.Celebrity.data,
+    Cinema: state.Cinema.data,
   }));
   // Inside your component
-  const { error, success, messageSuccess, messageError, Celebrity } =
-    useSelector(CelebrityStateData);
+  const { error, success, messageSuccess, messageError, Cinema } =
+    useSelector(CinemaStateData);
 
   useEffect(() => {
     if (success) {
@@ -62,39 +62,50 @@ const Celebrity = (props) => {
   }, [dispatch, success, error]);
 
   useEffect(() => {
-    dispatch(celebrity({}, props.router.navigate));
+    dispatch(getCinema({}, props.router.navigate));
   }, []);
+  useEffect(() => {
+    console.log(slug);
+  }, [slug]);
 
   const handlePagination = (page) => {
     const formData = new FormData();
     formData.append("pageNo", page);
     console.log(page);
-    // dispatch(celebrity(formData, props.router.navigate));
+    dispatch(getCinema(formData, props.router.navigate));
   };
 
   function tog_togdelete(slug) {
     setmodal_detele(!modal_togFirst);
-    // console.log(id);
+    // console.log(slug);
     if (slug) {
       setSlug(slug);
     }
   }
 
   function deleteitem(slug) {
-    // console.log("delete : " + id);
+    console.log("delete : " + slug);
     if (slug) {
-      dispatch(deleteCelebrity(slug));
+      // dispatch(deleteCelebrity(id));
     }
   }
 
   const columns = useMemo(
     () => [
       {
-        header: "Avatar",
-        accessorKey: "image",
+        header: "Image",
+        accessorKey: "images",
         cell: (cell) => {
+          const imageUrls = cell.getValue()?.map((item) => item.url);
           return (
-            <img src={cell.getValue()} alt={cell.getValue()} width={100} />
+            <>
+              <Image.PreviewGroup items={imageUrls}>
+                <Image
+                  width={150}
+                  src={imageUrls && imageUrls[0] ? imageUrls[0] : ""}
+                />
+              </Image.PreviewGroup>
+            </>
           );
         },
         enableColumnFilter: false,
@@ -105,41 +116,31 @@ const Celebrity = (props) => {
         enableColumnFilter: false,
       },
       {
-        header: "Date",
-        accessorKey: "dateOfBirth",
+        header: "Address",
+        accessorKey: "address",
         enableColumnFilter: false,
       },
       {
-        header: "nationality",
-        accessorKey: "country",
+        header: "Phone",
+        accessorKey: "phone",
+        enableColumnFilter: false,
+      },
+      {
+        header: "city",
+        accessorKey: "city",
         cell: (cell) => {
           return <span>{cell.getValue()?.name}</span>;
         },
         enableColumnFilter: false,
       },
-      {
-        header: "role",
-        enableColumnFilter: false,
-        accessorKey: "role",
-        cell: (cell) => {
-          switch (cell.getValue()) {
-            case "ACTOR":
-              return (
-                <span className="badge bg-success-subtle text-success text-uppercase">
-                  {" "}
-                  {cell.getValue()}
-                </span>
-              );
-            case "DIRECTOR":
-              return (
-                <span className="badge bg-warning-subtle  text-warning text-uppercase">
-                  {" "}
-                  {cell.getValue()}
-                </span>
-              );
-          }
-        },
-      },
+      // {
+      //   header: "Description",
+      //   accessorKey: "description",
+      //   cell: (cell) => {
+      //     return <div dangerouslySetInnerHTML={{ __html: cell.getValue() }} />;
+      //   },
+      //   enableColumnFilter: false,
+      // },
       {
         header: "Actions",
         accessorKey: "slug",
@@ -169,15 +170,12 @@ const Celebrity = (props) => {
     []
   );
 
-  document.title = "Actors and Directors Manager";
+  document.title = "Cinema Manager";
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb
-            title="Actors and Directors Manager"
-            pageTitle="Actors and Directors"
-          />
+          <BreadCrumb title="Cinema Manager" pageTitle="Cinema" />
           <Row>
             <Col lg={12}>
               <Card id="customerList">
@@ -185,9 +183,7 @@ const Celebrity = (props) => {
                   <Row className="g-4 align-items-center">
                     <div className="col-sm">
                       <div>
-                        <h5 className="card-title mb-0">
-                          Actors and Directors Manager
-                        </h5>
+                        <h5 className="card-title mb-0">Cinema Manager</h5>
                       </div>
                     </div>
                     <div className="col-sm-auto">
@@ -197,7 +193,7 @@ const Celebrity = (props) => {
                           to={`/dashboard/celebrity/create`}
                         >
                           <i className="ri-add-line align-bottom me-1"></i> Add
-                          New Profile
+                          New Cinema
                         </Link>
                       </div>
                     </div>
@@ -206,9 +202,9 @@ const Celebrity = (props) => {
                 <div className="card-body pt-0">
                   <TableContainer
                     columns={columns || []}
-                    data={Celebrity.content || []}
-                    paginateData={Celebrity}
-                    customPageSize={Celebrity.size}
+                    data={Cinema.content || []}
+                    paginateData={Cinema}
+                    customPageSize={Cinema.size}
                     paginate={handlePagination}
                     tableClass="table-centered align-middle table-nowrap mb-0"
                     theadClass="text-muted table-light"
@@ -230,12 +226,6 @@ const Celebrity = (props) => {
         centered
       >
         <ModalBody className="text-center p-5">
-          {/* <lord-icon
-              src="https://cdn.lordicon.com/tdrtiskw.json"
-              trigger="loop"
-              colors="primary:#f7b84b,secondary:#405189"
-              style={{ width: "130px", height: "130px" }}
-            ></lord-icon> */}
           <div className="pt-4">
             <h4>Confirm Deletion</h4>
             <p className="text-muted">
@@ -266,4 +256,4 @@ const Celebrity = (props) => {
   );
 };
 
-export default withRouter(Celebrity);
+export default withRouter(Cinema);

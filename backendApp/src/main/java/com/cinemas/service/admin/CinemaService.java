@@ -15,4 +15,6 @@ public interface CinemaService {
     boolean createCinema(CinemaRequest cinemaRequest) throws IOException;
 
     Page<Cinema> getAllCinema(PaginationHelper PaginationHelper);
+
+    Integer deleteCinema(String slug) throws IOException;
 }

@@ -34,6 +34,6 @@ public class SizeValidator implements ConstraintValidator<Size, String> {
             return false;
         }
 
-        return true; // Passes both checks
+        return true;
     }
 }

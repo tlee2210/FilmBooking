@@ -22,7 +22,7 @@ public class EmployeeRequest {
 
     private Integer id;
 
-    @Size(min = 5, max = 10, message = "FIELD_TOO_LENGTH")
+    @Size(min = 5, max = 10)
     @NotEmpty(message = "VALIDATION")
     private String no;
 

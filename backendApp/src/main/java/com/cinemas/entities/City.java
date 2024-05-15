@@ -1,10 +1,11 @@
 package com.cinemas.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.minidev.json.annotate.JsonIgnore;
+
 
 import java.util.List;
 
@@ -25,7 +26,6 @@ public class City {
     private String slug;
 
     @OneToMany(mappedBy = "city", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @Transient
-//    @JsonIgnore
+    @JsonIgnore
     private List<Cinema> cinemas;
 }

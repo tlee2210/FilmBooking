@@ -23,7 +23,7 @@ import CelebrityCreate from "../pages/dashboard/Celebrity/create";
 import CelebrityEdit from "../pages/dashboard/Celebrity/edit";
 import City from "../pages/dashboard/city/index";
 import CinemaCreate from "../pages/dashboard/Cinemas/create";
-
+import Cinemas from "../pages/dashboard/Cinemas/index";
 const authProtectedRoutes = [
   //User Profile
   { path: "/profile", component: <UserProfile /> },
@@ -32,6 +32,8 @@ const authProtectedRoutes = [
   { path: "/dashboard/celebrity/:slug/edit", component: <CelebrityEdit /> },
   { path: "/dashboard/celebrity/create", component: <CelebrityCreate /> },
   { path: "/dashboard/city", component: <City /> },
+  { path: "/dashboard/cinema/create", component: <CinemaCreate /> },
+  { path: "/dashboard/cinema", component: <Cinemas /> },
   // {
   //   path: "/",
   //   exact: true,
@@ -50,7 +52,6 @@ const publicRoutes = [
 
   { path: "/auth-404-alt", component: <Alt404 /> },
   { path: "/auth-500", component: <Error500 /> },
-  { path: "/dashboard/cinema/create", component: <CinemaCreate /> },
 ];
 
 const homeRoutes = [{ path: "/", component: <Home /> }];

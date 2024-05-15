@@ -60,6 +60,14 @@ const Navdata = () => {
           // badgeColor: "success",
           // badgeName: "New",
         },
+        {
+          id: "cinema",
+          label: "Cinema",
+          link: "/dashboard/cinema",
+          parentId: "dashboard",
+          // badgeColor: "success",
+          // badgeName: "New",
+        },
       ],
     },
   ];

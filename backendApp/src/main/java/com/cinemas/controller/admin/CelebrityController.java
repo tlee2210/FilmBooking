@@ -77,15 +77,15 @@ public class CelebrityController {
     /**
      * delete Celebrity by id
      *
-     * @param id
+     * @param slug
      * @return
      * @throws IOException
      */
-    @DeleteMapping("/delete/{id}")
-    public APIResponse<Integer> deleteCelebrity(@PathVariable int id) throws IOException {
+    @DeleteMapping("/delete/{slug}")
+    public APIResponse<Integer> deleteCelebrity(@PathVariable String slug) throws IOException {
 
-        boolean checkDelete = celebrityService.deleteCelebrity(id);
-        if (checkDelete) {
+        int id = celebrityService.deleteCelebrity(slug);
+        if (id > 0) {
             APIResponse<Integer> apiResponse = new APIResponse();
             apiResponse.setCode(200);
             apiResponse.setMessage("Successfully deleted celeb");

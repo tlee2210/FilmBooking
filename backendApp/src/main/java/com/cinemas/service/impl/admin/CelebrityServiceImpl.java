@@ -88,14 +88,15 @@ public class CelebrityServiceImpl implements CelebrityService {
     }
 
     @Override
-    public boolean deleteCelebrity(int id) throws IOException {
-        Celebrity celebrity = celebrityRepository.findById(id)
-                .orElseThrow(() -> new AppException(CELEBRITY_EXISTED));
+    public Integer deleteCelebrity(String slug) throws IOException {
+        Celebrity celebrity = celebrityRepository.findBySlug(slug);
+
+        if (celebrity == null) throw new AppException(NOT_FOUND);
 
         fileStorageServiceImpl.deleteFile(celebrity.getImage());
         celebrityRepository.delete(celebrity);
 
-        return true;
+        return celebrity.getId();
     }
 
     @Override

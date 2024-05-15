@@ -8,6 +8,7 @@ import com.cinemas.entities.Celebrity;
 import com.cinemas.entities.Cinema;
 import com.cinemas.entities.CinemaImages;
 import com.cinemas.entities.City;
+import com.cinemas.exception.AppException;
 import com.cinemas.repositories.CinemaImageRespository;
 import com.cinemas.repositories.CinemaRespository;
 import com.cinemas.repositories.CityRepository;
@@ -29,6 +30,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.cinemas.exception.ErrorCode.NOT_FOUND;
+
 @Service
 public class CinemaServiceImpl implements CinemaService {
 
@@ -46,7 +49,16 @@ public class CinemaServiceImpl implements CinemaService {
 
     @Override
     public Page<Cinema> getAllCinema(PaginationHelper PaginationHelper) {
+
         List<Cinema> cinemaList = cinemaRespository.findAll();
+
+        cinemaList.forEach(cinema -> {
+            List<CinemaImages> cinemaImages = cinema.getImages();
+
+            cinemaImages.forEach(images -> {
+                images.setUrl(fileStorageServiceImpl.getUrlFromPublicId(images.getUrl()));
+            });
+        });
 
         PagedListHolder<Cinema> pagedListHolder = new PagedListHolder<Cinema>(cinemaList);
         pagedListHolder.setPage(PaginationHelper.getPageNo());
@@ -59,6 +71,23 @@ public class CinemaServiceImpl implements CinemaService {
         Page<Cinema> cinemas = new PageImpl<>(pageList, new PaginationHelper().getPageable(PaginationHelper), cinemaList.size());
 
         return cinemas;
+    }
+
+    @Override
+    public Integer deleteCinema(String slug) throws IOException {
+        Cinema cinema = cinemaRespository.findCinemaBySlug(slug);
+        if (cinema == null)
+            throw new AppException(NOT_FOUND);
+
+        List<CinemaImages> cinemaImages = cinemaImageRespository.findCinemaImagesByCinema_Id(cinema.getId());
+        for (CinemaImages images : cinemaImages
+        ) {
+            fileStorageServiceImpl.deleteFile(images.getUrl());
+            cinemaImageRespository.delete(images);
+        }
+        cinemaRespository.delete(cinema);
+        return 1;
+
     }
 
     @Override

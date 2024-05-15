@@ -1,10 +1,10 @@
 package com.cinemas.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.minidev.json.annotate.JsonIgnore;
 
 @Data
 @AllArgsConstructor
@@ -20,7 +20,7 @@ public class CinemaImages {
     private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cinema_id")
+    @JoinColumn(name = "cinema_id", referencedColumnName = "id")
     @JsonIgnore
     Cinema cinema;
 }
