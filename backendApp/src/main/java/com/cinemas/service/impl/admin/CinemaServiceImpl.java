@@ -3,18 +3,15 @@ package com.cinemas.service.impl.admin;
 import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.CinemaRequest;
 import com.cinemas.dto.request.PaginationHelper;
+import com.cinemas.dto.response.EditSelectOptionReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
-import com.cinemas.entities.Celebrity;
-import com.cinemas.entities.Cinema;
-import com.cinemas.entities.CinemaImages;
-import com.cinemas.entities.City;
+import com.cinemas.entities.*;
 import com.cinemas.exception.AppException;
 import com.cinemas.repositories.CinemaImageRespository;
 import com.cinemas.repositories.CinemaRespository;
 import com.cinemas.repositories.CityRepository;
 import com.cinemas.service.admin.CinemaService;
 import com.cinemas.service.impl.FileStorageServiceImpl;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PagedListHolder;
@@ -29,8 +26,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static com.cinemas.exception.ErrorCode.NOT_FOUND;
+import static com.cinemas.exception.ErrorCode.*;
 
 @Service
 public class CinemaServiceImpl implements CinemaService {
@@ -53,9 +51,7 @@ public class CinemaServiceImpl implements CinemaService {
         List<Cinema> cinemaList = cinemaRespository.findAll();
 
         cinemaList.forEach(cinema -> {
-            List<CinemaImages> cinemaImages = cinema.getImages();
-
-            cinemaImages.forEach(images -> {
+            cinema.getImages().forEach(images -> {
                 images.setUrl(fileStorageServiceImpl.getUrlFromPublicId(images.getUrl()));
             });
         });
@@ -75,19 +71,105 @@ public class CinemaServiceImpl implements CinemaService {
 
     @Override
     public Integer deleteCinema(String slug) throws IOException {
+
         Cinema cinema = cinemaRespository.findCinemaBySlug(slug);
-        if (cinema == null)
-            throw new AppException(NOT_FOUND);
+
+        if (cinema == null) throw new AppException(NOT_FOUND);
 
         List<CinemaImages> cinemaImages = cinemaImageRespository.findCinemaImagesByCinema_Id(cinema.getId());
-        for (CinemaImages images : cinemaImages
-        ) {
+        for (CinemaImages images : cinemaImages) {
             fileStorageServiceImpl.deleteFile(images.getUrl());
             cinemaImageRespository.delete(images);
         }
         cinemaRespository.delete(cinema);
-        return 1;
 
+        return cinema.getId();
+    }
+
+    @Override
+    public EditSelectOptionReponse<Cinema> getCinemaEdit(String slug) {
+
+        Cinema cinema = cinemaRespository.findCinemaBySlug(slug);
+
+        if (cinema == null) throw new AppException(NOT_FOUND);
+
+        cinema.getImages().forEach(image -> {
+            image.setUrl(fileStorageServiceImpl.getUrlFromPublicId(image.getUrl()));
+        });
+
+        List<City> cityList = cityRepository.findAll();
+
+        List<SelectOptionReponse> options = new ArrayList<>();
+
+        for (City city : cityList) {
+            options.add(new SelectOptionReponse(city.getId(), city.getName()));
+        }
+
+        return new EditSelectOptionReponse<>(options, cinema);
+    }
+
+    @Override
+    public boolean updateCinema(CinemaRequest cinemaRequest) throws IOException {
+
+        Cinema cinema = cinemaRespository
+                .findById(cinemaRequest.getId())
+                .orElseThrow(() -> new AppException(NOT_FOUND));
+
+        if (cinemaRespository.findByNameWithId(cinemaRequest.getName(), cinemaRequest.getId()) != null) {
+            throw new AppException(NAME_EXISTED);
+        }
+
+        ObjectUtils.copyFields(cinemaRequest, cinema);
+        cinema.setSlug(cinemaRequest.getName().toLowerCase().replaceAll("\\s+", "-"));
+
+        cinema.setCity(cityRepository
+                .findById(cinemaRequest.getCity_id())
+                .orElseThrow(() -> new AppException(UPDATE_FAILED)));
+
+        List<Integer> newImageUrls = cinemaRequest.getImages();
+
+        List<CinemaImages> cinemaImages = cinemaImageRespository.findCinemaImagesByCinema_Id(cinema.getId());
+
+        cinema.setImages(new ArrayList<>());
+        cinemaRespository.save(cinema);
+
+        if (newImageUrls != null) {
+            for (CinemaImages images : cinemaImages) {
+                if (!(newImageUrls.contains(images.getUid()))) {
+                    images.setCinema(null);
+
+                    fileStorageServiceImpl.deleteFile(images.getUrl());
+
+                    cinemaImageRespository.deleteByUid(images.getUid());
+                }
+            }
+        } else {
+            for (CinemaImages images : cinemaImages) {
+                images.setCinema(null);
+
+                fileStorageServiceImpl.deleteFile(images.getUrl());
+
+                cinemaImageRespository.deleteByUid(images.getUid());
+            }
+        }
+
+
+        if (cinemaRequest.getFiles() != null) {
+
+            List<MultipartFile> files = cinemaRequest.getFiles();
+            List<CinemaImages> newImages = new ArrayList<>();
+
+            for (MultipartFile file : files) {
+                CinemaImages image = new CinemaImages();
+                image.setUrl(fileStorageServiceImpl.uploadFile(file, "cinemas"));
+                image.setCinema(cinema);
+                newImages.add(image);
+            }
+
+            cinemaImageRespository.saveAll(newImages);
+        }
+
+        return true;
     }
 
     @Override
@@ -97,32 +179,41 @@ public class CinemaServiceImpl implements CinemaService {
         for (City city : cityList) {
             selectOptionReponses.add(new SelectOptionReponse(city.getId(), city.getName()));
         }
+
         return selectOptionReponses;
     }
 
     @Override
     @Transactional
     public boolean createCinema(CinemaRequest cinemaRequest) throws IOException {
+
+        if (cinemaRespository.findCinemaByName(cinemaRequest.getName()) != null) {
+            throw new AppException(NAME_EXISTED);
+        }
+
         Cinema cinema = new Cinema();
 
         ObjectUtils.copyFields(cinemaRequest, cinema);
         cinema.setSlug(cinemaRequest.getName().toLowerCase().replaceAll("\\s+", "-"));
 
-        cinema.setCity(cityRepository.findById(cinemaRequest.getCity_id())
-                .orElseThrow(() -> new EntityNotFoundException("City not found")));
+        cinema.setCity(cityRepository.findById(cinemaRequest.getCity_id()).orElseThrow(() -> new AppException(UPDATE_FAILED)));
 
         cinemaRespository.save(cinema);
 
         List<MultipartFile> files = cinemaRequest.getFiles();
-        for (MultipartFile file : files
-        ) {
+        List<CinemaImages> newImages = new ArrayList<>();
+
+        for (MultipartFile file : files) {
             CinemaImages cinemaImages = new CinemaImages();
             cinemaImages.setUrl(fileStorageServiceImpl.uploadFile(file, "cinemas"));
+//            cinemaImages.setCinemaId(cinema.getId());
             cinemaImages.setCinema(cinema);
-            cinemaImageRespository.save(cinemaImages);
+            newImages.add(cinemaImages);
         }
+
+        cinemaImageRespository.saveAll(newImages);
+
         return true;
     }
-
 
 }

@@ -18,7 +18,7 @@ public class City {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(nullable = false)
     private String name;
@@ -27,5 +27,7 @@ public class City {
 
     @OneToMany(mappedBy = "city", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
+    @Transient
     private List<Cinema> cinemas;
+
 }

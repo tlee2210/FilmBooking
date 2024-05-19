@@ -1,39 +1,80 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
+import { lazy } from "react";
+// //login
+// import Login from "../pages/Authentication/Login";
+// import ForgetPasswordPage from "../pages/Authentication/ForgetPassword";
+// import VerifyPassword from "../pages/Authentication/verifyPassword";
+// import Logout from "../pages/Authentication/Logout";
+// import Register from "../pages/Authentication/Register";
 
-//login
-import Login from "../pages/Authentication/Login";
-import ForgetPasswordPage from "../pages/Authentication/ForgetPassword";
-import VerifyPassword from "../pages/Authentication/verifyPassword";
-import Logout from "../pages/Authentication/Logout";
-import Register from "../pages/Authentication/Register";
+// import Alt404 from "../pages/AuthenticationInner/Errors/Alt404";
+// import Error500 from "../pages/AuthenticationInner/Errors/Error500";
 
-import Alt404 from "../pages/AuthenticationInner/Errors/Alt404";
-import Error500 from "../pages/AuthenticationInner/Errors/Error500";
+// // User Profile
+// import UserProfile from "../pages/Authentication/user-profile";
+
+// import Home from "../pages/home/index";
+
+// import Starter from "../pages/dashboard/Starter";
+
+// import Celebrity from "../pages/dashboard/Celebrity/index";
+// import CelebrityCreate from "../pages/dashboard/Celebrity/create";
+// import CelebrityEdit from "../pages/dashboard/Celebrity/edit";
+// import City from "../pages/dashboard/city/index";
+// import CinemaCreate from "../pages/dashboard/Cinemas/create";
+// import Cinemas from "../pages/dashboard/Cinemas/index";
+
+// Lazy load components
+const Login = lazy(() => import("../pages/Authentication/Login"));
+const ForgetPasswordPage = lazy(() =>
+  import("../pages/Authentication/ForgetPassword")
+);
+const VerifyPassword = lazy(() =>
+  import("../pages/Authentication/verifyPassword")
+);
+const Logout = lazy(() => import("../pages/Authentication/Logout"));
+const Register = lazy(() => import("../pages/Authentication/Register"));
+
+const Alt404 = lazy(() => import("../pages/AuthenticationInner/Errors/Alt404"));
+const Error500 = lazy(() =>
+  import("../pages/AuthenticationInner/Errors/Error500")
+);
 
 // User Profile
-import UserProfile from "../pages/Authentication/user-profile";
+const UserProfile = lazy(() => import("../pages/Authentication/user-profile"));
 
-import Home from "../pages/home/index";
+const Home = lazy(() => import("../pages/home/index"));
 
-import Starter from "../pages/dashboard/Starter";
+const Starter = lazy(() => import("../pages/dashboard/Starter"));
 
-import Celebrity from "../pages/dashboard/Celebrity/index";
-import CelebrityCreate from "../pages/dashboard/Celebrity/create";
-import CelebrityEdit from "../pages/dashboard/Celebrity/edit";
-import City from "../pages/dashboard/city/index";
-import CinemaCreate from "../pages/dashboard/Cinemas/create";
-import Cinemas from "../pages/dashboard/Cinemas/index";
+const Celebrity = lazy(() => import("../pages/dashboard/Celebrity/index"));
+const CelebrityCreate = lazy(() =>
+  import("../pages/dashboard/Celebrity/create")
+);
+const CelebrityEdit = lazy(() => import("../pages/dashboard/Celebrity/edit"));
+
+const City = lazy(() => import("../pages/dashboard/city/index"));
+
+const CinemaCreate = lazy(() => import("../pages/dashboard/Cinemas/create"));
+const CinemaEdit = lazy(() => import("../pages/dashboard/Cinemas/edit"));
+const Cinemas = lazy(() => import("../pages/dashboard/Cinemas/index"));
+
 const authProtectedRoutes = [
   //User Profile
   { path: "/profile", component: <UserProfile /> },
   { path: "/pages-starter", component: <Starter /> },
+
   { path: "/dashboard/celebrity", component: <Celebrity /> },
   { path: "/dashboard/celebrity/:slug/edit", component: <CelebrityEdit /> },
   { path: "/dashboard/celebrity/create", component: <CelebrityCreate /> },
+
   { path: "/dashboard/city", component: <City /> },
+
   { path: "/dashboard/cinema/create", component: <CinemaCreate /> },
   { path: "/dashboard/cinema", component: <Cinemas /> },
+  { path: "/dashboard/cinema/:slug/edit", component: <CinemaEdit /> },
+
   // {
   //   path: "/",
   //   exact: true,

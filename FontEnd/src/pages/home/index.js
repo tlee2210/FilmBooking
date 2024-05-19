@@ -64,17 +64,17 @@ const homepage = () => {
         >
           <div className="swiper-wrapper">
             <SwiperSlide>
-              <div class="swiper-slide d-flex justify-content-center align-items-center">
+              <div className="swiper-slide d-flex justify-content-center align-items-center">
                 <img src={img1} alt="" className="img-fluid" />
               </div>
             </SwiperSlide>
             <SwiperSlide>
-              <div class="swiper-slide d-flex justify-content-center align-items-center">
+              <div className="swiper-slide d-flex justify-content-center align-items-center">
                 <img src={img1} alt="" className="img-fluid" />
               </div>
             </SwiperSlide>
             <SwiperSlide>
-              <div class="swiper-slide d-flex justify-content-center align-items-center">
+              <div className="swiper-slide d-flex justify-content-center align-items-center">
                 <img src={img1} alt="" className="img-fluid" />
               </div>
             </SwiperSlide>

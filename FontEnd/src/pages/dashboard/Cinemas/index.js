@@ -26,7 +26,7 @@ import { useSelector, useDispatch } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import { createSelector } from "reselect";
 
-import { getCinema } from "../../../slices/Cinemas/thunk";
+import { getCinema, deleteCinema } from "../../../slices/Cinemas/thunk";
 
 const Cinema = (props) => {
   const dispatch = useDispatch();
@@ -64,9 +64,6 @@ const Cinema = (props) => {
   useEffect(() => {
     dispatch(getCinema({}, props.router.navigate));
   }, []);
-  useEffect(() => {
-    console.log(slug);
-  }, [slug]);
 
   const handlePagination = (page) => {
     const formData = new FormData();
@@ -84,9 +81,9 @@ const Cinema = (props) => {
   }
 
   function deleteitem(slug) {
-    console.log("delete : " + slug);
+    // console.log("delete : " + slug);
     if (slug) {
-      // dispatch(deleteCelebrity(id));
+      dispatch(deleteCinema(slug));
     }
   }
 
@@ -149,7 +146,7 @@ const Cinema = (props) => {
           // return <React.Fragment>Details</React.Fragment>;
           return (
             <React.Fragment>
-              <Link to={`/dashboard/celebrity/${cell.getValue()}/edit`}>
+              <Link to={`/dashboard/cinema/${cell.getValue()}/edit`}>
                 <span className="bg-gradient me-3 fs-4 text-info">
                   <i className="ri-edit-2-fill"></i>
                 </span>
@@ -190,7 +187,7 @@ const Cinema = (props) => {
                       <div>
                         <Link
                           className="btn btn-success add-btn"
-                          to={`/dashboard/celebrity/create`}
+                          to={`/dashboard/cinema/create`}
                         >
                           <i className="ri-add-line align-bottom me-1"></i> Add
                           New Cinema

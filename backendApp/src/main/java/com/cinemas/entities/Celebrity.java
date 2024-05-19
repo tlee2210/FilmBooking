@@ -19,7 +19,7 @@ import java.time.LocalDate;
 public class Celebrity {
     @Id
     @GeneratedValue
-    private int id;
+    private Integer id;
 
     @Column
     private String name;

@@ -9,13 +9,13 @@ export const getCinema = (formData, history) => async (dispatch) => {
       console.log(response);
       dispatch(
         fetchSuccess({
-          data: response.data.result,
+          data: response.data?.result,
         })
       );
     })
     .catch((err) => {
-      console.error(err);
-      // dispatch(Error(err.response.data.message));
+      // console.error(err);
+      // dispatch(Error(err.response?.data?.message));
     });
 };
 
@@ -24,11 +24,15 @@ export const getCreateCinemas = () => async (dispatch) => {
     .get(`http://localhost:8081/api/admin/v1/cinema/create`)
     .then((response) => {
       // console.log(response);
-      dispatch(setSelectOption(response.data.result));
+      dispatch(setSelectOption(response.data?.result));
     })
     .catch((err) => {
-      console.error(err);
-      // dispatch(Error(err.response.data.message));
+      // console.error(err);
+      dispatch(Error(err.response?.data?.message));
+
+      if (err.response?.status === 404) {
+        dispatch("/dashboard/cinema");
+      }
     });
 };
 
@@ -40,60 +44,63 @@ export const CreateCinemas = (formData, history) => async (dispatch) => {
       },
     })
     .then((response) => {
-      console.log(response);
-      // dispatch(Success(response.data.message));
-      // history("/dashboard/celebrity");
+      // console.log(response);
+      dispatch(Success(response.data?.message));
+      history("/dashboard/cinema");
     })
     .catch((err) => {
-      console.error(err);
-      // dispatch(Error(err.response.data.message));
+      // console.error(err);
+      dispatch(Error(err.response?.data?.message));
     });
 };
 
-// export const deleteCelebrity = (id, history) => async (dispatch) => {
-//   await axios
-//     .delete(`http://localhost:8081/api/admin/v1/celebrity/delete/${id}`)
-//     .then((response) => {
-//       // console.log(response);
-//       dispatch(Success(response.data.message));
-//       dispatch(removeItem(response.data.result));
-//     })
-//     .catch((err) => {
-//       // console.error(err);
-//       dispatch(Error(err.response.data.message));
-//     });
-// };
+export const deleteCinema = (slug) => async (dispatch) => {
+  await axios
+    .delete(`http://localhost:8081/api/admin/v1/cinema/delete/${slug}`)
+    .then((response) => {
+      // console.log(response);
+      dispatch(Success(response.data?.message));
+      dispatch(getCinema({}));
+      // dispatch(removeItem(response.data?.result));
+    })
+    .catch((err) => {
+      // console.error(err);
+      dispatch(Error(err.response?.data?.message));
+    });
+};
 
-// export const GetEditCelebrity = (id, history) => async (dispatch) => {
-//   await axios
-//     .get(`http://localhost:8081/api/admin/v1/celebrity/${id}/edit`)
-//     .then((response) => {
-//       // console.log(response);
-//       dispatch(setSelectOption(response.data.result.selectOptionReponse));
-//       dispatch(setItem(response.data.result.model));
-//     })
-//     .catch((err) => {
-//       // console.error(err);
-//       dispatch(Error(err.response.data.message));
-//       if (err.response.status) history("/dashboard/celebrity");
-//     });
-// };
+export const GetEditCinema = (slug, history) => async (dispatch) => {
+  await axios
+    .get(`http://localhost:8081/api/admin/v1/cinema/${slug}/edit`)
+    .then((response) => {
+      // console.log(response);
+      dispatch(setSelectOption(response.data?.result.selectOptionReponse));
+      dispatch(setItem(response.data?.result.model));
+    })
+    .catch((err) => {
+      console.error(err);
+      dispatch(Error(err.response?.data?.message));
+      if (err.response?.status === 404) {
+        history("/dashboard/cinema");
+      }
+    });
+};
 
-// export const UpdateCelebrity = (formData, history) => async (dispatch) => {
-//   await axios
-//     .put(`http://localhost:8081/api/admin/v1/celebrity/update`, formData, {
-//       headers: {
-//         "Content-Type": "multipart/form-data",
-//       },
-//     })
-//     .then((response) => {
-//       // console.log(response);
-//       dispatch(Success(response.data.message));
-//       history("/dashboard/celebrity");
-//     })
-//     .catch((err) => {
-//       // console.error(err);
-//       dispatch(Error(err.response.data.message));
-//       // history("/dashboard/celebrity");
-//     });
-// };
+export const UpdateCinema = (formData, history) => async (dispatch) => {
+  await axios
+    .put(`http://localhost:8081/api/admin/v1/cinema/update`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((response) => {
+      // console.log(response);
+      dispatch(Success(response.data?.message));
+      history("/dashboard/cinema");
+    })
+    .catch((err) => {
+      // console.error(err);
+      dispatch(Error(err.response?.data.message));
+      // history("/dashboard/celebrity");
+    });
+};

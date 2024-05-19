@@ -27,13 +27,11 @@ import { Image, Upload, message } from "antd";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
-import { getCreateCinemas, CreateCinemas } from "../../../slices/Cinemas/thunk";
+import { GetEditCinema, UpdateCinema } from "../../../slices/Cinemas/thunk";
 import { clearNotification } from "../../../slices/message/reducer";
-
 
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import classnames from "classnames";
 import { Link, useNavigate } from "react-router-dom";
 //formik
 import { useFormik } from "formik";
@@ -49,32 +47,33 @@ const getBase64 = (file) =>
     reader.onerror = (error) => reject(error);
   });
 
-const CinemaCreate = (props) => {
-  document.title = "Create Cinema";
+const CinemaEdit = (props) => {
+  const slug = props.router.params.slug;
+  // console.log(slug);
+  document.title = "Edit Cinema";
 
   const history = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getCreateCinemas());
+    dispatch(GetEditCinema(slug, props.router.navigate));
+    validation.resetForm();
   }, []);
 
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
 
-  const selectCinemaCreateState = (state) => state;
+  const selectCinemaEditState = (state) => state;
 
-  const CinemaCreatepageData = createSelector(
-    selectCinemaCreateState,
-    (state) => ({
-      SelectOption: state.Cinema.SelectOption,
-      error: state.Message.error,
-      messageError: state.Message.messageError,
-    })
-  );
+  const CinemaEditpageData = createSelector(selectCinemaEditState, (state) => ({
+    SelectOption: state.Cinema.SelectOption,
+    item: state.Cinema.item,
+    error: state.Message.error,
+    messageError: state.Message.messageError,
+  }));
 
-  const { SelectOption, error, messageError } =
-    useSelector(CinemaCreatepageData);
+  const { SelectOption, item, error, messageError } =
+    useSelector(CinemaEditpageData);
 
   useEffect(() => {
     if (error) {
@@ -91,13 +90,12 @@ const CinemaCreate = (props) => {
     enableReinitialize: true,
 
     initialValues: {
-      name: "",
-      phone: "",
-      Description: "",
-      address: "",
-      // Skill: [],
-      City_id: "",
-      fileList: [],
+      name: item.name || "",
+      phone: item.phone || "",
+      Description: item.description || "",
+      address: item.address || "",
+      City_id: item.city?.id || "",
+      fileList: item.images || [],
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Please Enter a Cinema name"),
@@ -112,7 +110,9 @@ const CinemaCreate = (props) => {
           Yup.mixed().test(
             "fileType",
             "Unsupported File Format",
-            (value) => value && value.type.startsWith("image/")
+            (value) =>
+              !value.originFileObj ||
+              (value.originFileObj && value.type.startsWith("image/"))
           )
         )
         .min(1, "Please upload at least one Image"),
@@ -120,17 +120,33 @@ const CinemaCreate = (props) => {
     onSubmit: (values) => {
       // console.log(values);
       const formData = new FormData();
+      formData.append("id", item.id);
       formData.append("name", values.name);
       formData.append("description", values.Description);
       formData.append("address", values.address);
       formData.append("city_id", values.City_id);
       formData.append("phone", values.phone);
-      values.fileList.forEach((file, index) => {
-        formData.append(`files[${index}]`, file.originFileObj);
+      // formData.append("files", values.fileList);
+      let fileIndex = 0;
+      let imageIndex = 0;
+
+      values.fileList.forEach((file) => {
+        if (file.originFileObj) {
+          formData.append(`files[${fileIndex}]`, file.originFileObj);
+          fileIndex += 1;
+        } else {
+          formData.append(`images[${imageIndex}]`, file.uid);
+          imageIndex += 1;
+        }
       });
-      dispatch(CreateCinemas(formData, props.router.navigate));
+
+      // const formDataEntries = Array.from(formData.entries());
+
+      // console.table("FormData entries:", formDataEntries);
+      dispatch(UpdateCinema(formData, props.router.navigate));
     },
   });
+
   // useEffect(() => {
   //   console.log("Current validation errors:", validation.errors);
   // }, [validation.errors]);
@@ -142,8 +158,10 @@ const CinemaCreate = (props) => {
     setPreviewImage(file.url || file.preview);
     setPreviewOpen(true);
   };
-  const handleChange = ({ fileList: newFileList }) =>
+
+  const handleChange = ({ fileList: newFileList }) => {
     validation.setFieldValue("fileList", newFileList);
+  };
 
   const uploadButton = (
     <button
@@ -167,7 +185,7 @@ const CinemaCreate = (props) => {
   return (
     <div className="page-content">
       <Container fluid>
-        <BreadCrumb title="Create Cinema" pageTitle="Cinema" />
+        <BreadCrumb title="Edit Cinema" pageTitle="Cinema" />
 
         <Form
           onSubmit={(e) => {
@@ -369,7 +387,7 @@ const CinemaCreate = (props) => {
                       src={previewImage}
                     />
                   )}
-                  {validation.errors.fileList ? (
+                  {validation.touched.fileList && validation.errors.fileList ? (
                     <div className="invalid-feedback d-block">
                       {validation.errors.fileList}
                     </div>
@@ -397,4 +415,4 @@ const CinemaCreate = (props) => {
   );
 };
 
-export default withRouter(CinemaCreate);
+export default withRouter(CinemaEdit);

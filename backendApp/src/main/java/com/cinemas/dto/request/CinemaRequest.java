@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 public class CinemaRequest {
 
-    private int id;
+    private Integer id;
 
     private String name;
 
@@ -26,8 +26,9 @@ public class CinemaRequest {
 
     private String description;
 
-    private int city_id;
+    private Integer city_id;
 
-//    private MultipartFile file;
     private List<MultipartFile> files;
+
+    private List<Integer> images;
 }
