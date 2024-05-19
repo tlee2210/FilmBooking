@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Entity
@@ -45,4 +46,7 @@ public class Celebrity {
     @ManyToOne
     @JoinColumn(name = "country_id")
     private Country country;
+
+    @ManyToMany(mappedBy = "celebrities")
+    private List<Movie> movies;
 }

@@ -19,6 +19,16 @@ public class FileStorageServiceImpl implements FileStorageService {
     private final Cloudinary cloudinary;
 
     public String uploadFile(MultipartFile file, String folderName) throws IOException {
+        String resourceType;
+        if(file.getContentType().startsWith("image/")){
+            resourceType = "image";
+        }
+        else if(file.getContentType().startsWith("video/")){
+            resourceType = "video";
+        }
+        else{
+            throw new IllegalArgumentException("File must be an image or a video");
+        }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         String timestamp = LocalDateTime.now().format(formatter);
@@ -27,10 +37,11 @@ public class FileStorageServiceImpl implements FileStorageService {
 
         Map<String, Object> uploadParams = Map.of(
                 "public_id", fullFileName,
-                "folder", folderName
+                "folder", folderName,
+                "resource_type", resourceType
         );
 
-        cloudinary.uploader().upload(file.getBytes(), uploadParams)
+        cloudinary.uploader().uploadLarge(file.getBytes(), uploadParams)
                 .get("url").toString();
         return folderName + "/" + fullFileName;
     }
