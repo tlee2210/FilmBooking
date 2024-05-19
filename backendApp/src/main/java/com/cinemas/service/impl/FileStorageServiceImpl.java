@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -19,21 +20,22 @@ public class FileStorageServiceImpl implements FileStorageService {
     private final Cloudinary cloudinary;
 
     public String uploadFile(MultipartFile file, String folderName) throws IOException {
+
         String resourceType;
-        if(file.getContentType().startsWith("image/")){
+        String contentType = file.getContentType();
+        if (contentType == null) {
+            throw new IllegalArgumentException("File content type cannot be null");
+        }
+        if (contentType.startsWith("image/")) {
             resourceType = "image";
-        }
-        else if(file.getContentType().startsWith("video/")){
+        } else if (contentType.startsWith("video/")) {
             resourceType = "video";
-        }
-        else{
+        } else {
             throw new IllegalArgumentException("File must be an image or a video");
         }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-        String timestamp = LocalDateTime.now().format(formatter);
-
-        String fullFileName = file.getName() + "_" + timestamp;
+        String uuid = UUID.randomUUID().toString();
+        String fullFileName = file.getOriginalFilename() + "_" + uuid;
 
         Map<String, Object> uploadParams = Map.of(
                 "public_id", fullFileName,
@@ -41,17 +43,20 @@ public class FileStorageServiceImpl implements FileStorageService {
                 "resource_type", resourceType
         );
 
-        cloudinary.uploader().uploadLarge(file.getBytes(), uploadParams)
-                .get("url").toString();
-        return folderName + "/" + fullFileName;
+        // Upload the file to Cloudinary
+        Map uploadResult = cloudinary.uploader().uploadLarge(file.getBytes(), uploadParams);
+
+        return (String) uploadResult.get("url");
     }
 
     public String getUrlFromPublicId(String publicId) {
         String url = cloudinary.url().publicId(publicId).generate();
+
         return url;
     }
 
     public Map<String, Object> deleteFile(String publicId) throws IOException {
+
         return cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
     }
 }

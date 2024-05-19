@@ -6,7 +6,7 @@ export const getCinema = (formData, history) => async (dispatch) => {
   await axios
     .post(`http://localhost:8081/api/admin/v1/cinema`, formData)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(
         fetchSuccess({
           data: response.data?.result,

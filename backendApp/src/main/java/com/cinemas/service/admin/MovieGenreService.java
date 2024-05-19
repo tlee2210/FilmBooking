@@ -1,4 +1,4 @@
-package com.cinemas.service;
+package com.cinemas.service.admin;
 
 import com.cinemas.dto.request.MovieGenreRequest;
 import com.cinemas.entities.MovieGenre;

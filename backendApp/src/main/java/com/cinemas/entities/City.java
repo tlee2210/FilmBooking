@@ -1,6 +1,9 @@
 package com.cinemas.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +19,8 @@ import java.util.List;
 @Entity
 @Builder
 @Table(name = "city")
+@JsonIgnoreProperties({"cinemas"})
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class City {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,9 +32,10 @@ public class City {
 
     private String slug;
 
-    @OneToMany(mappedBy = "city", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonIgnore
-    @Transient
+    @OneToMany(mappedBy = "city", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JsonIgnore
+//    @Transient
+//    @JsonManagedReference
     private List<Cinema> cinemas;
 
 }

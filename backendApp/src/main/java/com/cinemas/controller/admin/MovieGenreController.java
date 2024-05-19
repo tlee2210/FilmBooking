@@ -1,8 +1,8 @@
-package com.cinemas.controller;
+package com.cinemas.controller.admin;
 
 import com.cinemas.dto.request.MovieGenreRequest;
 import com.cinemas.entities.MovieGenre;
-import com.cinemas.service.MovieGenreService;
+import com.cinemas.service.admin.MovieGenreService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/movie-genre")
+@RequestMapping("/api/admin/v1/movie-genre")
 @Tag(name = "Movie Genre Controller")
 public class MovieGenreController {
     @Autowired

@@ -16,10 +16,13 @@ import java.util.List;
 public class MovieGenre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column
     private String name;
+
+    @Column
+    private String slug;
 
     @ManyToMany(mappedBy = "genres")
     private List<Movie> movies;

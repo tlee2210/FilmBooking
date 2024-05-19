@@ -108,9 +108,73 @@ public class CinemaServiceImpl implements CinemaService {
         return new EditSelectOptionReponse<>(options, cinema);
     }
 
+//    @Override
+//    public boolean updateCinema(CinemaRequest cinemaRequest) throws IOException {
+//
+//        Cinema cinema = cinemaRespository
+//                .findById(cinemaRequest.getId())
+//                .orElseThrow(() -> new AppException(NOT_FOUND));
+//
+//        if (cinemaRespository.findByNameWithId(cinemaRequest.getName(), cinemaRequest.getId()) != null) {
+//            throw new AppException(NAME_EXISTED);
+//        }
+//
+//        ObjectUtils.copyFields(cinemaRequest, cinema);
+//        cinema.setSlug(cinemaRequest.getName().toLowerCase().replaceAll("\\s+", "-"));
+//
+//        cinema.setCity(cityRepository
+//                .findById(cinemaRequest.getCity_id())
+//                .orElseThrow(() -> new AppException(UPDATE_FAILED)));
+//
+//        List<Integer> newImageUrls = cinemaRequest.getImages();
+//
+//        List<CinemaImages> cinemaImages = cinemaImageRespository.findCinemaImagesByCinema_Id(cinema.getId());
+//
+//        cinema.setImages(new ArrayList<>());
+//        cinemaRespository.save(cinema);
+//
+//        if (newImageUrls != null) {
+//            for (CinemaImages images : cinemaImages) {
+//                if (!(newImageUrls.contains(images.getUid()))) {
+//                    images.setCinema(null);
+//
+//                    fileStorageServiceImpl.deleteFile(images.getUrl());
+//
+//                    cinemaImageRespository.deleteByUid(images.getUid());
+//                }
+//            }
+//        } else {
+//            for (CinemaImages images : cinemaImages) {
+//                images.setCinema(null);
+//
+//                fileStorageServiceImpl.deleteFile(images.getUrl());
+//
+//                cinemaImageRespository.deleteByUid(images.getUid());
+//            }
+//        }
+//
+//
+//        if (cinemaRequest.getFiles() != null) {
+//
+//            List<MultipartFile> files = cinemaRequest.getFiles();
+//            List<CinemaImages> newImages = new ArrayList<>();
+//
+//            for (MultipartFile file : files) {
+//                CinemaImages image = new CinemaImages();
+//                image.setUrl(fileStorageServiceImpl.uploadFile(file, "cinemas"));
+//                image.setCinema(cinema);
+//                newImages.add(image);
+//            }
+//
+//            cinemaImageRespository.saveAll(newImages);
+//        }
+//
+//        return true;
+//    }
+
     @Override
     public boolean updateCinema(CinemaRequest cinemaRequest) throws IOException {
-
+        // Fetch the cinema and city entities
         Cinema cinema = cinemaRespository
                 .findById(cinemaRequest.getId())
                 .orElseThrow(() -> new AppException(NOT_FOUND));
@@ -126,51 +190,58 @@ public class CinemaServiceImpl implements CinemaService {
                 .findById(cinemaRequest.getCity_id())
                 .orElseThrow(() -> new AppException(UPDATE_FAILED)));
 
-        List<Integer> newImageUrls = cinemaRequest.getImages();
-
         List<CinemaImages> cinemaImages = cinemaImageRespository.findCinemaImagesByCinema_Id(cinema.getId());
 
         cinema.setImages(new ArrayList<>());
         cinemaRespository.save(cinema);
 
-        if (newImageUrls != null) {
-            for (CinemaImages images : cinemaImages) {
-                if (!(newImageUrls.contains(images.getUid()))) {
-                    images.setCinema(null);
+        if (cinemaRequest.getImages() != null) {
+            List<Integer> newImageUrls = cinemaRequest.getImages();
 
-                    fileStorageServiceImpl.deleteFile(images.getUrl());
+            List<CinemaImages> imagesToDelete = cinemaImages.stream()
+                    .filter(images -> !newImageUrls.contains(images.getUid()))
+                    .peek(images -> {
+                        images.setCinema(null);
+                        try {
+                            fileStorageServiceImpl.deleteFile(images.getUrl());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    })
+                    .collect(Collectors.toList());
 
-                    cinemaImageRespository.deleteByUid(images.getUid());
-                }
-            }
+            cinemaImageRespository.deleteAll(imagesToDelete);
         } else {
-            for (CinemaImages images : cinemaImages) {
+            cinemaImages.forEach(images -> {
                 images.setCinema(null);
-
-                fileStorageServiceImpl.deleteFile(images.getUrl());
-
-                cinemaImageRespository.deleteByUid(images.getUid());
-            }
+                try {
+                    fileStorageServiceImpl.deleteFile(images.getUrl());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            cinemaImageRespository.deleteAll(cinemaImages);
         }
 
-
         if (cinemaRequest.getFiles() != null) {
-
             List<MultipartFile> files = cinemaRequest.getFiles();
-            List<CinemaImages> newImages = new ArrayList<>();
-
-            for (MultipartFile file : files) {
+            List<CinemaImages> newImages = files.stream().map(file -> {
                 CinemaImages image = new CinemaImages();
-                image.setUrl(fileStorageServiceImpl.uploadFile(file, "cinemas"));
+                try {
+                    image.setUrl(fileStorageServiceImpl.uploadFile(file, "cinemas"));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 image.setCinema(cinema);
-                newImages.add(image);
-            }
+                return image;
+            }).collect(Collectors.toList());
 
             cinemaImageRespository.saveAll(newImages);
         }
 
         return true;
     }
+
 
     @Override
     public List<SelectOptionReponse> getCreateCinema() {

@@ -20,13 +20,9 @@ public class CinemaImages {
     @Column()
     private String url;
 
-//    @Transient
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "cinema_id", referencedColumnName = "id")
     Cinema cinema;
 
-//    @Column(name = "cinemaId")
-//    @JsonIgnore
-//    private Integer cinemaId;
 }

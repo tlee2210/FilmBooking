@@ -21,6 +21,7 @@ public class CountryDataInitializer {
                 "South Korean", "Swedish", "Dutch", "Norwegian", "Swiss", "Greek"};
 
         List<Country> countries = new ArrayList<>();
+
         for (String nationality : nationalities) {
             Country country = Country.builder()
                     .name(nationality)

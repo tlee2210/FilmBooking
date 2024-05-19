@@ -1,12 +1,11 @@
-package com.cinemas.service.impl;
+package com.cinemas.service.impl.admin;
 
 import com.cinemas.dto.request.MovieGenreRequest;
 import com.cinemas.entities.MovieGenre;
 import com.cinemas.repositories.MovieGenreRepository;
-import com.cinemas.service.MovieGenreService;
+import com.cinemas.service.admin.MovieGenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
