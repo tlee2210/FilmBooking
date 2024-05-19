@@ -52,6 +52,7 @@ public class CelebrityController {
         APIResponse<List<SelectOptionReponse>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(countryList);
+
         return apiResponse;
     }
 
@@ -69,8 +70,10 @@ public class CelebrityController {
             APIResponse<String> apiResponse = new APIResponse();
             apiResponse.setCode(200);
             apiResponse.setMessage("Celebrity created successfully");
+
             return apiResponse;
         }
+
         throw new AppException(CREATE_FAILED);
     }
 
@@ -90,6 +93,7 @@ public class CelebrityController {
             apiResponse.setCode(200);
             apiResponse.setMessage("Successfully deleted celeb");
             apiResponse.setResult(id);
+
             return apiResponse;
         }
         throw new AppException(CREATE_FAILED);
@@ -120,14 +124,16 @@ public class CelebrityController {
      */
     @PutMapping(value = "/update")
     public APIResponse<String> updateCelebrity(@ModelAttribute CelebrityRequest celebrity) throws IOException {
-        System.out.println(celebrity);
+//        System.out.println(celebrity);
         boolean checkUpdate = celebrityService.updateCelebrity(celebrity);
         if (checkUpdate) {
             APIResponse<String> apiResponse = new APIResponse();
             apiResponse.setCode(200);
             apiResponse.setMessage("Celebrity Update successfully");
+
             return apiResponse;
         }
+
         throw new AppException(UPDATE_FAILED);
     }
 }

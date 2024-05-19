@@ -34,8 +34,10 @@ axios.interceptors.response.use(
       default:
         // message = error.message || error;
         message = error;
+        break;
     }
     return Promise.reject(message);
+    // return Promise.reject(error);
   }
 );
 /**

@@ -16,22 +16,22 @@ import java.util.List;
 public class Cinema {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
-    private int id;
+//    @Column(unique = true, nullable = false)
+    private Integer id;
 
-    @Column(nullable = false)
+    @Column
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private String slug;
 
-    @Column(nullable = false)
+    @Column
     private String address;
 
-    @Column(nullable = false)
+    @Column
     private String phone;
 
-    @Column(nullable = false)
+    @Column
 //    @Size(min = 10, max = 255, message = "Max 255")
     private String description;
 
@@ -40,6 +40,7 @@ public class Cinema {
     private City city;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cinema", cascade = CascadeType.ALL)
+//    @JoinColumn(name = "cinemaId")
     private List<CinemaImages> images;
 
     @ManyToMany(mappedBy = "cinemas")

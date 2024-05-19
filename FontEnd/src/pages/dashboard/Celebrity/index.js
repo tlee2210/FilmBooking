@@ -197,7 +197,7 @@ const Celebrity = (props) => {
                           to={`/dashboard/celebrity/create`}
                         >
                           <i className="ri-add-line align-bottom me-1"></i> Add
-                          New Profile
+                          New
                         </Link>
                       </div>
                     </div>

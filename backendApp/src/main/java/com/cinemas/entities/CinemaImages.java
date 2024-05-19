@@ -13,14 +13,20 @@ import lombok.NoArgsConstructor;
 @Table(name = "cinema_images")
 public class CinemaImages {
     @Id
+    @Column(name = "uid")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int uid;
+    private Integer uid;
 
-    @Column(nullable = false)
+    @Column()
     private String url;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cinema_id", referencedColumnName = "id")
+//    @Transient
+    @ManyToOne
     @JsonIgnore
+    @JoinColumn(name = "cinema_id", referencedColumnName = "id")
     Cinema cinema;
+
+//    @Column(name = "cinemaId")
+//    @JsonIgnore
+//    private Integer cinemaId;
 }

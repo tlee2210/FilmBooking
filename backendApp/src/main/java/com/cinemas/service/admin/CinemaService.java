@@ -2,6 +2,7 @@ package com.cinemas.service.admin;
 
 import com.cinemas.dto.request.CinemaRequest;
 import com.cinemas.dto.request.PaginationHelper;
+import com.cinemas.dto.response.EditSelectOptionReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Cinema;
 import org.springframework.data.domain.Page;
@@ -17,4 +18,8 @@ public interface CinemaService {
     Page<Cinema> getAllCinema(PaginationHelper PaginationHelper);
 
     Integer deleteCinema(String slug) throws IOException;
+
+    EditSelectOptionReponse<Cinema> getCinemaEdit(String slug);
+
+    boolean updateCinema(CinemaRequest cinemaRequest) throws IOException;
 }

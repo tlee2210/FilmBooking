@@ -21,6 +21,12 @@ public class CityController {
     @Autowired
     private CityService cityService;
 
+    /**
+     * get all City
+     *
+     * @param PaginationHelper
+     * @return
+     */
     @PostMapping("")
     public APIResponse<Page<CityResponse>> getAllCities(@RequestBody(required = false) PaginationHelper PaginationHelper) {
         Page<CityResponse> cityList = cityService.getCitiesAll(PaginationHelper);
@@ -31,6 +37,12 @@ public class CityController {
         return apiResponse;
     }
 
+    /**
+     * get City By Id
+     *
+     * @param id
+     * @return
+     */
     @GetMapping("/{id}/edit")
     public APIResponse<CityResponse> getCityById(@PathVariable int id) {
 
@@ -41,6 +53,12 @@ public class CityController {
         return apiResponse;
     }
 
+    /**
+     * create new a City
+     *
+     * @param city
+     * @return
+     */
     @PostMapping(value = "/create")
     public APIResponse<String> createCity(@RequestBody CityRequest city) {
         boolean check = cityService.addCity(city);
@@ -53,6 +71,12 @@ public class CityController {
         throw new AppException(UPDATE_FAILED);
     }
 
+    /**
+     * delete a City by id
+     *
+     * @param id
+     * @return
+     */
     @DeleteMapping("/delete/{id}")
     public APIResponse<String> deleteCity(@PathVariable int id) {
         boolean check = cityService.deleteCity(id);
@@ -65,6 +89,12 @@ public class CityController {
         throw new AppException(CREATE_FAILED);
     }
 
+    /**
+     * update a City
+     *
+     * @param city
+     * @return
+     */
     @PutMapping(value = "/update")
     public APIResponse<String> updateCity(@RequestBody CityRequest city) {
 

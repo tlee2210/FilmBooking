@@ -20,7 +20,7 @@ import java.util.List;
 public class Celebrity {
     @Id
     @GeneratedValue
-    private int id;
+    private Integer id;
 
     @Column
     private String name;

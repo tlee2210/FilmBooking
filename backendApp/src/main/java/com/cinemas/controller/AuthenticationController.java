@@ -81,6 +81,13 @@ public class AuthenticationController {
         return apiResponse;
     }
 
+    /**
+     * check email and send eamil Otp
+     *
+     * @param email
+     * @return
+     * @throws MessagingException
+     */
     @PostMapping("/verifyMail")
     public APIResponse<String> verifyEmail(@RequestBody verifyMailrequest email) throws MessagingException {
 
@@ -94,6 +101,13 @@ public class AuthenticationController {
         return apiResponse;
     }
 
+    /**
+     * check eamil and Otp
+     *
+     * @param otp
+     * @param id
+     * @return
+     */
     @GetMapping("/verifyOtp/{otp}/{id}")
     public APIResponse<String> verifyOtp(@PathVariable String otp, @PathVariable String id) {
         String response = authenticationService.verifyOtp(otp, id);
@@ -106,6 +120,13 @@ public class AuthenticationController {
         return apiResponse;
     }
 
+    /**
+     * reset password By id
+     *
+     * @param changePassword
+     * @param id
+     * @return
+     */
     @PostMapping("/changePassword/{id}")
     public APIResponse<String> changePasswordHandler(@RequestBody ChangePassword changePassword,
                                                      @PathVariable int id) {
@@ -119,7 +140,12 @@ public class AuthenticationController {
         return apiResponse;
     }
 
-
+    /**
+     * signin with google
+     *
+     * @param tokenMap
+     * @return
+     */
     @PostMapping("/auth/google")
     public APIResponse<String> signinWithgoogle(@RequestBody Map<String, String> tokenMap) {
         String jwt = tokenMap.get("token");
