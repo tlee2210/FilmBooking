@@ -160,6 +160,5 @@ public class AuthenticationController {
         apiResponse.setCode(200);
 
         return apiResponse;
-
     }
 }
