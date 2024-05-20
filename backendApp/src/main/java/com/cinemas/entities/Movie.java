@@ -21,13 +21,13 @@ public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
-    private int duration;
+    private Integer duration;
 
     @ManyToOne
     @JoinColumn(name = "country_id", nullable = false)
