@@ -1,6 +1,7 @@
 package com.cinemas.entities;
 
 import com.cinemas.enums.RoleCeleb;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -48,5 +49,6 @@ public class Celebrity {
     private Country country;
 
     @ManyToMany(mappedBy = "celebrities")
+    @JsonIgnore
     private List<Movie> movies;
 }

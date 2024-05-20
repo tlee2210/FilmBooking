@@ -9,6 +9,7 @@ public interface FileStorageService {
     String uploadFile(MultipartFile file, String folderName) throws IOException;
 
     String getUrlFromPublicId(String publicId);
+    String getVideoFromPublicId(String publicId);
 
     //    void deleteFile(String publicId, String resourceType);
     Map<String, Object> deleteFile(String publicId) throws IOException;

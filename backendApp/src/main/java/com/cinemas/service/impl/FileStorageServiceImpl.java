@@ -75,6 +75,11 @@ public class FileStorageServiceImpl implements FileStorageService {
         return url;
     }
 
+    public String getVideoFromPublicId(String publicId) {
+        String url = cloudinary.url().publicId(publicId).resourceType("video").generate();
+        return url;
+    }
+
     public Map<String, Object> deleteFile(String publicId) throws IOException {
 
         return cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());

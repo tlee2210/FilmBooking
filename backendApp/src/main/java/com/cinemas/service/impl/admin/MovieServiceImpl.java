@@ -171,7 +171,7 @@ public class MovieServiceImpl implements MovieService {
         if (movie == null) throw new AppException(NOT_FOUND);
 
         movie.setImage(fileStorageServiceImpl.getUrlFromPublicId(movie.getImage()));
-        movie.setTrailer(fileStorageServiceImpl.getUrlFromPublicId(movie.getTrailer()));
+        movie.setTrailer(fileStorageServiceImpl.getVideoFromPublicId(movie.getTrailer()));
 
         List<SelectOptionReponse> options = new ArrayList<>();
 

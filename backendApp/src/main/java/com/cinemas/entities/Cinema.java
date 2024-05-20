@@ -1,6 +1,7 @@
 package com.cinemas.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -43,5 +44,6 @@ public class Cinema {
     private List<CinemaImages> images;
 
     @ManyToMany(mappedBy = "cinemas")
+    @JsonIgnore
     private List<Movie> movies;
 }

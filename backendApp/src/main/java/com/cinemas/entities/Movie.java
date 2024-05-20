@@ -1,5 +1,6 @@
 package com.cinemas.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -74,6 +75,7 @@ public class Movie {
     private List<Celebrity> celebrities;
 
     @ManyToMany
+    @JsonIgnore
     @JoinTable(
             name = "cinema_movie",
             joinColumns = @JoinColumn(name = "movie_id"),
