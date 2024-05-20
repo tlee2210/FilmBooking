@@ -7,6 +7,22 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface MovieRepository extends JpaRepository<Movie, Integer> {
-    @Query("SELECT m FROM Movie m JOIN FETCH m.celebrities JOIN FETCH m.cinemas JOIN FETCH m.country JOIN FETCH m.genres")
-    List<Movie> findAllWithDetail();
+    @Query("SELECT DISTINCT m FROM Movie m " +
+            "JOIN FETCH m.country co " +
+            "LEFT JOIN FETCH m.genres g")
+    List<Movie> findAllWithBasicDetail();
+
+    @Query("SELECT DISTINCT m FROM Movie m " +
+            "LEFT JOIN FETCH m.celebrities c " +
+            "WHERE m IN :movies")
+    List<Movie> findAllWithCelebrities(List<Movie> movies);
+
+    @Query("SELECT DISTINCT m FROM Movie m " +
+            "LEFT JOIN FETCH m.cinemas ci " +
+            "WHERE m IN :movies")
+    List<Movie> findAllWithCinemas(List<Movie> movies);
+
+    Movie findByName(String name);
+
+    Movie findBySlug(String slug);
 }
