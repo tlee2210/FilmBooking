@@ -59,7 +59,8 @@ const City = lazy(() => import("../pages/dashboard/city"));
 const CinemaCreate = lazy(() => import("../pages/dashboard/Cinemas/create"));
 const CinemaEdit = lazy(() => import("../pages/dashboard/Cinemas/edit"));
 const Cinemas = lazy(() => import("../pages/dashboard/Cinemas/index"));
-
+const CinemaCorners =lazy(() => import("../pages/dashboard/CinemaCorner/index"));
+const DaoDien =lazy(() => import("../pages/dashboard/CinemaCorner/daoDien"));
 const authProtectedRoutes = [
   //User Profile
   { path: "/profile", component: <UserProfile /> },
@@ -97,4 +98,10 @@ const publicRoutes = [
 
 const homeRoutes = [{ path: "/", component: <Home /> }];
 
-export { authProtectedRoutes, publicRoutes, homeRoutes };
+const CinemaCornerRoutes = [
+  { path: "/dien-vien", component: <CinemaCorners /> },
+  { path: "/dao-dien", component: <DaoDien /> }
+];
+
+
+export { authProtectedRoutes, publicRoutes, homeRoutes, CinemaCornerRoutes };

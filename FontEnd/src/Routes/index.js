@@ -8,7 +8,7 @@ import VerticalLayout from "../Layouts/index";
 import LayoutHome from "../Layouts/home/index";
 
 //routes
-import { authProtectedRoutes, publicRoutes, homeRoutes } from "./allRoutes";
+import { authProtectedRoutes, publicRoutes, homeRoutes, CinemaCornerRoutes } from "./allRoutes";
 import { AuthProtected } from "./AuthProtected";
 
 const loading = (
@@ -42,6 +42,17 @@ const Index = () => {
                 exact={true}
               />
             ))}
+          </Route>
+          {CinemaCornerRoutes.map((route, idx) => (
+            <Route
+              path={route.path}
+              element={<LayoutHome>{route.component}</LayoutHome>}
+              key={idx}
+              exact={true}
+            />
+          ))}
+          <Route>
+
           </Route>
 
           <Route>

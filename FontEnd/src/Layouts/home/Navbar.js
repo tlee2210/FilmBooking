@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Scrollspy from "react-scrollspy";
-import { Collapse, Container, NavbarToggler, NavLink } from "reactstrap";
+import { Collapse, Container, NavbarToggler, NavLink, Dropdown, dropdownOpen, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
 import LogoDark from "../../assets/images/logo-dark.png";
 import LogoLight from "../../assets/images/logo-light.png";
 
 import Ticket from "../../assets/images/Ticket.png";
+import { color } from "echarts";
 
 const Navbar = () => {
   const [isOpenMenu, setisOpenMenu] = useState(false);
   const [navClass, setnavClass] = useState("");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggle = () => setisOpenMenu(!isOpenMenu);
+  const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
 
   useEffect(() => {
     window.addEventListener("scroll", scrollNavigation, true);
@@ -64,7 +67,7 @@ const Navbar = () => {
         id="navbar"
       >
         <Container fluid className="custom-container">
-          <Link className="navbar-brand" to="/index">
+          <Link className="navbar-brand" to="/">
             <img
               src={LogoDark}
               className="card-logo card-logo-dark"
@@ -125,6 +128,34 @@ const Navbar = () => {
                 <NavLink className="fs-16" href="#Movies">
                   Movies
                 </NavLink>
+              </li>
+              <li
+                className='nav-item'
+                onMouseEnter={() => setDropdownOpen(true)}
+                onMouseLeave={() => setDropdownOpen(false)}
+              >
+                <Dropdown isOpen={dropdownOpen} toggle={toggleDropdown}>
+                  <DropdownToggle className='fs-16 nav-link' caret style={{ backgroundColor: 'transparent', color: 'black', borderColor: 'transparent' }}>
+                    Cinema Corner
+                  </DropdownToggle>
+                  <DropdownMenu style={{boxShadow:"20px 20px 50px 10px #95d8f3 inset"}}>
+                    <DropdownItem tag={Link} to='/the-loai-phim'>
+                      Thể Loại Phim
+                    </DropdownItem>
+                    <DropdownItem tag={Link} to='/dien-vien'>
+                      Diễn Viên
+                    </DropdownItem>
+                    <DropdownItem tag={Link} to='/dao-dien'>
+                      Đạo Diễn
+                    </DropdownItem>
+                    <DropdownItem tag={Link} to='/Cinema-Corner'>
+                      Bình Luận Phim
+                    </DropdownItem>
+                    <DropdownItem tag={Link} to='/Cinema-Corner'>
+                      Blog Điện Ảnh
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
               </li>
               <li className="nav-item">
                 <NavLink className="fs-16" href="#Cinema">
