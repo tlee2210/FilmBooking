@@ -54,7 +54,7 @@ const CelebrityCreate = lazy(() =>
 );
 const CelebrityEdit = lazy(() => import("../pages/dashboard/Celebrity/edit"));
 
-const City = lazy(() => import("../pages/dashboard/City/index"));
+const City = lazy(() => import("../pages/dashboard/city/index"));
 
 const CinemaCreate = lazy(() => import("../pages/dashboard/Cinemas/create"));
 const CinemaEdit = lazy(() => import("../pages/dashboard/Cinemas/edit"));

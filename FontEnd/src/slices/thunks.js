@@ -8,5 +8,5 @@ export * from "./auth/forgetpwd/thunk";
 export * from "./auth/profile/thunk";
 
 export * from "./Celebrity/thunk";
-export * from "./City/thunk";
+export * from "./city/thunk";
 export * from "./Cinemas/thunk";
