@@ -3,6 +3,7 @@ package com.cinemas.controller.admin;
 import com.cinemas.dto.request.MovieRequest;
 import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.response.APIResponse;
+import com.cinemas.dto.response.EditSelectOptionReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Celebrity;
 import com.cinemas.entities.Movie;
@@ -88,5 +89,15 @@ public class MovieController {
         }
 
         throw new AppException(CREATE_FAILED);
+    }
+
+    @GetMapping("/{slug}/edit")
+    public APIResponse<EditSelectOptionReponse<Movie>> getMovieBySlug(@PathVariable String slug) throws IOException {
+        APIResponse<EditSelectOptionReponse<Movie>> apiResponse = new APIResponse();
+
+        apiResponse.setCode(200);
+        apiResponse.setResult(movieService.getEditCelebrityBySlug(slug));
+
+        return apiResponse;
     }
 }

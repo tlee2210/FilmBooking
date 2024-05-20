@@ -3,6 +3,7 @@ package com.cinemas.service.impl.admin;
 import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.MovieRequest;
 import com.cinemas.dto.request.PaginationHelper;
+import com.cinemas.dto.response.EditSelectOptionReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.*;
 import com.cinemas.exception.AppException;
@@ -158,8 +159,46 @@ public class MovieServiceImpl implements MovieService {
         if (movie == null) throw new AppException(NOT_FOUND);
 
         fileStorageServiceImpl.deleteFile(movie.getImage());
-        fileStorageServiceImpl.deleteFile(movie.getTrailer());
+        fileStorageServiceImpl.deleteVideo(movie.getTrailer(), "video");
         movieRepository.delete(movie);
         return movie.getId();
+    }
+
+    @Override
+    public EditSelectOptionReponse<Movie> getEditCelebrityBySlug(String slug) {
+        Movie movie = movieRepository.findBySlug(slug);
+
+        if (movie == null) throw new AppException(NOT_FOUND);
+
+        movie.setImage(fileStorageServiceImpl.getUrlFromPublicId(movie.getImage()));
+        movie.setTrailer(fileStorageServiceImpl.getUrlFromPublicId(movie.getTrailer()));
+
+        List<SelectOptionReponse> options = new ArrayList<>();
+
+        //list Country
+        List<Country> countryList = countryRepository.findAll();
+        for (Country country : countryList) {
+            options.add(new SelectOptionReponse(country.getId(), country.getName()));
+        }
+
+        //list cinema
+        List<Cinema> cinemaList = cinemaRespository.findAll();
+        for(Cinema cinema : cinemaList) {
+            options.add(new SelectOptionReponse(cinema.getId(), cinema.getName()));
+        }
+
+        //list celeb
+        List<Celebrity> celebrityList = celebrityRepository.findAll();
+        for(Celebrity celebrity : celebrityList) {
+            options.add(new SelectOptionReponse(celebrity.getId(), celebrity.getName()));
+        }
+
+        //list movie genre
+        List<MovieGenre> movieGenreList = movieGenreRepository.findAll();
+        for (MovieGenre movieGenre : movieGenreList) {
+            options.add(new SelectOptionReponse(movieGenre.getId(), movieGenre.getName()));
+        }
+
+        return new EditSelectOptionReponse<>(options, movie);
     }
 }

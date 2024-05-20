@@ -12,4 +12,5 @@ public interface FileStorageService {
 
     //    void deleteFile(String publicId, String resourceType);
     Map<String, Object> deleteFile(String publicId) throws IOException;
+    Map<String, Object> deleteVideo(String publicId, String resourceType) throws IOException;
 }
