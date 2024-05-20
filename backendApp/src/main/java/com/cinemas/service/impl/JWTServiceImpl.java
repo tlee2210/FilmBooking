@@ -48,7 +48,7 @@ public class JWTServiceImpl implements JWTService {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))  // 24 hours
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
                 .signWith(getPrivateKey(), SignatureAlgorithm.ES256)
                 .compact();
     }
@@ -61,22 +61,6 @@ public class JWTServiceImpl implements JWTService {
         final Claims claims = extractAllClaims(token);
         return claimsTFunction.apply(claims);
     }
-
-//    private PrivateKey getSignKey() {
-//        try {
-//            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
-//
-//            ECGenParameterSpec ecSpec = new ECGenParameterSpec("secp256r1");
-//
-//            keyPairGenerator.initialize(ecSpec, new SecureRandom());
-//
-//            KeyPair keyPair = keyPairGenerator.generateKeyPair();
-//
-//            return keyPair.getPrivate();
-//        } catch (Exception e) {
-//            throw new IllegalStateException("Error generating ECDSA key", e);
-//        }
-//    }
 
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()

@@ -30,14 +30,14 @@ import { message } from "antd";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { clearNotification } from "../../../slices/message/reducer";
-import { clearCity } from "../../../slices/city/reducer";
+import { clearCity } from "../../../slices/City/reducer";
 import {
   getcity,
   CreateCity,
   deleteCity,
   GetEditCity,
   UpdateCity,
-} from "../../../slices/city/thunk";
+} from "../../../slices/City/thunk";
 
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";

@@ -26,6 +26,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
     private final JwtTokenFilter jwtTokenFilter;
+
     private final UserService userService;
 
     @Bean
@@ -43,6 +44,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/user").hasAnyAuthority(RoleType.USER.name())
                         .anyRequest().authenticated())
 //                .oauth2Login(withDefaults())
+
                 .sessionManagement(mannager -> mannager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)

@@ -53,7 +53,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setRole(RoleType.USER);
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
         user.setDOB(signUpRequest.getDOB());
-        System.out.println(user);
+//        System.out.println(user);
 
         if (user == null)
             throw new IllegalArgumentException("User creation failed");
@@ -173,6 +173,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     public static String optGenerator() {
+
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@$&*";
         Random random = new Random();
         StringBuilder sb = new StringBuilder(220);

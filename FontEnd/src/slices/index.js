@@ -11,7 +11,7 @@ import ProfileReducer from "./auth/profile/reducer";
 import MessageReducer from "./message/reducer";
 
 import CelebrityReducer from "./Celebrity/reducer";
-import CityReducer from "./city/reducer";
+import CityReducer from "./City/reducer";
 import CinemaReducer from "./Cinemas/reducer";
 
 const rootReducer = combineReducers({
