@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import { createSelector } from "reselect";
 import withRouter from "../../../Components/Common/withRouter";
+import { GoogleApiWrapper, Map, Marker } from "google-maps-react";
 
 import {
   Card,
@@ -25,11 +26,15 @@ import {
 import { PlusOutlined } from "@ant-design/icons";
 import { Image, Upload, message } from "antd";
 
+const mapStyles = {
+  width: "100%",
+  height: "100%",
+};
+
 // Redux
 import { useDispatch, useSelector } from "react-redux";
 import { getCreateCinemas, CreateCinemas } from "../../../slices/Cinemas/thunk";
 import { clearNotification } from "../../../slices/message/reducer";
-
 
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
@@ -49,11 +54,36 @@ const getBase64 = (file) =>
     reader.onerror = (error) => reject(error);
   });
 
+const getLatLng = async (address, apiKey) => {
+  console.log("address : ", address);
+  console.log("apiKey : ", apiKey);
+  const response = await axios.get(
+    "https://api.opencagedata.com/geocode/v1/json",
+    {
+      params: {
+        q: address,
+        key: apiKey,
+      },
+    }
+  );
+  if (response.data.results.length > 0) {
+    return response.data.results[0].geometry.location;
+  } else {
+    throw new Error("No coordinates were found for this address.");
+  }
+};
+
 const CinemaCreate = (props) => {
   document.title = "Create Cinema";
 
   const history = useNavigate();
   const dispatch = useDispatch();
+
+  const [mapCenter, setMapCenter] = useState({ lat: 48.0, lng: -122.0 });
+  const [markerPosition, setMarkerPosition] = useState({
+    lat: 48.0,
+    lng: -122.0,
+  });
 
   useEffect(() => {
     dispatch(getCreateCinemas());
@@ -134,6 +164,28 @@ const CinemaCreate = (props) => {
   // useEffect(() => {
   //   console.log("Current validation errors:", validation.errors);
   // }, [validation.errors]);
+
+  useEffect(() => {
+    const fetchLatLng = async () => {
+      if (validation.values.address) {
+        try {
+          console.log(validation.values.address);
+          console.log(props.google.maps.ApiKey);
+
+          const location = await getLatLng(
+            validation.values.address,
+            "23c35984bc6f42268abd8516ce6529d2"
+          );
+          console.log(JSON.stringify(location));
+          setMapCenter(location);
+          setMarkerPosition(location);
+        } catch (error) {
+          message.error("Không thể lấy tọa độ từ địa chỉ");
+        }
+      }
+    };
+    fetchLatLng();
+  }, [validation.values.address, props.google.maps.ApiKey]);
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -312,27 +364,6 @@ const CinemaCreate = (props) => {
                       </div>
                     </Col>
                   </Row>
-
-                  <div>
-                    <Label>Description</Label>
-                    <CKEditor
-                      editor={ClassicEditor}
-                      data={validation.values.Description}
-                      onChange={(event, editor) => {
-                        const data = editor.getData();
-                        validation.setFieldValue("Description", data);
-                      }}
-                      onBlur={() =>
-                        validation.setFieldTouched("Description", true)
-                      }
-                    />
-                    {validation.touched.Description &&
-                    validation.errors.Description ? (
-                      <div className="invalid-feedback d-block">
-                        {validation.errors.Description}
-                      </div>
-                    ) : null}
-                  </div>
                 </CardBody>
               </Card>
             </Col>
@@ -351,7 +382,7 @@ const CinemaCreate = (props) => {
                     onPreview={handlePreview}
                     onChange={handleChange}
                   >
-                    {validation.values.fileList.length >= 5
+                    {validation.values.fileList.length >= 4
                       ? null
                       : uploadButton}
                   </Upload>
@@ -377,12 +408,56 @@ const CinemaCreate = (props) => {
                 </CardBody>
               </Card>
             </Col>
-            <Col md={12}>
+            <Col md={8}>
               <Card>
                 <CardHeader>
-                  <h5 className="card-title mb-0">image</h5>
+                  <h5 className="card-title mb-0">Description</h5>
                 </CardHeader>
-                <CardBody></CardBody>
+                <CardBody>
+                  {" "}
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={validation.values.Description}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      validation.setFieldValue("Description", data);
+                    }}
+                    onBlur={() =>
+                      validation.setFieldTouched("Description", true)
+                    }
+                  />
+                  {validation.touched.Description &&
+                  validation.errors.Description ? (
+                    <div className="invalid-feedback d-block">
+                      {validation.errors.Description}
+                    </div>
+                  ) : (
+                    <div className="invalid-feedback d-block"></div>
+                  )}
+                </CardBody>
+              </Card>
+            </Col>
+            <Col md={4}>
+              <Card>
+                <CardHeader>
+                  <h5 className="card-title mb-0">Google Map</h5>
+                </CardHeader>
+                <CardBody>
+                  <div
+                    id="gmaps-markers"
+                    className="gmaps"
+                    style={{ position: "relative" }}
+                  >
+                    <Map
+                      google={props.google}
+                      zoom={8}
+                      style={mapStyles}
+                      center={mapCenter}
+                    >
+                      <Marker position={markerPosition} />
+                    </Map>
+                  </div>
+                </CardBody>
               </Card>
             </Col>
             <div className="text-end mb-3">
@@ -397,4 +472,12 @@ const CinemaCreate = (props) => {
   );
 };
 
-export default withRouter(CinemaCreate);
+const LoadingContainer = () => <div>Loading...</div>;
+
+const WrappedComponent = GoogleApiWrapper({
+  apiKey: "AIzaSyDhtEFlRSgllsaY4VpWdsp7YHwlLSNgmvs",
+  LoadingContainer: LoadingContainer,
+  v: "3",
+})(CinemaCreate);
+
+export default withRouter(WrappedComponent);

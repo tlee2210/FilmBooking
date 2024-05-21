@@ -104,3 +104,4 @@ export const UpdateCinema = (formData, history) => async (dispatch) => {
       // history("/dashboard/celebrity");
     });
 };
+
