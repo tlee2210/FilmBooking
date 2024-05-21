@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.cinemas.exception.ErrorCode.CREATE_FAILED;
+import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 
 @RestController
 @RequestMapping("/api/admin/v1/movie")
@@ -99,5 +100,18 @@ public class MovieController {
         apiResponse.setResult(movieService.getEditCelebrityBySlug(slug));
 
         return apiResponse;
+    }
+
+    @PutMapping("/update")
+    public APIResponse<String> updateMovie(@ModelAttribute MovieRequest movieRequest) throws IOException {
+        boolean checkUpdate = movieService.updateMovie(movieRequest);
+        if(checkUpdate){
+            APIResponse<String> apiResponse = new APIResponse<>();
+            apiResponse.setCode(200);
+            apiResponse.setMessage("Movie updated successfully");
+            return apiResponse;
+        }
+
+        throw new AppException(UPDATE_FAILED);
     }
 }

@@ -17,6 +17,8 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class MovieRequest {
+    private int id;
+
     @NotEmpty(message = "VALIDATION")
     private String name;
 

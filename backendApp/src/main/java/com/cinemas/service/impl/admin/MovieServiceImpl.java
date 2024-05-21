@@ -201,4 +201,52 @@ public class MovieServiceImpl implements MovieService {
 
         return new EditSelectOptionReponse<>(options, movie);
     }
+
+    @Override
+    public boolean updateMovie(MovieRequest movieRequest) throws IOException {
+        Movie movie = movieRepository.findById(movieRequest.getId()).orElseThrow(() -> new AppException(NOT_FOUND));
+
+        if(movieRepository.findByNameWithId(movieRequest.getName(), movieRequest.getId()) != null) {
+            throw new AppException(NAME_EXISTED);
+        }
+
+        if(movieRequest.getImage() !=null){
+            fileStorageServiceImpl.deleteFile(movie.getImage());
+            movie.setImage(fileStorageServiceImpl.uploadFile(movieRequest.getImage(), "MOVIE"));
+        }
+
+        if(movieRequest.getTrailer() !=null){
+            fileStorageServiceImpl.deleteVideo(movie.getTrailer(), "video");
+            movie.setTrailer(fileStorageServiceImpl.uploadFile(movieRequest.getTrailer(), "MOVIE"));
+        }
+
+        ObjectUtils.copyFields(movieRequest, movie);
+
+        //set slug
+        String slug = movieRequest.getName().toLowerCase().replaceAll("\\s+", "-");
+        movie.setSlug(slug);
+
+        //set country
+        Country Country = countryRepository.findById(movieRequest.getCountryId());
+
+        movie.setCountry(Country);
+
+        //set movie genre
+        List<MovieGenre> genres = movieRequest.getGenreIds().stream().map(id -> movieGenreRepository.getById(id))
+                .collect(Collectors.toList());
+        movie.setGenres(genres);
+
+        //set cinema
+        List<Cinema> cinemas = movieRequest.getCinemaIds().stream().map(id -> cinemaRespository.getById(id))
+                .collect(Collectors.toList());
+        movie.setCinemas(cinemas);
+
+        //set celebrity
+        List<Celebrity> celebrities = movieRequest.getCelebrityIds().stream().map(id -> celebrityRepository.getById(id))
+                .collect(Collectors.toList());
+        movie.setCelebrities(celebrities);
+
+        movieRepository.save(movie);
+        return false;
+    }
 }

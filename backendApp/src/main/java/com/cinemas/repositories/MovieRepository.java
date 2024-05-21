@@ -25,4 +25,7 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
     Movie findByName(String name);
 
     Movie findBySlug(String slug);
+
+    @Query("SELECT m FROM Movie m WHERE m.name = ?1 AND m.id != ?2")
+    Movie findByNameWithId(String name, int id);
 }
