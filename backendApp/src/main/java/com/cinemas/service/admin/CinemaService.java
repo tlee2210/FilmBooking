@@ -11,15 +11,13 @@ import java.io.IOException;
 import java.util.List;
 
 public interface CinemaService {
-    List<SelectOptionReponse> getCreateCinema();
-
     boolean createCinema(CinemaRequest cinemaRequest) throws IOException;
 
     Page<Cinema> getAllCinema(PaginationHelper PaginationHelper);
 
     Integer deleteCinema(String slug) throws IOException;
 
-    EditSelectOptionReponse<Cinema> getCinemaEdit(String slug);
+    Cinema getCinemaEdit(String slug);
 
     boolean updateCinema(CinemaRequest cinemaRequest) throws IOException;
 }

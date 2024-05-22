@@ -46,22 +46,6 @@ public class CinemaController {
     }
 
     /**
-     * get city create new cinema
-     *
-     * @return
-     */
-    @GetMapping("/create")
-    public APIResponse<List<SelectOptionReponse>> getCreateCinema() {
-
-        List<SelectOptionReponse> selectOptionReponses = cinemaService.getCreateCinema();
-        APIResponse<List<SelectOptionReponse>> apiResponse = new APIResponse<>();
-        apiResponse.setCode(200);
-        apiResponse.setResult(selectOptionReponses);
-
-        return apiResponse;
-    }
-
-    /**
      * Create new Cinema
      *
      * @param cinemaRequest
@@ -91,11 +75,11 @@ public class CinemaController {
      * @return
      */
     @GetMapping("{slug}/edit")
-    public APIResponse<EditSelectOptionReponse<Cinema>> getCinemaEdit(@PathVariable String slug) {
+    public APIResponse<Cinema> getCinemaEdit(@PathVariable String slug) {
 
-        EditSelectOptionReponse<Cinema> cinema = cinemaService.getCinemaEdit(slug);
+        Cinema cinema = cinemaService.getCinemaEdit(slug);
 
-        APIResponse<EditSelectOptionReponse<Cinema>> cinemaAPIResponse = new APIResponse<>();
+        APIResponse<Cinema> cinemaAPIResponse = new APIResponse<>();
         cinemaAPIResponse.setCode(200);
         cinemaAPIResponse.setResult(cinema);
 

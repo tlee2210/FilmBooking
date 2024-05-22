@@ -1,5 +1,6 @@
 package com.cinemas.entities;
 
+import com.cinemas.enums.StatusCinema;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -36,9 +37,17 @@ public class Cinema {
     @Column
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "city_id")
-    private City city;
+    @Column
+    private String city;
+
+    @Column
+    private String lat;
+
+    @Column
+    private String lng;
+
+    @Column
+    private StatusCinema status;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cinema", cascade = CascadeType.ALL)
     private List<CinemaImages> images;

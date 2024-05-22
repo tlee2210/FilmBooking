@@ -13,8 +13,7 @@ public class BackendAppApplication implements CommandLineRunner {
     UserDataInitializer userDataInitializer;
     @Autowired
     CountryDataInitializer countryDataInitializer;
-    @Autowired
-    CityDataInitializer cityDataInitializer;
+
     @Autowired
     MovieGenreDataInitializer movieGenreDataInitializer;
 
@@ -26,7 +25,6 @@ public class BackendAppApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
 //        userDataInitializer.initUsers();
 //        countryDataInitializer.initCountries();
-//        cityDataInitializer.initCity();
 //        movieGenreDataInitializer.initMovieGenre();
     }
 }

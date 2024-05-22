@@ -1,5 +1,6 @@
 package com.cinemas.dto.request;
 
+import com.cinemas.enums.StatusCinema;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -26,7 +27,13 @@ public class CinemaRequest {
 
     private String description;
 
-    private Integer city_id;
+    private String city;
+
+    private String lat;
+
+    private String lng;
+
+    private StatusCinema status;
 
     private List<MultipartFile> files;
 

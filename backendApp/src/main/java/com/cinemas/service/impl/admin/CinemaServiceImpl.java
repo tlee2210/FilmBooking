@@ -6,10 +6,10 @@ import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.response.EditSelectOptionReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.*;
+import com.cinemas.enums.StatusCinema;
 import com.cinemas.exception.AppException;
 import com.cinemas.repositories.CinemaImageRespository;
 import com.cinemas.repositories.CinemaRespository;
-import com.cinemas.repositories.CityRepository;
 import com.cinemas.service.admin.CinemaService;
 import com.cinemas.service.impl.FileStorageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +33,6 @@ import static com.cinemas.exception.ErrorCode.*;
 
 @Service
 public class CinemaServiceImpl implements CinemaService {
-
-    @Autowired
-    private CityRepository cityRepository;
-
     @Autowired
     private CinemaImageRespository cinemaImageRespository;
 
@@ -92,8 +88,7 @@ public class CinemaServiceImpl implements CinemaService {
     }
 
     @Override
-    public EditSelectOptionReponse<Cinema> getCinemaEdit(String slug) {
-
+    public Cinema getCinemaEdit(String slug) {
         Cinema cinema = cinemaRespository.findCinemaBySlug(slug);
 
         if (cinema == null) throw new AppException(NOT_FOUND);
@@ -102,15 +97,7 @@ public class CinemaServiceImpl implements CinemaService {
             image.setUrl(fileStorageServiceImpl.getUrlFromPublicId(image.getUrl()));
         });
 
-        List<City> cityList = cityRepository.findAll();
-
-        List<SelectOptionReponse> options = new ArrayList<>();
-
-        for (City city : cityList) {
-            options.add(new SelectOptionReponse(city.getId(), city.getName()));
-        }
-
-        return new EditSelectOptionReponse<>(options, cinema);
+        return cinema;
     }
 
     @Override
@@ -125,10 +112,6 @@ public class CinemaServiceImpl implements CinemaService {
 
         ObjectUtils.copyFields(cinemaRequest, cinema);
         cinema.setSlug(cinemaRequest.getName().toLowerCase().replaceAll("\\s+", "-"));
-
-        cinema.setCity(cityRepository
-                .findById(cinemaRequest.getCity_id())
-                .orElseThrow(() -> new AppException(UPDATE_FAILED)));
 
         List<CinemaImages> cinemaImages = cinemaImageRespository.findCinemaImagesByCinema_Id(cinema.getId());
 
@@ -183,18 +166,6 @@ public class CinemaServiceImpl implements CinemaService {
         return true;
     }
 
-
-    @Override
-    public List<SelectOptionReponse> getCreateCinema() {
-        List<City> cityList = cityRepository.findAll();
-        List<SelectOptionReponse> selectOptionReponses = new ArrayList<>();
-        for (City city : cityList) {
-            selectOptionReponses.add(new SelectOptionReponse(city.getId(), city.getName()));
-        }
-
-        return selectOptionReponses;
-    }
-
     @Override
     @Transactional
     public boolean createCinema(CinemaRequest cinemaRequest) throws IOException {
@@ -206,7 +177,7 @@ public class CinemaServiceImpl implements CinemaService {
         Cinema cinema = new Cinema();
         ObjectUtils.copyFields(cinemaRequest, cinema);
         cinema.setSlug(cinemaRequest.getName().toLowerCase().replaceAll("\\s+", "-"));
-        cinema.setCity(cityRepository.findById(cinemaRequest.getCity_id()).orElseThrow(() -> new AppException(UPDATE_FAILED)));
+        cinema.setStatus(StatusCinema.ACTIVE);
 
         cinemaRespository.save(cinema);
 
