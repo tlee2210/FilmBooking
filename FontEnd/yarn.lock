@@ -3073,6 +3073,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@googlemaps/js-api-loader@npm:^1.14.3":
+  version: 1.16.6
+  resolution: "@googlemaps/js-api-loader@npm:1.16.6"
+  dependencies:
+    fast-deep-equal: "npm:^3.1.3"
+  checksum: 10c0/084f92f0cef9920e8ef7e54cd7931dddef102a4baf20fe4ba30d45dee3327748c626f1b40ccc158c76544e8d88ccebb41edf6c65d115fdd25d5bdebd7d909bb6
+  languageName: node
+  linkType: hard
+
 "@grpc/grpc-js@npm:~1.9.0":
   version: 1.9.14
   resolution: "@grpc/grpc-js@npm:1.9.14"
@@ -4354,6 +4363,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/google.maps@npm:^3.50.4":
+  version: 3.55.9
+  resolution: "@types/google.maps@npm:3.55.9"
+  checksum: 10c0/327119433db1563a8c2fe72d7d99a220fa47f833e02e7c54fd51ecf0f0fc251974c6a848e56210c6a3acf9c545fe33feca65ffc1e760db925fb45edfcabcc3ed
+  languageName: node
+  linkType: hard
+
 "@types/graceful-fs@npm:^4.1.2":
   version: 4.1.9
   resolution: "@types/graceful-fs@npm:4.1.9"
@@ -5135,6 +5151,8 @@ __metadata:
     react-fast-marquee: "npm:^1.6.2"
     react-filepond: "npm:^7.1.2"
     react-flatpickr: "npm:^3.10.13"
+    react-google-autocomplete: "npm:^2.7.3"
+    react-google-places-autocomplete: "npm:^4.0.1"
     react-i18next: "npm:^13.5.0"
     react-image-lightbox: "npm:^5.1.4"
     react-masonry-component: "npm:^6.3.0"
@@ -14035,7 +14053,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.5.10, prop-types@npm:^15.5.8, prop-types@npm:^15.6.0, prop-types@npm:^15.6.1, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.5.0, prop-types@npm:^15.5.10, prop-types@npm:^15.5.8, prop-types@npm:^15.6.0, prop-types@npm:^15.6.1, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -15007,6 +15025,33 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-google-autocomplete@npm:^2.7.3":
+  version: 2.7.3
+  resolution: "react-google-autocomplete@npm:2.7.3"
+  dependencies:
+    lodash.debounce: "npm:^4.0.8"
+    prop-types: "npm:^15.5.0"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 10c0/d627a02087650b97fb519f5007d9e94a48e1d3541ee6ecb081dc1fdd40147d814cda41e0e036638800e9d01ddf99085dcd581630a34dffc1686008c04e61d6ee
+  languageName: node
+  linkType: hard
+
+"react-google-places-autocomplete@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "react-google-places-autocomplete@npm:4.0.1"
+  dependencies:
+    "@googlemaps/js-api-loader": "npm:^1.14.3"
+    "@types/google.maps": "npm:^3.50.4"
+    react-select: "npm:^5.7.2"
+    use-debounce: "npm:^3.4.3"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 10c0/8d12f2200552d5a75bfd9823bca5ec506e0ede9e87ceeae070d04b79e7b4e9553267d9ec9d8848fe772d2f2d375d272b28181bb7e8642919efe565164d9d98ca
+  languageName: node
+  linkType: hard
+
 "react-i18next@npm:^13.5.0":
   version: 13.5.0
   resolution: "react-i18next@npm:13.5.0"
@@ -15332,7 +15377,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-select@npm:^5.8.0":
+"react-select@npm:^5.7.2, react-select@npm:^5.8.0":
   version: 5.8.0
   resolution: "react-select@npm:5.8.0"
   dependencies:
@@ -17854,6 +17899,15 @@ __metadata:
     querystringify: "npm:^2.1.1"
     requires-port: "npm:^1.0.0"
   checksum: 10c0/bd5aa9389f896974beb851c112f63b466505a04b4807cea2e5a3b7092f6fbb75316f0491ea84e44f66fed55f1b440df5195d7e3a8203f64fcefa19d182f5be87
+  languageName: node
+  linkType: hard
+
+"use-debounce@npm:^3.4.3":
+  version: 3.4.3
+  resolution: "use-debounce@npm:3.4.3"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 10c0/d3728c1904d9476333c60d2bc30a26b5b339d350f4d77922b8615a8670a3b834f90b63095b507f2ad0f54597d8dca742172fe93c8d364a47944db20f7974bec5
   languageName: node
   linkType: hard
 

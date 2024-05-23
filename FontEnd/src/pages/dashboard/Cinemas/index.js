@@ -8,6 +8,7 @@ import {
   Modal,
   ModalBody,
   Button,
+  Badge,
 } from "reactstrap";
 
 import TableContainer from "../../../Components/Common/TableContainerReactTable";
@@ -113,20 +114,20 @@ const Cinema = (props) => {
         enableColumnFilter: false,
       },
       {
-        header: "Address",
-        accessorKey: "address",
+        header: "Phone",
+        accessorKey: "phone",
         enableColumnFilter: false,
       },
       {
-        header: "Phone",
-        accessorKey: "phone",
+        header: "Address",
+        accessorKey: "address",
         enableColumnFilter: false,
       },
       {
         header: "city",
         accessorKey: "city",
         cell: (cell) => {
-          return <span>{cell.getValue()?.name}</span>;
+          return <span>{cell.getValue()}</span>;
         },
         enableColumnFilter: false,
       },
@@ -138,6 +139,27 @@ const Cinema = (props) => {
       //   },
       //   enableColumnFilter: false,
       // },
+      {
+        header: "status",
+        accessorKey: "status",
+        enableColumnFilter: false,
+        cell: (cell) => {
+          const value = cell.getValue();
+          return (
+            <React.Fragment>
+              {value === "ACTIVE" ? (
+                <span className="badge bg-success-subtle text-success badge-border">
+                  {value}
+                </span>
+              ) : (
+                <span className="badge bg-danger-subtle  text-danger badge-border">
+                  {value}
+                </span>
+              )}
+            </React.Fragment>
+          );
+        },
+      },
       {
         header: "Actions",
         accessorKey: "slug",

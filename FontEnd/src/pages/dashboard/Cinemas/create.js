@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createRef } from "react";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import { createSelector } from "reselect";
 import withRouter from "../../../Components/Common/withRouter";
 import { GoogleApiWrapper, Map, Marker } from "google-maps-react";
+import axios from "axios";
+
+// import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 
 import {
   Card,
@@ -10,18 +13,11 @@ import {
   Col,
   Container,
   CardHeader,
-  Nav,
-  NavItem,
-  NavLink,
   Row,
-  TabContent,
-  TabPane,
   Input,
   Label,
   FormFeedback,
-  FormGroup,
   Form,
-  Button,
 } from "reactstrap";
 import { PlusOutlined } from "@ant-design/icons";
 import { Image, Upload, message } from "antd";
@@ -33,12 +29,11 @@ const mapStyles = {
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
-import { getCreateCinemas, CreateCinemas } from "../../../slices/Cinemas/thunk";
+import { CreateCinemas } from "../../../slices/Cinemas/thunk";
 import { clearNotification } from "../../../slices/message/reducer";
 
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import classnames from "classnames";
 import { Link, useNavigate } from "react-router-dom";
 //formik
 import { useFormik } from "formik";
@@ -54,22 +49,16 @@ const getBase64 = (file) =>
     reader.onerror = (error) => reject(error);
   });
 
-const getLatLng = async (address, apiKey) => {
-  console.log("address : ", address);
-  console.log("apiKey : ", apiKey);
-  const response = await axios.get(
-    "https://api.opencagedata.com/geocode/v1/json",
-    {
-      params: {
-        q: address,
-        key: apiKey,
-      },
-    }
-  );
-  if (response.data.results.length > 0) {
-    return response.data.results[0].geometry.location;
-  } else {
-    throw new Error("No coordinates were found for this address.");
+const getLatLng = async (address) => {
+  try {
+    const response = await axios.get(
+      `https://api.opencagedata.com/geocode/v1/json?q=${address}&key=23c35984bc6f42268abd8516ce6529d2`
+    );
+    return response;
+  } catch (error) {
+    // console.error("Error fetching latitude and longitude:", error);
+    // throw error;
+    return null;
   }
 };
 
@@ -79,16 +68,6 @@ const CinemaCreate = (props) => {
   const history = useNavigate();
   const dispatch = useDispatch();
 
-  const [mapCenter, setMapCenter] = useState({ lat: 48.0, lng: -122.0 });
-  const [markerPosition, setMarkerPosition] = useState({
-    lat: 48.0,
-    lng: -122.0,
-  });
-
-  useEffect(() => {
-    dispatch(getCreateCinemas());
-  }, []);
-
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
 
@@ -97,14 +76,17 @@ const CinemaCreate = (props) => {
   const CinemaCreatepageData = createSelector(
     selectCinemaCreateState,
     (state) => ({
-      SelectOption: state.Cinema.SelectOption,
       error: state.Message.error,
       messageError: state.Message.messageError,
     })
   );
 
-  const { SelectOption, error, messageError } =
-    useSelector(CinemaCreatepageData);
+  const statusOption = [
+    { value: "ACTIVE", label: "ACTIVE" },
+    { value: "INACTIVE", label: "INACTIVE" },
+  ];
+
+  const { error, messageError } = useSelector(CinemaCreatepageData);
 
   useEffect(() => {
     if (error) {
@@ -115,8 +97,6 @@ const CinemaCreate = (props) => {
     dispatch(clearNotification());
   }, [error]);
 
-  // const [files, setFiles] = useState([]);
-
   const validation = useFormik({
     enableReinitialize: true,
 
@@ -126,17 +106,21 @@ const CinemaCreate = (props) => {
       Description: "",
       address: "",
       // Skill: [],
-      City_id: "",
+      City: "",
       fileList: [],
+      lat: 10.7738155,
+      lng: 106.7063757,
+      status: "",
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Please Enter a Cinema name"),
       address: Yup.string().required("Please Enter a address"),
+      status: Yup.string().required("Please Enter a status"),
       phone: Yup.string()
         .required("Please Enter a phone")
         .matches(/^\d{10}$/, "phone must be exactly 10 digits"),
       Description: Yup.string().required("Please Enter a Description"),
-      City_id: Yup.string().required("Please Enter an City"),
+      City: Yup.string().required("address does not exist"),
       fileList: Yup.array()
         .of(
           Yup.mixed().test(
@@ -153,8 +137,11 @@ const CinemaCreate = (props) => {
       formData.append("name", values.name);
       formData.append("description", values.Description);
       formData.append("address", values.address);
-      formData.append("city_id", values.City_id);
+      formData.append("city", values.City);
       formData.append("phone", values.phone);
+      formData.append("lat", values.lat);
+      formData.append("lng", values.lng);
+      formData.append("status", values.status);
       values.fileList.forEach((file, index) => {
         formData.append(`files[${index}]`, file.originFileObj);
       });
@@ -165,27 +152,38 @@ const CinemaCreate = (props) => {
   //   console.log("Current validation errors:", validation.errors);
   // }, [validation.errors]);
 
-  useEffect(() => {
-    const fetchLatLng = async () => {
-      if (validation.values.address) {
-        try {
-          console.log(validation.values.address);
-          console.log(props.google.maps.ApiKey);
+  const fetchLatLng = async (address) => {
+    // console.log(`Fetching lat/lng for address: ${address}`);
+    validation.setFieldValue("City", "");
 
-          const location = await getLatLng(
-            validation.values.address,
-            "23c35984bc6f42268abd8516ce6529d2"
+    if (address) {
+      try {
+        const location = await getLatLng(address);
+        if (!location?.data?.results || location.data.results.length < 0) {
+          validation.setFieldError("address", "address does not exist");
+        } else {
+          console.log(location);
+          validation.setFieldValue(
+            "lat",
+            location?.data?.results[0]?.geometry?.lat
           );
-          console.log(JSON.stringify(location));
-          setMapCenter(location);
-          setMarkerPosition(location);
-        } catch (error) {
-          message.error("Không thể lấy tọa độ từ địa chỉ");
+          validation.setFieldValue(
+            "lng",
+            location?.data?.results[0]?.geometry?.lng
+          );
+
+          let city =
+            location?.data?.results[0]?.components?.city ||
+            location?.data?.results[0]?.components?.state;
+          // console.log(city + ": city");
+          validation.setFieldValue("City", city);
         }
+      } catch (error) {
+        console.error("Error fetching lat/lng:", error);
+        validation.setFieldError("address", "address does not exist");
       }
-    };
-    fetchLatLng();
-  }, [validation.values.address, props.google.maps.ApiKey]);
+    }
+  };
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -269,38 +267,6 @@ const CinemaCreate = (props) => {
                           className="form-label"
                           htmlFor="product-title-input"
                         >
-                          address
-                        </Label>
-                        <Input
-                          type="text"
-                          className="form-control"
-                          id="product-title-input"
-                          placeholder="Enter address"
-                          name="address"
-                          value={validation.values.address || ""}
-                          onBlur={validation.handleBlur}
-                          onChange={validation.handleChange}
-                          invalid={
-                            validation.errors.address &&
-                            validation.touched.address
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.errors.address &&
-                        validation.touched.address ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.address}
-                          </FormFeedback>
-                        ) : null}
-                      </div>
-                    </Col>
-                    <Col md={6}>
-                      <div className="mb-3">
-                        <Label
-                          className="form-label"
-                          htmlFor="product-title-input"
-                        >
                           phone
                         </Label>
                         <Input
@@ -325,6 +291,91 @@ const CinemaCreate = (props) => {
                         ) : null}
                       </div>
                     </Col>
+                    <Col md={12}>
+                      <div className="mb-3">
+                        <Label
+                          className="form-label"
+                          htmlFor="product-title-input"
+                        >
+                          address
+                        </Label>
+                        <Input
+                          type="text"
+                          className="form-control"
+                          id="product-title-input"
+                          placeholder="Enter address"
+                          name="address"
+                          value={validation.values.address || ""}
+                          onChange={validation.handleChange}
+                          onBlur={(e) => {
+                            validation.handleBlur(e);
+                            fetchLatLng(validation.values.address);
+                          }}
+                          invalid={
+                            validation.errors.address &&
+                            validation.touched.address
+                              ? true
+                              : false
+                          }
+                        />
+                        {validation.errors.address &&
+                        validation.touched.address ? (
+                          <FormFeedback type="invalid">
+                            {validation.errors.address}
+                          </FormFeedback>
+                        ) : validation.errors.City ? (
+                          <FormFeedback type="invalid">
+                            {validation.errors.City}
+                          </FormFeedback>
+                        ) : null}
+                        {!validation.errors.address &&
+                        validation.errors.City ? (
+                          <div className="invalid-feedback d-block">
+                            {validation.errors.City}
+                          </div>
+                        ) : null}
+                      </div>
+                    </Col>
+
+                    <Col md={6}>
+                      <div className="mb-3">
+                        <Label
+                          className="form-label"
+                          htmlFor="product-title-input"
+                        >
+                          Status
+                        </Label>
+                        <Select
+                          name="status"
+                          options={statusOption}
+                          placeholder="Select Status"
+                          classNamePrefix="select"
+                          onChange={(option) => {
+                            validation.setFieldValue("status", option.value);
+                            validation.setFieldTouched("status", true);
+                          }}
+                          onBlur={() =>
+                            validation.setFieldTouched("status", true)
+                          }
+                          value={statusOption.find(
+                            (opt) => opt.value === validation.values.status
+                          )}
+                          className={
+                            validation.errors.status &&
+                            validation.touched.status
+                              ? "is-invalid"
+                              : ""
+                          }
+                        />
+                        {validation.errors.status &&
+                          validation.touched.status && (
+                            <FormFeedback type="invalid">
+                              {validation.errors.status}
+                            </FormFeedback>
+                          )}
+                      </div>
+                    </Col>
+
                     <Col md={6}>
                       <div className="mb-3">
                         <Label
@@ -333,34 +384,14 @@ const CinemaCreate = (props) => {
                         >
                           City
                         </Label>
-                        <Select
-                          name="City_id"
-                          options={SelectOption}
-                          placeholder="Enter City Name"
-                          classNamePrefix="select"
-                          onChange={(option) => {
-                            validation.setFieldValue("City_id", option.value);
-                            validation.setFieldTouched("City_id", true);
-                          }}
-                          onBlur={() =>
-                            validation.setFieldTouched("City_id", true)
-                          }
-                          value={SelectOption.find(
-                            (opt) => opt.value === validation.values.City_id
-                          )}
-                          className={
-                            validation.errors.City_id &&
-                            validation.touched.City_id
-                              ? "is-invalid"
-                              : ""
-                          }
+                        <Input
+                          type="text"
+                          disabled
+                          onChange={validation.handleChange}
+                          className="form-control"
+                          id="product-title-input"
+                          value={validation.values.City}
                         />
-                        {validation.errors.City_id &&
-                          validation.touched.City_id && (
-                            <div className="invalid-feedback">
-                              {validation.errors.City_id}
-                            </div>
-                          )}
                       </div>
                     </Col>
                   </Row>
@@ -452,9 +483,17 @@ const CinemaCreate = (props) => {
                       google={props.google}
                       zoom={8}
                       style={mapStyles}
-                      center={mapCenter}
+                      initialCenter={{
+                        lat: validation.values.lat,
+                        lng: validation.values.lng,
+                      }}
                     >
-                      <Marker position={markerPosition} />
+                      <Marker
+                        position={{
+                          lat: validation.values.lat,
+                          lng: validation.values.lng,
+                        }}
+                      />
                     </Map>
                   </div>
                 </CardBody>
@@ -475,7 +514,7 @@ const CinemaCreate = (props) => {
 const LoadingContainer = () => <div>Loading...</div>;
 
 const WrappedComponent = GoogleApiWrapper({
-  apiKey: "AIzaSyDhtEFlRSgllsaY4VpWdsp7YHwlLSNgmvs",
+  apiKey: "AIzaSyDFP-fyihmScYjgRGuxmgMoX5Mj1Nvv7bY",
   LoadingContainer: LoadingContainer,
   v: "3",
 })(CinemaCreate);

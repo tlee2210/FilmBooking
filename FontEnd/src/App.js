@@ -22,7 +22,7 @@ import Route from "./Routes";
 function App() {
   return (
     <React.Fragment>
-      <GoogleOAuthProvider clientId="87556603754-d1csp22asir1b0933ikhag56aua1lie4.apps.googleusercontent.com">
+      <GoogleOAuthProvider clientId="724460963519-pn71te5d6a2p37sv18ql7dv3j1e9cgu4.apps.googleusercontent.com">
         <Route />
       </GoogleOAuthProvider>
     </React.Fragment>

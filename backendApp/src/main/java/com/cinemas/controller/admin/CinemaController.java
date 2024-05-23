@@ -54,7 +54,6 @@ public class CinemaController {
      */
     @PostMapping("/create")
     public APIResponse<String> CreateCinema(@ModelAttribute CinemaRequest cinemaRequest) throws IOException {
-
         boolean check = cinemaService.createCinema(cinemaRequest);
 
         if (check) {
