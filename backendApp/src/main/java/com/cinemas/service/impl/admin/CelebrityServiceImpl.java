@@ -3,6 +3,7 @@ package com.cinemas.service.impl.admin;
 import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.CelebrityRequest;
 import com.cinemas.dto.request.PaginationHelper;
+import com.cinemas.dto.request.SearchRequest;
 import com.cinemas.dto.response.EditSelectOptionReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Celebrity;
@@ -36,8 +37,14 @@ public class CelebrityServiceImpl implements CelebrityService {
     FileStorageServiceImpl fileStorageServiceImpl;
 
     @Override
-    public Page<Celebrity> getAllCelebrity(PaginationHelper PaginationHelper) {
-        List<Celebrity> celebrityList = celebrityRepository.findAllWithCountry();
+    public Page<Celebrity> getAllCelebrity(SearchRequest searchRequest) {
+        List<Celebrity> celebrityList;
+        if(searchRequest.getSearch() != null){
+            celebrityList = celebrityRepository.searchCelebrity(searchRequest.getSearch());
+        }
+        else{
+            celebrityList = celebrityRepository.findAllWithCountry();
+        }
 
         celebrityList.forEach(celebrity -> {
             String imageUrl = fileStorageServiceImpl.getUrlFromPublicId(celebrity.getImage());
@@ -45,14 +52,14 @@ public class CelebrityServiceImpl implements CelebrityService {
         });
 
         PagedListHolder<Celebrity> pagedListHolder = new PagedListHolder<Celebrity>(celebrityList);
-        pagedListHolder.setPage(PaginationHelper.getPageNo());
-        pagedListHolder.setPageSize(PaginationHelper.getPageSize());
+        pagedListHolder.setPage(searchRequest.getPageNo());
+        pagedListHolder.setPageSize(searchRequest.getPageSize());
 
         List<Celebrity> pageList = pagedListHolder.getPageList();
-        boolean ascending = PaginationHelper.getSort().isAscending();
-        PropertyComparator.sort(pageList, new MutableSortDefinition(PaginationHelper.getSortByColumn(), true, ascending));
+        boolean ascending = searchRequest.getSort().isAscending();
+        PropertyComparator.sort(pageList, new MutableSortDefinition(searchRequest.getSortByColumn(), true, ascending));
 
-        Page<Celebrity> celebrities = new PageImpl<>(pageList, new PaginationHelper().getPageable(PaginationHelper), celebrityList.size());
+        Page<Celebrity> celebrities = new PageImpl<>(pageList, new PaginationHelper().getPageable(searchRequest), celebrityList.size());
 
         return celebrities;
     }

@@ -2,6 +2,7 @@ package com.cinemas.controller.admin;
 
 import com.cinemas.dto.request.CelebrityRequest;
 import com.cinemas.dto.request.PaginationHelper;
+import com.cinemas.dto.request.SearchRequest;
 import com.cinemas.dto.response.APIResponse;
 import com.cinemas.dto.response.EditSelectOptionReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
@@ -28,12 +29,12 @@ public class CelebrityController {
     /**
      * all list Celebrity
      *
-     * @param PaginationHelper
+     * @param searchRequest
      * @return
      */
     @PostMapping
-    public APIResponse<Page<Celebrity>> getAllCelebrity(@RequestBody(required = false) PaginationHelper PaginationHelper) {
-        Page<Celebrity> celebrityList = celebrityService.getAllCelebrity(PaginationHelper);
+    public APIResponse<Page<Celebrity>> getAllCelebrity(@RequestBody(required = false) SearchRequest searchRequest) {
+        Page<Celebrity> celebrityList = celebrityService.getAllCelebrity(searchRequest);
         APIResponse<Page<Celebrity>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(celebrityList);

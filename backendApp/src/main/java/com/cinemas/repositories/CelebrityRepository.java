@@ -19,4 +19,7 @@ public interface CelebrityRepository extends JpaRepository<Celebrity, Integer> {
 
     @Query("SELECT c FROM Celebrity c WHERE c.slug = ?1")
     Celebrity findBySlug(String slug);
+
+    @Query("SELECT c FROM Celebrity c JOIN FETCH c.country WHERE c.name LIKE %?1%")
+    List<Celebrity> searchCelebrity(String name);
 }
