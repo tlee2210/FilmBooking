@@ -58,7 +58,7 @@ public class MovieGenreServiceImpl implements MovieGenreService {
 
     @Override
     public MovieGenre getEditMovieGenreBySlug(String slug) {
-        MovieGenre movieGenre = movieGenreRepository.findBySlug(slug);
+        MovieGenre movieGenre = movieGenreRepository.findMovieGenreBySlug(slug);
 
         if (movieGenre == null) throw new AppException(NOT_FOUND);
 
@@ -67,15 +67,16 @@ public class MovieGenreServiceImpl implements MovieGenreService {
 
     @Override
     public boolean addMovieGenre(MovieGenreRequest movieGenre) {
-        MovieGenre addMovieGenre = new MovieGenre();
         if (movieGenreRepository.findByName(movieGenre.getName()) != null) {
             throw new AppException(NAME_EXISTED);
         }
 
+        MovieGenre addMovieGenre = new MovieGenre();
+
         ObjectUtils.copyFields(movieGenre, addMovieGenre);
-        String slug = movieGenre.getName().toLowerCase().replaceAll("\\s+", "-");
-        addMovieGenre.setSlug(slug);
+        addMovieGenre.setSlug(movieGenre.getName().toLowerCase().replaceAll("\\s+", "-"));
         movieGenreRepository.save(addMovieGenre);
+
         return true;
     }
 
@@ -100,12 +101,12 @@ public class MovieGenreServiceImpl implements MovieGenreService {
 
     @Override
     public Integer deleteMovieGenre(String slug) {
-        MovieGenre movieGenre = movieGenreRepository.findBySlug(slug);
+        MovieGenre movieGenre = movieGenreRepository.findMovieGenreBySlug(slug);
 
         if (movieGenre == null) throw new AppException(NOT_FOUND);
 
         movieGenreRepository.delete(movieGenre);
-
-        return movieGenre.getId();
+        Integer id = movieGenre.getId();
+        return id;
     }
 }

@@ -14,8 +14,8 @@ public interface MovieGenreRepository extends JpaRepository<MovieGenre, Integer>
     @Query("SELECT m FROM MovieGenre m WHERE m.name = ?1")
     MovieGenre findByName(String name);
 
-    @Query("SELECT m FROM MovieGenre m WHERE m.slug = ?1")
-    MovieGenre findBySlug(String slug);
+//    @Query("SELECT m FROM MovieGenre m WHERE m.slug = ?1")
+    MovieGenre findMovieGenreBySlug(String slug);
 
     @Query("SELECT m FROM MovieGenre m WHERE m.name = ?1 AND m.id != ?2")
     MovieGenre findByNameWithId(String name, int id);

@@ -1,10 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-// import {
-//   GetCourses,
-//   CreateCourses,
-//   UpdateCourses,
-//   deleteCourses,
-// } from "../../../slices/Courses/thunk";
 import { createSelector } from "reselect";
 // import { findCoursesById, clearCourses } from "../../../slices/Courses/reducer";
 //redux
@@ -30,28 +24,28 @@ import { message } from "antd";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { clearNotification } from "../../../slices/message/reducer";
-import { clearCity } from "../../../slices/city/reducer";
+import { clear } from "../../../slices/MovieGenre/reducer";
 import {
-  getcity,
-  CreateCity,
-  deleteCity,
-  GetEditCity,
-  UpdateCity,
-} from "../../../slices/city/thunk";
+  getMovieGenre,
+  CreateMovieGenre,
+  deleteMovieGenre,
+  GetEditMovieGenre,
+  UpdateMovieGenre,
+} from "../../../slices/MovieGenre/thunk";
 
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
 import TableContainer from "../../../Components/Common/TableContainerReactTable";
 
-const Citylist = (props) => {
+const MovieGenre = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getcity({}));
+    dispatch(getMovieGenre({}));
   }, []);
 
   const [formcheck, setformcheck] = useState(false);
-  const [Id, setId] = useState("");
+  const [slug, setSlug] = useState("");
   const [modal_togFirst, setmodal_togFirst] = useState(false);
   const [modal_togtitle, setmodal_togtitle] = useState("Create New Courses");
   const [modal_detele, setmodal_detele] = useState(false);
@@ -59,8 +53,8 @@ const Citylist = (props) => {
   const selectCityState = (state) => state;
 
   const CitypageData = createSelector(selectCityState, (state) => ({
-    CityData: state.City.data,
-    item: state.City.item,
+    CityData: state.MovieGenre.data,
+    item: state.MovieGenre.item,
     success: state.Message.success,
     error: state.Message.error,
     messageSuccess: state.Message.messageSuccess,
@@ -103,10 +97,10 @@ const Citylist = (props) => {
       if (formcheck) {
         // console.log("edit: ", values);
         formData.append("id", item?.id);
-        dispatch(UpdateCity(formData));
+        dispatch(UpdateMovieGenre(formData));
       } else {
         // console.log("create: ", values);
-        dispatch(CreateCity(formData));
+        dispatch(CreateMovieGenre(formData));
       }
     },
   });
@@ -119,12 +113,12 @@ const Citylist = (props) => {
       },
       {
         header: "Slug",
-        accessorKey: "slug",
+        // accessorKey: "slug",
         enableColumnFilter: false,
       },
       {
         header: "Actions",
-        accessorKey: "id",
+        accessorKey: "slug",
         enableColumnFilter: false,
         cell: (cell) => {
           // return <React.Fragment>Details</React.Fragment>;
@@ -160,24 +154,24 @@ const Citylist = (props) => {
     // console.log(page);
     const formData = new FormData();
     formData.append("pageNo", page);
-    dispatch(getcity(formData));
+    dispatch(getMovieGenre(formData));
   };
 
   function settitle(type) {
     if (!type) {
       setmodal_togtitle("Edit City");
     } else {
-      setmodal_togtitle("Create New City");
+      setmodal_togtitle("Create New Movie Genre");
       // dispatch(clearNotificationMessage());
-      dispatch(clearCity());
+      dispatch(clear());
       validation.resetForm();
     }
   }
 
-  function deleteitem(id) {
-    console.log(id);
-    if (id) {
-      dispatch(deleteCity(id));
+  function deleteitem(slug) {
+    // console.log(slug);
+    if (slug) {
+      dispatch(deleteMovieGenre(slug));
     }
   }
 
@@ -186,19 +180,19 @@ const Citylist = (props) => {
     setmodal_togFirst(!modal_togFirst);
   }
 
-  const getedit = (id) => {
+  const getedit = (slug) => {
     // console.log(id);
-    dispatch(GetEditCity(id));
+    dispatch(GetEditMovieGenre(slug));
     setmodal_togFirst(!modal_togFirst);
   };
 
-  function tog_togdelete(id) {
+  function tog_togdelete(slug) {
     setmodal_detele(!modal_togFirst);
-    if (id) {
-      setId(id);
+    if (slug) {
+      setSlug(slug);
     }
   }
-  document.title = "City Manager";
+  document.title = "Movie Genre Manager";
 
   return (
     <React.Fragment>
@@ -206,7 +200,7 @@ const Citylist = (props) => {
         <Col xs={12}>
           <div className="page-content">
             <Container fluid>
-              <BreadCrumb title="City Manager" pageTitle="City" />
+              <BreadCrumb title="Movie Genre Manager" pageTitle="Movie Genre" />
               <Row>
                 <Col lg={12}>
                   <Card id="customerList">
@@ -214,7 +208,9 @@ const Citylist = (props) => {
                       <Row className="g-4 align-items-center">
                         <div className="col-sm">
                           <div>
-                            <h5 className="card-title mb-0">City Manager</h5>
+                            <h5 className="card-title mb-0">
+                              Movie Genre Manager
+                            </h5>
                           </div>
                         </div>
                         <div className="col-sm-auto">
@@ -229,7 +225,7 @@ const Citylist = (props) => {
                               }}
                             >
                               <i className="ri-add-line align-bottom me-1"></i>{" "}
-                              Add New City
+                              Add Movie Genre
                             </Link>
                           </div>
                         </div>
@@ -282,7 +278,7 @@ const Citylist = (props) => {
                         name="name"
                         type="text"
                         className="form-control"
-                        placeholder="Enter City Name"
+                        placeholder="Enter Movie Genre"
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values.name || ""}
@@ -348,7 +344,7 @@ const Citylist = (props) => {
                     color="danger"
                     type="submit"
                     onClick={() => {
-                      deleteitem(Id);
+                      deleteitem(slug);
                       setmodal_detele(false);
                     }}
                   >
@@ -364,4 +360,4 @@ const Citylist = (props) => {
   );
 };
 
-export default Citylist;
+export default MovieGenre;

@@ -39,13 +39,13 @@ public class MovieGenreController {
         return apiResponse;
     }
 
-    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public APIResponse<String> createMovieGenre(@ModelAttribute MovieGenreRequest movieGenreRequest){
+    @PostMapping(value = "/create")
+    public APIResponse<String> createMovieGenre(@RequestBody MovieGenreRequest movieGenreRequest){
         boolean checkCreate = movieGenreService.addMovieGenre(movieGenreRequest);
         if (checkCreate) {
             APIResponse<String> apiResponse = new APIResponse();
             apiResponse.setCode(200);
-            apiResponse.setMessage("Celebrity created successfully");
+            apiResponse.setMessage("Movie Genre created successfully");
 
             return apiResponse;
         }
@@ -63,13 +63,13 @@ public class MovieGenreController {
         return apiResponse;
     }
 
-    @PutMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/update")
     public APIResponse<String> updateMovieGenre(@ModelAttribute MovieGenreRequest movieGenreRequest){
         boolean checkUpdate = movieGenreService.updateMovieGenre(movieGenreRequest);
         if (checkUpdate) {
             APIResponse<String> apiResponse = new APIResponse();
             apiResponse.setCode(200);
-            apiResponse.setMessage("Celebrity Update successfully");
+            apiResponse.setMessage("Movie Genre Update successfully");
 
             return apiResponse;
         }
@@ -77,14 +77,14 @@ public class MovieGenreController {
         throw new AppException(UPDATE_FAILED);
     }
 
-    @DeleteMapping("/delete/{slug}")
+    @DeleteMapping("/{slug}/delete")
     public APIResponse<Integer> deleteMovieGenre(@PathVariable String slug){
 
         int id = movieGenreService.deleteMovieGenre(slug);
         if (id > 0) {
             APIResponse<Integer> apiResponse = new APIResponse();
             apiResponse.setCode(200);
-            apiResponse.setMessage("Successfully deleted celeb");
+            apiResponse.setMessage("Successfully deleted Movie Genre");
             apiResponse.setResult(id);
 
             return apiResponse;
