@@ -81,6 +81,7 @@ const TableContainer = ({
   SearchPlaceholder,
   paginateData,
   paginate,
+  numberOfElements,
 }) => {
   const [columnFilters, setColumnFilters] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("");
@@ -214,7 +215,21 @@ const TableContainer = ({
           <div className="text-muted">
             Showing
             <span className="fw-semibold ms-1">
-              {paginateData.numberOfElements}
+              {/* {paginateData.numberOfElements} */}
+              <select
+                className="custom-select"
+                value={paginateData.size}
+                id="inputGroupSelect01"
+                onChange={(e) => {
+                  const newPageSize = Number(e.target.value);
+                  numberOfElements(newPageSize);
+                }}
+              >
+                <option value={10}>10</option>
+                <option value={15}>15</option>
+                <option value={25}>25</option>
+                <option value={50}>50</option>
+              </select>
             </span>{" "}
             of <span className="fw-semibold">{paginateData.totalElements}</span>{" "}
             Results

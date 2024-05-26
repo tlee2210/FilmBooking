@@ -8,11 +8,23 @@ import VerticalLayout from "../Layouts/index";
 import LayoutHome from "../Layouts/home/index";
 
 //routes
-import { authProtectedRoutes, publicRoutes, homeRoutes, CinemaCornerRoutes } from "./allRoutes";
+import {
+  authProtectedRoutes,
+  publicRoutes,
+  homeRoutes,
+  CinemaCornerRoutes,
+} from "./allRoutes";
 import { AuthProtected } from "./AuthProtected";
 
 const loading = (
-  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "100vh",
+    }}
+  >
     <PuffLoader color={"#c6ec0c"} loading={true} size={76} />
   </div>
 );
@@ -26,7 +38,11 @@ const Index = () => {
             {publicRoutes.map((route, idx) => (
               <Route
                 path={route.path}
-                element={<NonAuthLayout>{route.component}</NonAuthLayout>}
+                element={
+                  <NonAuthLayout>
+                    {route.element ? route.element : route.component}
+                  </NonAuthLayout>
+                }
                 key={idx}
                 exact={true}
               />
@@ -51,9 +67,7 @@ const Index = () => {
               exact={true}
             />
           ))}
-          <Route>
-
-          </Route>
+          <Route></Route>
 
           <Route>
             {authProtectedRoutes.map((route, idx) => (
@@ -61,7 +75,9 @@ const Index = () => {
                 path={route.path}
                 element={
                   <AuthProtected>
-                    <VerticalLayout>{route.component}</VerticalLayout>
+                    <VerticalLayout>
+                      {route.element ? route.element : route.component}
+                    </VerticalLayout>
                   </AuthProtected>
                 }
                 key={idx}

@@ -3,11 +3,13 @@ import { Success, Error } from "../message/reducer";
 
 import axios from "axios";
 
-export const getMovieGenre = (formData) => async (dispatch) => {
+export const getMovieGenre = (search, pageNo, pageSize) => async (dispatch) => {
   await axios
-    .post(`http://localhost:8081/api/admin/v1/movie-genre`, formData)
+    .get(`http://localhost:8081/api/admin/v1/movie-genre`, {
+      params: { search, pageNo, pageSize },
+    })
     .then((response) => {
-      // console.log(response);
+      console.log(response);
       dispatch(getDate(response.data?.result));
     })
     .catch((err) => {

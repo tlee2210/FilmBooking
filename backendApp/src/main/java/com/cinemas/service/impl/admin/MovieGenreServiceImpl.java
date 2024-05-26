@@ -4,10 +4,6 @@ import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.MovieGenreRequest;
 import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.SearchRequest;
-import com.cinemas.dto.response.EditSelectOptionReponse;
-import com.cinemas.dto.response.SelectOptionReponse;
-import com.cinemas.entities.Celebrity;
-import com.cinemas.entities.Country;
 import com.cinemas.entities.MovieGenre;
 import com.cinemas.exception.AppException;
 import com.cinemas.repositories.MovieGenreRepository;
@@ -18,11 +14,8 @@ import org.springframework.beans.support.PagedListHolder;
 import org.springframework.beans.support.PropertyComparator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.cinemas.exception.ErrorCode.NAME_EXISTED;
@@ -36,8 +29,8 @@ public class MovieGenreServiceImpl implements MovieGenreService {
     @Override
     public Page<MovieGenre> getAllMovieGenre(SearchRequest searchRequest) {
         List<MovieGenre> movieGenreList;
-        if(searchRequest.getSearch() != null){
-            movieGenreList = movieGenreRepository.searchMovieGenre(searchRequest.getSearch());
+        if(searchRequest.getSearchname() != null){
+            movieGenreList = movieGenreRepository.searchMovieGenre(searchRequest.getSearchname());
         }
         else{
             movieGenreList = movieGenreRepository.findAll();

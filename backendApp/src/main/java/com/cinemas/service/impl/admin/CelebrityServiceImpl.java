@@ -4,7 +4,7 @@ import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.CelebrityRequest;
 import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.SearchRequest;
-import com.cinemas.dto.response.EditSelectOptionReponse;
+import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Celebrity;
 import com.cinemas.entities.Country;
@@ -38,13 +38,7 @@ public class CelebrityServiceImpl implements CelebrityService {
 
     @Override
     public Page<Celebrity> getAllCelebrity(SearchRequest searchRequest) {
-        List<Celebrity> celebrityList;
-        if(searchRequest.getSearch() != null){
-            celebrityList = celebrityRepository.searchCelebrity(searchRequest.getSearch());
-        }
-        else{
-            celebrityList = celebrityRepository.findAllWithCountry();
-        }
+        List<Celebrity> celebrityList = celebrityRepository.searchCelebrity(searchRequest.getSearchname(), searchRequest.getRole());
 
         celebrityList.forEach(celebrity -> {
             String imageUrl = fileStorageServiceImpl.getUrlFromPublicId(celebrity.getImage());
@@ -107,7 +101,7 @@ public class CelebrityServiceImpl implements CelebrityService {
     }
 
     @Override
-    public EditSelectOptionReponse<Celebrity> getEditCelebrityBySlug(String slug) {
+    public SelectOptionAndModelReponse<Celebrity> getEditCelebrityBySlug(String slug) {
 
         Celebrity celebrity = celebrityRepository.findBySlug(slug);
 
@@ -122,7 +116,7 @@ public class CelebrityServiceImpl implements CelebrityService {
             options.add(new SelectOptionReponse(country.getId(), country.getName()));
         }
 
-        return new EditSelectOptionReponse<>(options, celebrity);
+        return new SelectOptionAndModelReponse<>(options, celebrity);
     }
 
     @Override

@@ -3,22 +3,25 @@ import { fetchSuccess, setSelectOption, removeItem, setItem } from "./reducer";
 import { Success, Error } from "../message/reducer";
 import axios from "axios";
 
-export const celebrity = (formData, history) => async (dispatch) => {
-  await axios
-    .post(`http://localhost:8081/api/admin/v1/celebrity`, formData)
-    .then((response) => {
-      // console.log(response);
-      dispatch(
-        fetchSuccess({
-          data: response.data.result,
-        })
-      );
-    })
-    .catch((err) => {
-      console.error(err);
-      // dispatch(Error(err.response.data.message));
-    });
-};
+export const celebrity =
+  (search, role, pageNo, pageSize) => async (dispatch) => {
+    await axios
+      .get(`http://localhost:8081/api/admin/v1/celebrity`, {
+        params: { search, role, pageNo, pageSize },
+      })
+      .then((response) => {
+        // console.log(response);
+        dispatch(
+          fetchSuccess({
+            data: response.data.result,
+          })
+        );
+      })
+      .catch((err) => {
+        console.error(err);
+        // dispatch(Error(err.response.data.message));
+      });
+  };
 
 export const getCreateCelebrity = () => async (dispatch) => {
   await axios

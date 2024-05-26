@@ -1,21 +1,22 @@
 package com.cinemas.controller.admin;
 
-import com.cinemas.dto.request.CelebrityRequest;
 import com.cinemas.dto.request.CinemaRequest;
 import com.cinemas.dto.request.PaginationHelper;
+import com.cinemas.dto.request.cinemaSearchRequest;
 import com.cinemas.dto.response.APIResponse;
-import com.cinemas.dto.response.EditSelectOptionReponse;
-import com.cinemas.dto.response.SelectOptionReponse;
+import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.entities.Cinema;
+import com.cinemas.enums.RoleCeleb;
+import com.cinemas.enums.StatusCinema;
 import com.cinemas.exception.AppException;
 import com.cinemas.service.admin.CinemaService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.List;
 
 import static com.cinemas.exception.ErrorCode.CREATE_FAILED;
 import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
@@ -29,16 +30,27 @@ public class CinemaController {
     CinemaService cinemaService;
 
     /**
-     * get all list Cinema
+     * get all list or search Cinema
      *
-     * @param PaginationHelper
+     * @param search
+     * @param status
+     * @param city
+     * @param pageNo
+     * @param pageSize
+     * @param sort
      * @return
      */
-    @PostMapping
-    public APIResponse<Page<Cinema>> getAllCinema(@RequestBody(required = false) PaginationHelper PaginationHelper) {
+    @GetMapping
+    public APIResponse<SelectOptionAndModelReponse<Page<Cinema>>> getAllCinema(@RequestParam(required = false) String search,
+                                                                               @RequestParam(required = false) StatusCinema status,
+                                                                               @RequestParam(required = false) String city,
+                                                                               @RequestParam(required = false, defaultValue = "1") Integer pageNo,
+                                                                               @RequestParam(required = false, defaultValue = "15") Integer pageSize,
+                                                                               @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort) {
 
-        Page<Cinema> cinemaList = cinemaService.getAllCinema(PaginationHelper);
-        APIResponse<Page<Cinema>> apiResponse = new APIResponse<>();
+        cinemaSearchRequest cinemaSearchRequest = new cinemaSearchRequest(search, status, city, pageNo - 1, pageSize, sort);
+        SelectOptionAndModelReponse<Page<Cinema>> cinemaList = cinemaService.getAllCinema(cinemaSearchRequest);
+        APIResponse<SelectOptionAndModelReponse<Page<Cinema>>> apiResponse = new APIResponse<>();
         apiResponse.setResult(cinemaList);
         apiResponse.setCode(200);
 

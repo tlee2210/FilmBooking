@@ -3,11 +3,10 @@ package com.cinemas.service.impl.admin;
 import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.MovieRequest;
 import com.cinemas.dto.request.PaginationHelper;
-import com.cinemas.dto.response.EditSelectOptionReponse;
+import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.*;
 import com.cinemas.exception.AppException;
-import com.cinemas.exception.ErrorCode;
 import com.cinemas.repositories.*;
 import com.cinemas.service.admin.MovieService;
 import com.cinemas.service.impl.FileStorageServiceImpl;
@@ -165,7 +164,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public EditSelectOptionReponse<Movie> getEditCelebrityBySlug(String slug) {
+    public SelectOptionAndModelReponse<Movie> getEditCelebrityBySlug(String slug) {
         Movie movie = movieRepository.findBySlug(slug);
 
         if (movie == null) throw new AppException(NOT_FOUND);
@@ -199,7 +198,7 @@ public class MovieServiceImpl implements MovieService {
             options.add(new SelectOptionReponse(movieGenre.getId(), movieGenre.getName()));
         }
 
-        return new EditSelectOptionReponse<>(options, movie);
+        return new SelectOptionAndModelReponse<>(options, movie);
     }
 
     @Override

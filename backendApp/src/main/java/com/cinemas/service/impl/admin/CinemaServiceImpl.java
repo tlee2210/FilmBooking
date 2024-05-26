@@ -3,7 +3,8 @@ package com.cinemas.service.impl.admin;
 import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.CinemaRequest;
 import com.cinemas.dto.request.PaginationHelper;
-import com.cinemas.dto.response.EditSelectOptionReponse;
+import com.cinemas.dto.request.cinemaSearchRequest;
+import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.*;
 import com.cinemas.enums.StatusCinema;
@@ -43,9 +44,9 @@ public class CinemaServiceImpl implements CinemaService {
     FileStorageServiceImpl fileStorageServiceImpl;
 
     @Override
-    public Page<Cinema> getAllCinema(PaginationHelper PaginationHelper) {
+    public SelectOptionAndModelReponse<Page<Cinema>> getAllCinema(cinemaSearchRequest PaginationHelper) {
 
-        List<Cinema> cinemaList = cinemaRespository.findAll();
+        List<Cinema> cinemaList = cinemaRespository.searchCinema(PaginationHelper.getSearchname(), PaginationHelper.getStatus(), PaginationHelper.getCity());
 
         cinemaList.forEach(cinema -> {
             cinema.getImages().forEach(images -> {
@@ -63,7 +64,14 @@ public class CinemaServiceImpl implements CinemaService {
 
         Page<Cinema> cinemas = new PageImpl<>(pageList, new PaginationHelper().getPageable(PaginationHelper), cinemaList.size());
 
-        return cinemas;
+        List<String> cityList = cinemaRespository.findByCity();
+
+        List<SelectOptionReponse> options = new ArrayList<>();
+        cityList.forEach(item -> {
+            options.add(new SelectOptionReponse(item, item));
+        });
+
+        return new SelectOptionAndModelReponse<>(options, cinemas);
     }
 
     @Override
@@ -102,9 +110,7 @@ public class CinemaServiceImpl implements CinemaService {
 
     @Override
     public boolean updateCinema(CinemaRequest cinemaRequest) throws IOException {
-        Cinema cinema = cinemaRespository
-                .findById(cinemaRequest.getId())
-                .orElseThrow(() -> new AppException(NOT_FOUND));
+        Cinema cinema = cinemaRespository.findById(cinemaRequest.getId()).orElseThrow(() -> new AppException(NOT_FOUND));
 
         if (cinemaRespository.findByNameWithId(cinemaRequest.getName(), cinemaRequest.getId()) != null) {
             throw new AppException(NAME_EXISTED);
@@ -121,17 +127,14 @@ public class CinemaServiceImpl implements CinemaService {
         if (cinemaRequest.getImages() != null) {
             List<Integer> newImageUrls = cinemaRequest.getImages();
 
-            List<CinemaImages> imagesToDelete = cinemaImages.stream()
-                    .filter(images -> !newImageUrls.contains(images.getUid()))
-                    .peek(images -> {
-                        images.setCinema(null);
-                        try {
-                            fileStorageServiceImpl.deleteFile(images.getUrl());
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    })
-                    .collect(Collectors.toList());
+            List<CinemaImages> imagesToDelete = cinemaImages.stream().filter(images -> !newImageUrls.contains(images.getUid())).peek(images -> {
+                images.setCinema(null);
+                try {
+                    fileStorageServiceImpl.deleteFile(images.getUrl());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }).collect(Collectors.toList());
 
             cinemaImageRespository.deleteAll(imagesToDelete);
         } else {

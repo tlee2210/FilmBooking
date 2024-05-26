@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SelectOptionReponse {
-    public int value;
+public class SelectOptionReponse<T> {
+    public T value;
     public String label;
 }

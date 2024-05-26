@@ -6,13 +6,13 @@ export const initialState = {
   item: {},
 };
 
-const CelebritySlice = createSlice({
-  name: "Celebrity",
+const CinemaSlice = createSlice({
+  name: "Cinema",
   initialState,
   reducers: {
     fetchSuccess: (state, action) => {
-      // state.loading = false;
-      state.data = action.payload.data;
+      state.data = action.payload.data.model;
+      state.item = action.payload.data.selectOptionReponse;
     },
     setSelectOption(state, action) {
       state.SelectOption = action.payload;
@@ -21,8 +21,6 @@ const CelebritySlice = createSlice({
       state.item = action.payload;
     },
     removeItem(state, action) {
-      // console.log(action.payload);
-      // console.log("data: " + state.data);
       state.data.content = state.data.content.filter(
         (item) => item.id !== action.payload
       );
@@ -31,6 +29,6 @@ const CelebritySlice = createSlice({
 });
 
 export const { fetchSuccess, setSelectOption, removeItem, setItem } =
-  CelebritySlice.actions;
+  CinemaSlice.actions;
 
-export default CelebritySlice.reducer;
+export default CinemaSlice.reducer;

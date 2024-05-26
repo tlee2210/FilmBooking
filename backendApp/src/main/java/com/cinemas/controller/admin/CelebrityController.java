@@ -1,17 +1,18 @@
 package com.cinemas.controller.admin;
 
 import com.cinemas.dto.request.CelebrityRequest;
-import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.SearchRequest;
 import com.cinemas.dto.response.APIResponse;
-import com.cinemas.dto.response.EditSelectOptionReponse;
+import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Celebrity;
+import com.cinemas.enums.RoleCeleb;
 import com.cinemas.exception.AppException;
 import com.cinemas.service.admin.CelebrityService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -26,14 +27,40 @@ public class CelebrityController {
     @Autowired
     CelebrityService celebrityService;
 
+//    /**
+//     * all list Celebrity
+//     *
+//     * @param searchRequest
+//     * @return
+//     */
+//    @PostMapping
+//    public APIResponse<Page<Celebrity>> getAllCelebrity(@RequestBody(required = false) SearchRequest searchRequest) {
+//        Page<Celebrity> celebrityList = celebrityService.getAllCelebrity(searchRequest);
+//        APIResponse<Page<Celebrity>> apiResponse = new APIResponse<>();
+//        apiResponse.setCode(200);
+//        apiResponse.setResult(celebrityList);
+//
+//        return apiResponse;
+//    }
+
     /**
-     * all list Celebrity
-     *
-     * @param searchRequest
+     * all list Celebrity or search Celebrity
+     * @param search
+     * @param role
+     * @param pageNo
+     * @param pageSize
+     * @param sort
      * @return
      */
-    @PostMapping
-    public APIResponse<Page<Celebrity>> getAllCelebrity(@RequestBody(required = false) SearchRequest searchRequest) {
+    @GetMapping
+    public APIResponse<Page<Celebrity>> getAllCelebrity(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) RoleCeleb role,
+            @RequestParam(required = false, defaultValue = "1") Integer pageNo,
+            @RequestParam(required = false, defaultValue = "15") Integer pageSize,
+            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort) {
+
+        SearchRequest searchRequest = new SearchRequest(search, role,pageNo - 1, pageSize, sort);
         Page<Celebrity> celebrityList = celebrityService.getAllCelebrity(searchRequest);
         APIResponse<Page<Celebrity>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
@@ -107,8 +134,8 @@ public class CelebrityController {
      * @return
      */
     @GetMapping("/{slug}/edit")
-    public APIResponse<EditSelectOptionReponse<Celebrity>> getCelebrityById(@PathVariable String slug) {
-        APIResponse<EditSelectOptionReponse<Celebrity>> apiResponse = new APIResponse();
+    public APIResponse<SelectOptionAndModelReponse<Celebrity>> getCelebrityById(@PathVariable String slug) {
+        APIResponse<SelectOptionAndModelReponse<Celebrity>> apiResponse = new APIResponse();
 
         apiResponse.setCode(200);
         apiResponse.setResult(celebrityService.getEditCelebrityBySlug(slug));

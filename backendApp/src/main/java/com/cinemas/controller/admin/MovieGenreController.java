@@ -1,23 +1,16 @@
 package com.cinemas.controller.admin;
 
-import com.cinemas.dto.request.CelebrityRequest;
 import com.cinemas.dto.request.MovieGenreRequest;
 import com.cinemas.dto.request.SearchRequest;
 import com.cinemas.dto.response.APIResponse;
-import com.cinemas.dto.response.EditSelectOptionReponse;
-import com.cinemas.entities.Celebrity;
 import com.cinemas.entities.MovieGenre;
 import com.cinemas.exception.AppException;
 import com.cinemas.service.admin.MovieGenreService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
-import java.util.List;
 
 import static com.cinemas.exception.ErrorCode.CREATE_FAILED;
 import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
@@ -29,8 +22,12 @@ public class MovieGenreController {
     @Autowired
     private MovieGenreService movieGenreService;
 
-    @PostMapping
-    public APIResponse<Page<MovieGenre>> getAllMovieGenres(@RequestBody(required = false) SearchRequest searchRequest) {
+    @GetMapping
+    public APIResponse<Page<MovieGenre>> getAllMovieGenres(@RequestParam(required = false) String search,
+                                                           @RequestParam(required = false, defaultValue = "1") Integer pageNo,
+                                                           @RequestParam(required = false, defaultValue = "15") Integer pageSize,
+                                                           @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort) {
+        SearchRequest searchRequest = new SearchRequest(search, pageNo - 1, pageSize, sort);
         Page<MovieGenre> movieGenres = movieGenreService.getAllMovieGenre(searchRequest);
         APIResponse<Page<MovieGenre>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
@@ -40,7 +37,7 @@ public class MovieGenreController {
     }
 
     @PostMapping(value = "/create")
-    public APIResponse<String> createMovieGenre(@RequestBody MovieGenreRequest movieGenreRequest){
+    public APIResponse<String> createMovieGenre(@RequestBody MovieGenreRequest movieGenreRequest) {
         boolean checkCreate = movieGenreService.addMovieGenre(movieGenreRequest);
         if (checkCreate) {
             APIResponse<String> apiResponse = new APIResponse();
@@ -64,7 +61,7 @@ public class MovieGenreController {
     }
 
     @PutMapping(value = "/update")
-    public APIResponse<String> updateMovieGenre(@ModelAttribute MovieGenreRequest movieGenreRequest){
+    public APIResponse<String> updateMovieGenre(@ModelAttribute MovieGenreRequest movieGenreRequest) {
         boolean checkUpdate = movieGenreService.updateMovieGenre(movieGenreRequest);
         if (checkUpdate) {
             APIResponse<String> apiResponse = new APIResponse();
@@ -78,7 +75,7 @@ public class MovieGenreController {
     }
 
     @DeleteMapping("/{slug}/delete")
-    public APIResponse<Integer> deleteMovieGenre(@PathVariable String slug){
+    public APIResponse<Integer> deleteMovieGenre(@PathVariable String slug) {
 
         int id = movieGenreService.deleteMovieGenre(slug);
         if (id > 0) {

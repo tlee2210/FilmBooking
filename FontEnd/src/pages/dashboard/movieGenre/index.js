@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   Button,
   Card,
-  CardBody,
   CardHeader,
   Col,
   Container,
@@ -19,6 +18,7 @@ import {
   FormFeedback,
 } from "reactstrap";
 import { message } from "antd";
+import withRouter from "../../../Components/Common/withRouter";
 
 // Formik validation
 import * as Yup from "yup";
@@ -34,15 +34,28 @@ import {
 } from "../../../slices/MovieGenre/thunk";
 
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import TableContainer from "../../../Components/Common/TableContainerReactTable";
 
-const MovieGenre = () => {
+const MovieGenre = (props) => {
   const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [searchname, setSearch] = useState(searchParams.get("search") || null);
+  const [pageNo, setPageNo] = useState(
+    parseInt(searchParams.get("pageNo"), 10) || 1
+  );
+  const [pageSize, setPageSize] = useState(
+    parseInt(searchParams.get("pageSize"), 10) || 15
+  );
 
   useEffect(() => {
-    dispatch(getMovieGenre({}));
-  }, []);
+    searchname && searchname !== null && searchname !== undefined
+      ? setSearchParams({ searchname, pageNo, pageSize })
+      : setSearchParams({ pageNo, pageSize });
+
+    dispatch(getMovieGenre(searchname, pageNo, pageSize));
+  }, [dispatch, searchname, pageNo, pageSize]);
 
   const [formcheck, setformcheck] = useState(false);
   const [slug, setSlug] = useState("");
@@ -53,7 +66,7 @@ const MovieGenre = () => {
   const selectCityState = (state) => state;
 
   const CitypageData = createSelector(selectCityState, (state) => ({
-    CityData: state.MovieGenre.data,
+    MovieGenreData: state.MovieGenre.data,
     item: state.MovieGenre.item,
     success: state.Message.success,
     error: state.Message.error,
@@ -61,7 +74,7 @@ const MovieGenre = () => {
     messageError: state.Message.messageError,
   }));
 
-  const { error, success, messageSuccess, messageError, CityData, item } =
+  const { error, success, messageSuccess, messageError, MovieGenreData, item } =
     useSelector(CitypageData);
 
   useEffect(() => {
@@ -69,6 +82,7 @@ const MovieGenre = () => {
       if (messageSuccess != null) {
         message.success(messageSuccess);
         setmodal_togFirst(false);
+        searchForm.resetForm();
       }
     }
     if (error) {
@@ -104,16 +118,29 @@ const MovieGenre = () => {
       }
     },
   });
+  const searchForm = useFormik({
+    enableReinitialize: true,
+
+    initialValues: {
+      name: searchname ? searchname : "" || "",
+    },
+    onSubmit: (values) => {
+      // console.log(values);
+      setSearch(values.name);
+      setPageNo(1);
+    },
+  });
+
   const columns = useMemo(
     () => [
       {
-        header: "Name",
-        accessorKey: "name",
+        header: "id",
+        accessorKey: "id",
         enableColumnFilter: false,
       },
       {
-        header: "Slug",
-        // accessorKey: "slug",
+        header: "Name",
+        accessorKey: "name",
         enableColumnFilter: false,
       },
       {
@@ -151,10 +178,14 @@ const MovieGenre = () => {
   );
 
   const handlePagination = (page) => {
-    // console.log(page);
-    const formData = new FormData();
-    formData.append("pageNo", page);
-    dispatch(getMovieGenre(formData));
+    const newPageNo = page + 1;
+    setPageNo(newPageNo);
+    setSearchParams({ searchname, pageNo: newPageNo, pageSize });
+  };
+  const handlenumberOfElements = (elements) => {
+    setPageSize(elements);
+    setPageNo(1);
+    setSearchParams({ searchname, pageNo, pageSize: elements });
   };
 
   function settitle(type) {
@@ -230,14 +261,52 @@ const MovieGenre = () => {
                           </div>
                         </div>
                       </Row>
+                      <Form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          searchForm.handleSubmit();
+                          return false;
+                        }}
+                        action="#"
+                      >
+                        <Row className="g-2 mt-3 mb-3">
+                          <Col sm={4}>
+                            <div className="search-box">
+                              <Input
+                                type="text"
+                                name="name"
+                                className="form-control"
+                                placeholder="Search for name..."
+                                onChange={searchForm.handleChange}
+                                onBlur={searchForm.handleBlur}
+                                value={searchForm.values.name}
+                              />
+                              <i className="ri-search-line search-icon"></i>
+                            </div>
+                          </Col>
+                          <Col className="col-sm-auto ms-auto">
+                            <div className="list-grid-nav hstack gap-1">
+                              <button
+                                type="submit"
+                                className="btn btn-primary w-100"
+                              >
+                                {" "}
+                                <i className="ri-equalizer-fill me-2 align-bottom"></i>
+                                Filters
+                              </button>
+                            </div>
+                          </Col>
+                        </Row>
+                      </Form>
                     </CardHeader>
                     <div className="card-body pt-0">
                       <TableContainer
                         columns={columns || []}
-                        data={CityData.content || []}
-                        paginateData={CityData}
-                        customPageSize={CityData.size}
+                        data={MovieGenreData.content || []}
+                        paginateData={MovieGenreData}
+                        customPageSize={MovieGenreData.size}
                         paginate={handlePagination}
+                        numberOfElements={handlenumberOfElements}
                         tableClass="table-centered align-middle table-nowrap mb-0"
                         theadClass="text-muted table-light"
                         SearchPlaceholder="Search Products..."
@@ -360,4 +429,4 @@ const MovieGenre = () => {
   );
 };
 
-export default MovieGenre;
+export default withRouter(MovieGenre);
