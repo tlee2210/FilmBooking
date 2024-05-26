@@ -41,10 +41,7 @@ const Movie = lazy(() => import("../pages/dashboard/Movie/index"));
 const MovieEdit = lazy(() => import("../pages/dashboard/Movie/edit"));
 const MovieCreate = lazy(() => import("../pages/dashboard/Movie/create"));
 
-const CinemaCorners = lazy(() =>
-  import("../pages/dashboard/CinemaCorner/index")
-);
-const DaoDien = lazy(() => import("../pages/dashboard/CinemaCorner/daoDien"));
+
 //Cinema Coner
 const Actor = lazy(() =>
   import("../pages/Page/CinemaCorner/Actor")
@@ -52,6 +49,11 @@ const Actor = lazy(() =>
 const Director = lazy(() => import("../pages/Page/CinemaCorner/Director"));
 const ActorInfor = lazy(()=>import("../pages/Page/CinemaCorner/Details/ActorInfor"))
 const DirectorInfor = lazy(()=>import("../pages/Page/CinemaCorner/Details/DirectorInfor"))
+
+
+//Ticket Booking
+const TicketBooking = lazy(()=>import("../pages/Page/BuyTicket/index"))
+
 
 const authProtectedRoutes = [
   //User Profile
@@ -100,4 +102,9 @@ const CinemaCornerRoutes = [
   { path: "/dao-dien/dao-dien-details", component: <DirectorInfor /> },
 ];
 
-export { authProtectedRoutes, publicRoutes, homeRoutes, CinemaCornerRoutes };
+const TicketBookingRoutes = [
+  { path: "/ticket-booking/phim", component: <TicketBooking /> },
+ 
+];
+
+export { authProtectedRoutes, publicRoutes, homeRoutes, CinemaCornerRoutes,TicketBookingRoutes };

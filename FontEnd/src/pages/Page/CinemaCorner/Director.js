@@ -41,7 +41,6 @@ const Director = () => {
       <Container style={{ paddingTop: 100 }}>
         <div className="page-content">
           <Container fluid>
-
             <Row>
               <Col lg={8}>
                 <div fluid className="director-header-container-cinemaCorner">

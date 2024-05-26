@@ -13,6 +13,7 @@ import {
   publicRoutes,
   homeRoutes,
   CinemaCornerRoutes,
+  TicketBookingRoutes,
 } from "./allRoutes";
 import { AuthProtected } from "./AuthProtected";
 
@@ -69,7 +70,15 @@ const Index = () => {
               exact={true}
             />
           ))}
-          <Route></Route>
+           {/* Ticket Booking */}
+           {TicketBookingRoutes.map((route, idx) => (
+            <Route
+              path={route.path}
+              element={<LayoutHome>{route.component}</LayoutHome>}
+              key={idx}
+              exact={true}
+            />
+          ))}
 
           <Route>
             {authProtectedRoutes.map((route, idx) => (

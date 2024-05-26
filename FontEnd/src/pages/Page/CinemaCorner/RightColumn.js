@@ -87,7 +87,7 @@ const DirectorInfor = () => {
                 <div className="d-flex align-items-center pb-3">
                     <div className="text-xl inline-block font-bold uppercase" style={{ borderLeft: "4px solid #007bff", fontSize: "18px", fontWeight: "bold", textTransform: "uppercase", paddingLeft: "0.5rem" }}>PHIM ĐANG CHIẾU</div>
                 </div>
-                <Link to="/dat-ve/phim?=" style={{ textDecoration: "none", color: "inherit" }}>
+                <Link to="/ticket-booking/phim" style={{ textDecoration: "none", color: "inherit" }}>
                     <CardBody className="position-relative p-0 hover-container">
                         <img
                             style={{ height: "280px", width: "380px", objectFit: "inherit" }}
@@ -109,7 +109,7 @@ const DirectorInfor = () => {
                 </Link>
             </Card>
             <Card className="quick-ticket-card-phim-dang-chieu mt-5">
-                <Link to="/dat-ve/phim?=" style={{ textDecoration: "none", color: "inherit" }}>
+                <Link to="/ticket-booking/phim" style={{ textDecoration: "none", color: "inherit" }}>
                     <CardBody className="position-relative p-0 hover-container">
                         <img
                             style={{ height: "280px", width: "380px", objectFit: "inherit" }}
@@ -131,7 +131,7 @@ const DirectorInfor = () => {
                 </Link>
             </Card>
             <Card className="quick-ticket-card-phim-dang-chieu mt-5">
-                <Link to="/dat-ve/phim?=" style={{ textDecoration: "none", color: "inherit" }}>
+                <Link to="/ticket-booking/phim" style={{ textDecoration: "none", color: "inherit" }}>
                     <CardBody className="position-relative p-0 hover-container">
                         <img
                             style={{ height: "280px", width: "380px", objectFit: "inherit" }}
