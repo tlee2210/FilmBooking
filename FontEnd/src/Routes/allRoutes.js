@@ -59,10 +59,15 @@ const MovieGenre = lazy(() => import("../pages/dashboard/movieGenre/index"));
 const CinemaCreate = lazy(() => import("../pages/dashboard/Cinemas/create"));
 const CinemaEdit = lazy(() => import("../pages/dashboard/Cinemas/edit"));
 const Cinemas = lazy(() => import("../pages/dashboard/Cinemas/index"));
-const CinemaCorners = lazy(() =>
-  import("../pages/dashboard/CinemaCorner/index")
+
+//Cinema Coner
+const Actor = lazy(() =>
+  import("../pages/Page/CinemaCorner/Actor")
 );
-const DaoDien = lazy(() => import("../pages/dashboard/CinemaCorner/daoDien"));
+const Director = lazy(() => import("../pages/Page/CinemaCorner/Director"));
+const ActorInfor = lazy(()=>import("../pages/Page/CinemaCorner/Details/ActorInfor"))
+const DirectorInfor = lazy(()=>import("../pages/Page/CinemaCorner/Details/DirectorInfor"))
+
 const authProtectedRoutes = [
   //User Profile
   { path: "/profile", component: <UserProfile /> },
@@ -100,8 +105,10 @@ const publicRoutes = [
 const homeRoutes = [{ path: "/", component: <Home /> }];
 
 const CinemaCornerRoutes = [
-  { path: "/dien-vien", component: <CinemaCorners /> },
-  { path: "/dao-dien", component: <DaoDien /> },
+  { path: "/dien-vien", component: <Actor /> },
+  { path: "/dao-dien", component: <Director /> },
+  { path: "/dien-vien/dien-vien-details", component: <ActorInfor /> },
+  { path: "/dao-dien/dao-dien-details", component: <DirectorInfor /> },
 ];
 
 export { authProtectedRoutes, publicRoutes, homeRoutes, CinemaCornerRoutes };

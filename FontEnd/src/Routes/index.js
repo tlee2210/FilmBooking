@@ -59,6 +59,8 @@ const Index = () => {
               />
             ))}
           </Route>
+
+          {/* CinemaCorner */}
           {CinemaCornerRoutes.map((route, idx) => (
             <Route
               path={route.path}
