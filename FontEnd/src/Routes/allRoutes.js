@@ -41,7 +41,6 @@ const Movie = lazy(() => import("../pages/dashboard/Movie/index"));
 const MovieEdit = lazy(() => import("../pages/dashboard/Movie/edit"));
 const MovieCreate = lazy(() => import("../pages/dashboard/Movie/create"));
 
-
 //Cinema Coner
 const Actor = lazy(() =>
   import("../pages/Page/CinemaCorner/Actor")

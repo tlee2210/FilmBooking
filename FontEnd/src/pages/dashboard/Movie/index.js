@@ -263,7 +263,7 @@ const Cinema = (props) => {
                       <div>
                         <Link
                           className="btn btn-success add-btn"
-                          to={`/dashboard/cinema/create`}
+                          to={`/dashboard/movie/create`}
                         >
                           <i className="ri-add-line align-bottom me-1"></i> Add
                           New Cinema
