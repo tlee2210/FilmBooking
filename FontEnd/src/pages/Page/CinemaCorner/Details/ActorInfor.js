@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Card, CardBody, CardHeader, Col, Container, Input, Label, Row, FormGroup, Button } from 'reactstrap';
 import "../css/CinemaCorner.css"
-
+import RightColumn from "../RightColumn";
 const actorImage = "https://images2.thanhnien.vn/528068263637045248/2024/5/24/chris-hemsworth-1716539281941143214485.png";
 const movieImages = [
     "https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcQul9f8AXvrrs1EXi1wEA_zsa_f200m5RDGPOhKCPrk9q17SvS15ShBND91nXvW9ctIuoDJeY_S&s=19",
@@ -135,78 +135,7 @@ const ActorInfor = () => {
 
                             {/* Bên Phải */}
                             <Col lg={4}>
-                                <Card className="quick-ticket-card">
-                                    <CardHeader className="quick-ticket-header">Mua Vé Nhanh</CardHeader>
-                                    <CardBody>
-                                        <FormGroup>
-                                            <Label for="movieSelect">Chọn phim</Label>
-                                            <Input
-                                                type="select"
-                                                id="movieSelect"
-                                                value={selectedMovie}
-                                                onChange={handleMovieChange}
-                                            >
-                                                <option value="">Chọn phim</option>
-                                                <option value="movie1">Phim 1</option>
-                                                <option value="movie2">Phim 2</option>
-                                            </Input>
-                                        </FormGroup>
-                                        <FormGroup>
-                                            <Label for="theaterSelect">Chọn rạp</Label>
-                                            <Input
-                                                type="select"
-                                                id="theaterSelect"
-                                                value={selectedTheater}
-                                                onChange={handleTheaterChange}
-                                                disabled={!selectedMovie}
-                                            >
-                                                <option value="">Chọn rạp</option>
-                                                <option value="theater1">Rạp 1</option>
-                                                <option value="theater2">Rạp 2</option>
-                                            </Input>
-                                        </FormGroup>
-                                        <FormGroup>
-                                            <Label for="dateSelect">Chọn ngày</Label>
-                                            <Input
-                                                type="select"
-                                                id="dateSelect"
-                                                value={selectedDate}
-                                                onChange={handleDateChange}
-                                                disabled={!selectedTheater}
-                                            >
-                                                <option value="">Chọn ngày</option>
-                                                <option value="date1">Ngày 1</option>
-                                                <option value="date2">Ngày 2</option>
-                                            </Input>
-                                        </FormGroup>
-                                    </CardBody>
-                                </Card>
-
-
-                                 {/* PHIM ĐANG CHIẾU */}
-                                <Card className="quick-ticket-card-phim-dang-chieu mt-5">
-                                    <div className="d-flex align-items-center pb-3">
-                                        <div className="text-xl inline-block font-bold uppercase" style={{ borderLeft: "4px solid #007bff", fontSize: "18px", fontWeight: "bold", textTransform: "uppercase", paddingLeft: "0.5rem" }}>PHIM ĐANG CHIẾU</div>
-                                    </div>
-                                    <CardBody className="position-relative p-0 hover-container">
-                                        <img
-                                            style={{ height: "280px", width: "380px", objectFit: "inherit" }}
-                                            className="img-fluid hover-image"
-                                            src="https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcTtz0oynJ2nY-2wHZXerfJbJoGZpLIPrUSWdLfQbcWOuymbu2uWLbSyonfEeoUHbcnS1FE5k6ZfxkQe8YQ"
-                                            alt="Movie"
-                                        />
-                                        <div className="ticket-overlay">
-                                            <img
-                                                src="https://www.galaxycine.vn/_next/static/media/btn-ticket.42d72c96.webp"
-                                                alt="Ticket"
-                                                className="ticket-image"
-                                            />
-                                        </div>
-                                        <div style={{ paddingTop: 5 }}>
-                                            <a style={{ fontSize: 18, fontWeight: "bold" }} href='/#'>Thor RagnaRock</a>
-                                        </div>
-                                    </CardBody>
-                                </Card>
+                                <RightColumn />
                                 <div className='button-dien-vien'>
                                     <Button color="secondary" outline className="waves-effect waves-light material-shadow-none">Xem Thêm <i className="bx bx-right-arrow-alt"></i></Button>
                                 </div>
