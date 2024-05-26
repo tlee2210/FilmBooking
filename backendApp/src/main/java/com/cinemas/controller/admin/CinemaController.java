@@ -41,12 +41,13 @@ public class CinemaController {
      * @return
      */
     @GetMapping
-    public APIResponse<SelectOptionAndModelReponse<Page<Cinema>>> getAllCinema(@RequestParam(required = false) String search,
-                                                                               @RequestParam(required = false) StatusCinema status,
-                                                                               @RequestParam(required = false) String city,
-                                                                               @RequestParam(required = false, defaultValue = "1") Integer pageNo,
-                                                                               @RequestParam(required = false, defaultValue = "15") Integer pageSize,
-                                                                               @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort) {
+    public APIResponse<SelectOptionAndModelReponse<Page<Cinema>>> getAllCinema(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) StatusCinema status,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false, defaultValue = "1") Integer pageNo,
+            @RequestParam(required = false, defaultValue = "15") Integer pageSize,
+            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort) {
 
         cinemaSearchRequest cinemaSearchRequest = new cinemaSearchRequest(search, status, city, pageNo - 1, pageSize, sort);
         SelectOptionAndModelReponse<Page<Cinema>> cinemaList = cinemaService.getAllCinema(cinemaSearchRequest);

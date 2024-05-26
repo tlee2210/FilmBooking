@@ -27,24 +27,9 @@ public class CelebrityController {
     @Autowired
     CelebrityService celebrityService;
 
-//    /**
-//     * all list Celebrity
-//     *
-//     * @param searchRequest
-//     * @return
-//     */
-//    @PostMapping
-//    public APIResponse<Page<Celebrity>> getAllCelebrity(@RequestBody(required = false) SearchRequest searchRequest) {
-//        Page<Celebrity> celebrityList = celebrityService.getAllCelebrity(searchRequest);
-//        APIResponse<Page<Celebrity>> apiResponse = new APIResponse<>();
-//        apiResponse.setCode(200);
-//        apiResponse.setResult(celebrityList);
-//
-//        return apiResponse;
-//    }
-
     /**
      * all list Celebrity or search Celebrity
+     *
      * @param search
      * @param role
      * @param pageNo
@@ -60,7 +45,7 @@ public class CelebrityController {
             @RequestParam(required = false, defaultValue = "15") Integer pageSize,
             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort) {
 
-        SearchRequest searchRequest = new SearchRequest(search, role,pageNo - 1, pageSize, sort);
+        SearchRequest searchRequest = new SearchRequest(search, role, pageNo - 1, pageSize, sort);
         Page<Celebrity> celebrityList = celebrityService.getAllCelebrity(searchRequest);
         APIResponse<Page<Celebrity>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);

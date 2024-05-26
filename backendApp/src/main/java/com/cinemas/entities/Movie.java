@@ -27,6 +27,9 @@ public class Movie {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false, unique = true)
+    private String slug;
+
     @Column(nullable = false)
     private Integer duration;
 
@@ -41,10 +44,13 @@ public class Movie {
     private String producer;
 
     @Column(nullable = false)
-    private String movieContent;
+    private String description;
 
     @Column(nullable = false)
-    private String image;
+    private String imageLandscape;
+
+    @Column(nullable = false)
+    private String imagePortrait;
 
     @Column(nullable = false)
     private String trailer;
@@ -53,10 +59,7 @@ public class Movie {
     private String rules;
 
     @Column(nullable = false)
-    private String type;
-
-    @Column(nullable = false, unique = true)
-    private String slug;
+    private String movieFormat;
 
     @ManyToMany
     @JoinTable(

@@ -142,7 +142,7 @@ public class MovieServiceImpl implements MovieService {
         movie.setCelebrities(celebrities);
 
         //set image
-        movie.setImage(fileStorageServiceImpl.uploadFile(movieRequest.getImage(), "MOVIE"));
+//        movie.setImage(fileStorageServiceImpl.uploadFile(movieRequest.getImage(), "MOVIE"));
 
         //set trailer
         movie.setTrailer(fileStorageServiceImpl.uploadFile(movieRequest.getTrailer(), "MOVIE"));
@@ -157,7 +157,7 @@ public class MovieServiceImpl implements MovieService {
 
         if (movie == null) throw new AppException(NOT_FOUND);
 
-        fileStorageServiceImpl.deleteFile(movie.getImage());
+//        fileStorageServiceImpl.deleteFile(movie.getImage());
         fileStorageServiceImpl.deleteVideo(movie.getTrailer(), "video");
         movieRepository.delete(movie);
         return movie.getId();
@@ -169,7 +169,7 @@ public class MovieServiceImpl implements MovieService {
 
         if (movie == null) throw new AppException(NOT_FOUND);
 
-        movie.setImage(fileStorageServiceImpl.getUrlFromPublicId(movie.getImage()));
+//        movie.setImage(fileStorageServiceImpl.getUrlFromPublicId(movie.getImage()));
         movie.setTrailer(fileStorageServiceImpl.getVideoFromPublicId(movie.getTrailer()));
 
         List<SelectOptionReponse> options = new ArrayList<>();
@@ -210,8 +210,8 @@ public class MovieServiceImpl implements MovieService {
         }
 
         if(movieRequest.getImage() !=null){
-            fileStorageServiceImpl.deleteFile(movie.getImage());
-            movie.setImage(fileStorageServiceImpl.uploadFile(movieRequest.getImage(), "MOVIE"));
+//            fileStorageServiceImpl.deleteFile(movie.getImage());
+//            movie.setImage(fileStorageServiceImpl.uploadFile(movieRequest.getImage(), "MOVIE"));
         }
 
         if(movieRequest.getTrailer() !=null){

@@ -23,10 +23,12 @@ public class MovieGenreController {
     private MovieGenreService movieGenreService;
 
     @GetMapping
-    public APIResponse<Page<MovieGenre>> getAllMovieGenres(@RequestParam(required = false) String search,
-                                                           @RequestParam(required = false, defaultValue = "1") Integer pageNo,
-                                                           @RequestParam(required = false, defaultValue = "15") Integer pageSize,
-                                                           @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort) {
+    public APIResponse<Page<MovieGenre>> getAllMovieGenres(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false, defaultValue = "1") Integer pageNo,
+            @RequestParam(required = false, defaultValue = "15") Integer pageSize,
+            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort) {
+
         SearchRequest searchRequest = new SearchRequest(search, pageNo - 1, pageSize, sort);
         Page<MovieGenre> movieGenres = movieGenreService.getAllMovieGenre(searchRequest);
         APIResponse<Page<MovieGenre>> apiResponse = new APIResponse<>();

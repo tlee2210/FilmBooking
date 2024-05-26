@@ -27,7 +27,6 @@ public class MovieController {
     private MovieService movieService;
 
     /**
-     *
      * @param PaginationHelper
      * @return
      */
@@ -42,11 +41,10 @@ public class MovieController {
     }
 
     /**
-     *
      * @return
      */
     @GetMapping("/create")
-    public APIResponse<List<SelectOptionReponse>> getCreateMovie(){
+    public APIResponse<List<SelectOptionReponse>> getCreateMovie() {
         List<SelectOptionReponse> multiList = movieService.getCreateMovie();
         APIResponse<List<SelectOptionReponse>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
@@ -56,7 +54,6 @@ public class MovieController {
     }
 
     /**
-     *
      * @param movieRequest
      * @return
      * @throws IOException
@@ -64,7 +61,7 @@ public class MovieController {
     @PostMapping("/create")
     public APIResponse<String> createMovie(@ModelAttribute MovieRequest movieRequest) throws IOException {
         boolean checkCreate = movieService.addMovie(movieRequest);
-        if(checkCreate){
+        if (checkCreate) {
             APIResponse<String> apiResponse = new APIResponse<>();
             apiResponse.setCode(200);
             apiResponse.setResult("Movie created successfully");
@@ -75,10 +72,17 @@ public class MovieController {
         throw new AppException(CREATE_FAILED);
     }
 
+    /**
+     * delete Movie by slug
+     * @param slug
+     * @return
+     * @throws IOException
+     */
+
     @DeleteMapping("/delete/{slug}")
     public APIResponse<Integer> deleteMovie(@PathVariable String slug) throws IOException {
         int id = movieService.deleteMovie(slug);
-        if(id > 0){
+        if (id > 0) {
             APIResponse<Integer> apiResponse = new APIResponse<>();
             apiResponse.setCode(200);
             apiResponse.setMessage("Movie deleted successfully");
@@ -102,7 +106,7 @@ public class MovieController {
     @PutMapping("/update")
     public APIResponse<String> updateMovie(@ModelAttribute MovieRequest movieRequest) throws IOException {
         boolean checkUpdate = movieService.updateMovie(movieRequest);
-        if(checkUpdate){
+        if (checkUpdate) {
             APIResponse<String> apiResponse = new APIResponse<>();
             apiResponse.setCode(200);
             apiResponse.setMessage("Movie updated successfully");

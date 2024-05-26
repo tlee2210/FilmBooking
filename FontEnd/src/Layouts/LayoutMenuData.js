@@ -39,8 +39,8 @@ const Navdata = () => {
     },
     {
       id: "movie",
-      label: "Movie",
-      icon: "ri-youtube-line",
+      label: "Movie Manager",
+      icon: "ri-movie-2-fill",
       link: "/#",
       stateVariables: isMovie,
       click: function (e) {
@@ -50,6 +50,12 @@ const Navdata = () => {
         updateIconSidebar(e);
       },
       subItems: [
+        {
+          id: "Movie",
+          label: "Movie",
+          link: "/dashboard/movie",
+          parentId: "movie",
+        },
         {
           id: "celebrity",
           label: "Celebrity",
