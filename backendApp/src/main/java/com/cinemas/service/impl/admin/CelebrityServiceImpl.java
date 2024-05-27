@@ -27,7 +27,7 @@ import java.util.List;
 import static com.cinemas.exception.ErrorCode.*;
 
 @Service
-public class CelebrityServiceImpl implements CelebrityService {
+public class    CelebrityServiceImpl implements CelebrityService {
     @Autowired
     CelebrityRepository celebrityRepository;
     @Autowired
