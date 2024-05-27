@@ -14,23 +14,25 @@ public class MovieGenreDataInitializer {
     MovieGenreRepository movieGenreRepository;
 
     public void initMovieGenre() {
-        String[] genreNames = {
-                "Action", "Adventure", "Comedy", "Drama", "Horror",
-                "Science Fiction", "Fantasy", "Mystery", "Romance", "Thriller",
-                "Animation", "Documentary", "Family", "Musical", "Western",
-                "War", "Crime", "Biography", "Sport", "History"};
+        if (movieGenreRepository.count() == 0) {
+            String[] genreNames = {
+                    "Action", "Adventure", "Comedy", "Drama", "Horror",
+                    "Science Fiction", "Fantasy", "Mystery", "Romance", "Thriller",
+                    "Animation", "Documentary", "Family", "Musical", "Western",
+                    "War", "Crime", "Biography", "Sport", "History"};
 
-        List<MovieGenre> genres = new ArrayList<>();
+            List<MovieGenre> genres = new ArrayList<>();
 
-        for (String genreName : genreNames) {
-            MovieGenre genre = MovieGenre.builder()
-                    .name(genreName)
-                    .slug(generateSlug(genreName))
-                    .build();
-            genres.add(genre);
+            for (String genreName : genreNames) {
+                MovieGenre genre = MovieGenre.builder()
+                        .name(genreName)
+                        .slug(generateSlug(genreName))
+                        .build();
+                genres.add(genre);
+            }
+
+            movieGenreRepository.saveAll(genres);
         }
-
-        movieGenreRepository.saveAll(genres);
     }
 
     private String generateSlug(String Name) {

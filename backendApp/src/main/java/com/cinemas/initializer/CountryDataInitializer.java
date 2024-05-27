@@ -14,21 +14,23 @@ public class CountryDataInitializer {
     CountryRepository countryRepository;
 
     public void initCountries() {
-        String[] nationalities = {
-                "American", "British", "Canadian", "Australian",
-                "French", "German", "Italian", "Spanish", "Japanese",
-                "Chinese", "Russian", "Brazilian", "Indian", "Mexican",
-                "South Korean", "Swedish", "Dutch", "Norwegian", "Swiss", "Greek"};
+        if (countryRepository.count() == 0) {
+            String[] nationalities = {
+                    "American", "British", "Canadian", "Australian",
+                    "French", "German", "Italian", "Spanish", "Japanese",
+                    "Chinese", "Russian", "Brazilian", "Indian", "Mexican",
+                    "South Korean", "Swedish", "Dutch", "Norwegian", "Swiss", "Greek"};
 
-        List<Country> countries = new ArrayList<>();
+            List<Country> countries = new ArrayList<>();
 
-        for (String nationality : nationalities) {
-            Country country = Country.builder()
-                    .name(nationality)
-                    .build();
-            countries.add(country);
+            for (String nationality : nationalities) {
+                Country country = Country.builder()
+                        .name(nationality)
+                        .build();
+                countries.add(country);
+            }
+
+            countryRepository.saveAll(countries);
         }
-
-        countryRepository.saveAll(countries);
     }
 }

@@ -24,9 +24,9 @@ public class BackendAppApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        userDataInitializer.initUsers();
-//        countryDataInitializer.initCountries();
-//        movieGenreDataInitializer.initMovieGenre();
-//        celebrityDataInitializer.initCelebrities();
+        userDataInitializer.initUsers();
+        countryDataInitializer.initCountries();
+        movieGenreDataInitializer.initMovieGenre();
+        celebrityDataInitializer.initCelebrities();
     }
 }
