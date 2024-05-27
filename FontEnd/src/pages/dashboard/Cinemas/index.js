@@ -353,19 +353,23 @@ const Cinema = (props) => {
                     </Row>
                   </Form>
                 </CardHeader>
-                <div className="card-body pt-0">
-                  <TableContainer
-                    columns={columns || []}
-                    data={Cinema.content || []}
-                    paginateData={Cinema}
-                    customPageSize={Cinema.size}
-                    paginate={handlePagination}
-                    numberOfElements={handlenumberOfElements}
-                    tableClass="table-centered align-middle table-nowrap mb-0"
-                    theadClass="text-muted table-light"
-                    SearchPlaceholder="Search Products..."
-                  />
-                </div>
+                <Row>
+                  <Col md={12}>
+                    <div className="card-body pt-0">
+                      <TableContainer
+                        columns={columns || []}
+                        data={Cinema.content || []}
+                        paginateData={Cinema}
+                        customPageSize={Cinema.size}
+                        paginate={handlePagination}
+                        numberOfElements={handlenumberOfElements}
+                        tableClass="table-centered align-middle table-nowrap mb-0"
+                        theadClass="text-muted table-light"
+                        SearchPlaceholder="Search Products..."
+                      />
+                    </div>
+                  </Col>
+                </Row>
               </Card>
             </Col>
           </Row>

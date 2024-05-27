@@ -36,15 +36,10 @@ public class SecurityConfiguration {
                         .requestMatchers(
                                 "/api/auth/**",
                                 "/api/admin/v1/celebrity/**",
-                                "/api/admin/v1/city/**",
                                 "/api/admin/v1/cinema/**",
-<<<<<<< HEAD
                                 "/api/admin/v1/watercorn/**",
-                                "/api/admin/v1/movie/**").permitAll()
-=======
                                 "/api/admin/v1/movie/**",
                                 "/api/admin/v1/movie-genre/**").permitAll()
->>>>>>> c8089f06a7b7aae68030074d70ac01dae3db2dcb
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 //                        .requestMatchers("/api/admin").hasAnyAuthority(RoleType.ADMIN.name(), RoleType.MANAGER.name())
                         .requestMatchers("/api/admin").hasAnyAuthority(RoleType.ADMIN.name())
