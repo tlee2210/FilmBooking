@@ -31,6 +31,7 @@ const mapStyles = {
 // Redux
 import { useDispatch, useSelector } from "react-redux";
 import { CreateCinemas } from "../../../slices/Cinemas/thunk";
+import { getCreate } from "../../../slices/Movie/thunk";
 import { clearNotification } from "../../../slices/message/reducer";
 
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -59,22 +60,26 @@ const MovieCreate = (props) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
 
-  const selectCinemaCreateState = (state) => state;
+  const selectMovieCreateState = (state) => state;
 
-  const CinemaCreatepageData = createSelector(
-    selectCinemaCreateState,
+  const movieCreatepageData = createSelector(
+    selectMovieCreateState,
     (state) => ({
       error: state.Message.error,
       messageError: state.Message.messageError,
+      selectActors: state.Movie.selectActors,
+      selectCategories: state.Movie.selectCategories,
+      selectDirectories: state.Movie.selectDirectories,
     })
   );
 
-  const statusOption = [
-    { value: "ACTIVE", label: "ACTIVE" },
-    { value: "INACTIVE", label: "INACTIVE" },
-  ];
-
-  const { error, messageError } = useSelector(CinemaCreatepageData);
+  const {
+    error,
+    messageError,
+    selectActors,
+    selectCategories,
+    selectDirectories,
+  } = useSelector(movieCreatepageData);
 
   useEffect(() => {
     if (error) {
@@ -84,6 +89,10 @@ const MovieCreate = (props) => {
     }
     dispatch(clearNotification());
   }, [error]);
+
+  useEffect(() => {
+    dispatch(getCreate());
+  }, []);
 
   const customStyles = {
     multiValue: (styles, { data }) => {
@@ -157,8 +166,8 @@ const MovieCreate = (props) => {
 
     initialValues: {
       name: "",
-      fileList: [],
-      status: "",
+      fileLandscape: [],
+      filePortrait: [],
       Description: "",
       Category: [],
       Actor: [],
@@ -166,25 +175,36 @@ const MovieCreate = (props) => {
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Please Enter a Cinema name"),
-      status: Yup.string().required("Please Enter a status"),
       Description: Yup.string().required("Please Enter Description"),
-      // fileList: Yup.array()
-      //   .of(
-      //     Yup.mixed().test(
-      //       "fileType",
-      //       "Unsupported File Format",
-      //       (value) => value && value.type.startsWith("image/")
-      //     )
-      //   )
-      //   .min(1, "Please upload at least one Image"),
+      Category: Yup.array().min(1, "Please select at least one Category"),
+      Actor: Yup.array().min(1, "Please select at least one Actor"),
+      Directory: Yup.array().min(1, "Please select at least one Director"),
+      fileLandscape: Yup.array()
+        .of(
+          Yup.mixed().test(
+            "fileType",
+            "Unsupported File Format",
+            (value) => value && value.type.startsWith("image/")
+          )
+        )
+        .min(1, "Please upload at least one Image"),
+      filePortrait: Yup.array()
+        .of(
+          Yup.mixed().test(
+            "fileType",
+            "Unsupported File Format",
+            (value) => value && value.type.startsWith("image/")
+          )
+        )
+        .min(1, "Please upload at least one Image"),
     }),
     onSubmit: (values) => {
       console.log(values);
     },
   });
-  // useEffect(() => {
-  //   console.log("Current validation errors:", validation.errors);
-  // }, [validation.errors]);
+  useEffect(() => {
+    console.log("Current validation errors:", validation.errors);
+  }, [validation.errors]);
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -193,8 +213,11 @@ const MovieCreate = (props) => {
     setPreviewImage(file.url || file.preview);
     setPreviewOpen(true);
   };
-  const handleChange = ({ fileList: newFileList }) =>
-    validation.setFieldValue("fileList", newFileList);
+  const handleChangePortrait = ({ fileList: newFileList }) =>
+    validation.setFieldValue("filePortrait", newFileList);
+
+  const handleChangeLandscape = ({ fileList: newFileList }) =>
+    validation.setFieldValue("fileLandscape", newFileList);
 
   const uploadButton = (
     <button
@@ -263,52 +286,13 @@ const MovieCreate = (props) => {
                           ) : null}
                         </div>
                       </Col>
-
-                      <Col md={6}>
-                        <div className="mb-3">
-                          <Label
-                            className="form-label"
-                            htmlFor="product-title-input"
-                          >
-                            Status
-                          </Label>
-                          <Select
-                            name="status"
-                            options={statusOption}
-                            placeholder="Select Status"
-                            classNamePrefix="select"
-                            onChange={(option) => {
-                              validation.setFieldValue("status", option.value);
-                              validation.setFieldTouched("status", true);
-                            }}
-                            onBlur={() =>
-                              validation.setFieldTouched("status", true)
-                            }
-                            value={statusOption.find(
-                              (opt) => opt.value === validation.values.status
-                            )}
-                            className={
-                              validation.errors.status &&
-                              validation.touched.status
-                                ? "is-invalid"
-                                : ""
-                            }
-                          />
-                          {validation.errors.status &&
-                            validation.touched.status && (
-                              <FormFeedback type="invalid">
-                                {validation.errors.status}
-                              </FormFeedback>
-                            )}
-                        </div>
-                      </Col>
                       <Col md={6}>
                         <FormGroup className="mb-3">
                           <Label htmlFor="validationCustom02">Category</Label>
                           <Select
                             name="Category"
                             isMulti={true}
-                            options={statusOption}
+                            options={selectCategories}
                             classNamePrefix="select"
                             styles={CategoryStyles}
                             onChange={(option) => {
@@ -316,7 +300,6 @@ const MovieCreate = (props) => {
                                 "Category",
                                 option.map((item) => item.value)
                               );
-                              validation.setFieldTouched("Category", true);
                             }}
                             onBlur={() =>
                               validation.setFieldTouched("Category", true)
@@ -327,7 +310,7 @@ const MovieCreate = (props) => {
                                 ? true
                                 : false
                             }
-                            value={statusOption.filter((option) =>
+                            value={selectCategories.filter((option) =>
                               validation.values.Category.includes(option.value)
                             )}
                           />
@@ -349,7 +332,7 @@ const MovieCreate = (props) => {
                           <Select
                             name="Actor"
                             isMulti={true}
-                            options={statusOption}
+                            options={selectActors}
                             classNamePrefix="select"
                             styles={customStyles}
                             onChange={(option) => {
@@ -357,7 +340,6 @@ const MovieCreate = (props) => {
                                 "Actor",
                                 option.map((item) => item.value)
                               );
-                              validation.setFieldTouched("Actor", true);
                             }}
                             onBlur={() =>
                               validation.setFieldTouched("Actor", true)
@@ -368,7 +350,7 @@ const MovieCreate = (props) => {
                                 ? true
                                 : false
                             }
-                            value={statusOption.filter((option) =>
+                            value={selectActors.filter((option) =>
                               validation.values.Actor.includes(option.value)
                             )}
                           />
@@ -390,7 +372,7 @@ const MovieCreate = (props) => {
                           <Select
                             name="Directory"
                             isMulti={true}
-                            options={statusOption}
+                            options={selectDirectories}
                             classNamePrefix="select"
                             styles={DirectoryStyles}
                             onChange={(option) => {
@@ -398,7 +380,6 @@ const MovieCreate = (props) => {
                                 "Directory",
                                 option.map((item) => item.value)
                               );
-                              validation.setFieldTouched("Directory", true);
                             }}
                             onBlur={() =>
                               validation.setFieldTouched("Directory", true)
@@ -409,7 +390,7 @@ const MovieCreate = (props) => {
                                 ? true
                                 : false
                             }
-                            value={statusOption.filter((option) =>
+                            value={selectDirectories.filter((option) =>
                               validation.values.Directory.includes(option.value)
                             )}
                           />
@@ -426,7 +407,6 @@ const MovieCreate = (props) => {
                         </FormGroup>
                       </Col>
                     </Row>
-                    {/* Directory */}
                   </CardBody>
                 </Card>
               </Col>
@@ -472,11 +452,11 @@ const MovieCreate = (props) => {
                         <Upload
                           beforeUpload={() => false}
                           listType="picture-card"
-                          fileList={validation.values.fileList}
+                          fileList={validation.values.fileLandscape}
                           onPreview={handlePreview}
-                          onChange={handleChange}
+                          onChange={handleChangeLandscape}
                         >
-                          {validation.values.fileList.length >= 1
+                          {validation.values.fileLandscape.length >= 1
                             ? null
                             : uploadButton}
                         </Upload>
@@ -495,9 +475,10 @@ const MovieCreate = (props) => {
                             src={previewImage}
                           />
                         )}
-                        {validation.errors.fileList ? (
+                        {validation.errors.fileLandscape &&
+                        validation.touched.fileLandscape ? (
                           <div className="invalid-feedback d-block">
-                            {validation.errors.fileList}
+                            {validation.errors.fileLandscape}
                           </div>
                         ) : null}
                       </div>
@@ -514,11 +495,11 @@ const MovieCreate = (props) => {
                         <Upload
                           beforeUpload={() => false}
                           listType="picture-card"
-                          fileList={validation.values.fileList}
+                          fileList={validation.values.filePortrait}
                           onPreview={handlePreview}
-                          onChange={handleChange}
+                          onChange={handleChangePortrait}
                         >
-                          {validation.values.fileList.length >= 1
+                          {validation.values.filePortrait.length >= 1
                             ? null
                             : uploadButton}
                         </Upload>
@@ -537,9 +518,10 @@ const MovieCreate = (props) => {
                             src={previewImage}
                           />
                         )}
-                        {validation.errors.fileList ? (
+                        {validation.errors.filePortrait &&
+                        validation.touched.filePortrait ? (
                           <div className="invalid-feedback d-block">
-                            {validation.errors.fileList}
+                            {validation.errors.filePortrait}
                           </div>
                         ) : null}
                       </div>

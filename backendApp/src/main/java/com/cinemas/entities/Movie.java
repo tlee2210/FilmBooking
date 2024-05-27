@@ -1,5 +1,6 @@
 package com.cinemas.entities;
 
+import com.cinemas.enums.MovieStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
@@ -60,6 +61,10 @@ public class Movie {
 
     @Column(nullable = false)
     private String movieFormat;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MovieStatus status;
 
     @ManyToMany
     @JoinTable(

@@ -13,9 +13,10 @@ public class BackendAppApplication implements CommandLineRunner {
     UserDataInitializer userDataInitializer;
     @Autowired
     CountryDataInitializer countryDataInitializer;
-
     @Autowired
     MovieGenreDataInitializer movieGenreDataInitializer;
+    @Autowired
+    CelebrityDataInitializer celebrityDataInitializer;
 
     public static void main(String[] args) {
         SpringApplication.run(BackendAppApplication.class, args);
@@ -26,5 +27,6 @@ public class BackendAppApplication implements CommandLineRunner {
 //        userDataInitializer.initUsers();
 //        countryDataInitializer.initCountries();
 //        movieGenreDataInitializer.initMovieGenre();
+//        celebrityDataInitializer.initCelebrities();
     }
 }
