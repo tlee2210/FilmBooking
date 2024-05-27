@@ -25,7 +25,7 @@ public class MovieGenre {
     @Column(unique = true)
     private String slug;
 
-    @ManyToMany(mappedBy = "genres")
+    @ManyToMany(mappedBy = "categories")
     @JsonIgnore
     private List<Movie> movies;
 }

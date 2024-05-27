@@ -3,6 +3,7 @@ package com.cinemas.service.admin;
 import com.cinemas.dto.request.MovieRequest;
 import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.response.SelectOptionAndModelReponse;
+import com.cinemas.dto.response.SelectOptionMovie;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Movie;
 import org.springframework.data.domain.Page;
@@ -13,13 +14,13 @@ import java.util.List;
 public interface MovieService {
     Page<Movie> getAllMovie(PaginationHelper paginationHelper);
 
-    List<SelectOptionReponse> getCreateMovie();
+    SelectOptionMovie<?> getCreateMovie();
 
     boolean addMovie(MovieRequest movieRequest) throws IOException;
 
     Integer deleteMovie(String slug) throws IOException;
 
-    SelectOptionAndModelReponse<Movie> getEditCelebrityBySlug(String slug);
+    SelectOptionMovie<Movie> getEditCelebrityBySlug(String slug);
 
     boolean updateMovie(MovieRequest movieRequest) throws IOException;
 }

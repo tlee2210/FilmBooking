@@ -48,7 +48,11 @@ public class Celebrity {
     @JoinColumn(name = "country_id")
     private Country country;
 
-    @ManyToMany(mappedBy = "celebrities")
+    @ManyToMany(mappedBy = "actor")
     @JsonIgnore
-    private List<Movie> movies;
+    private List<Movie> moviesActor;
+
+    @ManyToMany(mappedBy = "director")
+    @JsonIgnore
+    private List<Movie> moviesDirector;
 }

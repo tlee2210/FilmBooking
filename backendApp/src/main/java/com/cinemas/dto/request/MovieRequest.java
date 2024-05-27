@@ -30,15 +30,17 @@ public class MovieRequest {
 
     private String producer;
 
-    private String movieContent;
+    private String description;
 
-    private MultipartFile image;
+    private MultipartFile imageLandscape;
 
-    private MultipartFile trailer;
+    private MultipartFile imagePortrait;
+
+    private String trailer;
 
     private String rules;
 
-    private String type;
+    private String movieFormat;
 
     @DobConstraint(min = 18, message = "INVALID_DATE")
     private LocalDate releaseDate;
@@ -46,9 +48,9 @@ public class MovieRequest {
     @DobConstraint(min = 18, message = "INVALID_DATE")
     private LocalDate endDate;
 
-    private List<Integer> genreIds;
+    private List<Integer> categoriesIds;
 
-    private List<Integer> celebrityIds;
+    private List<Integer> actorId;
 
-    private List<Integer> cinemaIds;
+    private List<Integer> directorId;
 }

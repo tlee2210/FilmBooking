@@ -4,6 +4,7 @@ import com.cinemas.dto.request.MovieRequest;
 import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.response.APIResponse;
 import com.cinemas.dto.response.SelectOptionAndModelReponse;
+import com.cinemas.dto.response.SelectOptionMovie;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Movie;
 import com.cinemas.exception.AppException;
@@ -44,9 +45,9 @@ public class MovieController {
      * @return
      */
     @GetMapping("/create")
-    public APIResponse<List<SelectOptionReponse>> getCreateMovie() {
-        List<SelectOptionReponse> multiList = movieService.getCreateMovie();
-        APIResponse<List<SelectOptionReponse>> apiResponse = new APIResponse<>();
+    public APIResponse<SelectOptionMovie<?>> getCreateMovie() {
+        SelectOptionMovie<?> multiList = movieService.getCreateMovie();
+        APIResponse<SelectOptionMovie<?>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(multiList);
 
@@ -94,8 +95,8 @@ public class MovieController {
     }
 
     @GetMapping("/{slug}/edit")
-    public APIResponse<SelectOptionAndModelReponse<Movie>> getMovieBySlug(@PathVariable String slug) throws IOException {
-        APIResponse<SelectOptionAndModelReponse<Movie>> apiResponse = new APIResponse();
+    public APIResponse<SelectOptionMovie<Movie>> getMovieBySlug(@PathVariable String slug) throws IOException {
+        APIResponse<SelectOptionMovie<Movie>> apiResponse = new APIResponse();
 
         apiResponse.setCode(200);
         apiResponse.setResult(movieService.getEditCelebrityBySlug(slug));

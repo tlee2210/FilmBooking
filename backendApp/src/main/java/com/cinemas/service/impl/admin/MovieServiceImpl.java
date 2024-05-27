@@ -4,8 +4,10 @@ import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.MovieRequest;
 import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.response.SelectOptionAndModelReponse;
+import com.cinemas.dto.response.SelectOptionMovie;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.*;
+import com.cinemas.enums.RoleCeleb;
 import com.cinemas.exception.AppException;
 import com.cinemas.repositories.*;
 import com.cinemas.service.admin.MovieService;
@@ -50,20 +52,12 @@ public class MovieServiceImpl implements MovieService {
     public Page<Movie> getAllMovie(PaginationHelper paginationHelper) {
         List<Movie> movieList = movieRepository.findAllWithBasicDetail();
 
-        if (!movieList.isEmpty()) {
-            movieList = movieRepository.findAllWithCelebrities(movieList);
-        }
-
-        // Step 3: Fetch cinemas for the movies
-        if (!movieList.isEmpty()) {
-            movieList = movieRepository.findAllWithCinemas(movieList);
-        }
-//        movieList.forEach(movie -> {
-//            String imageUrl = fileStorageServiceImpl.getUrlFromPublicId(movie.getImage());
-//            String videoUrl = fileStorageServiceImpl.getUrlFromPublicId(movie.getTrailer());
+        movieList.forEach(movie -> {
+//            String imageUrl = ;
+            String videoUrl = fileStorageServiceImpl.getUrlFromPublicId(movie.getTrailer());
 //            movie.setImage(imageUrl);
-//            movie.setTrailer(videoUrl);
-//        });
+            movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
+        });
 
         PagedListHolder<Movie> pagedListHolder = new PagedListHolder<Movie>(movieList);
         pagedListHolder.setPage(paginationHelper.getPageNo());
@@ -78,34 +72,29 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<SelectOptionReponse> getCreateMovie() {
-        List<SelectOptionReponse> options = new ArrayList<>();
+    public SelectOptionMovie<?> getCreateMovie() {
+        List<SelectOptionReponse> optionsCategory = new ArrayList<>();
+        List<MovieGenre> categories = movieGenreRepository.findAll();
 
-        //list Country
-        List<Country> countryList = countryRepository.findAll();
-        for (Country country : countryList) {
-            options.add(new SelectOptionReponse(country.getId(), country.getName()));
+        for (MovieGenre category : categories) {
+            optionsCategory.add(new SelectOptionReponse(category.getId(), category.getName()));
         }
 
-        //list cinema
-        List<Cinema> cinemaList = cinemaRespository.findAll();
-        for(Cinema cinema : cinemaList) {
-            options.add(new SelectOptionReponse(cinema.getId(), cinema.getName()));
+        List<SelectOptionReponse> optionsActor = new ArrayList<>();
+        List<Celebrity> actors = celebrityRepository.findByRole(RoleCeleb.ACTOR);
+
+        for (Celebrity actor : actors) {
+            optionsActor.add(new SelectOptionReponse(actor.getId(), actor.getName()));
         }
 
-        //list celeb
-        List<Celebrity> celebrityList = celebrityRepository.findAll();
-        for(Celebrity celebrity : celebrityList) {
-            options.add(new SelectOptionReponse(celebrity.getId(), celebrity.getName()));
+        List<SelectOptionReponse> optionsDirector = new ArrayList<>();
+        List<Celebrity> directors = celebrityRepository.findByRole(RoleCeleb.DIRECTOR);
+
+        for (Celebrity director : directors) {
+            optionsDirector.add(new SelectOptionReponse(director.getId(), director.getName()));
         }
 
-        //list movie genre
-        List<MovieGenre> movieGenreList = movieGenreRepository.findAll();
-        for (MovieGenre movieGenre : movieGenreList) {
-            options.add(new SelectOptionReponse(movieGenre.getId(), movieGenre.getName()));
-        }
-
-        return options;
+        return new SelectOptionMovie<>(optionsCategory, optionsDirector, optionsActor);
     }
 
     @Override
@@ -127,26 +116,23 @@ public class MovieServiceImpl implements MovieService {
         movie.setCountry(Country);
 
         //set movie genre
-        List<MovieGenre> genres = movieRequest.getGenreIds().stream().map(id -> movieGenreRepository.getById(id))
+        List<MovieGenre> genres = movieRequest.getCategoriesIds().stream().map(id -> movieGenreRepository.getById(id))
                 .collect(Collectors.toList());
-        movie.setGenres(genres);
-
-        //set cinema
-        List<Cinema> cinemas = movieRequest.getCinemaIds().stream().map(id -> cinemaRespository.getById(id))
-                .collect(Collectors.toList());
-        movie.setCinemas(cinemas);
+        movie.setCategories(genres);
 
         //set celebrity
-        List<Celebrity> celebrities = movieRequest.getCelebrityIds().stream().map(id -> celebrityRepository.getById(id))
+        List<Celebrity> actors = movieRequest.getActorId().stream().map(id -> celebrityRepository.getById(id))
                 .collect(Collectors.toList());
-        movie.setCelebrities(celebrities);
+        movie.setActor(actors);
+
+        List<Celebrity> directors = movieRequest.getDirectorId().stream().map(id -> celebrityRepository.getById(id))
+                .collect(Collectors.toList());
+        movie.setDirector(directors);
 
         //set image
-//        movie.setImage(fileStorageServiceImpl.uploadFile(movieRequest.getImage(), "MOVIE"));
+        movie.setImageLandscape(fileStorageServiceImpl.uploadFile(movieRequest.getImageLandscape(), "movie"));
 
-        //set trailer
-        movie.setTrailer(fileStorageServiceImpl.uploadFile(movieRequest.getTrailer(), "MOVIE"));
-
+        movie.setImagePortrait(fileStorageServiceImpl.uploadFile(movieRequest.getImagePortrait(), "movie"));
         movieRepository.save(movie);
         return true;
     }
@@ -157,48 +143,43 @@ public class MovieServiceImpl implements MovieService {
 
         if (movie == null) throw new AppException(NOT_FOUND);
 
-//        fileStorageServiceImpl.deleteFile(movie.getImage());
-        fileStorageServiceImpl.deleteVideo(movie.getTrailer(), "video");
+        fileStorageServiceImpl.deleteFile(movie.getImageLandscape());
+        fileStorageServiceImpl.deleteFile(movie.getImagePortrait());
         movieRepository.delete(movie);
         return movie.getId();
     }
 
     @Override
-    public SelectOptionAndModelReponse<Movie> getEditCelebrityBySlug(String slug) {
+    public SelectOptionMovie<Movie> getEditCelebrityBySlug(String slug) {
         Movie movie = movieRepository.findBySlug(slug);
 
         if (movie == null) throw new AppException(NOT_FOUND);
 
-//        movie.setImage(fileStorageServiceImpl.getUrlFromPublicId(movie.getImage()));
-        movie.setTrailer(fileStorageServiceImpl.getVideoFromPublicId(movie.getTrailer()));
+        movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
+        movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
 
-        List<SelectOptionReponse> options = new ArrayList<>();
+        List<SelectOptionReponse> optionsCategory = new ArrayList<>();
+        List<MovieGenre> categories = movieGenreRepository.findAll();
 
-        //list Country
-        List<Country> countryList = countryRepository.findAll();
-        for (Country country : countryList) {
-            options.add(new SelectOptionReponse(country.getId(), country.getName()));
+        for (MovieGenre category : categories) {
+            optionsCategory.add(new SelectOptionReponse(category.getId(), category.getName()));
         }
 
-        //list cinema
-        List<Cinema> cinemaList = cinemaRespository.findAll();
-        for(Cinema cinema : cinemaList) {
-            options.add(new SelectOptionReponse(cinema.getId(), cinema.getName()));
+        List<SelectOptionReponse> optionsActor = new ArrayList<>();
+        List<Celebrity> actors = celebrityRepository.findByRole(RoleCeleb.ACTOR);
+
+        for (Celebrity actor : actors) {
+            optionsActor.add(new SelectOptionReponse(actor.getId(), actor.getName()));
         }
 
-        //list celeb
-        List<Celebrity> celebrityList = celebrityRepository.findAll();
-        for(Celebrity celebrity : celebrityList) {
-            options.add(new SelectOptionReponse(celebrity.getId(), celebrity.getName()));
+        List<SelectOptionReponse> optionsDirector = new ArrayList<>();
+        List<Celebrity> directors = celebrityRepository.findByRole(RoleCeleb.DIRECTOR);
+
+        for (Celebrity director : directors) {
+            optionsDirector.add(new SelectOptionReponse(director.getId(), director.getName()));
         }
 
-        //list movie genre
-        List<MovieGenre> movieGenreList = movieGenreRepository.findAll();
-        for (MovieGenre movieGenre : movieGenreList) {
-            options.add(new SelectOptionReponse(movieGenre.getId(), movieGenre.getName()));
-        }
-
-        return new SelectOptionAndModelReponse<>(options, movie);
+        return new SelectOptionMovie<>(optionsCategory, optionsDirector, optionsActor, movie);
     }
 
     @Override
@@ -209,43 +190,41 @@ public class MovieServiceImpl implements MovieService {
             throw new AppException(NAME_EXISTED);
         }
 
-        if(movieRequest.getImage() !=null){
-//            fileStorageServiceImpl.deleteFile(movie.getImage());
-//            movie.setImage(fileStorageServiceImpl.uploadFile(movieRequest.getImage(), "MOVIE"));
-        }
-
-        if(movieRequest.getTrailer() !=null){
-            fileStorageServiceImpl.deleteVideo(movie.getTrailer(), "video");
-            movie.setTrailer(fileStorageServiceImpl.uploadFile(movieRequest.getTrailer(), "MOVIE"));
-        }
-
         ObjectUtils.copyFields(movieRequest, movie);
+//        movie.setCategories(null);
+        if(!movieRequest.getImageLandscape().isEmpty()){
+            fileStorageServiceImpl.deleteFile(movie.getImageLandscape());
+            movie.setImageLandscape(fileStorageServiceImpl.uploadFile(movieRequest.getImageLandscape(), "movie"));
+        }
+
+        if(!movieRequest.getImagePortrait().isEmpty()){
+            fileStorageServiceImpl.deleteFile(movie.getImagePortrait());
+            movie.setImagePortrait(fileStorageServiceImpl.uploadFile(movieRequest.getImagePortrait(), "movie"));
+        }
 
         //set slug
         String slug = movieRequest.getName().toLowerCase().replaceAll("\\s+", "-");
         movie.setSlug(slug);
 
         //set country
-        Country Country = countryRepository.findById(movieRequest.getCountryId());
-
-        movie.setCountry(Country);
+        movie.setCountry(countryRepository.findById(movieRequest.getCountryId()));
 
         //set movie genre
-        List<MovieGenre> genres = movieRequest.getGenreIds().stream().map(id -> movieGenreRepository.getById(id))
+        List<MovieGenre> genres = movieRequest.getCategoriesIds().stream().map(id -> movieGenreRepository.getById(id))
                 .collect(Collectors.toList());
-        movie.setGenres(genres);
+        movie.setCategories(genres);
 
-        //set cinema
-        List<Cinema> cinemas = movieRequest.getCinemaIds().stream().map(id -> cinemaRespository.getById(id))
+        //set actors
+        List<Celebrity> actors = movieRequest.getActorId().stream().map(id -> celebrityRepository.getById(id))
                 .collect(Collectors.toList());
-        movie.setCinemas(cinemas);
+        movie.setActor(actors);
 
-        //set celebrity
-        List<Celebrity> celebrities = movieRequest.getCelebrityIds().stream().map(id -> celebrityRepository.getById(id))
+        //set directors
+        List<Celebrity> directors = movieRequest.getDirectorId().stream().map(id -> celebrityRepository.getById(id))
                 .collect(Collectors.toList());
-        movie.setCelebrities(celebrities);
+        movie.setDirector(directors);
 
         movieRepository.save(movie);
-        return false;
+        return true;
     }
 }

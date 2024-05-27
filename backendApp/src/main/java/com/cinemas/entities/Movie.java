@@ -67,15 +67,23 @@ public class Movie {
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id")
     )
-    private List<MovieGenre> genres;
+    private List<MovieGenre> categories;
 
     @ManyToMany
     @JoinTable(
-            name = "movie_celebrity",
+            name = "movie_actor",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "celebrity_id")
     )
-    private List<Celebrity> celebrities;
+    private List<Celebrity> actor;
+
+    @ManyToMany
+    @JoinTable(
+            name = "movie_director",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "celebrity_id")
+    )
+    private List<Celebrity> director;
 
     @ManyToMany
     @JsonIgnore
