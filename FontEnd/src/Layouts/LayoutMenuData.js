@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 const Navdata = () => {
   const history = useNavigate();
   //state data
-  const [isDashboard, setIsDashboard] = useState(false);
+  const [isMovie, setIsMovie] = useState(false);
+  const [isCinema, setIsCinema] = useState(false);
   const [iscurrentState, setIscurrentState] = useState("Dashboard");
 
   function updateIconSidebar(e) {
@@ -23,10 +24,13 @@ const Navdata = () => {
 
   useEffect(() => {
     document.body.classList.remove("twocolumn-panel");
-    if (iscurrentState !== "Dashboard") {
-      setIsDashboard(false);
+    if (iscurrentState !== "Movie") {
+      setIsMovie(false);
     }
-  }, [history, isDashboard]);
+    if (iscurrentState !== "Cinema") {
+      setIsCinema(false);
+    }
+  }, [history, isMovie, isCinema]);
 
   const menuItems = [
     {
@@ -34,39 +38,58 @@ const Navdata = () => {
       isHeader: true,
     },
     {
-      id: "dashboard",
-      label: "Dashboards",
-      icon: "ri-dashboard-2-line",
+      id: "movie",
+      label: "Movie Manager",
+      icon: "ri-movie-2-fill",
       link: "/#",
-      stateVariables: isDashboard,
+      stateVariables: isMovie,
       click: function (e) {
         e.preventDefault();
-        setIsDashboard(!isDashboard);
-        setIscurrentState("Dashboard");
+        setIsMovie(!isMovie);
+        setIscurrentState("Movie");
         updateIconSidebar(e);
       },
       subItems: [
         {
+          id: "Movie",
+          label: "Movie",
+          link: "/dashboard/movie",
+          parentId: "movie",
+        },
+        {
           id: "celebrity",
           label: "Celebrity",
           link: "/dashboard/celebrity",
-          parentId: "dashboard",
+          parentId: "movie",
         },
         {
-          id: "city",
-          label: "City",
-          link: "/dashboard/city",
-          parentId: "dashboard",
+          id: "MovieGenre",
+          label: "Movie Genre",
+          link: "/dashboard/movie-genre",
+          parentId: "movie",
           // badgeColor: "success",
           // badgeName: "New",
         },
+      ],
+    },
+    {
+      id: "cinemas",
+      label: "Cinemas",
+      icon: "ri-dashboard-2-line",
+      link: "/#",
+      stateVariables: isCinema,
+      click: function (e) {
+        e.preventDefault();
+        setIsCinema(!isCinema);
+        setIscurrentState("Cinema");
+        updateIconSidebar(e);
+      },
+      subItems: [
         {
           id: "cinema",
           label: "Cinema",
           link: "/dashboard/cinema",
-          parentId: "dashboard",
-          // badgeColor: "success",
-          // badgeName: "New",
+          parentId: "cinemas",
         },
       ],
     },

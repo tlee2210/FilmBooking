@@ -1,29 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 import { lazy } from "react";
-// //login
-// import Login from "../pages/Authentication/Login";
-// import ForgetPasswordPage from "../pages/Authentication/ForgetPassword";
-// import VerifyPassword from "../pages/Authentication/verifyPassword";
-// import Logout from "../pages/Authentication/Logout";
-// import Register from "../pages/Authentication/Register";
-
-// import Alt404 from "../pages/AuthenticationInner/Errors/Alt404";
-// import Error500 from "../pages/AuthenticationInner/Errors/Error500";
-
-// // User Profile
-// import UserProfile from "../pages/Authentication/user-profile";
-
-// import Home from "../pages/home/index";
-
-// import Starter from "../pages/dashboard/Starter";
-
-// import Celebrity from "../pages/dashboard/Celebrity/index";
-// import CelebrityCreate from "../pages/dashboard/Celebrity/create";
-// import CelebrityEdit from "../pages/dashboard/Celebrity/edit";
-// import City from "../pages/dashboard/city/index";
-// import CinemaCreate from "../pages/dashboard/Cinemas/create";
-// import Cinemas from "../pages/dashboard/Cinemas/index";
 
 // Lazy load components
 const Login = lazy(() => import("../pages/Authentication/Login"));
@@ -54,13 +31,29 @@ const CelebrityCreate = lazy(() =>
 );
 const CelebrityEdit = lazy(() => import("../pages/dashboard/Celebrity/edit"));
 
-const City = lazy(() => import("../pages/dashboard/city"));
+const MovieGenre = lazy(() => import("../pages/dashboard/movieGenre/index"));
 
 const CinemaCreate = lazy(() => import("../pages/dashboard/Cinemas/create"));
 const CinemaEdit = lazy(() => import("../pages/dashboard/Cinemas/edit"));
 const Cinemas = lazy(() => import("../pages/dashboard/Cinemas/index"));
-const CinemaCorners =lazy(() => import("../pages/dashboard/CinemaCorner/index"));
-const DaoDien =lazy(() => import("../pages/dashboard/CinemaCorner/daoDien"));
+
+const Movie = lazy(() => import("../pages/dashboard/Movie/index"));
+const MovieEdit = lazy(() => import("../pages/dashboard/Movie/edit"));
+const MovieCreate = lazy(() => import("../pages/dashboard/Movie/create"));
+
+//Cinema Coner
+const Actor = lazy(() =>
+  import("../pages/Page/CinemaCorner/Actor")
+);
+const Director = lazy(() => import("../pages/Page/CinemaCorner/Director"));
+const ActorInfor = lazy(()=>import("../pages/Page/CinemaCorner/Details/ActorInfor"))
+const DirectorInfor = lazy(()=>import("../pages/Page/CinemaCorner/Details/DirectorInfor"))
+
+
+//Ticket Booking
+const TicketBooking = lazy(()=>import("../pages/Page/BuyTicket/index"))
+
+
 const authProtectedRoutes = [
   //User Profile
   { path: "/profile", component: <UserProfile /> },
@@ -70,11 +63,14 @@ const authProtectedRoutes = [
   { path: "/dashboard/celebrity/:slug/edit", component: <CelebrityEdit /> },
   { path: "/dashboard/celebrity/create", component: <CelebrityCreate /> },
 
-  { path: "/dashboard/city", component: <City /> },
-
   { path: "/dashboard/cinema/create", component: <CinemaCreate /> },
   { path: "/dashboard/cinema", component: <Cinemas /> },
   { path: "/dashboard/cinema/:slug/edit", component: <CinemaEdit /> },
+  { path: "/dashboard/movie-genre", component: <MovieGenre /> },
+  
+  { path: "/dashboard/movie", component: <Movie /> },
+  { path: "/dashboard/movie/:slug/edit", component: <MovieEdit /> },
+  { path: "/dashboard/movie/create", component: <MovieCreate /> },
 
   // {
   //   path: "/",
@@ -99,9 +95,15 @@ const publicRoutes = [
 const homeRoutes = [{ path: "/", component: <Home /> }];
 
 const CinemaCornerRoutes = [
-  { path: "/dien-vien", component: <CinemaCorners /> },
-  { path: "/dao-dien", component: <DaoDien /> }
+  { path: "/dien-vien", component: <Actor /> },
+  { path: "/dao-dien", component: <Director /> },
+  { path: "/dien-vien/dien-vien-details", component: <ActorInfor /> },
+  { path: "/dao-dien/dao-dien-details", component: <DirectorInfor /> },
 ];
 
+const TicketBookingRoutes = [
+  { path: "/ticket-booking/phim", component: <TicketBooking /> },
+ 
+];
 
-export { authProtectedRoutes, publicRoutes, homeRoutes, CinemaCornerRoutes };
+export { authProtectedRoutes, publicRoutes, homeRoutes, CinemaCornerRoutes,TicketBookingRoutes };

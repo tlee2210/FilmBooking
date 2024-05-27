@@ -10,6 +10,8 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class MovieGenreRequest {
+    private int id;
+
     @NotEmpty(message = "VALIDATION")
     private String name;
 }

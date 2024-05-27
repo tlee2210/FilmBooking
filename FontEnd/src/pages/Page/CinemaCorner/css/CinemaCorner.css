@@ -1,0 +1,237 @@
+.director-header-container-cinemaCorner {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid #781eff;
+
+}
+
+.title-cinemaCorner {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.title-cinemaCorner-name {
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.title-icon-cinemaCorner {
+    width: 5px;
+    height: 30px;
+    background-color: #007bff;
+    margin-right: 10px;
+}
+
+.custom-select-cinemaCorner {
+    width: auto;
+}
+
+.bottom-border-cinemaCorner {
+    margin-top: 10px;
+    border-top: 2px solid #007bff;
+}
+
+.quick-ticket-card {
+    width: 380px;
+    border: 1px solid #ddd;
+    margin-left: 40px;
+}
+
+.quick-ticket-header {
+    background-color: #007bff;
+    color: white;
+    font-size: 18px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+
+
+
+
+
+.quick-ticket-card-phim-dang-chieu {
+    width: 380px;
+    margin-left: 40px;
+}
+
+.hover-container {
+    position: relative;
+    display: inline-block;
+}
+
+.hover-container:hover .hover-image {
+    filter: brightness(0.8);
+}
+
+.hover-container:hover .ticket-overlay {
+    display: flex;
+}
+
+.hover-image {
+    transition: filter 0.3s ease;
+}
+
+.ticket-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s ease;
+}
+
+.ticket-image {
+    max-width: 80px;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+.ticket-image:hover {
+    transform: scale(1.1);
+
+}
+
+
+
+
+.button-dien-vien {
+    padding: 20px;
+    padding-bottom: 50px;
+    margin-left: 280px;
+    width: 200px;
+}
+
+
+
+
+
+
+
+.page-content-ActorInfor {
+    padding-top: 100px;
+}
+
+.actor-info-ActorInfor {
+    display: flex;
+    align-items: flex-start;
+    /* Align items to the top */
+    margin-bottom: 30px;
+}
+
+.actor-info-ActorInfor img {
+    width: 255px;
+    height: 384px;
+    object-fit: cover;
+}
+
+.actor-info-text-ActorInfor {
+    margin-left: 20px;
+    flex: 1;
+    /* Allow the text to take up the remaining space */
+}
+
+.actor-info-text-ActorInfor h2 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.actor-info-text-ActorInfor p {
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.images-section-ActorInfor {
+    margin-bottom: 30px;
+}
+
+.images-section-ActorInfor h3 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.images-section-ActorInfor img {
+    border-radius: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+    height: auto;
+}
+
+.movies-section-ActorInfor {
+    margin-bottom: 30px;
+}
+
+.movies-section-ActorInfor {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.movie-item-ActorInfor {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.movie-item-ActorInfor img {
+    width: 128px;
+    height: 85px;
+    border-radius: 10px;
+    margin-right: 15px;
+    object-fit: cover;
+}
+
+.movie-item-ActorInfor div {
+    flex: 1;
+}
+
+.movie-item-ActorInfor h5 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.movie-item-ActorInfor p {
+    margin-bottom: 5px;
+    color: #777;
+}
+
+
+
+.biography-section-ActorInfor p {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* .title-icon-actorInfor {
+    margin-top: -19px;
+    height: 17px;
+    border-style: solid;
+    --tw-border-opacity: 1;
+    border-color: rgb(3 78 162 / var(--tw-border-opacity));
+    margin-right: .5rem;
+    border-left-width: 1px;
+    vertical-align: middle;
+
+} */
+
+.movies-section-ActorInfor-phim-dang-chieu {
+    display: inline-block;
+    font-size: 18px;
+    font-weight: bold;
+
+}
+
+
+
+
+
+

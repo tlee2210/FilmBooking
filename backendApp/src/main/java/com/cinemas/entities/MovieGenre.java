@@ -22,7 +22,7 @@ public class MovieGenre {
     @Column
     private String name;
 
-    @Column
+    @Column(unique = true)
     private String slug;
 
     @ManyToMany(mappedBy = "genres")

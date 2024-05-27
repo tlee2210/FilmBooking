@@ -6,22 +6,22 @@ export const initialState = {
   item: {},
 };
 
-const CitySlice = createSlice({
-  name: "City",
+const MovieGenreSlice = createSlice({
+  name: "MovieGenre",
   initialState,
   reducers: {
     getDate: (state, action) => {
       state.data = action.payload;
     },
-    getCityitem: (state, action) => {
+    getitem: (state, action) => {
       state.item = action.payload;
     },
-    clearCity(state) {
+    clear(state) {
       state.item = null;
     },
   },
 });
 
-export const { getDate, getCityitem, clearCity } = CitySlice.actions;
+export const { getDate, getitem, clear } = MovieGenreSlice.actions;
 
-export default CitySlice.reducer;
+export default MovieGenreSlice.reducer;

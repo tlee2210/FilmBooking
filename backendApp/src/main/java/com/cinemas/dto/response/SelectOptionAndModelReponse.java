@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EditSelectOptionReponse<T> {
+public class SelectOptionAndModelReponse<T> {
 
     private List<SelectOptionReponse> selectOptionReponse;
     private T Model;

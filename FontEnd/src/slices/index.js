@@ -11,8 +11,8 @@ import ProfileReducer from "./auth/profile/reducer";
 import MessageReducer from "./message/reducer";
 
 import CelebrityReducer from "./Celebrity/reducer";
-import CityReducer from "./city/reducer";
 import CinemaReducer from "./Cinemas/reducer";
+import MovieGenreReducer from "./MovieGenre/reducer";
 
 const rootReducer = combineReducers({
   Layout: LayoutReducer,
@@ -22,8 +22,8 @@ const rootReducer = combineReducers({
   Profile: ProfileReducer,
   Message: MessageReducer,
   Celebrity: CelebrityReducer,
-  City: CityReducer,
   Cinema: CinemaReducer,
+  MovieGenre: MovieGenreReducer,
 });
 
 export default rootReducer;

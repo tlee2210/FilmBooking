@@ -1,15 +1,19 @@
 package com.cinemas.controller.admin;
 
 import com.cinemas.dto.request.MovieGenreRequest;
+import com.cinemas.dto.request.SearchRequest;
+import com.cinemas.dto.response.APIResponse;
 import com.cinemas.entities.MovieGenre;
+import com.cinemas.exception.AppException;
 import com.cinemas.service.admin.MovieGenreService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import static com.cinemas.exception.ErrorCode.CREATE_FAILED;
+import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 
 @RestController
 @RequestMapping("/api/admin/v1/movie-genre")
@@ -18,48 +22,72 @@ public class MovieGenreController {
     @Autowired
     private MovieGenreService movieGenreService;
 
-    @GetMapping("")
-    public ResponseEntity<List<MovieGenre>> getAllMovieGenres() {
-        List<MovieGenre> movieGenres = movieGenreService.getAllGenres();
-        return ResponseEntity.ok(movieGenres);
+    @GetMapping
+    public APIResponse<Page<MovieGenre>> getAllMovieGenres(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false, defaultValue = "1") Integer pageNo,
+            @RequestParam(required = false, defaultValue = "15") Integer pageSize,
+            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort) {
+
+        SearchRequest searchRequest = new SearchRequest(search, pageNo - 1, pageSize, sort);
+        Page<MovieGenre> movieGenres = movieGenreService.getAllMovieGenre(searchRequest);
+        APIResponse<Page<MovieGenre>> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setResult(movieGenres);
+
+        return apiResponse;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<MovieGenre> getMoviceGenre(@PathVariable int id) {
-        MovieGenre movieGenre = movieGenreService.getGenreById(id);
-        return ResponseEntity.ok(movieGenre);
+    @PostMapping(value = "/create")
+    public APIResponse<String> createMovieGenre(@RequestBody MovieGenreRequest movieGenreRequest) {
+        boolean checkCreate = movieGenreService.addMovieGenre(movieGenreRequest);
+        if (checkCreate) {
+            APIResponse<String> apiResponse = new APIResponse();
+            apiResponse.setCode(200);
+            apiResponse.setMessage("Movie Genre created successfully");
+
+            return apiResponse;
+        }
+
+        throw new AppException(CREATE_FAILED);
     }
 
-    @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> createMovieGenre(@ModelAttribute MovieGenreRequest movieGenreRequest) {
-        try {
-            movieGenreService.saveGenre(movieGenreRequest);
-            return ResponseEntity.ok("Created successfully");
-        }
-        catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @GetMapping("/{slug}/edit")
+    public APIResponse<MovieGenre> getMovieGenreById(@PathVariable String slug) {
+        APIResponse<MovieGenre> apiResponse = new APIResponse();
+
+        apiResponse.setCode(200);
+        apiResponse.setResult(movieGenreService.getEditMovieGenreBySlug(slug));
+
+        return apiResponse;
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteMovieGenre(@PathVariable int id) {
-        try {
-            movieGenreService.deleteGenre(id);
-            return ResponseEntity.ok("Deleted successfully");
+    @PutMapping(value = "/update")
+    public APIResponse<String> updateMovieGenre(@ModelAttribute MovieGenreRequest movieGenreRequest) {
+        boolean checkUpdate = movieGenreService.updateMovieGenre(movieGenreRequest);
+        if (checkUpdate) {
+            APIResponse<String> apiResponse = new APIResponse();
+            apiResponse.setCode(200);
+            apiResponse.setMessage("Movie Genre Update successfully");
+
+            return apiResponse;
         }
-        catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+
+        throw new AppException(UPDATE_FAILED);
     }
 
-    @PutMapping(value = "/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateMovieGenre(@PathVariable int id, @ModelAttribute MovieGenreRequest movieGenreRequest) {
-        try {
-            movieGenreService.updateGenre(id, movieGenreRequest);
-            return ResponseEntity.ok("Updated successfully");
+    @DeleteMapping("/{slug}/delete")
+    public APIResponse<Integer> deleteMovieGenre(@PathVariable String slug) {
+
+        int id = movieGenreService.deleteMovieGenre(slug);
+        if (id > 0) {
+            APIResponse<Integer> apiResponse = new APIResponse();
+            apiResponse.setCode(200);
+            apiResponse.setMessage("Successfully deleted Movie Genre");
+            apiResponse.setResult(id);
+
+            return apiResponse;
         }
-        catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        throw new AppException(CREATE_FAILED);
     }
 }

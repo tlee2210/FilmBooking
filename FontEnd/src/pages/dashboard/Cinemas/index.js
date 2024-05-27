@@ -8,20 +8,23 @@ import {
   Modal,
   ModalBody,
   Button,
+  Form,
+  Input,
 } from "reactstrap";
 
 import TableContainer from "../../../Components/Common/TableContainerReactTable";
 import { message, Image } from "antd";
 
 import withRouter from "../../../Components/Common/withRouter";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 //Import Breadcrumb
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
-
+import { useFormik } from "formik";
 import { clearNotification } from "../../../slices/message/reducer";
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
+import Select from "react-select";
 
 import "react-toastify/dist/ReactToastify.css";
 import { createSelector } from "reselect";
@@ -35,6 +38,41 @@ const Cinema = (props) => {
   const [modal_togFirst, setmodal_togFirst] = useState(false);
   const [slug, setSlug] = useState("");
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchname, setSearch] = useState(
+    searchParams.get("searchname") || null
+  );
+  const [status, setStatus] = useState(searchParams.get("status") || null);
+  const [city, setCity] = useState(searchParams.get("city") || null);
+  const [pageNo, setPageNo] = useState(
+    parseInt(searchParams.get("pageNo"), 10) || 1
+  );
+  const [pageSize, setPageSize] = useState(
+    parseInt(searchParams.get("pageSize"), 10) || 15
+  );
+
+  useEffect(() => {
+    let params = {};
+    if (searchname && searchname !== null && searchname !== undefined) {
+      params.searchname = searchname;
+    }
+
+    if (status && status !== null && status !== undefined) {
+      params.status = status;
+    }
+
+    if (city && city !== null && city !== undefined) {
+      params.city = city;
+    }
+
+    params.pageNo = pageNo;
+    params.pageSize = pageSize;
+
+    setSearchParams(params);
+
+    dispatch(getCinema(searchname, status, city, pageNo, pageSize));
+  }, [dispatch, searchname, city, status, pageNo, pageSize]);
+
   const CinemaState = (state) => state;
   const CinemaStateData = createSelector(CinemaState, (state) => ({
     success: state.Message.success,
@@ -42,9 +80,10 @@ const Cinema = (props) => {
     messageSuccess: state.Message.messageSuccess,
     messageError: state.Message.messageError,
     Cinema: state.Cinema.data,
+    item: state.Cinema.item,
   }));
   // Inside your component
-  const { error, success, messageSuccess, messageError, Cinema } =
+  const { error, success, messageSuccess, messageError, Cinema, item } =
     useSelector(CinemaStateData);
 
   useEffect(() => {
@@ -61,16 +100,35 @@ const Cinema = (props) => {
     dispatch(clearNotification());
   }, [dispatch, success, error]);
 
-  useEffect(() => {
-    dispatch(getCinema({}, props.router.navigate));
-  }, []);
-
   const handlePagination = (page) => {
-    const formData = new FormData();
-    formData.append("pageNo", page);
-    console.log(page);
-    dispatch(getCinema(formData, props.router.navigate));
+    const newPageNo = page + 1;
+    setPageNo(newPageNo);
+
+    setSearchParams({ searchname, status, city, pageNo: newPageNo, pageSize });
   };
+
+  const handlenumberOfElements = (elements) => {
+    setPageSize(elements);
+    setPageNo(1);
+    setSearchParams({ searchname, status, city, pageNo, pageSize: elements });
+  };
+
+  const searchForm = useFormik({
+    enableReinitialize: true,
+
+    initialValues: {
+      name: searchname ? searchname : null,
+      status: status ? status : null,
+      city: city ? city : null,
+    },
+    onSubmit: (values) => {
+      console.log(values);
+      setSearch(values.name);
+      setStatus(values.status);
+      setCity(values.city);
+      setPageNo(1);
+    },
+  });
 
   function tog_togdelete(slug) {
     setmodal_detele(!modal_togFirst);
@@ -86,6 +144,11 @@ const Cinema = (props) => {
       dispatch(deleteCinema(slug));
     }
   }
+
+  const statusOption = [
+    { label: "Active", value: "ACTIVE" },
+    { label: "Inactive", value: "INACTIVE" },
+  ];
 
   const columns = useMemo(
     () => [
@@ -113,31 +176,44 @@ const Cinema = (props) => {
         enableColumnFilter: false,
       },
       {
-        header: "Address",
-        accessorKey: "address",
+        header: "Phone",
+        accessorKey: "phone",
         enableColumnFilter: false,
       },
       {
-        header: "Phone",
-        accessorKey: "phone",
+        header: "Address",
+        accessorKey: "address",
         enableColumnFilter: false,
       },
       {
         header: "city",
         accessorKey: "city",
         cell: (cell) => {
-          return <span>{cell.getValue()?.name}</span>;
+          return <span>{cell.getValue()}</span>;
         },
         enableColumnFilter: false,
       },
-      // {
-      //   header: "Description",
-      //   accessorKey: "description",
-      //   cell: (cell) => {
-      //     return <div dangerouslySetInnerHTML={{ __html: cell.getValue() }} />;
-      //   },
-      //   enableColumnFilter: false,
-      // },
+      {
+        header: "status",
+        accessorKey: "status",
+        enableColumnFilter: false,
+        cell: (cell) => {
+          const value = cell.getValue();
+          return (
+            <React.Fragment>
+              {value === "ACTIVE" ? (
+                <span className="badge bg-success-subtle text-success badge-border">
+                  {value}
+                </span>
+              ) : (
+                <span className="badge bg-danger-subtle  text-danger badge-border">
+                  {value}
+                </span>
+              )}
+            </React.Fragment>
+          );
+        },
+      },
       {
         header: "Actions",
         accessorKey: "slug",
@@ -195,6 +271,87 @@ const Cinema = (props) => {
                       </div>
                     </div>
                   </Row>
+                  <Form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      searchForm.handleSubmit();
+                      return false;
+                    }}
+                    action="#"
+                  >
+                    <Row className="g-2 mt-3 mb-3">
+                      <Col sm={4}>
+                        <div className="search-box">
+                          <Input
+                            type="text"
+                            name="name"
+                            className="form-control"
+                            placeholder="Search for name..."
+                            onChange={searchForm.handleChange}
+                            onBlur={searchForm.handleBlur}
+                            value={searchForm.values.name}
+                          />
+                          <i className="ri-search-line search-icon"></i>
+                        </div>
+                      </Col>
+                      <Col sm={3}>
+                        <div className="search-box">
+                          <Select
+                            name="city"
+                            options={item}
+                            isClearable={true}
+                            placeholder="Select city"
+                            classNamePrefix="select"
+                            onChange={(option) => {
+                              const status = option ? option.value : null;
+                              searchForm.setFieldValue("city", status);
+                              searchForm.setFieldTouched("city", true);
+                            }}
+                            onBlur={() =>
+                              searchForm.setFieldTouched("city", true)
+                            }
+                            value={statusOption.find(
+                              (opt) => opt.value === searchForm.values.city
+                            )}
+                          />
+                        </div>
+                      </Col>
+                      <Col sm={3}>
+                        <div className="search-box">
+                          <Select
+                            name="status"
+                            options={statusOption}
+                            isClearable={true}
+                            placeholder="Select Status"
+                            classNamePrefix="select"
+                            onChange={(option) => {
+                              const status = option ? option.value : null;
+                              searchForm.setFieldValue("status", status);
+                              searchForm.setFieldTouched("status", true);
+                            }}
+                            onBlur={() =>
+                              searchForm.setFieldTouched("status", true)
+                            }
+                            value={statusOption.find(
+                              (opt) => opt.value === searchForm.values.status
+                            )}
+                          />
+                        </div>
+                      </Col>
+                      <Col className="col-sm-auto ms-auto">
+                        <div className="list-grid-nav hstack gap-1">
+                          <button
+                            type="submit"
+                            className="btn btn-primary w-100"
+                          >
+                            {" "}
+                            <i className="ri-equalizer-fill me-2 align-bottom"></i>
+                            Filters
+                          </button>
+                        </div>
+                      </Col>
+                    </Row>
+                  </Form>
                 </CardHeader>
                 <div className="card-body pt-0">
                   <TableContainer
@@ -203,6 +360,7 @@ const Cinema = (props) => {
                     paginateData={Cinema}
                     customPageSize={Cinema.size}
                     paginate={handlePagination}
+                    numberOfElements={handlenumberOfElements}
                     tableClass="table-centered align-middle table-nowrap mb-0"
                     theadClass="text-muted table-light"
                     SearchPlaceholder="Search Products..."

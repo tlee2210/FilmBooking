@@ -8,18 +8,23 @@ import {
   Modal,
   ModalBody,
   Button,
+  Form,
+  Input,
 } from "reactstrap";
 
 import TableContainer from "../../../Components/Common/TableContainerReactTable";
 import { message } from "antd";
 
+import * as Yup from "yup";
+import { useFormik } from "formik";
+
 import withRouter from "../../../Components/Common/withRouter";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 //Import Breadcrumb
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
-
 import { clearNotification } from "../../../slices/message/reducer";
 
+import Select from "react-select";
 //redux
 import { useSelector, useDispatch } from "react-redux";
 
@@ -34,6 +39,18 @@ const Celebrity = (props) => {
   const [modal_detele, setmodal_detele] = useState(false);
   const [modal_togFirst, setmodal_togFirst] = useState(false);
   const [slug, setSlug] = useState("");
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchname, setSearch] = useState(
+    searchParams.get("searchname") || null
+  );
+  const [role, setRole] = useState(searchParams.get("role") || null);
+  const [pageNo, setPageNo] = useState(
+    parseInt(searchParams.get("pageNo"), 10) || 1
+  );
+  const [pageSize, setPageSize] = useState(
+    parseInt(searchParams.get("pageSize"), 10) || 15
+  );
 
   const CelebrityState = (state) => state;
   const CelebrityStateData = createSelector(CelebrityState, (state) => ({
@@ -62,15 +79,50 @@ const Celebrity = (props) => {
   }, [dispatch, success, error]);
 
   useEffect(() => {
-    dispatch(celebrity({}, props.router.navigate));
-  }, []);
+    let params = {};
+    if (searchname && searchname !== null && searchname !== undefined) {
+      params.searchname = searchname;
+    }
+
+    if (role && role !== null && role !== undefined) {
+      params.role = role;
+    }
+
+    params.pageNo = pageNo;
+    params.pageSize = pageSize;
+
+    setSearchParams(params);
+
+    dispatch(celebrity(searchname, role, pageNo, pageSize));
+  }, [dispatch, searchname, role, pageNo, pageSize]);
 
   const handlePagination = (page) => {
-    const formData = new FormData();
-    formData.append("pageNo", page);
-    console.log(page);
-    // dispatch(celebrity(formData, props.router.navigate));
+    const newPageNo = page + 1;
+    setPageNo(newPageNo);
+
+    setSearchParams({ searchname, role, pageNo: newPageNo, pageSize });
   };
+
+  const handlenumberOfElements = (elements) => {
+    setPageSize(elements);
+    setPageNo(1);
+    setSearchParams({ searchname, role, pageNo, pageSize: elements });
+  };
+
+  const searchForm = useFormik({
+    enableReinitialize: true,
+
+    initialValues: {
+      name: searchname ? searchname : "" || "",
+      role: role ? role : "" || "",
+    },
+    onSubmit: (values) => {
+      // console.log(values);
+      setSearch(values.name);
+      setRole(values.role);
+      setPageNo(1);
+    },
+  });
 
   function tog_togdelete(slug) {
     setmodal_detele(!modal_togFirst);
@@ -86,6 +138,11 @@ const Celebrity = (props) => {
       dispatch(deleteCelebrity(slug));
     }
   }
+
+  const statusOption = [
+    { label: "Actor", value: "ACTOR" },
+    { label: "Director", value: "DIRECTOR" },
+  ];
 
   const columns = useMemo(
     () => [
@@ -202,6 +259,65 @@ const Celebrity = (props) => {
                       </div>
                     </div>
                   </Row>
+                  <Form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      searchForm.handleSubmit();
+                      return false;
+                    }}
+                    action="#"
+                  >
+                    <Row className="g-2 mt-3 mb-3">
+                      <Col sm={4}>
+                        <div className="search-box">
+                          <Input
+                            type="text"
+                            name="name"
+                            className="form-control"
+                            placeholder="Search for name..."
+                            onChange={searchForm.handleChange}
+                            onBlur={searchForm.handleBlur}
+                            value={searchForm.values.name}
+                          />
+                          <i className="ri-search-line search-icon"></i>
+                        </div>
+                      </Col>
+                      <Col sm={3}>
+                        <div className="search-box">
+                          <Select
+                            name="status"
+                            options={statusOption}
+                            isClearable={true}
+                            placeholder="Select Role"
+                            classNamePrefix="select"
+                            onChange={(option) => {
+                              const roleValue = option ? option.value : null;
+                              searchForm.setFieldValue("role", roleValue);
+                              searchForm.setFieldTouched("role", true);
+                            }}
+                            onBlur={() =>
+                              searchForm.setFieldTouched("role", true)
+                            }
+                            value={statusOption.find(
+                              (opt) => opt.value === searchForm.values.role
+                            )}
+                          />
+                        </div>
+                      </Col>
+                      <Col className="col-sm-auto ms-auto">
+                        <div className="list-grid-nav hstack gap-1">
+                          <button
+                            type="submit"
+                            className="btn btn-primary w-100"
+                          >
+                            {" "}
+                            <i className="ri-equalizer-fill me-2 align-bottom"></i>
+                            Filters
+                          </button>
+                        </div>
+                      </Col>
+                    </Row>
+                  </Form>
                 </CardHeader>
                 <div className="card-body pt-0">
                   <TableContainer
@@ -210,6 +326,7 @@ const Celebrity = (props) => {
                     paginateData={Celebrity}
                     customPageSize={Celebrity.size}
                     paginate={handlePagination}
+                    numberOfElements={handlenumberOfElements}
                     tableClass="table-centered align-middle table-nowrap mb-0"
                     theadClass="text-muted table-light"
                     SearchPlaceholder="Search Products..."

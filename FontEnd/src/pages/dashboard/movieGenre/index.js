@@ -1,10 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-// import {
-//   GetCourses,
-//   CreateCourses,
-//   UpdateCourses,
-//   deleteCourses,
-// } from "../../../slices/Courses/thunk";
 import { createSelector } from "reselect";
 // import { findCoursesById, clearCourses } from "../../../slices/Courses/reducer";
 //redux
@@ -12,7 +6,6 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   Button,
   Card,
-  CardBody,
   CardHeader,
   Col,
   Container,
@@ -25,33 +18,47 @@ import {
   FormFeedback,
 } from "reactstrap";
 import { message } from "antd";
+import withRouter from "../../../Components/Common/withRouter";
 
 // Formik validation
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { clearNotification } from "../../../slices/message/reducer";
-import { clearCity } from "../../../slices/city/reducer";
+import { clear } from "../../../slices/MovieGenre/reducer";
 import {
-  getcity,
-  CreateCity,
-  deleteCity,
-  GetEditCity,
-  UpdateCity,
-} from "../../../slices/city/thunk";
+  getMovieGenre,
+  CreateMovieGenre,
+  deleteMovieGenre,
+  GetEditMovieGenre,
+  UpdateMovieGenre,
+} from "../../../slices/MovieGenre/thunk";
 
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import TableContainer from "../../../Components/Common/TableContainerReactTable";
 
-const Citylist = (props) => {
+const MovieGenre = (props) => {
   const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [searchname, setSearch] = useState(searchParams.get("search") || null);
+  const [pageNo, setPageNo] = useState(
+    parseInt(searchParams.get("pageNo"), 10) || 1
+  );
+  const [pageSize, setPageSize] = useState(
+    parseInt(searchParams.get("pageSize"), 10) || 15
+  );
 
   useEffect(() => {
-    dispatch(getcity({}));
-  }, []);
+    searchname && searchname !== null && searchname !== undefined
+      ? setSearchParams({ searchname, pageNo, pageSize })
+      : setSearchParams({ pageNo, pageSize });
+
+    dispatch(getMovieGenre(searchname, pageNo, pageSize));
+  }, [dispatch, searchname, pageNo, pageSize]);
 
   const [formcheck, setformcheck] = useState(false);
-  const [Id, setId] = useState("");
+  const [slug, setSlug] = useState("");
   const [modal_togFirst, setmodal_togFirst] = useState(false);
   const [modal_togtitle, setmodal_togtitle] = useState("Create New Courses");
   const [modal_detele, setmodal_detele] = useState(false);
@@ -59,15 +66,15 @@ const Citylist = (props) => {
   const selectCityState = (state) => state;
 
   const CitypageData = createSelector(selectCityState, (state) => ({
-    CityData: state.City.data,
-    item: state.City.item,
+    MovieGenreData: state.MovieGenre.data,
+    item: state.MovieGenre.item,
     success: state.Message.success,
     error: state.Message.error,
     messageSuccess: state.Message.messageSuccess,
     messageError: state.Message.messageError,
   }));
 
-  const { error, success, messageSuccess, messageError, CityData, item } =
+  const { error, success, messageSuccess, messageError, MovieGenreData, item } =
     useSelector(CitypageData);
 
   useEffect(() => {
@@ -75,6 +82,7 @@ const Citylist = (props) => {
       if (messageSuccess != null) {
         message.success(messageSuccess);
         setmodal_togFirst(false);
+        searchForm.resetForm();
       }
     }
     if (error) {
@@ -103,28 +111,41 @@ const Citylist = (props) => {
       if (formcheck) {
         // console.log("edit: ", values);
         formData.append("id", item?.id);
-        dispatch(UpdateCity(formData));
+        dispatch(UpdateMovieGenre(formData));
       } else {
         // console.log("create: ", values);
-        dispatch(CreateCity(formData));
+        dispatch(CreateMovieGenre(formData));
       }
     },
   });
+  const searchForm = useFormik({
+    enableReinitialize: true,
+
+    initialValues: {
+      name: searchname ? searchname : "" || "",
+    },
+    onSubmit: (values) => {
+      // console.log(values);
+      setSearch(values.name);
+      setPageNo(1);
+    },
+  });
+
   const columns = useMemo(
     () => [
+      {
+        header: "id",
+        accessorKey: "id",
+        enableColumnFilter: false,
+      },
       {
         header: "Name",
         accessorKey: "name",
         enableColumnFilter: false,
       },
       {
-        header: "Slug",
-        accessorKey: "slug",
-        enableColumnFilter: false,
-      },
-      {
         header: "Actions",
-        accessorKey: "id",
+        accessorKey: "slug",
         enableColumnFilter: false,
         cell: (cell) => {
           // return <React.Fragment>Details</React.Fragment>;
@@ -157,27 +178,31 @@ const Citylist = (props) => {
   );
 
   const handlePagination = (page) => {
-    // console.log(page);
-    const formData = new FormData();
-    formData.append("pageNo", page);
-    dispatch(getcity(formData));
+    const newPageNo = page + 1;
+    setPageNo(newPageNo);
+    setSearchParams({ searchname, pageNo: newPageNo, pageSize });
+  };
+  const handlenumberOfElements = (elements) => {
+    setPageSize(elements);
+    setPageNo(1);
+    setSearchParams({ searchname, pageNo, pageSize: elements });
   };
 
   function settitle(type) {
     if (!type) {
       setmodal_togtitle("Edit City");
     } else {
-      setmodal_togtitle("Create New City");
+      setmodal_togtitle("Create New Movie Genre");
       // dispatch(clearNotificationMessage());
-      dispatch(clearCity());
+      dispatch(clear());
       validation.resetForm();
     }
   }
 
-  function deleteitem(id) {
-    console.log(id);
-    if (id) {
-      dispatch(deleteCity(id));
+  function deleteitem(slug) {
+    // console.log(slug);
+    if (slug) {
+      dispatch(deleteMovieGenre(slug));
     }
   }
 
@@ -186,19 +211,19 @@ const Citylist = (props) => {
     setmodal_togFirst(!modal_togFirst);
   }
 
-  const getedit = (id) => {
+  const getedit = (slug) => {
     // console.log(id);
-    dispatch(GetEditCity(id));
+    dispatch(GetEditMovieGenre(slug));
     setmodal_togFirst(!modal_togFirst);
   };
 
-  function tog_togdelete(id) {
+  function tog_togdelete(slug) {
     setmodal_detele(!modal_togFirst);
-    if (id) {
-      setId(id);
+    if (slug) {
+      setSlug(slug);
     }
   }
-  document.title = "City Manager";
+  document.title = "Movie Genre Manager";
 
   return (
     <React.Fragment>
@@ -206,7 +231,7 @@ const Citylist = (props) => {
         <Col xs={12}>
           <div className="page-content">
             <Container fluid>
-              <BreadCrumb title="City Manager" pageTitle="City" />
+              <BreadCrumb title="Movie Genre Manager" pageTitle="Movie Genre" />
               <Row>
                 <Col lg={12}>
                   <Card id="customerList">
@@ -214,7 +239,9 @@ const Citylist = (props) => {
                       <Row className="g-4 align-items-center">
                         <div className="col-sm">
                           <div>
-                            <h5 className="card-title mb-0">City Manager</h5>
+                            <h5 className="card-title mb-0">
+                              Movie Genre Manager
+                            </h5>
                           </div>
                         </div>
                         <div className="col-sm-auto">
@@ -229,19 +256,57 @@ const Citylist = (props) => {
                               }}
                             >
                               <i className="ri-add-line align-bottom me-1"></i>{" "}
-                              Add New City
+                              Add Movie Genre
                             </Link>
                           </div>
                         </div>
                       </Row>
+                      <Form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          searchForm.handleSubmit();
+                          return false;
+                        }}
+                        action="#"
+                      >
+                        <Row className="g-2 mt-3 mb-3">
+                          <Col sm={4}>
+                            <div className="search-box">
+                              <Input
+                                type="text"
+                                name="name"
+                                className="form-control"
+                                placeholder="Search for name..."
+                                onChange={searchForm.handleChange}
+                                onBlur={searchForm.handleBlur}
+                                value={searchForm.values.name}
+                              />
+                              <i className="ri-search-line search-icon"></i>
+                            </div>
+                          </Col>
+                          <Col className="col-sm-auto ms-auto">
+                            <div className="list-grid-nav hstack gap-1">
+                              <button
+                                type="submit"
+                                className="btn btn-primary w-100"
+                              >
+                                {" "}
+                                <i className="ri-equalizer-fill me-2 align-bottom"></i>
+                                Filters
+                              </button>
+                            </div>
+                          </Col>
+                        </Row>
+                      </Form>
                     </CardHeader>
                     <div className="card-body pt-0">
                       <TableContainer
                         columns={columns || []}
-                        data={CityData.content || []}
-                        paginateData={CityData}
-                        customPageSize={CityData.size}
+                        data={MovieGenreData.content || []}
+                        paginateData={MovieGenreData}
+                        customPageSize={MovieGenreData.size}
                         paginate={handlePagination}
+                        numberOfElements={handlenumberOfElements}
                         tableClass="table-centered align-middle table-nowrap mb-0"
                         theadClass="text-muted table-light"
                         SearchPlaceholder="Search Products..."
@@ -282,7 +347,7 @@ const Citylist = (props) => {
                         name="name"
                         type="text"
                         className="form-control"
-                        placeholder="Enter City Name"
+                        placeholder="Enter Movie Genre"
                         onChange={validation.handleChange}
                         onBlur={validation.handleBlur}
                         value={validation.values.name || ""}
@@ -348,7 +413,7 @@ const Citylist = (props) => {
                     color="danger"
                     type="submit"
                     onClick={() => {
-                      deleteitem(Id);
+                      deleteitem(slug);
                       setmodal_detele(false);
                     }}
                   >
@@ -364,4 +429,4 @@ const Citylist = (props) => {
   );
 };
 
-export default Citylist;
+export default withRouter(MovieGenre);

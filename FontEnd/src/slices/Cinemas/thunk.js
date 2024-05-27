@@ -2,39 +2,33 @@ import { fetchSuccess, setSelectOption, removeItem, setItem } from "./reducer";
 import { Success, Error } from "../message/reducer";
 import axios from "axios";
 
-export const getCinema = (formData, history) => async (dispatch) => {
-  await axios
-    .post(`http://localhost:8081/api/admin/v1/cinema`, formData)
-    .then((response) => {
-      // console.log(response);
-      dispatch(
-        fetchSuccess({
-          data: response.data?.result,
-        })
-      );
-    })
-    .catch((err) => {
-      // console.error(err);
-      // dispatch(Error(err.response?.data?.message));
-    });
-};
+export const getCinema =
+  (search, status, city, pageNo, pageSize) => async (dispatch) => {
+    console.log("================================================");
+    console.log("search: " + search);
+    console.log("status: " + status);
+    console.log("city: " + city);
+    console.log("pageNo: " + pageNo);
+    console.log("pageSize: " + pageSize);
+    console.log("================================================");
 
-export const getCreateCinemas = () => async (dispatch) => {
-  await axios
-    .get(`http://localhost:8081/api/admin/v1/cinema/create`)
-    .then((response) => {
-      // console.log(response);
-      dispatch(setSelectOption(response.data?.result));
-    })
-    .catch((err) => {
-      // console.error(err);
-      dispatch(Error(err.response?.data?.message));
-
-      if (err.response?.status === 404) {
-        dispatch("/dashboard/cinema");
-      }
-    });
-};
+    await axios
+      .get(`http://localhost:8081/api/admin/v1/cinema`, {
+        params: { search, status, city, pageNo, pageSize },
+      })
+      .then((response) => {
+        console.log(response);
+        dispatch(
+          fetchSuccess({
+            data: response.data?.result,
+          })
+        );
+      })
+      .catch((err) => {
+        // console.error(err);
+        // dispatch(Error(err.response?.data?.message));
+      });
+  };
 
 export const CreateCinemas = (formData, history) => async (dispatch) => {
   await axios
@@ -49,7 +43,7 @@ export const CreateCinemas = (formData, history) => async (dispatch) => {
       history("/dashboard/cinema");
     })
     .catch((err) => {
-      // console.error(err);
+      console.error(err);
       dispatch(Error(err.response?.data?.message));
     });
 };
@@ -73,9 +67,9 @@ export const GetEditCinema = (slug, history) => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/admin/v1/cinema/${slug}/edit`)
     .then((response) => {
-      // console.log(response);
-      dispatch(setSelectOption(response.data?.result.selectOptionReponse));
-      dispatch(setItem(response.data?.result.model));
+      console.log(response);
+      // dispatch(setSelectOption(response.data?.result.selectOptionReponse));
+      dispatch(setItem(response.data?.result));
     })
     .catch((err) => {
       console.error(err);
@@ -104,4 +98,3 @@ export const UpdateCinema = (formData, history) => async (dispatch) => {
       // history("/dashboard/celebrity");
     });
 };
-

@@ -3,11 +3,10 @@ package com.cinemas.service.impl.admin;
 import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.MovieRequest;
 import com.cinemas.dto.request.PaginationHelper;
-import com.cinemas.dto.response.EditSelectOptionReponse;
+import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.*;
 import com.cinemas.exception.AppException;
-import com.cinemas.exception.ErrorCode;
 import com.cinemas.repositories.*;
 import com.cinemas.service.admin.MovieService;
 import com.cinemas.service.impl.FileStorageServiceImpl;
@@ -143,7 +142,7 @@ public class MovieServiceImpl implements MovieService {
         movie.setCelebrities(celebrities);
 
         //set image
-        movie.setImage(fileStorageServiceImpl.uploadFile(movieRequest.getImage(), "MOVIE"));
+//        movie.setImage(fileStorageServiceImpl.uploadFile(movieRequest.getImage(), "MOVIE"));
 
         //set trailer
         movie.setTrailer(fileStorageServiceImpl.uploadFile(movieRequest.getTrailer(), "MOVIE"));
@@ -158,19 +157,19 @@ public class MovieServiceImpl implements MovieService {
 
         if (movie == null) throw new AppException(NOT_FOUND);
 
-        fileStorageServiceImpl.deleteFile(movie.getImage());
+//        fileStorageServiceImpl.deleteFile(movie.getImage());
         fileStorageServiceImpl.deleteVideo(movie.getTrailer(), "video");
         movieRepository.delete(movie);
         return movie.getId();
     }
 
     @Override
-    public EditSelectOptionReponse<Movie> getEditCelebrityBySlug(String slug) {
+    public SelectOptionAndModelReponse<Movie> getEditCelebrityBySlug(String slug) {
         Movie movie = movieRepository.findBySlug(slug);
 
         if (movie == null) throw new AppException(NOT_FOUND);
 
-        movie.setImage(fileStorageServiceImpl.getUrlFromPublicId(movie.getImage()));
+//        movie.setImage(fileStorageServiceImpl.getUrlFromPublicId(movie.getImage()));
         movie.setTrailer(fileStorageServiceImpl.getVideoFromPublicId(movie.getTrailer()));
 
         List<SelectOptionReponse> options = new ArrayList<>();
@@ -199,7 +198,7 @@ public class MovieServiceImpl implements MovieService {
             options.add(new SelectOptionReponse(movieGenre.getId(), movieGenre.getName()));
         }
 
-        return new EditSelectOptionReponse<>(options, movie);
+        return new SelectOptionAndModelReponse<>(options, movie);
     }
 
     @Override
@@ -211,8 +210,8 @@ public class MovieServiceImpl implements MovieService {
         }
 
         if(movieRequest.getImage() !=null){
-            fileStorageServiceImpl.deleteFile(movie.getImage());
-            movie.setImage(fileStorageServiceImpl.uploadFile(movieRequest.getImage(), "MOVIE"));
+//            fileStorageServiceImpl.deleteFile(movie.getImage());
+//            movie.setImage(fileStorageServiceImpl.uploadFile(movieRequest.getImage(), "MOVIE"));
         }
 
         if(movieRequest.getTrailer() !=null){
