@@ -1,8 +1,7 @@
 package com.cinemas.service;
 
-import com.cinemas.dto.request.MovieGenreRequest;
 import com.cinemas.dto.request.UserRequest;
-import com.cinemas.entities.MovieGenre;
+import com.cinemas.dto.response.UserResponse;
 import com.cinemas.entities.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -11,7 +10,7 @@ public interface UserService {
 
     boolean addUser(UserRequest userRequest);
 
-    User getEditUserById(int id);
+    UserResponse getEditUserById(int id);
 
     boolean updateUser(UserRequest userRequest);
 }

@@ -2,6 +2,7 @@ package com.cinemas.service.impl;
 
 import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.UserRequest;
+import com.cinemas.dto.response.UserResponse;
 import com.cinemas.entities.MovieGenre;
 import com.cinemas.entities.User;
 import com.cinemas.exception.AppException;
@@ -52,11 +53,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getEditUserById(int id) {
+    public UserResponse getEditUserById(int id) {
         User user = userRepository.findById(id).get();
 
         if (user == null) throw new AppException(NOT_FOUND);
-        return user;
+
+        UserResponse userResponse = new UserResponse();
+        ObjectUtils.copyFields(user, userResponse);
+
+        return userResponse;
     }
 
     @Override
@@ -69,10 +74,33 @@ public class UserServiceImpl implements UserService {
             throw new AppException(NAME_EXISTED);
         }
 
-        ObjectUtils.copyFields(userRequest, user);
+//        ObjectUtils.copyFields(userRequest, user);
+        if(userRequest.getName() != null){
+            user.setName(userRequest.getName());
+        }
+
+        if(userRequest.getEmail() != null){
+            user.setEmail(userRequest.getEmail());
+        }
 
         if(userRequest.getPassword() != null){
             user.setPassword(new BCryptPasswordEncoder().encode(userRequest.getPassword()));
+        }
+
+        if(userRequest.getPhone() != null){
+            user.setPhone(userRequest.getPhone());
+        }
+
+        if(userRequest.getDOB() != null){
+            user.setDOB(userRequest.getDOB());
+        }
+
+        if(userRequest.getGender() != null){
+            user.setGender(userRequest.getGender());
+        }
+
+        if(userRequest.getRole() != null){
+            user.setRole(userRequest.getRole());
         }
         userRepository.save(user);
 

@@ -3,6 +3,7 @@ package com.cinemas.controller;
 import com.cinemas.dto.request.MovieGenreRequest;
 import com.cinemas.dto.request.UserRequest;
 import com.cinemas.dto.response.APIResponse;
+import com.cinemas.dto.response.UserResponse;
 import com.cinemas.entities.MovieGenre;
 import com.cinemas.entities.User;
 import com.cinemas.exception.AppException;
@@ -36,8 +37,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}/edit")
-    public APIResponse<User> getUserById(@PathVariable Integer id) {
-        APIResponse<User> apiResponse = new APIResponse();
+    public APIResponse<UserResponse> getUserById(@PathVariable Integer id) {
+        APIResponse<UserResponse> apiResponse = new APIResponse();
 
         apiResponse.setCode(200);
         apiResponse.setResult(userService.getEditUserById(id));
