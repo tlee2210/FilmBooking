@@ -148,7 +148,7 @@ const Navbar = () => {
                     <DropdownItem tag={Link} to='/dao-dien'>
                       Đạo Diễn
                     </DropdownItem>
-                    <DropdownItem tag={Link} to='/Cinema-Corner'>
+                    <DropdownItem tag={Link} to='/binh-luan-phim'>
                       Bình Luận Phim
                     </DropdownItem>
                     <DropdownItem tag={Link} to='/Cinema-Corner'>

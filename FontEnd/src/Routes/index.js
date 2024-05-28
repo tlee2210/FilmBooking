@@ -14,6 +14,7 @@ import {
   homeRoutes,
   CinemaCornerRoutes,
   TicketBookingRoutes,
+  BinhLuanPhimRoutes,
 } from "./allRoutes";
 import { AuthProtected } from "./AuthProtected";
 
@@ -70,8 +71,8 @@ const Index = () => {
               exact={true}
             />
           ))}
-           {/* Ticket Booking */}
-           {TicketBookingRoutes.map((route, idx) => (
+          {/* Ticket Booking */}
+          {TicketBookingRoutes.map((route, idx) => (
             <Route
               path={route.path}
               element={<LayoutHome>{route.component}</LayoutHome>}
@@ -79,6 +80,17 @@ const Index = () => {
               exact={true}
             />
           ))}
+
+          {/* Binh luận phim */}
+          {BinhLuanPhimRoutes.map((route, idx) => (
+            <Route
+              path={route.path}
+              element={<LayoutHome>{route.component}</LayoutHome>}
+              key={idx}
+              exact={true}
+            />
+          ))}
+
 
           <Route>
             {authProtectedRoutes.map((route, idx) => (

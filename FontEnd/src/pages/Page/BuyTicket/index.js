@@ -5,6 +5,9 @@ import './css/BuyTicket.css'; // Import your CSS file
 import '../CinemaCorner/css/CinemaCorner.css';
 import classnames from "classnames";
 import { StrippedRow } from '../../../Components/Common/BasicTablesCode';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import "swiper/bundle";
+import "swiper/css";
 
 const TicketBooking = () => {
 
@@ -44,6 +47,8 @@ const TicketBooking = () => {
     const toggleModal = () => {
         setModal(!modal);
     };
+
+
 
     return (
         <Container style={{ paddingTop: 80 }} fluid>
@@ -138,31 +143,69 @@ const TicketBooking = () => {
                                             <Col>
                                                 <Card>
                                                     <CardBody style={{ padding: 0 }}>
-                                                        <Nav pills className="nav nav-pills animation-nav nav-justified gap-2 mb-3">
-                                                            <NavItem>
-                                                                <NavLink style={{ cursor: "pointer" }} className={classnames({ active: animationNavTab === "1", })} onClick={() => { animationNavToggle("1"); }} >
-                                                                    Hôm Nay <br />
-                                                                    Ngày 27/5
-                                                                </NavLink>
-                                                            </NavItem>
-                                                            <NavItem>
-                                                                <NavLink style={{ cursor: "pointer" }} className={classnames({ active: animationNavTab === "2", })} onClick={() => { animationNavToggle("2"); }} >
-                                                                    Thứ 3 <br />
-                                                                    Ngày 28/5
-                                                                </NavLink>
-                                                            </NavItem>
-                                                            <NavItem>
-                                                                <NavLink style={{ cursor: "pointer" }} className={classnames({ active: animationNavTab === "3", })} onClick={() => { animationNavToggle("3"); }} >
-                                                                    Thứ 4 <br />
-                                                                    Ngày 29/5
-                                                                </NavLink>
-                                                            </NavItem>
-                                                            <NavItem>
-                                                                <NavLink style={{ cursor: "pointer" }} className={classnames({ active: animationNavTab === "4", })} onClick={() => { animationNavToggle("4"); }} >
-                                                                    Thứ 5 <br />
-                                                                    Ngày 30/5
-                                                                </NavLink>
-                                                            </NavItem>
+                                                        <Nav pills className="nav nav-pills animation-nav nav-justified gap-2 mb-3 " style={{ width: "80%" }}>
+                                                            <Row style={{ width: "100%" }}>
+                                                                <Col md="8">
+                                                                    <Swiper
+                                                                        spaceBetween={10}
+                                                                        slidesPerView={3}
+                                                                        pagination={{ clickable: true }}
+                                                                    >
+                                                                        <SwiperSlide>
+                                                                            <NavLink
+                                                                                style={{ cursor: "pointer", fontSize: "12px", padding: "5px", textAlign: "center" }}
+                                                                                className={classnames({ active: animationNavTab === "1" })}
+                                                                                onClick={() => { animationNavToggle("1"); }}
+                                                                            >
+                                                                                Hôm Nay <br />
+                                                                                Ngày 27/5
+                                                                            </NavLink>
+                                                                        </SwiperSlide>
+                                                                        <SwiperSlide>
+                                                                            <NavLink
+                                                                                style={{ cursor: "pointer", fontSize: "12px", padding: "5px", textAlign: "center" }}
+                                                                                className={classnames({ active: animationNavTab === "2" })}
+                                                                                onClick={() => { animationNavToggle("2"); }}
+                                                                            >
+                                                                                Thứ 3 <br />
+                                                                                Ngày 28/5
+                                                                            </NavLink>
+                                                                        </SwiperSlide>
+                                                                        <SwiperSlide>
+                                                                            <NavLink
+                                                                                style={{ cursor: "pointer", fontSize: "12px", padding: "5px", textAlign: "center" }}
+                                                                                className={classnames({ active: animationNavTab === "3" })}
+                                                                                onClick={() => { animationNavToggle("3"); }}
+                                                                            >
+                                                                                Thứ 4 <br />
+                                                                                Ngày 29/5
+                                                                            </NavLink>
+                                                                        </SwiperSlide>
+                                                                        <SwiperSlide>
+                                                                            <NavLink
+                                                                                style={{ cursor: "pointer", fontSize: "12px", padding: "5px", textAlign: "center" }}
+                                                                                className={classnames({ active: animationNavTab === "4" })}
+                                                                                onClick={() => { animationNavToggle("4"); }}
+                                                                            >
+                                                                                Thứ 5 <br />
+                                                                                Ngày 30/5
+                                                                            </NavLink>
+                                                                        </SwiperSlide>
+                                                                    </Swiper>
+                                                                </Col>
+                                                                <Col md="4" className="d-flex align-items-center" style={{ paddingLeft: 80 }}>
+                                                                    <Input type="select" className="custom-select-cinemaCorner mx-2" style={{ cursor: "pointer", fontSize: "12px", width: "auto" }}>
+                                                                        <option>Toàn Quốc</option>
+                                                                        <option>Option 1</option>
+                                                                        <option>Option 2</option>
+                                                                    </Input>
+                                                                    <Input type="select" className="custom-select-cinemaCorner mx-2" style={{ cursor: "pointer", fontSize: "12px", width: "auto" }}>
+                                                                        <option>Tất Cả Rạp</option>
+                                                                        <option>Option 1</option>
+                                                                        <option>Option 2</option>
+                                                                    </Input>
+                                                                </Col>
+                                                            </Row>
                                                         </Nav>
                                                         <div style={{ borderBottom: '4px solid #dee2e6' }}>
                                                         </div>
@@ -182,7 +225,7 @@ const TicketBooking = () => {
                                                                                                     <tr key={theater.id} style={{ height: 120 }} className='fw-bolder'>
                                                                                                         <td style={{ fontSize: 17 }}>{theater.name}</td>
                                                                                                         <td>
-                                                                                                            <div style={{ display: "flex", gap: "20px" }}>
+                                                                                                            <div style={{ display: "flex", gap: "20px", cursor: "pointer", fontSize: "12px", width: "auto" }}>
                                                                                                                 {theater.showtimes.map(showtime => (
                                                                                                                     <Button
                                                                                                                         style={{ width: 110, backgroundColor: "white", color: "black", border: "1px solid rgb(189, 192, 194)" }}
@@ -217,7 +260,7 @@ const TicketBooking = () => {
                                                             </TabPane>
 
 
-                                                            {/* Tab ID 1 */}
+                                                            {/* Tab ID 2 */}
                                                             <TabPane tabId="2" id="animation-profile">
                                                                 <Row>
                                                                     <Col>
@@ -231,7 +274,7 @@ const TicketBooking = () => {
                                                                                                     <tr key={theater.id} style={{ height: 120 }} className='fw-bolder'>
                                                                                                         <td style={{ fontSize: 17 }}>{theater.name}</td>
                                                                                                         <td>
-                                                                                                            <div style={{ display: "flex", gap: "20px" }}>
+                                                                                                            <div style={{ display: "flex", gap: "20px", cursor: "pointer", fontSize: "12px", width: "auto" }}>
                                                                                                                 {theater.showtimes.map(showtime => (
                                                                                                                     <Button
                                                                                                                         style={{ width: 110, backgroundColor: "white", color: "black", border: "1px solid rgb(189, 192, 194)" }}
@@ -266,41 +309,97 @@ const TicketBooking = () => {
                                                             </TabPane>
 
                                                             <TabPane tabId="3" id="animation-messages" >
-                                                                <div className="d-flex">
-                                                                    <div className="flex-shrink-0">
-                                                                        <i className="ri-checkbox-circle-fill text-success"></i>
-                                                                    </div>
-                                                                    <div className="flex-grow-1 ms-2">
-                                                                        Each design is a new, unique piece of art birthed into this world, and while you have the opportunity to be creative and make your own style choices.
-                                                                    </div>
-                                                                </div>
-                                                                <div className="d-flex mt-2">
-                                                                    <div className="flex-shrink-0">
-                                                                        <i className="ri-checkbox-circle-fill text-success"></i>
-                                                                    </div>
-                                                                    <div className="flex-grow-1 ms-2">
-                                                                        For that very reason, I went on a quest and spoke to many different professional graphic designers and asked them what graphic design tips they live.
-                                                                    </div>
-                                                                </div>
+                                                                <Row>
+                                                                    <Col>
+                                                                        <Card>
+                                                                            <CardBody style={{ padding: 0 }}>
+                                                                                <div className="live-preview">
+                                                                                    <div className="table-responsive">
+                                                                                        <Table className="table-striped table-nowrap align-middle mb-0">
+                                                                                            <tbody>
+                                                                                                {theaters.map(theater => (
+                                                                                                    <tr key={theater.id} style={{ height: 120 }} className='fw-bolder'>
+                                                                                                        <td style={{ fontSize: 17 }}>{theater.name}</td>
+                                                                                                        <td>
+                                                                                                            <div style={{ display: "flex", gap: "20px", cursor: "pointer", fontSize: "12px", width: "auto" }}>
+                                                                                                                {theater.showtimes.map(showtime => (
+                                                                                                                    <Button
+                                                                                                                        style={{ width: 110, backgroundColor: "white", color: "black", border: "1px solid rgb(189, 192, 194)" }}
+                                                                                                                        key={showtime}
+                                                                                                                        color="primary"
+                                                                                                                        onMouseEnter={(e) => { e.target.style.backgroundColor = "#c0c1df"; }}
+                                                                                                                        onMouseLeave={(e) => { e.target.style.backgroundColor = "white"; }}
+                                                                                                                        onClick={() => setSelectedShowtime(showtime)}
+                                                                                                                    >
+                                                                                                                        {showtime}
+                                                                                                                    </Button>
+                                                                                                                ))}
+                                                                                                            </div>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                ))}
+                                                                                            </tbody>
+                                                                                        </Table>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div className="d-none code-view">
+                                                                                    <pre className="language-markup" style={{ "height": "275px" }}>
+                                                                                        <code>
+                                                                                            <StrippedRow />
+                                                                                        </code>
+                                                                                    </pre>
+                                                                                </div>
+                                                                            </CardBody>
+                                                                        </Card>
+                                                                    </Col>
+                                                                </Row>
                                                             </TabPane>
 
                                                             <TabPane tabId="4" id="animation-settings">
-                                                                <div className="d-flex mt-2">
-                                                                    <div className="flex-shrink-0">
-                                                                        <i className="ri-checkbox-circle-fill text-success"></i>
-                                                                    </div>
-                                                                    <div className="flex-grow-1 ms-2">
-                                                                        For that very reason, I went on a quest and spoke to many different professional graphic designers and asked them what graphic design tips they live.
-                                                                    </div>
-                                                                </div>
-                                                                <div className="d-flex mt-2">
-                                                                    <div className="flex-shrink-0">
-                                                                        <i className="ri-checkbox-circle-fill text-success"></i>
-                                                                    </div>
-                                                                    <div className="flex-grow-1 ms-2">
-                                                                        After gathering lots of different opinions and graphic design basics, I came up with a list of 30 graphic design tips that you can start implementing.
-                                                                    </div>
-                                                                </div>
+                                                                <Row>
+                                                                    <Col>
+                                                                        <Card>
+                                                                            <CardBody style={{ padding: 0 }}>
+                                                                                <div className="live-preview">
+                                                                                    <div className="table-responsive">
+                                                                                        <Table className="table-striped table-nowrap align-middle mb-0">
+                                                                                            <tbody>
+                                                                                                {theaters.map(theater => (
+                                                                                                    <tr key={theater.id} style={{ height: 120 }} className='fw-bolder'>
+                                                                                                        <td style={{ fontSize: 17 }}>{theater.name}</td>
+                                                                                                        <td>
+                                                                                                            <div style={{ display: "flex", gap: "20px", cursor: "pointer", fontSize: "12px", width: "auto" }}>
+                                                                                                                {theater.showtimes.map(showtime => (
+                                                                                                                    <Button
+                                                                                                                        style={{ width: 110, backgroundColor: "white", color: "black", border: "1px solid rgb(189, 192, 194)" }}
+                                                                                                                        key={showtime}
+                                                                                                                        color="primary"
+                                                                                                                        onMouseEnter={(e) => { e.target.style.backgroundColor = "#c0c1df"; }}
+                                                                                                                        onMouseLeave={(e) => { e.target.style.backgroundColor = "white"; }}
+                                                                                                                        onClick={() => setSelectedShowtime(showtime)}
+                                                                                                                    >
+                                                                                                                        {showtime}
+                                                                                                                    </Button>
+                                                                                                                ))}
+                                                                                                            </div>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                ))}
+                                                                                            </tbody>
+                                                                                        </Table>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div className="d-none code-view">
+                                                                                    <pre className="language-markup" style={{ "height": "275px" }}>
+                                                                                        <code>
+                                                                                            <StrippedRow />
+                                                                                        </code>
+                                                                                    </pre>
+                                                                                </div>
+                                                                            </CardBody>
+                                                                        </Card>
+                                                                    </Col>
+                                                                </Row>
                                                             </TabPane>
                                                         </TabContent>
                                                     </CardBody>

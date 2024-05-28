@@ -73,8 +73,8 @@ const Director = () => {
                           <Link to="/dao-dien/dao-dien-details" style={{ textDecoration: "none", color: "inherit" }}>
                             <img
                               style={{ height: "250px", width: "250px", objectFit: "cover" }}
-                              className="rounded-start img-fluid"
-                              src="https://cdn.galaxycine.vn/media/j/a/james-wan-premiere-death-sentence-01.jpg"
+                              className="rounded w-100 h-auto"
+                              src="https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcTtz0oynJ2nY-2wHZXerfJbJoGZpLIPrUSWdLfQbcWOuymbu2uWLbSyonfEeoUHbcnS1FE5k6ZfxkQe8YQ"
                               alt="Card"
                             />
                           </Link>
@@ -85,7 +85,7 @@ const Director = () => {
 
                           </CardHeader>
                           <CardBody>
-                            <p className="card-text mb-2">
+                            <p className="card-text mb-2 text-muted">
                               For that very reason, I went on a quest and spoke to many different professional graphic designers and asked them what graphic design tips they live.
                             </p>
                             <p className="card-text">
