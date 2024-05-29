@@ -39,7 +39,7 @@ const Navdata = () => {
     },
     {
       id: "movie",
-      label: "Movie Manager",
+      label: "Movie Management",
       icon: "ri-movie-2-fill",
       link: "/#",
       stateVariables: isMovie,
@@ -74,7 +74,7 @@ const Navdata = () => {
     },
     {
       id: "cinemas",
-      label: "Cinemas",
+      label: "Cinemas Management",
       icon: "ri-dashboard-2-line",
       link: "/#",
       stateVariables: isCinema,

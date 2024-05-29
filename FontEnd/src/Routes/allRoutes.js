@@ -42,17 +42,17 @@ const MovieEdit = lazy(() => import("../pages/dashboard/Movie/edit"));
 const MovieCreate = lazy(() => import("../pages/dashboard/Movie/create"));
 
 //Cinema Coner
-const Actor = lazy(() =>
-  import("../pages/Page/CinemaCorner/Actor")
-);
+const Actor = lazy(() => import("../pages/Page/CinemaCorner/Actor"));
 const Director = lazy(() => import("../pages/Page/CinemaCorner/Director"));
-const ActorInfor = lazy(()=>import("../pages/Page/CinemaCorner/Details/ActorInfor"))
-const DirectorInfor = lazy(()=>import("../pages/Page/CinemaCorner/Details/DirectorInfor"))
-
+const ActorInfor = lazy(() =>
+  import("../pages/Page/CinemaCorner/Details/ActorInfor")
+);
+const DirectorInfor = lazy(() =>
+  import("../pages/Page/CinemaCorner/Details/DirectorInfor")
+);
 
 //Ticket Booking
-const TicketBooking = lazy(()=>import("../pages/Page/BuyTicket/index"))
-
+const TicketBooking = lazy(() => import("../pages/Page/BuyTicket/index"));
 
 const authProtectedRoutes = [
   //User Profile
@@ -67,7 +67,7 @@ const authProtectedRoutes = [
   { path: "/dashboard/cinema", component: <Cinemas /> },
   { path: "/dashboard/cinema/:slug/edit", component: <CinemaEdit /> },
   { path: "/dashboard/movie-genre", component: <MovieGenre /> },
-  
+
   { path: "/dashboard/movie", component: <Movie /> },
   { path: "/dashboard/movie/:slug/edit", component: <MovieEdit /> },
   { path: "/dashboard/movie/create", component: <MovieCreate /> },
@@ -103,7 +103,12 @@ const CinemaCornerRoutes = [
 
 const TicketBookingRoutes = [
   { path: "/ticket-booking/phim", component: <TicketBooking /> },
- 
 ];
 
-export { authProtectedRoutes, publicRoutes, homeRoutes, CinemaCornerRoutes,TicketBookingRoutes };
+export {
+  authProtectedRoutes,
+  publicRoutes,
+  homeRoutes,
+  CinemaCornerRoutes,
+  TicketBookingRoutes,
+};

@@ -1,5 +1,6 @@
 package com.cinemas.dto.request;
 
+import com.cinemas.enums.MovieStatus;
 import com.cinemas.validator.DobConstraint;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Null;
@@ -22,7 +23,7 @@ public class MovieRequest {
     @NotEmpty(message = "VALIDATION")
     private String name;
 
-    private int duration;
+    private int duration_movie;
 
     private int countryId;
 
@@ -31,6 +32,8 @@ public class MovieRequest {
     private String producer;
 
     private String description;
+
+    private MovieStatus status;
 
     private MultipartFile imageLandscape;
 

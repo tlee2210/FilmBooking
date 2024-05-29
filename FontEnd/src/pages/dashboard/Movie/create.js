@@ -27,11 +27,11 @@ const mapStyles = {
   width: "100%",
   height: "100%",
 };
+import Flatpickr from "react-flatpickr";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
-import { CreateCinemas } from "../../../slices/Cinemas/thunk";
-import { getCreate } from "../../../slices/Movie/thunk";
+import { getCreate, CreateMovies } from "../../../slices/Movie/thunk";
 import { clearNotification } from "../../../slices/message/reducer";
 
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -70,6 +70,8 @@ const MovieCreate = (props) => {
       selectActors: state.Movie.selectActors,
       selectCategories: state.Movie.selectCategories,
       selectDirectories: state.Movie.selectDirectories,
+      selectStatus: state.Movie.selectStatus,
+      selectcountry: state.Movie.selectcountry,
     })
   );
 
@@ -79,6 +81,8 @@ const MovieCreate = (props) => {
     selectActors,
     selectCategories,
     selectDirectories,
+    selectStatus,
+    selectcountry,
   } = useSelector(movieCreatepageData);
 
   useEffect(() => {
@@ -166,19 +170,54 @@ const MovieCreate = (props) => {
 
     initialValues: {
       name: "",
+      status: "COMING_SOON",
+      country: "",
+      producer: "",
+      duration_movie: "",
+      Description: "",
+      rules: "",
+      releaseDate: "",
+      endDate: "",
+      language: "",
+      movieFormat: "",
+      trailer: "",
       fileLandscape: [],
       filePortrait: [],
-      Description: "",
       Category: [],
       Actor: [],
       Directory: [],
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Please Enter a Cinema name"),
+      name: Yup.string().required("Please Enter a Movie name"),
+      trailer: Yup.string().required("Please Enter Link trailer"),
+      producer: Yup.string().required("Please Enter a Movie producer"),
+      status: Yup.string().required("Please Enter a Movie status"),
+      language: Yup.string().required("Please Enter a Movie language"),
+      movieFormat: Yup.string().required("Please Enter a Movie Format"),
+      duration_movie: Yup.number()
+        .required("Please Enter a duration movie")
+        .min(60, "Duration must be at least 60 minutes")
+        .max(200, "Duration cannot exceed 200 minutes"),
+      rules: Yup.number()
+        .min(12, "Age must be at least 12")
+        .max(18, "Age cannot exceed 18"),
+      country: Yup.string().required("Please Enter a Movie country"),
       Description: Yup.string().required("Please Enter Description"),
       Category: Yup.array().min(1, "Please select at least one Category"),
       Actor: Yup.array().min(1, "Please select at least one Actor"),
       Directory: Yup.array().min(1, "Please select at least one Director"),
+      releaseDate: Yup.date()
+        .required("Please enter a release date")
+        .min(
+          new Date(new Date().getTime() + 15 * 24 * 60 * 60 * 1000),
+          "The release date cannot be less than 15 days from the current date"
+        ),
+      endDate: Yup.date()
+        .min(
+          Yup.ref("releaseDate"),
+          "The end date must be at least 30 days after the release date"
+        )
+        .required("Please enter an end date"),
       fileLandscape: Yup.array()
         .of(
           Yup.mixed().test(
@@ -200,6 +239,38 @@ const MovieCreate = (props) => {
     }),
     onSubmit: (values) => {
       console.log(values);
+      const formData = new FormData();
+      formData.append("name", values.name);
+      formData.append("duration_movie", values.duration_movie);
+      formData.append("countryId", values.country);
+      formData.append("language", values.language);
+      formData.append("producer", values.producer);
+      formData.append("status", values.status);
+      formData.append("description", values.Description);
+      formData.append("imageLandscape", values.fileLandscape[0].originFileObj);
+      formData.append("imagePortrait", values.filePortrait[0].originFileObj);
+      formData.append("trailer", values.trailer);
+      formData.append("rules", values.rules);
+      formData.append("movieFormat", values.movieFormat);
+      formData.append(
+        "releaseDate",
+        new Date(values.releaseDate).toISOString().split("T")[0]
+      );
+      formData.append(
+        "endDate",
+        new Date(values.endDate).toISOString().split("T")[0]
+      );
+      values.Category.forEach((item, index) => {
+        formData.append(`categoriesIds[${index}]`, item);
+      });
+      values.Actor.forEach((item, index) => {
+        formData.append(`actorId[${index}]`, item);
+      });
+      values.Directory.forEach((item, index) => {
+        formData.append(`directorId[${index}]`, item);
+      });
+
+      dispatch(CreateMovies(formData, props.router.navigate));
     },
   });
   useEffect(() => {
@@ -254,6 +325,9 @@ const MovieCreate = (props) => {
             <Col md={8}>
               <Col md={12}>
                 <Card>
+                  <CardHeader>
+                    <h5 className="card-title mb-0">Movie Detail</h5>
+                  </CardHeader>
                   <CardBody>
                     <Row>
                       <Col md={6}>
@@ -286,6 +360,137 @@ const MovieCreate = (props) => {
                           ) : null}
                         </div>
                       </Col>
+                      <Col md={6}>
+                        <div className="mb-3">
+                          <Label
+                            className="form-label"
+                            htmlFor="product-title-input"
+                          >
+                            trailer Link
+                          </Label>
+                          <Input
+                            type="text"
+                            className="form-control"
+                            id="product-title-input"
+                            placeholder="Enter trailer"
+                            name="trailer"
+                            value={validation.values.trailer || ""}
+                            onBlur={validation.handleBlur}
+                            onChange={validation.handleChange}
+                            invalid={
+                              validation.errors.trailer &&
+                              validation.touched.trailer
+                                ? true
+                                : false
+                            }
+                          />
+                          {validation.errors.trailer &&
+                          validation.touched.trailer ? (
+                            <FormFeedback type="invalid">
+                              {validation.errors.trailer}
+                            </FormFeedback>
+                          ) : null}
+                        </div>
+                      </Col>
+                      <Col md={6}>
+                        <div className="mb-3">
+                          <Label
+                            className="form-label"
+                            htmlFor="product-title-input"
+                          >
+                            producer
+                          </Label>
+                          <Input
+                            type="text"
+                            className="form-control"
+                            id="product-title-input"
+                            placeholder="Enter producer"
+                            name="producer"
+                            value={validation.values.producer || ""}
+                            onBlur={validation.handleBlur}
+                            onChange={validation.handleChange}
+                            invalid={
+                              validation.errors.producer &&
+                              validation.touched.producer
+                                ? true
+                                : false
+                            }
+                          />
+                          {validation.errors.producer &&
+                          validation.touched.producer ? (
+                            <FormFeedback type="invalid">
+                              {validation.errors.producer}
+                            </FormFeedback>
+                          ) : null}
+                        </div>
+                      </Col>
+                      <Col md={6}>
+                        <div className="mb-3">
+                          <Label
+                            className="form-label"
+                            htmlFor="product-title-input"
+                          >
+                            Duration Movie
+                          </Label>
+                          <Input
+                            type="number"
+                            className="form-control"
+                            id="product-title-input"
+                            placeholder="Enter Duration"
+                            name="duration_movie"
+                            value={validation.values.duration_movie || ""}
+                            onBlur={validation.handleBlur}
+                            onChange={validation.handleChange}
+                            invalid={
+                              validation.errors.duration_movie &&
+                              validation.touched.duration_movie
+                                ? true
+                                : false
+                            }
+                          />
+                          {validation.errors.duration_movie &&
+                          validation.touched.duration_movie ? (
+                            <FormFeedback type="invalid">
+                              {validation.errors.duration_movie}
+                            </FormFeedback>
+                          ) : null}
+                        </div>
+                      </Col>
+                      <Col md={6}>
+                        <div className="mb-3">
+                          <Label
+                            className="form-label"
+                            htmlFor="product-title-input"
+                          >
+                            Country
+                          </Label>
+                          <Select
+                            name="country"
+                            options={selectcountry}
+                            placeholder="Select country"
+                            classNamePrefix="select"
+                            onChange={(option) => {
+                              validation.setFieldValue("country", option.value);
+                            }}
+                            value={selectcountry.find(
+                              (opt) => opt.value === validation.values.country
+                            )}
+                            className={
+                              validation.errors.country &&
+                              validation.touched.country
+                                ? "is-invalid"
+                                : ""
+                            }
+                          />
+                          {validation.errors.country &&
+                            validation.touched.country && (
+                              <FormFeedback type="invalid">
+                                {validation.errors.country}
+                              </FormFeedback>
+                            )}
+                        </div>
+                      </Col>
+
                       <Col md={6}>
                         <FormGroup className="mb-3">
                           <Label htmlFor="validationCustom02">Category</Label>
@@ -427,6 +632,32 @@ const MovieCreate = (props) => {
                       onBlur={() =>
                         validation.setFieldTouched("Description", true)
                       }
+                      config={{
+                        toolbar: [
+                          "heading",
+                          "|",
+                          "bold",
+                          "italic",
+                          "link",
+                          "bulletedList",
+                          "numberedList",
+                          "blockQuote",
+                          "|",
+                          "undo",
+                          "redo",
+                          "alignment",
+                          "fontSize",
+                          "fontFamily",
+                          "fontColor",
+                          "highlight",
+                          "imageUpload",
+                          "mediaEmbed",
+                          "insertTable",
+                          "tableColumn",
+                          "tableRow",
+                          "mergeTableCells",
+                        ],
+                      }}
                     />
                     {validation.touched.Description &&
                     validation.errors.Description ? (
@@ -533,9 +764,198 @@ const MovieCreate = (props) => {
               <Col md={12}>
                 <Card>
                   <CardHeader>
-                    <h5 className="card-title mb-0">Google Map</h5>
+                    <h5 className="card-title mb-0">Movie Details Status</h5>
                   </CardHeader>
-                  <CardBody></CardBody>
+                  <CardBody>
+                    <Col md={12}>
+                      <div className="mb-3">
+                        <Label
+                          className="form-label"
+                          htmlFor="product-title-input"
+                        >
+                          language
+                        </Label>
+                        <Input
+                          type="text"
+                          className="form-control"
+                          id="product-title-input"
+                          placeholder="Enter language Movies"
+                          name="language"
+                          value={validation.values.language || ""}
+                          onBlur={validation.handleBlur}
+                          onChange={validation.handleChange}
+                          invalid={
+                            validation.errors.language &&
+                            validation.touched.language
+                              ? true
+                              : false
+                          }
+                        />
+                        {validation.errors.language &&
+                        validation.touched.language ? (
+                          <FormFeedback type="invalid">
+                            {validation.errors.language}
+                          </FormFeedback>
+                        ) : null}
+                      </div>
+                    </Col>
+                    <Col md={12}>
+                      <div className="mb-3">
+                        <Label
+                          className="form-label"
+                          htmlFor="product-title-input"
+                        >
+                          Movie Format
+                        </Label>
+                        <Input
+                          type="text"
+                          className="form-control"
+                          id="product-title-input"
+                          placeholder="Enter movie Format"
+                          name="movieFormat"
+                          value={validation.values.movieFormat || ""}
+                          onBlur={validation.handleBlur}
+                          onChange={validation.handleChange}
+                          invalid={
+                            validation.errors.movieFormat &&
+                            validation.touched.movieFormat
+                              ? true
+                              : false
+                          }
+                        />
+                        {validation.errors.movieFormat &&
+                        validation.touched.movieFormat ? (
+                          <FormFeedback type="invalid">
+                            {validation.errors.movieFormat}
+                          </FormFeedback>
+                        ) : null}
+                      </div>
+                    </Col>
+                    <Col md={12}>
+                      <div className="mb-3">
+                        <Label
+                          className="form-label"
+                          htmlFor="product-title-input"
+                        >
+                          Status
+                        </Label>
+                        <Select
+                          name="status"
+                          options={selectStatus}
+                          placeholder="Select Status"
+                          classNamePrefix="select"
+                          onChange={(option) => {
+                            validation.setFieldValue("status", option.value);
+                          }}
+                          value={selectStatus.find(
+                            (opt) => opt.value === validation.values.status
+                          )}
+                          className={
+                            validation.errors.status &&
+                            validation.touched.status
+                              ? "is-invalid"
+                              : ""
+                          }
+                        />
+                        {validation.errors.status &&
+                          validation.touched.status && (
+                            <FormFeedback type="invalid">
+                              {validation.errors.status}
+                            </FormFeedback>
+                          )}
+                      </div>
+                    </Col>
+                    <Col md={12}>
+                      <div className="mb-3">
+                        <Label
+                          className="form-label"
+                          htmlFor="product-title-input"
+                        >
+                          Age Limit
+                        </Label>
+                        <Input
+                          type="number"
+                          className="form-control"
+                          id="product-title-input"
+                          placeholder="Enter age limit"
+                          name="rules"
+                          value={validation.values.rules || ""}
+                          onBlur={validation.handleBlur}
+                          onChange={validation.handleChange}
+                          invalid={
+                            validation.errors.rules && validation.touched.rules
+                              ? true
+                              : false
+                          }
+                        />
+                        {validation.errors.rules && validation.touched.rules ? (
+                          <FormFeedback type="invalid">
+                            {validation.errors.rules}
+                          </FormFeedback>
+                        ) : null}
+                      </div>
+                    </Col>
+                    <Col md={12}>
+                      <div className="mb-3">
+                        <Label className="form-label" htmlFor="releaseDate">
+                          Release Date
+                        </Label>
+                        <Flatpickr
+                          className="form-control"
+                          placeholder="Enter Release Date"
+                          value={validation.values.releaseDate}
+                          onChange={([selectedDate]) => {
+                            validation.setFieldValue(
+                              "releaseDate",
+                              selectedDate
+                            );
+                          }}
+                          options={{
+                            minDate: new Date(
+                              new Date().getTime() + 15 * 24 * 60 * 60 * 1000
+                            ),
+                          }}
+                        />
+                        {validation.errors.releaseDate &&
+                        validation.touched.releaseDate ? (
+                          <div className="text-danger">
+                            {validation.errors.releaseDate}
+                          </div>
+                        ) : null}
+                      </div>
+                    </Col>
+                    <Col md={12}>
+                      <div className="mb-3">
+                        <Label className="form-label" htmlFor="endDate">
+                          End Date
+                        </Label>
+                        <Flatpickr
+                          className="form-control"
+                          placeholder="Enter End Date"
+                          value={validation.values.endDate}
+                          onChange={([selectedDate]) => {
+                            validation.setFieldValue("endDate", selectedDate);
+                          }}
+                          options={{
+                            minDate: validation.values.releaseDate
+                              ? new Date(
+                                  new Date(
+                                    validation.values.releaseDate
+                                  ).getTime() +
+                                    30 * 24 * 60 * 60 * 1000
+                                )
+                              : new Date().fp_incr(45), // Default to 45 days from now if no release date is selected
+                          }}
+                        />
+                        {validation.errors.endDate &&
+                        validation.touched.endDate ? (
+                          <div className="text-danger">
+                            {validation.errors.endDate}
+                          </div>
+                        ) : null}
+                      </div>
+                    </Col>
+                  </CardBody>
                 </Card>
               </Col>
             </Col>

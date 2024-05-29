@@ -5,6 +5,8 @@ export const initialState = {
   selectActors: [],
   selectCategories: [],
   selectDirectories: [],
+  selectStatus: [],
+  selectcountry: [],
   item: {},
 };
 
@@ -20,6 +22,8 @@ const MovieSlice = createSlice({
       state.selectActors = action.payload.data.selectActors;
       state.selectCategories = action.payload.data.selectCategories;
       state.selectDirectories = action.payload.data.selectDirectories;
+      state.selectStatus = action.payload.data.selectStatus;
+      state.selectcountry = action.payload.data.selectcountry;
     },
     setItem(state, action) {
       state.item = action.payload;

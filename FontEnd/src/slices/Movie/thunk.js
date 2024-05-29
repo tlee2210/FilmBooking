@@ -39,23 +39,23 @@ export const getCreate = () => async (dispatch) => {
     });
 };
 
-// export const CreateCinemas = (formData, history) => async (dispatch) => {
-//   await axios
-//     .post(`http://localhost:8081/api/admin/v1/cinema/create`, formData, {
-//       headers: {
-//         "Content-Type": "multipart/form-data",
-//       },
-//     })
-//     .then((response) => {
-//       // console.log(response);
-//       dispatch(Success(response.data?.message));
-//       history("/dashboard/cinema");
-//     })
-//     .catch((err) => {
-//       console.error(err);
-//       dispatch(Error(err.response?.data?.message));
-//     });
-// };
+export const CreateMovies = (formData, history) => async (dispatch) => {
+  await axios
+    .post(`http://localhost:8081/api/admin/v1/movie/create`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((response) => {
+      console.log(response);
+      // dispatch(Success(response.data?.message));
+      // history("/dashboard/cinema");
+    })
+    .catch((err) => {
+      console.error(err);
+      // dispatch(Error(err.response?.data?.message));
+    });
+};
 
 // export const deleteCinema = (slug) => async (dispatch) => {
 //   await axios
