@@ -12,4 +12,7 @@ public interface WaterCornRepository extends JpaRepository<WaterCorn, Integer> {
 
     @Query("SELECT w FROM WaterCorn w WHERE w.name = ?1 AND w.id != ?2")
     WaterCorn findByNameWithId(String name, int id);
+
+    @Query("SELECT w FROM WaterCorn w WHERE w.slug = ?1")
+    WaterCorn findBySlug(String slug);
 }

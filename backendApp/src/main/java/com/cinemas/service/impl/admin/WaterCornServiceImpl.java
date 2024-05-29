@@ -4,6 +4,7 @@ import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.CelebrityRequest;
 import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.WaterCornRequest;
+import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Celebrity;
 import com.cinemas.entities.Country;
@@ -75,8 +76,8 @@ FileStorageServiceImpl fileStorageServiceImpl;
 
 
     @Override
-    public Integer deleteWaterCorn(String name) throws IOException {
-          WaterCorn watercorn = waterCornRepository.findByName(name);
+    public Integer deleteWaterCorn(String slug) throws IOException {
+          WaterCorn watercorn = waterCornRepository.findBySlug(slug);
 
         if (watercorn == null) throw new AppException(NOT_FOUND);
 
@@ -87,19 +88,31 @@ FileStorageServiceImpl fileStorageServiceImpl;
     }
 
     @Override
+    public WaterCorn getEditWaterCorn(String slug) throws IOException {
+        WaterCorn waterCorn = waterCornRepository.findBySlug(slug);
+
+        if (waterCorn == null) throw new AppException(NOT_FOUND);
+        waterCorn.setImage(fileStorageServiceImpl.getUrlFromPublicId(waterCorn.getImage()));
+
+
+        return waterCorn;
+    }
+
+
+    @Override
     public boolean updateWaterCorn(WaterCornRequest watercorn) throws IOException {
         WaterCorn wat= waterCornRepository
                 .findById(watercorn.getId())
                 .orElseThrow(() -> new AppException(NOT_FOUND));
 
-//        if (waterCornRepository.findByNameWithId(watercorn.getName(), watercorn.getId()) != null) {
-//            throw new AppException(NAME_EXISTED);
-//        }
-
-        if (watercorn.getFile() != null) {
-            fileStorageServiceImpl.deleteFile(wat.getImage());
-            wat.setImage(fileStorageServiceImpl.uploadFile(watercorn.getFile(), String.valueOf(watercorn.getName())));
+        if (waterCornRepository.findByNameWithId(watercorn.getName(), watercorn.getId()) != null) {
+            throw new AppException(NAME_EXISTED);
         }
+
+//        if (watercorn.getFile() != null) {
+//            fileStorageServiceImpl.deleteFile(wat.getImage());
+//            wat.setImage(fileStorageServiceImpl.uploadFile(watercorn.getFile(), String.valueOf(watercorn.getName())));
+//        }
 
         ObjectUtils.copyFields(watercorn, wat);
         String slug = watercorn.getName().toLowerCase().replaceAll("\\s+", "-");

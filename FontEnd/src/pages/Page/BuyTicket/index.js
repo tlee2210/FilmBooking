@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Card, CardBody, CardHeader, Col, Container, Nav, NavItem, NavLink, ButtonGroup, Modal, Row, ModalBody, Button, TabContent, TabPane, Table, Input } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import './css/BuyTicket.css'; // Import your CSS file
+import './css/BuyTicket.css';
 import '../CinemaCorner/css/CinemaCorner.css';
 import classnames from "classnames";
 import { StrippedRow } from '../../../Components/Common/BasicTablesCode';
@@ -92,42 +92,74 @@ const TicketBooking = () => {
                         <Col lg={8}>
                             <Col className="mb-4 mt-4">
                                 <Card className="h-100">
-                                    <Row className="g-0 mb-5">
-                                        <Col md={4}>
+                                    <Row className="mt-4">
+                                        <Col md={4} className="position-relative">
                                             <img
-                                                style={{ height: "250px", width: "250px", objectFit: "cover" }}
-                                                className="rounded-start img-fluid"
-                                                src="https://cdn.galaxycine.vn/media/j/a/james-wan-premiere-death-sentence-01.jpg"
-                                                alt="Card"
+                                                style={{ height: "400px", width: "300px", objectFit: "cover", border: "3px white solid", marginTop: -120 }}
+                                                className="rounded img-fluid position-absolute"
+                                                src="https://i.ytimg.com/vi_webp/49xWJJvpjzI/maxresdefault.webp"
+                                                alt="Movie Poster"
                                             />
                                         </Col>
-                                        <Col md={8}>
-                                            <CardHeader>
-                                                <h1 className="title-cinemaCorner-name mb-0">Thor RagnaRock 2</h1>
+                                        <Col md={8} className="offset-md-4">
+                                            <Card className="h-100" style={{ paddingLeft: 20 }}>
 
-                                            </CardHeader>
-                                            <CardBody>
+                                                <h1 className="title-ticketFilm mb-1">Furiosa: Câu Chuyện Từ Max Điên</h1>
+                                                <p className=" mb-2">
+                                                    <span><i style={{ color: 'orange' }} className="ri-time-line"></i> 148 Phút</span>
+                                                    <span style={{ paddingLeft: 20 }}><i style={{ color: 'orange' }} className="bx bx-calendar"></i> 22/05/2024</span>
+                                                </p>
                                                 <p className="card-text mb-2">
-                                                    For that very reason, I went on a quest and spoke to many different professional graphic designers and asked them what graphic design tips they live.
+                                                    <span>
+                                                        <i className='bx bxs-star' style={{ fontSize: 25, color: 'orange' }}></i>
+                                                        <span style={{ fontSize: 19 }}>9.0</span>
+                                                        <span className='text-muted' style={{ fontSize: 15 }}>(89 votes)</span>
+                                                    </span>
                                                 </p>
-                                                <p className="card-text">
-                                                    <small className="text-muted">Last updated 3 mins ago</small>
+                                                <p className="card-text mb-2">
+                                                    <span className='text-muted'>Quốc gia: Úc</span>
                                                 </p>
-                                            </CardBody>
+                                                <p className="card-text mb-2">
+                                                    <span className='text-muted' style={{ cursor: 'pointer' }}>Nhà sản xuất: Warner Bros</span>
+                                                </p>
+                                                <p className="card-text mb-2">
+                                                    <span className='text-muted' style={{ marginRight: 20 }}>Thể loại:</span>
+                                                    <span className="genre-container-ticketFilm">
+                                                        <button className="custom-button-ticketFilm">Giả Tưởng</button>
+                                                        <button className="custom-button-ticketFilm">Hành Động</button>
+                                                        <button className="custom-button-ticketFilm">Phiêu Lưu</button>
+                                                    </span>
+                                                </p>
+                                                <p className="card-text mb-2">
+                                                    <span className='text-muted' style={{ marginRight: 10 }}>Đạo Diễn:</span>
+                                                    <span className="genre-container-ticketFilm">
+
+                                                        <button className="custom-button-ticketFilm">George Miler</button>
+
+                                                    </span>
+                                                </p>
+                                                <p className="card-text mb-2">
+                                                    <span className='text-muted' style={{ marginRight: 20 }}>Thể loại:</span>
+                                                    <span className="genre-container-ticketFilm">
+                                                        <button className="custom-button-ticketFilm">Twicht</button>
+                                                        <button className="custom-button-ticketFilm">Chrishame Her</button>
+                                                        <button className="custom-button-ticketFilm">David Beckham</button>
+                                                    </span>
+                                                </p>
+                                            </Card>
                                         </Col>
                                     </Row>
 
-
                                     {/* Nội dung phim  */}
-                                    <div className="movies-section-ActorInfor mt-5 mb-3">
+                                    <div className="mt-5 mb-3">
                                         <div className="d-flex align-items-center pb-3">
-                                            <div className="text-xl inline-block font-bold uppercase" style={{ borderLeft: "4px solid #007bff", fontSize: "18px", fontWeight: "bold", textTransform: "uppercase", paddingLeft: "0.5rem" }}>Nội dung phim</div>
+                                            <div className="text-xl inline-block font-bold uppercase" style={{ borderLeft: "4px solid #007bff", fontSize: "16px", fontWeight: "bold", paddingLeft: "0.5rem" }}>Nội Dung Phim</div>
                                         </div>
                                         <Row>
-                                            <span style={{ fontSize: "13px", paddingBottom: "10px" }}>
-                                                Furiosa: A Mad Max Saga xảy ra trước những sự kiện của Mad Max: Fury Road, câu chuyện kể về thời trẻ của nữ chiến binh Furiosa khi cô bị tách ra khỏi nơi ẩn náu ở Green Place of Many Mothers và lần đầu tiên buộc phải đối mặt với sự điên rồ của thế giới bên ngoài. Nhưng cô ấy luôn nuôi trong mình một khát vọng “trở về đất mẹ” mãnh liệt.
+                                            <span style={{ fontSize: "14px", paddingBottom: "10px" }}>
+                                                <span style={{ fontWeight: 'bold' }}>Furiosa: A Mad Max Saga</span> xảy ra trước những sự kiện của Mad Max: Fury Road, câu chuyện kể về thời trẻ của nữ chiến binh Furiosa khi cô bị tách ra khỏi nơi ẩn náu ở Green Place of Many Mothers và lần đầu tiên buộc phải đối mặt với sự điên rồ của thế giới bên ngoài. Nhưng cô ấy luôn nuôi trong mình một khát vọng “trở về đất mẹ” mãnh liệt.
                                                 <br /><br /> Phần tiền truyện của Mad Max: Fury Road mở ra một thế giới gai góc và tràn đầy khốc liệt. Câu chuyện về nguồn gốc của nhân vật chính Furiosa khi còn ở vùng “Xanh”. Đóa hồng Anya Taylor-Joy hóa thân vào nữ chiến binh Furiosa thời trẻ, kết hợp cùng ‘thần Sấm’ Chris Hemsworth với tạo hình chất nhưng không kém phần điên dại. Được cầm trịch bởi đạo diễn đã tạo nên tên tuổi của các phần phim Mad Max George Miller, bộ phim chiếu rạp chắc hẳn sẽ là bom tấn mùa hè năm nay.
-                                                <br /><br /> Phim mới Furiosa: A Mad Max Saga có suất chiếu sớm tại rạp chiếu phim toàn quốc từ 22.05.2024 (không áp dụng movie voucher) và khởi chiếu vào 24.05.2024.
+                                                <br /><br /> Phim mới <span style={{ fontWeight: 'bold' }}>Furiosa: A Mad Max Saga</span> có suất chiếu sớm tại rạp chiếu phim toàn quốc từ 22.05.2024 (không áp dụng movie voucher) và khởi chiếu vào 24.05.2024.
                                             </span>
                                         </Row>
                                     </div>
@@ -136,25 +168,25 @@ const TicketBooking = () => {
 
                                     {/* Lịch Chiếu */}
                                     <div className="">
-                                        <div className="d-flex align-items-center pb-2">
-                                            <div className="text-xl inline-block font-bold uppercase" style={{ borderLeft: "4px solid #007bff", fontSize: "18px", fontWeight: "bold", textTransform: "uppercase", paddingLeft: "0.5rem" }}>Lịch Chiếu</div>
+                                        <div className="d-flex align-items-center pb-3">
+                                            <div className="text-xl inline-block font-bold uppercase" style={{ borderLeft: "4px solid #007bff", fontSize: "16px", fontWeight: "bold", paddingLeft: "0.5rem" }}>Lịch Chiếu</div>
                                         </div>
                                         <Row>
                                             <Col>
                                                 <Card>
                                                     <CardBody style={{ padding: 0 }}>
-                                                        <Nav pills className="nav nav-pills animation-nav nav-justified gap-2 mb-3 " style={{ width: "80%" }}>
+                                                        <Nav pills className="nav nav-pills animation-nav nav-justified gap-2 mb-3" style={{ width: "80%" }}>
                                                             <Row style={{ width: "100%" }}>
                                                                 <Col md="8">
                                                                     <Swiper
                                                                         spaceBetween={10}
-                                                                        slidesPerView={3}
-                                                                        pagination={{ clickable: true }}
+                                                                        slidesPerView={3.5}
+
                                                                     >
                                                                         <SwiperSlide>
                                                                             <NavLink
-                                                                                style={{ cursor: "pointer", fontSize: "12px", padding: "5px", textAlign: "center" }}
-                                                                                className={classnames({ active: animationNavTab === "1" })}
+                                                                                style={{ cursor: "pointer", fontSize: "14px", padding: "5px", textAlign: "center" }}
+                                                                                className={classnames("nav-link-lich-chieu-phim", { active: animationNavTab === "1" })}
                                                                                 onClick={() => { animationNavToggle("1"); }}
                                                                             >
                                                                                 Hôm Nay <br />
@@ -163,8 +195,8 @@ const TicketBooking = () => {
                                                                         </SwiperSlide>
                                                                         <SwiperSlide>
                                                                             <NavLink
-                                                                                style={{ cursor: "pointer", fontSize: "12px", padding: "5px", textAlign: "center" }}
-                                                                                className={classnames({ active: animationNavTab === "2" })}
+                                                                                style={{ cursor: "pointer", fontSize: "14px", padding: "5px", textAlign: "center" }}
+                                                                                className={classnames("nav-link-lich-chieu-phim", { active: animationNavTab === "2" })}
                                                                                 onClick={() => { animationNavToggle("2"); }}
                                                                             >
                                                                                 Thứ 3 <br />
@@ -173,8 +205,8 @@ const TicketBooking = () => {
                                                                         </SwiperSlide>
                                                                         <SwiperSlide>
                                                                             <NavLink
-                                                                                style={{ cursor: "pointer", fontSize: "12px", padding: "5px", textAlign: "center" }}
-                                                                                className={classnames({ active: animationNavTab === "3" })}
+                                                                                style={{ cursor: "pointer", fontSize: "14px", padding: "5px", textAlign: "center" }}
+                                                                                className={classnames("nav-link-lich-chieu-phim", { active: animationNavTab === "3" })}
                                                                                 onClick={() => { animationNavToggle("3"); }}
                                                                             >
                                                                                 Thứ 4 <br />
@@ -183,8 +215,8 @@ const TicketBooking = () => {
                                                                         </SwiperSlide>
                                                                         <SwiperSlide>
                                                                             <NavLink
-                                                                                style={{ cursor: "pointer", fontSize: "12px", padding: "5px", textAlign: "center" }}
-                                                                                className={classnames({ active: animationNavTab === "4" })}
+                                                                                style={{ cursor: "pointer", fontSize: "14px", padding: "5px", textAlign: "center" }}
+                                                                                className={classnames("nav-link-lich-chieu-phim", { active: animationNavTab === "4" })}
                                                                                 onClick={() => { animationNavToggle("4"); }}
                                                                             >
                                                                                 Thứ 5 <br />
@@ -423,7 +455,7 @@ const TicketBooking = () => {
                                 <Link to="/ticket-booking/phim" style={{ textDecoration: "none", color: "inherit" }}>
                                     <CardBody className="position-relative p-0 hover-container">
                                         <img
-                                            style={{ height: "280px", width: "380px", objectFit: "inherit" }}
+                                            style={{ height: "222px", width: "333px", objectFit: "inherit" }}
                                             className="img-fluid hover-image"
                                             src="https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcTtz0oynJ2nY-2wHZXerfJbJoGZpLIPrUSWdLfQbcWOuymbu2uWLbSyonfEeoUHbcnS1FE5k6ZfxkQe8YQ"
                                             alt="Movie"
@@ -436,7 +468,7 @@ const TicketBooking = () => {
                                             />
                                         </div>
                                         <div style={{ paddingTop: 5 }}>
-                                            <span style={{ fontSize: 18, fontWeight: "bold" }}>Thor RagnaRock</span>
+                                        <span style={{ fontSize: 13, fontWeight: "bold" }}>Thor RagnaRock</span>
                                         </div>
                                     </CardBody>
                                 </Link>
@@ -445,7 +477,7 @@ const TicketBooking = () => {
                                 <Link to="/ticket-booking/phim" style={{ textDecoration: "none", color: "inherit" }}>
                                     <CardBody className="position-relative p-0 hover-container">
                                         <img
-                                            style={{ height: "280px", width: "380px", objectFit: "inherit" }}
+                                           style={{ height: "222px", width: "333px", objectFit: "inherit" }}
                                             className="img-fluid hover-image"
                                             src="https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcTtz0oynJ2nY-2wHZXerfJbJoGZpLIPrUSWdLfQbcWOuymbu2uWLbSyonfEeoUHbcnS1FE5k6ZfxkQe8YQ"
                                             alt="Movie"
@@ -458,7 +490,7 @@ const TicketBooking = () => {
                                             />
                                         </div>
                                         <div style={{ paddingTop: 5 }}>
-                                            <span style={{ fontSize: 18, fontWeight: "bold" }}>Thor RagnaRock</span>
+                                        <span style={{ fontSize: 13, fontWeight: "bold" }}>Thor RagnaRock</span>
                                         </div>
                                     </CardBody>
                                 </Link>
@@ -467,7 +499,7 @@ const TicketBooking = () => {
                                 <Link to="/ticket-booking/phim" style={{ textDecoration: "none", color: "inherit" }}>
                                     <CardBody className="position-relative p-0 hover-container">
                                         <img
-                                            style={{ height: "280px", width: "380px", objectFit: "inherit" }}
+                                            style={{ height: "222px", width: "333px", objectFit: "inherit" }}
                                             className="img-fluid hover-image"
                                             src="https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcTtz0oynJ2nY-2wHZXerfJbJoGZpLIPrUSWdLfQbcWOuymbu2uWLbSyonfEeoUHbcnS1FE5k6ZfxkQe8YQ"
                                             alt="Movie"
@@ -480,7 +512,7 @@ const TicketBooking = () => {
                                             />
                                         </div>
                                         <div style={{ paddingTop: 5 }}>
-                                            <span style={{ fontSize: 18, fontWeight: "bold" }}>Thor RagnaRock</span>
+                                        <span style={{ fontSize: 13, fontWeight: "bold" }}>Thor RagnaRock</span>
                                         </div>
                                     </CardBody>
                                 </Link>

@@ -4,6 +4,9 @@ package com.cinemas.controller.admin;
 import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.WaterCornRequest;
 import com.cinemas.dto.response.APIResponse;
+import com.cinemas.dto.response.SelectOptionAndModelReponse;
+import com.cinemas.entities.Celebrity;
+import com.cinemas.entities.Cinema;
 import com.cinemas.entities.WaterCorn;
 import com.cinemas.exception.AppException;
 import com.cinemas.service.admin.WaterCornService;
@@ -91,15 +94,17 @@ public class WatercornController {
      * @param slug
      * @return
      */
-//    @GetMapping("/{slug}/edit")
-//    public APIResponse<EditSelectOptionReponse<Celebrity>> getCelebrityById(@PathVariable String slug) {
-//        APIResponse<EditSelectOptionReponse<Celebrity>> apiResponse = new APIResponse();
-//
-//        apiResponse.setCode(200);
-//        apiResponse.setResult(waterCornService.getEditCelebrityBySlug(slug));
-//
-//        return apiResponse;
-//    }
+    @GetMapping("/{slug}/edit")
+    public APIResponse<WaterCorn> getEditWaterCorn(@PathVariable String slug) throws IOException {
+        WaterCorn waterCorn = waterCornService. getEditWaterCorn(slug);
+
+        APIResponse<WaterCorn> apiResponse = new APIResponse();
+        apiResponse.setCode(200);
+        apiResponse.setResult(waterCorn);
+
+
+        return apiResponse;
+    }
 
     /**
 
