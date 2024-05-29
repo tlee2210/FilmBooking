@@ -4,14 +4,6 @@ import axios from "axios";
 
 export const getCinema =
   (search, status, city, pageNo, pageSize) => async (dispatch) => {
-    console.log("================================================");
-    console.log("search: " + search);
-    console.log("status: " + status);
-    console.log("city: " + city);
-    console.log("pageNo: " + pageNo);
-    console.log("pageSize: " + pageSize);
-    console.log("================================================");
-
     await axios
       .get(`http://localhost:8081/api/admin/v1/cinema`, {
         params: { search, status, city, pageNo, pageSize },

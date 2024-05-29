@@ -32,7 +32,7 @@ public class Movie {
     private String slug;
 
     @Column(nullable = false)
-    private Integer duration;
+    private Integer duration_movie;
 
     @ManyToOne
     @JoinColumn(name = "country_id", nullable = false)

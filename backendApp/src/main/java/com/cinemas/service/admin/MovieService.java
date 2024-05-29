@@ -2,6 +2,7 @@ package com.cinemas.service.admin;
 
 import com.cinemas.dto.request.MovieRequest;
 import com.cinemas.dto.request.PaginationHelper;
+import com.cinemas.dto.request.SearchMovie;
 import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.SelectOptionMovie;
 import com.cinemas.dto.response.SelectOptionReponse;
@@ -12,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface MovieService {
-    Page<Movie> getAllMovie(PaginationHelper paginationHelper);
+    SelectOptionAndModelReponse<Page<Movie>> getAllMovie(SearchMovie searchMovie);
 
     SelectOptionMovie<?> getCreateMovie();
 

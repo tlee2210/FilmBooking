@@ -1,8 +1,10 @@
 package com.cinemas.repositories;
 
 import com.cinemas.entities.Movie;
+import com.cinemas.enums.MovieStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -12,15 +14,10 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
             "LEFT JOIN FETCH m.categories g")
     List<Movie> findAllWithBasicDetail();
 
-//    @Query("SELECT DISTINCT m FROM Movie m " +
-//            "LEFT JOIN FETCH m.celebrities c " +
-//            "WHERE m IN :movies")
-//    List<Movie> findAllWithCelebrities(List<Movie> movies);
-//
-//    @Query("SELECT DISTINCT m FROM Movie m " +
-//            "LEFT JOIN FETCH m.cinemas ci " +
-//            "WHERE m IN :movies")
-//    List<Movie> findAllWithCinemas(List<Movie> movies);
+    @Query("SELECT m FROM Movie m WHERE (:name is null or m.name like %:name%)" +
+            "AND (:countryId is null or m.country.id = :countryId)" +
+            "AND (:status is null or m.status = :status)")
+    List<Movie> searchMovie(String name, Integer countryId, MovieStatus status);
 
     Movie findByName(String name);
 

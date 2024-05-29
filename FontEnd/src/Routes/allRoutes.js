@@ -43,10 +43,9 @@ const MovieEdit = lazy(() => import("../pages/dashboard/Movie/edit"));
 const MovieCreate = lazy(() => import("../pages/dashboard/Movie/create"));
 
 //Cinema Coner
-const Actor = lazy(() =>
-  import("../pages/Page/CinemaCorner/Actor")
-);
+const Actor = lazy(() => import("../pages/Page/CinemaCorner/Actor"));
 const Director = lazy(() => import("../pages/Page/CinemaCorner/Director"));
+
 const ActorInfor = lazy(() => import("../pages/Page/CinemaCorner/Details/ActorInfor"))
 const DirectorInfor = lazy(() => import("../pages/Page/CinemaCorner/Details/DirectorInfor"))
 
@@ -107,7 +106,6 @@ const CinemaCornerRoutes = [
 
 const TicketBookingRoutes = [
   { path: "/ticket-booking/phim", component: <TicketBooking /> },
-
 ];
 
 const BinhLuanPhimRoutes = [
