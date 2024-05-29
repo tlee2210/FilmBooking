@@ -1,5 +1,6 @@
 package com.cinemas.repositories;
 
+import com.cinemas.entities.MovieGenre;
 import com.cinemas.entities.User;
 
 import com.cinemas.enums.RoleType;
@@ -21,4 +22,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Modifying
     @Query("update User u set u.password = ?2 where u.id = ?1")
     void updatePassword(int id, String password);
+
+    @Query("SELECT u FROM User u WHERE u.email = ?1 AND u.id != ?2")
+    User findByEmailWithId(String name, int id);
 }

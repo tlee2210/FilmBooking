@@ -39,7 +39,7 @@ const DirectorInfor = () => {
                 <CardHeader className="quick-ticket-header">Mua Vé Nhanh</CardHeader>
                 <CardBody>
                     <FormGroup>
-                        <Label for="movieSelect">Chọn phim</Label>
+
                         <Input
                             type="select"
                             id="movieSelect"
@@ -52,7 +52,7 @@ const DirectorInfor = () => {
                         </Input>
                     </FormGroup>
                     <FormGroup>
-                        <Label for="theaterSelect">Chọn rạp</Label>
+
                         <Input
                             type="select"
                             id="theaterSelect"
@@ -66,7 +66,7 @@ const DirectorInfor = () => {
                         </Input>
                     </FormGroup>
                     <FormGroup>
-                        <Label for="dateSelect">Chọn ngày</Label>
+
                         <Input
                             type="select"
                             id="dateSelect"

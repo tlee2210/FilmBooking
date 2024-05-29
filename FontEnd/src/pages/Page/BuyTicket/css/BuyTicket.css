@@ -104,3 +104,8 @@ h3 {
 .overlay-right {
     right: 0;
 }
+
+.nav-link:hover {
+    background-color: #405189; /* Change background color on hover */
+    color: #fbfbfb; /* Change text color on hover */
+}

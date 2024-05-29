@@ -69,7 +69,6 @@ const Actor = () => {
                         <option>Option 2</option>
                       </Input>
                     </Col>
-
                   </Row>
                   <div className="bottom-border"></div>
                 </div>
@@ -81,7 +80,7 @@ const Actor = () => {
                           <Link to="/dien-vien/dien-vien-details" style={{ textDecoration: "none", color: "inherit" }}>
                             <img
                               style={{ height: "250px", width: "250px", objectFit: "cover" }}
-                              className="rounded-start img-fluid"
+                              className="rounded w-100 h-auto"
                               src="https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcTtz0oynJ2nY-2wHZXerfJbJoGZpLIPrUSWdLfQbcWOuymbu2uWLbSyonfEeoUHbcnS1FE5k6ZfxkQe8YQ"
                               alt="Card"
                             />
@@ -93,7 +92,7 @@ const Actor = () => {
 
                           </CardHeader>
                           <CardBody>
-                            <p className="card-text mb-2">
+                            <p className="card-text mb-2 text-muted" style={{ fontFamily: "Arial", fontSize: "12px" }}>
                               For that very reason, I went on a quest and spoke to many different professional graphic designers and asked them what graphic design tips they live.
                             </p>
                             <p className="card-text">
