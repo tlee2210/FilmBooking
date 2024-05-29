@@ -6,6 +6,8 @@ import com.cinemas.dto.request.PaginationHelper;
 
 import java.text.Normalizer.Form;
 
+import com.cinemas.dto.request.SearchMovie;
+import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.SelectOptionMovie;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.*;
@@ -51,8 +53,8 @@ public class MovieServiceImpl implements MovieService {
     FileStorageServiceImpl fileStorageServiceImpl;
 
     @Override
-    public Page<Movie> getAllMovie(PaginationHelper paginationHelper) {
-        List<Movie> movieList = movieRepository.findAllWithBasicDetail();
+    public SelectOptionAndModelReponse<Page<Movie>> getAllMovie(SearchMovie paginationHelper) {
+        List<Movie> movieList = movieRepository.searchMovie(paginationHelper.getName(), paginationHelper.getCountryId(), paginationHelper.getMovieStatus());
 
         movieList.forEach(movie -> {
             movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
@@ -67,7 +69,21 @@ public class MovieServiceImpl implements MovieService {
         PropertyComparator.sort(pageList, new MutableSortDefinition(paginationHelper.getSortByColumn(), true, ascending));
 
         Page<Movie> movies = new PageImpl<>(pageList, new PaginationHelper().getPageable(paginationHelper), movieList.size());
-        return movies;
+
+        List<SelectOptionReponse> optionsStatus = new ArrayList<>();
+
+        for (MovieStatus movieStatus : MovieStatus.values()) {
+            optionsStatus.add(new SelectOptionReponse(movieStatus.name(), movieStatus.getValue()));
+        }
+
+        List<Country> countryList = countryRepository.findAll();
+        List<SelectOptionReponse> optionsCountries = new ArrayList<>();
+
+        for (Country country : countryList) {
+            optionsCountries.add(new SelectOptionReponse(country.getId(), country.getName()));
+        }
+
+    return new SelectOptionAndModelReponse<>(movies, optionsCountries, optionsStatus);
     }
 
     @Override

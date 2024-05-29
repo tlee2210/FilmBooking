@@ -2,16 +2,19 @@ package com.cinemas.controller.admin;
 
 import com.cinemas.dto.request.MovieRequest;
 import com.cinemas.dto.request.PaginationHelper;
+import com.cinemas.dto.request.SearchMovie;
 import com.cinemas.dto.response.APIResponse;
 import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.SelectOptionMovie;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Movie;
+import com.cinemas.enums.MovieStatus;
 import com.cinemas.exception.AppException;
 import com.cinemas.service.admin.MovieService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -31,10 +34,18 @@ public class MovieController {
      * @param PaginationHelper
      * @return
      */
-    @PostMapping
-    public APIResponse<Page<Movie>> getMovie(@RequestBody(required = false) PaginationHelper PaginationHelper) {
-        Page<Movie> movieList = movieService.getAllMovie(PaginationHelper);
-        APIResponse<Page<Movie>> apiResponse = new APIResponse<>();
+    @GetMapping
+    public APIResponse<SelectOptionAndModelReponse<Page<Movie>>> getMovie(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Integer countryId,
+            @RequestParam(required = false) MovieStatus status,
+            @RequestParam(required = false, defaultValue = "1") Integer pageNo,
+            @RequestParam(required = false, defaultValue = "15") Integer pageSize,
+            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort
+            ) {
+        SearchMovie searchMovie = new SearchMovie(name, countryId, status, pageNo - 1, pageSize, sort);
+        SelectOptionAndModelReponse<Page<Movie>> movieList = movieService.getAllMovie(searchMovie);
+        APIResponse<SelectOptionAndModelReponse<Page<Movie>>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(movieList);
 
