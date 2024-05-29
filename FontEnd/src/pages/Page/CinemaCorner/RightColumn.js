@@ -103,7 +103,7 @@ const DirectorInfor = () => {
                             />
                         </div>
                         <div style={{ paddingTop: 5 }}>
-                            <span style={{ fontSize: 18, fontWeight: "bold" }}>Thor RagnaRock</span>
+                            <span style={{ fontSize: 13, fontWeight: "bold" }}>Thor RagnaRock</span>
                         </div>
                     </CardBody>
                 </Link>
@@ -125,7 +125,7 @@ const DirectorInfor = () => {
                             />
                         </div>
                         <div style={{ paddingTop: 5 }}>
-                            <span style={{ fontSize: 18, fontWeight: "bold" }}>Thor RagnaRock</span>
+                            <span style={{ fontSize: 13, fontWeight: "bold" }}>Thor RagnaRock</span>
                         </div>
                     </CardBody>
                 </Link>
@@ -147,7 +147,7 @@ const DirectorInfor = () => {
                             />
                         </div>
                         <div style={{ paddingTop: 5 }}>
-                            <span style={{ fontSize: 18, fontWeight: "bold" }}>Thor RagnaRock</span>
+                            <span style={{ fontSize: 13, fontWeight: "bold" }}>Thor RagnaRock</span>
                         </div>
                     </CardBody>
                 </Link>

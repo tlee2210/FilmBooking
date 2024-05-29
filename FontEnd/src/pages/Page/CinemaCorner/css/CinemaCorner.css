@@ -1,7 +1,7 @@
 .director-header-container-cinemaCorner {
     padding-top: 20px;
     padding-bottom: 20px;
-    border-bottom: 3px solid #781eff;
+    border-bottom: 3px solid #052f85;
 
 }
 
@@ -20,7 +20,7 @@
 .title-icon-cinemaCorner {
     width: 5px;
     height: 30px;
-    background-color: #007bff;
+    background-color: #053363;
     margin-right: 10px;
 }
 
@@ -30,17 +30,18 @@
 
 .bottom-border-cinemaCorner {
     margin-top: 10px;
-    border-top: 2px solid #007bff;
+    border-top: 2px solid #133559;
 }
 
 .quick-ticket-card {
     width: 380px;
     border: 1px solid #ddd;
     margin-left: 40px;
+    font-size: 14px;
 }
 
 .quick-ticket-header {
-    background-color: #007bff;
+    background-color: #206ec2;
     color: white;
     font-size: 18px;
     text-align: center;
@@ -66,7 +67,7 @@
 }
 
 .hover-container:hover .hover-image {
-    filter: brightness(0.8);
+    filter: brightness(0.5);
 }
 
 .hover-container:hover .ticket-overlay {
@@ -89,7 +90,7 @@
 }
 
 .ticket-image {
-    max-width: 80px;
+    max-width: 120px;
     height: auto;
     transition: transform 0.3s ease;
 }
