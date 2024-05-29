@@ -6,6 +6,7 @@ import com.cinemas.dto.request.PaginationHelper;
 
 import java.text.Normalizer.Form;
 
+import com.cinemas.dto.request.PriceRequest;
 import com.cinemas.dto.request.SearchMovie;
 import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.SelectOptionMovie;
@@ -161,6 +162,14 @@ public class MovieServiceImpl implements MovieService {
                 .collect(Collectors.toList());
         movie.setDirector(directors);
 
+        if(!movieRequest.getPrices().isEmpty()){
+            List<PriceMovie> prices = new ArrayList<>();
+            movieRequest.getPrices().forEach(price -> {
+                prices.add(new PriceMovie(price.getDate(), price.getPrice()));
+            });
+            movie.setPriceMovies(prices);
+        }
+
         movieRepository.save(movie);
 
         return true;
@@ -264,6 +273,14 @@ public class MovieServiceImpl implements MovieService {
         List<Celebrity> directors = movieRequest.getDirectorId().stream().map(id -> celebrityRepository.getById(id))
                 .collect(Collectors.toList());
         movie.setDirector(directors);
+
+        if(!movieRequest.getPrices().isEmpty()){
+            List<PriceMovie> prices = new ArrayList<>();
+            movieRequest.getPrices().forEach(price -> {
+                prices.add(new PriceMovie(price.getDate(), price.getPrice()));
+            });
+            movie.setPriceMovies(prices);
+        }
 
         movieRepository.save(movie);
         return true;

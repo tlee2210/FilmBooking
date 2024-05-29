@@ -62,6 +62,9 @@ public class Movie {
     @Column(nullable = false)
     private String movieFormat;
 
+    @Column(nullable = false)
+    private Float price;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MovieStatus status;
@@ -90,14 +93,8 @@ public class Movie {
     )
     private List<Celebrity> director;
 
-    @ManyToMany
-    @JsonIgnore
-    @JoinTable(
-            name = "cinema_movie",
-            joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "cinema_id")
-    )
-    private List<Cinema> cinemas;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "movie", cascade = CascadeType.ALL)
+    private List<PriceMovie> priceMovies;
 
     @Column(nullable = false)
     private LocalDate releaseDate;

@@ -1,20 +1,34 @@
 package com.cinemas.service.impl;
 
 import com.cinemas.Utils.ObjectUtils;
+import com.cinemas.dto.request.PaginationHelper;
+import com.cinemas.dto.request.SearchUser;
 import com.cinemas.dto.request.UserRequest;
+import com.cinemas.dto.response.SelectOptionAndModelReponse;
+import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.dto.response.UserResponse;
+import com.cinemas.entities.Country;
+import com.cinemas.entities.Movie;
 import com.cinemas.entities.MovieGenre;
 import com.cinemas.entities.User;
+import com.cinemas.enums.MovieStatus;
 import com.cinemas.exception.AppException;
 import com.cinemas.repositories.UserRepository;
 import com.cinemas.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.support.MutableSortDefinition;
+import org.springframework.beans.support.PagedListHolder;
+import org.springframework.beans.support.PropertyComparator;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static com.cinemas.exception.ErrorCode.NAME_EXISTED;
@@ -107,5 +121,34 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    @Override
+    public SelectOptionAndModelReponse<Page<UserResponse>> getAllUser(SearchUser searchUser) {
+        List<User> userList = userRepository.searchUser(searchUser.getName(), searchUser.getRole());
+        List<UserResponse> userResponseList = new ArrayList<>();
 
+        userList.forEach(user -> {
+            UserResponse userResponse = new UserResponse();
+            ObjectUtils.copyFields(user, userResponse);
+            userResponseList.add(userResponse);
+        });
+
+        PagedListHolder<UserResponse> pagedListHolder = new PagedListHolder<UserResponse>(userResponseList);
+        pagedListHolder.setPage(searchUser.getPageNo());
+        pagedListHolder.setPageSize(searchUser.getPageSize());
+
+        List<UserResponse> pageList = pagedListHolder.getPageList();
+        boolean ascending = searchUser.getSort().isAscending();
+        PropertyComparator.sort(pageList, new MutableSortDefinition(searchUser.getSortByColumn(), true, ascending));
+
+        Page<UserResponse> users = new PageImpl<>(pageList, new PaginationHelper().getPageable(searchUser), userResponseList.size());
+
+        List<String> roleList = userRepository.findByRole();
+
+        List<SelectOptionReponse> options = new ArrayList<>();
+        roleList.forEach(item -> {
+            options.add(new SelectOptionReponse(item, item));
+        });
+
+        return new SelectOptionAndModelReponse<>(options, users);
+    }
 }

@@ -1,15 +1,23 @@
 package com.cinemas.controller;
 
 import com.cinemas.dto.request.MovieGenreRequest;
+import com.cinemas.dto.request.SearchMovie;
+import com.cinemas.dto.request.SearchUser;
 import com.cinemas.dto.request.UserRequest;
 import com.cinemas.dto.response.APIResponse;
+import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.UserResponse;
+import com.cinemas.entities.Movie;
 import com.cinemas.entities.MovieGenre;
 import com.cinemas.entities.User;
+import com.cinemas.enums.MovieStatus;
+import com.cinemas.enums.RoleType;
 import com.cinemas.exception.AppException;
 import com.cinemas.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import static com.cinemas.exception.ErrorCode.CREATE_FAILED;
@@ -21,6 +29,23 @@ import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @GetMapping()
+    public APIResponse<SelectOptionAndModelReponse<Page<UserResponse>>> getUser(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) RoleType role,
+            @RequestParam(required = false, defaultValue = "1") Integer pageNo,
+            @RequestParam(required = false, defaultValue = "15") Integer pageSize,
+            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort
+    ) {
+        SearchUser searchUser = new SearchUser(name, role, pageNo - 1, pageSize, sort);
+        SelectOptionAndModelReponse<Page<UserResponse>> userList = userService.getAllUser(searchUser);
+        APIResponse<SelectOptionAndModelReponse<Page<UserResponse>>> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setResult(userList);
+
+        return apiResponse;
+    }
 
     @PostMapping("/create")
     public APIResponse<String> createUser(@RequestBody UserRequest user) {

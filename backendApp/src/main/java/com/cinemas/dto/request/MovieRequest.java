@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -44,6 +45,10 @@ public class MovieRequest {
     private String rules;
 
     private String movieFormat;
+
+    private Float price;
+
+    private List<PriceRequest> prices;
 
     @DobConstraint(min = 18, message = "INVALID_DATE")
     private LocalDate releaseDate;

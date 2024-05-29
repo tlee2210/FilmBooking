@@ -87,7 +87,6 @@ public class CinemaServiceImpl implements CinemaService {
             cinemaImageRespository.delete(images);
         }
 
-        cinema.getMovies().clear();
         cinemaRespository.save(cinema);
 
         cinemaRespository.delete(cinema);
