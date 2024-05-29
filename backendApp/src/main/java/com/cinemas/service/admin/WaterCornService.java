@@ -15,5 +15,7 @@ public interface WaterCornService {
 
     Integer deleteWaterCorn(String slug) throws IOException;
 
+    WaterCorn getEditWaterCorn(String slug) throws IOException;
+
     boolean updateWaterCorn(WaterCornRequest watercorn) throws IOException;
 }
