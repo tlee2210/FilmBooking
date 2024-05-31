@@ -154,7 +154,7 @@ const TableContainer = ({
       )}
 
       <div className={divClass} style={{ overflowX: "auto" }}>
-        <Table hover className={tableClass} scroll>
+        <Table hover className={tableClass}>
           <thead className={theadClass}>
             {getHeaderGroups().map((headerGroup) => (
               <tr className={trClass} key={headerGroup.id}>

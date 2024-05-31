@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -93,8 +94,8 @@ public class Movie {
     )
     private List<Celebrity> director;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "movie", cascade = CascadeType.ALL)
-    private List<PriceMovie> priceMovies;
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PriceMovie> priceMovies = new ArrayList<>();
 
     @Column(nullable = false)
     private LocalDate releaseDate;

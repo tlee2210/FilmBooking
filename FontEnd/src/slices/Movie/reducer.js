@@ -16,7 +16,8 @@ const MovieSlice = createSlice({
   reducers: {
     fetchSuccess: (state, action) => {
       state.data = action.payload.data.model;
-      state.item = action.payload.data.selectOptionReponse;
+      state.selectcountry = action.payload.data.selectOptionCountry;
+      state.selectStatus = action.payload.data.selectOptionStatus;
     },
     setSelectOption(state, action) {
       state.selectActors = action.payload.data.selectActors;
@@ -26,7 +27,12 @@ const MovieSlice = createSlice({
       state.selectcountry = action.payload.data.selectcountry;
     },
     setItem(state, action) {
-      state.item = action.payload;
+      state.item = action.payload.data.model;
+      state.selectActors = action.payload.data.selectActors;
+      state.selectCategories = action.payload.data.selectCategories;
+      state.selectDirectories = action.payload.data.selectDirectories;
+      state.selectStatus = action.payload.data.selectStatus;
+      state.selectcountry = action.payload.data.selectcountry;
     },
     removeItem(state, action) {
       state.data.content = state.data.content.filter(

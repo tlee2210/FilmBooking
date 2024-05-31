@@ -31,7 +31,13 @@ public class MovieController {
     private MovieService movieService;
 
     /**
-     * @param PaginationHelper
+     * get list and search list Movie
+     * @param name
+     * @param countryId
+     * @param status
+     * @param pageNo
+     * @param pageSize
+     * @param sort
      * @return
      */
     @GetMapping

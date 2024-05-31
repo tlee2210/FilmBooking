@@ -2,8 +2,6 @@ import React, { useState, useEffect, createRef } from "react";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import { createSelector } from "reselect";
 import withRouter from "../../../Components/Common/withRouter";
-import { GoogleApiWrapper, Map, Marker } from "google-maps-react";
-import axios from "axios";
 
 // import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 
@@ -19,14 +17,10 @@ import {
   FormFeedback,
   Form,
   FormGroup,
+  Button,
 } from "reactstrap";
 import { PlusOutlined } from "@ant-design/icons";
 import { Image, Upload, message } from "antd";
-
-const mapStyles = {
-  width: "100%",
-  height: "100%",
-};
 import Flatpickr from "react-flatpickr";
 
 // Redux
@@ -165,6 +159,11 @@ const MovieCreate = (props) => {
     }),
   };
 
+  const removePrice = (index) => {
+    const newPrices = validation.values.prices.filter((_, i) => i !== index);
+    validation.setFieldValue("prices", newPrices);
+  };
+
   const validation = useFormik({
     enableReinitialize: true,
 
@@ -181,6 +180,8 @@ const MovieCreate = (props) => {
       language: "",
       movieFormat: "",
       trailer: "",
+      price: "",
+      prices: [],
       fileLandscape: [],
       filePortrait: [],
       Category: [],
@@ -198,6 +199,7 @@ const MovieCreate = (props) => {
         .required("Please Enter a duration movie")
         .min(60, "Duration must be at least 60 minutes")
         .max(200, "Duration cannot exceed 200 minutes"),
+      price: Yup.number().required("Please Enter a price movie"),
       rules: Yup.number()
         .min(12, "Age must be at least 12")
         .max(18, "Age cannot exceed 18"),
@@ -236,9 +238,23 @@ const MovieCreate = (props) => {
           )
         )
         .min(1, "Please upload at least one Image"),
+      prices: Yup.array().of(
+        Yup.object().shape({
+          price: Yup.number().required("Please Enter a price"),
+          date: Yup.date()
+            .required("Please Enter a date")
+            .test("duplicateDate", "Dates must be unique", function (value) {
+              const { prices } = this.parent;
+              if (!prices) return true;
+              const dates = prices.map((price) => price.date);
+              const uniqueDates = [...new Set(dates)];
+              return uniqueDates.length === dates.length;
+            }),
+        })
+      ),
     }),
     onSubmit: (values) => {
-      console.log(values);
+      // console.log(values);
       const formData = new FormData();
       formData.append("name", values.name);
       formData.append("duration_movie", values.duration_movie);
@@ -251,6 +267,7 @@ const MovieCreate = (props) => {
       formData.append("imagePortrait", values.filePortrait[0].originFileObj);
       formData.append("trailer", values.trailer);
       formData.append("rules", values.rules);
+      formData.append("price", values.price);
       formData.append("movieFormat", values.movieFormat);
       formData.append(
         "releaseDate",
@@ -263,19 +280,27 @@ const MovieCreate = (props) => {
       values.Category.forEach((item, index) => {
         formData.append(`categoriesIds[${index}]`, item);
       });
+
       values.Actor.forEach((item, index) => {
         formData.append(`actorId[${index}]`, item);
       });
+
       values.Directory.forEach((item, index) => {
         formData.append(`directorId[${index}]`, item);
+      });
+
+      values.prices.forEach((item, index) => {
+        formData.append(`prices[${index}].price`, item.price);
+        formData.append(`prices[${index}].date`, item.date);
       });
 
       dispatch(CreateMovies(formData, props.router.navigate));
     },
   });
-  useEffect(() => {
-    console.log("Current validation errors:", validation.errors);
-  }, [validation.errors]);
+
+  // useEffect(() => {
+  //   console.log("Current validation errors:", validation.errors);
+  // }, [validation.errors]);
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -456,40 +481,6 @@ const MovieCreate = (props) => {
                           ) : null}
                         </div>
                       </Col>
-                      <Col md={6}>
-                        <div className="mb-3">
-                          <Label
-                            className="form-label"
-                            htmlFor="product-title-input"
-                          >
-                            Country
-                          </Label>
-                          <Select
-                            name="country"
-                            options={selectcountry}
-                            placeholder="Select country"
-                            classNamePrefix="select"
-                            onChange={(option) => {
-                              validation.setFieldValue("country", option.value);
-                            }}
-                            value={selectcountry.find(
-                              (opt) => opt.value === validation.values.country
-                            )}
-                            className={
-                              validation.errors.country &&
-                              validation.touched.country
-                                ? "is-invalid"
-                                : ""
-                            }
-                          />
-                          {validation.errors.country &&
-                            validation.touched.country && (
-                              <FormFeedback type="invalid">
-                                {validation.errors.country}
-                              </FormFeedback>
-                            )}
-                        </div>
-                      </Col>
 
                       <Col md={6}>
                         <FormGroup className="mb-3">
@@ -611,6 +602,264 @@ const MovieCreate = (props) => {
                             )}
                         </FormGroup>
                       </Col>
+                      <Col md={6}>
+                        <div className="mb-3">
+                          <Label
+                            className="form-label"
+                            htmlFor="product-title-input"
+                          >
+                            language
+                          </Label>
+                          <Input
+                            type="text"
+                            className="form-control"
+                            id="product-title-input"
+                            placeholder="Enter language Movies"
+                            name="language"
+                            value={validation.values.language || ""}
+                            onBlur={validation.handleBlur}
+                            onChange={validation.handleChange}
+                            invalid={
+                              validation.errors.language &&
+                              validation.touched.language
+                                ? true
+                                : false
+                            }
+                          />
+                          {validation.errors.language &&
+                          validation.touched.language ? (
+                            <FormFeedback type="invalid">
+                              {validation.errors.language}
+                            </FormFeedback>
+                          ) : null}
+                        </div>
+                      </Col>
+                      <Col md={6}>
+                        <div className="mb-3">
+                          <Label
+                            className="form-label"
+                            htmlFor="product-title-input"
+                          >
+                            Movie Format
+                          </Label>
+                          <Input
+                            type="text"
+                            className="form-control"
+                            id="product-title-input"
+                            placeholder="Enter movie Format"
+                            name="movieFormat"
+                            value={validation.values.movieFormat || ""}
+                            onBlur={validation.handleBlur}
+                            onChange={validation.handleChange}
+                            invalid={
+                              validation.errors.movieFormat &&
+                              validation.touched.movieFormat
+                                ? true
+                                : false
+                            }
+                          />
+                          {validation.errors.movieFormat &&
+                          validation.touched.movieFormat ? (
+                            <FormFeedback type="invalid">
+                              {validation.errors.movieFormat}
+                            </FormFeedback>
+                          ) : null}
+                        </div>
+                      </Col>
+
+                      <Col md={6}>
+                        <div className="mb-3">
+                          <Label
+                            className="form-label"
+                            htmlFor="product-title-input"
+                          >
+                            Age Limit
+                          </Label>
+                          <Input
+                            type="number"
+                            className="form-control"
+                            id="product-title-input"
+                            placeholder="Enter age limit"
+                            name="rules"
+                            value={validation.values.rules || ""}
+                            onBlur={validation.handleBlur}
+                            onChange={validation.handleChange}
+                            invalid={
+                              validation.errors.rules &&
+                              validation.touched.rules
+                                ? true
+                                : false
+                            }
+                          />
+                          {validation.errors.rules &&
+                          validation.touched.rules ? (
+                            <FormFeedback type="invalid">
+                              {validation.errors.rules}
+                            </FormFeedback>
+                          ) : null}
+                        </div>
+                      </Col>
+                      <Col md={4}>
+                        <div className="mb-3">
+                          <Label
+                            className="form-label"
+                            htmlFor="product-title-input"
+                          >
+                            price
+                          </Label>
+                          <Input
+                            type="number"
+                            className="form-control"
+                            id="product-title-input"
+                            placeholder="Enter price"
+                            name="price"
+                            value={validation.values.price || ""}
+                            onBlur={validation.handleBlur}
+                            onChange={validation.handleChange}
+                            invalid={
+                              validation.errors.price &&
+                              validation.touched.price
+                                ? true
+                                : false
+                            }
+                          />
+                          {validation.errors.price &&
+                          validation.touched.price ? (
+                            <FormFeedback type="invalid">
+                              {validation.errors.price}
+                            </FormFeedback>
+                          ) : null}
+                        </div>
+                      </Col>
+                      <Col md={4}>
+                        <div className="mb-3">
+                          <Label
+                            className="form-label"
+                            htmlFor="product-title-input"
+                          >
+                            Status
+                          </Label>
+                          <Select
+                            name="status"
+                            options={selectStatus}
+                            placeholder="Select Status"
+                            classNamePrefix="select"
+                            onChange={(option) => {
+                              validation.setFieldValue("status", option.value);
+                            }}
+                            value={selectStatus.find(
+                              (opt) => opt.value === validation.values.status
+                            )}
+                            className={
+                              validation.errors.status &&
+                              validation.touched.status
+                                ? "is-invalid"
+                                : ""
+                            }
+                          />
+                          {validation.errors.status &&
+                            validation.touched.status && (
+                              <FormFeedback type="invalid">
+                                {validation.errors.status}
+                              </FormFeedback>
+                            )}
+                        </div>
+                      </Col>
+                      <Col md={4}>
+                        <div className="mb-3">
+                          <Label
+                            className="form-label"
+                            htmlFor="product-title-input"
+                          >
+                            Country
+                          </Label>
+                          <Select
+                            name="country"
+                            options={selectcountry}
+                            placeholder="Select country"
+                            classNamePrefix="select"
+                            onChange={(option) => {
+                              validation.setFieldValue("country", option.value);
+                            }}
+                            value={selectcountry.find(
+                              (opt) => opt.value === validation.values.country
+                            )}
+                            className={
+                              validation.errors.country &&
+                              validation.touched.country
+                                ? "is-invalid"
+                                : ""
+                            }
+                          />
+                          {validation.errors.country &&
+                            validation.touched.country && (
+                              <FormFeedback type="invalid">
+                                {validation.errors.country}
+                              </FormFeedback>
+                            )}
+                        </div>
+                      </Col>
+
+                      <Col md={6}>
+                        <div className="mb-3">
+                          <Label className="form-label" htmlFor="releaseDate">
+                            Release Date
+                          </Label>
+                          <Flatpickr
+                            className="form-control"
+                            placeholder="Enter Release Date"
+                            value={validation.values.releaseDate}
+                            onChange={([selectedDate]) => {
+                              validation.setFieldValue(
+                                "releaseDate",
+                                selectedDate
+                              );
+                            }}
+                            options={{
+                              minDate: new Date(
+                                new Date().getTime() + 15 * 24 * 60 * 60 * 1000
+                              ),
+                            }}
+                          />
+                          {validation.errors.releaseDate &&
+                          validation.touched.releaseDate ? (
+                            <div className="text-danger">
+                              {validation.errors.releaseDate}
+                            </div>
+                          ) : null}
+                        </div>
+                      </Col>
+                      <Col md={6}>
+                        <div className="mb-3">
+                          <Label className="form-label" htmlFor="endDate">
+                            End Date
+                          </Label>
+                          <Flatpickr
+                            className="form-control"
+                            placeholder="Enter End Date"
+                            value={validation.values.endDate}
+                            onChange={([selectedDate]) => {
+                              validation.setFieldValue("endDate", selectedDate);
+                            }}
+                            options={{
+                              minDate: validation.values.releaseDate
+                                ? new Date(
+                                    new Date(
+                                      validation.values.releaseDate
+                                    ).getTime() +
+                                      30 * 24 * 60 * 60 * 1000
+                                  )
+                                : new Date().fp_incr(45),
+                            }}
+                          />
+                          {validation.errors.endDate &&
+                          validation.touched.endDate ? (
+                            <div className="text-danger">
+                              {validation.errors.endDate}
+                            </div>
+                          ) : null}
+                        </div>
+                      </Col>
                     </Row>
                   </CardBody>
                 </Card>
@@ -632,32 +881,6 @@ const MovieCreate = (props) => {
                       onBlur={() =>
                         validation.setFieldTouched("Description", true)
                       }
-                      config={{
-                        toolbar: [
-                          "heading",
-                          "|",
-                          "bold",
-                          "italic",
-                          "link",
-                          "bulletedList",
-                          "numberedList",
-                          "blockQuote",
-                          "|",
-                          "undo",
-                          "redo",
-                          "alignment",
-                          "fontSize",
-                          "fontFamily",
-                          "fontColor",
-                          "highlight",
-                          "imageUpload",
-                          "mediaEmbed",
-                          "insertTable",
-                          "tableColumn",
-                          "tableRow",
-                          "mergeTableCells",
-                        ],
-                      }}
                     />
                     {validation.touched.Description &&
                     validation.errors.Description ? (
@@ -760,206 +983,82 @@ const MovieCreate = (props) => {
                   </Card>
                 </Col>
               </Row>
-
               <Col md={12}>
                 <Card>
                   <CardHeader>
-                    <h5 className="card-title mb-0">Movie Details Status</h5>
+                    <h5 className="card-title mb-0">Special Release Price</h5>
                   </CardHeader>
                   <CardBody>
-                    <Col md={12}>
-                      <div className="mb-3">
-                        <Label
-                          className="form-label"
-                          htmlFor="product-title-input"
-                        >
-                          language
-                        </Label>
-                        <Input
-                          type="text"
-                          className="form-control"
-                          id="product-title-input"
-                          placeholder="Enter language Movies"
-                          name="language"
-                          value={validation.values.language || ""}
-                          onBlur={validation.handleBlur}
-                          onChange={validation.handleChange}
-                          invalid={
-                            validation.errors.language &&
-                            validation.touched.language
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.errors.language &&
-                        validation.touched.language ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.language}
-                          </FormFeedback>
-                        ) : null}
-                      </div>
-                    </Col>
-                    <Col md={12}>
-                      <div className="mb-3">
-                        <Label
-                          className="form-label"
-                          htmlFor="product-title-input"
-                        >
-                          Movie Format
-                        </Label>
-                        <Input
-                          type="text"
-                          className="form-control"
-                          id="product-title-input"
-                          placeholder="Enter movie Format"
-                          name="movieFormat"
-                          value={validation.values.movieFormat || ""}
-                          onBlur={validation.handleBlur}
-                          onChange={validation.handleChange}
-                          invalid={
-                            validation.errors.movieFormat &&
-                            validation.touched.movieFormat
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.errors.movieFormat &&
-                        validation.touched.movieFormat ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.movieFormat}
-                          </FormFeedback>
-                        ) : null}
-                      </div>
-                    </Col>
-                    <Col md={12}>
-                      <div className="mb-3">
-                        <Label
-                          className="form-label"
-                          htmlFor="product-title-input"
-                        >
-                          Status
-                        </Label>
-                        <Select
-                          name="status"
-                          options={selectStatus}
-                          placeholder="Select Status"
-                          classNamePrefix="select"
-                          onChange={(option) => {
-                            validation.setFieldValue("status", option.value);
-                          }}
-                          value={selectStatus.find(
-                            (opt) => opt.value === validation.values.status
-                          )}
-                          className={
-                            validation.errors.status &&
-                            validation.touched.status
-                              ? "is-invalid"
-                              : ""
-                          }
-                        />
-                        {validation.errors.status &&
-                          validation.touched.status && (
-                            <FormFeedback type="invalid">
-                              {validation.errors.status}
-                            </FormFeedback>
-                          )}
-                      </div>
-                    </Col>
-                    <Col md={12}>
-                      <div className="mb-3">
-                        <Label
-                          className="form-label"
-                          htmlFor="product-title-input"
-                        >
-                          Age Limit
-                        </Label>
-                        <Input
-                          type="number"
-                          className="form-control"
-                          id="product-title-input"
-                          placeholder="Enter age limit"
-                          name="rules"
-                          value={validation.values.rules || ""}
-                          onBlur={validation.handleBlur}
-                          onChange={validation.handleChange}
-                          invalid={
-                            validation.errors.rules && validation.touched.rules
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.errors.rules && validation.touched.rules ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.rules}
-                          </FormFeedback>
-                        ) : null}
-                      </div>
-                    </Col>
-                    <Col md={12}>
-                      <div className="mb-3">
-                        <Label className="form-label" htmlFor="releaseDate">
-                          Release Date
-                        </Label>
-                        <Flatpickr
-                          className="form-control"
-                          placeholder="Enter Release Date"
-                          value={validation.values.releaseDate}
-                          onChange={([selectedDate]) => {
-                            validation.setFieldValue(
-                              "releaseDate",
-                              selectedDate
-                            );
-                          }}
-                          options={{
-                            minDate: new Date(
-                              new Date().getTime() + 15 * 24 * 60 * 60 * 1000
-                            ),
-                          }}
-                        />
-                        {validation.errors.releaseDate &&
-                        validation.touched.releaseDate ? (
-                          <div className="text-danger">
-                            {validation.errors.releaseDate}
-                          </div>
-                        ) : null}
-                      </div>
-                    </Col>
-                    <Col md={12}>
-                      <div className="mb-3">
-                        <Label className="form-label" htmlFor="endDate">
-                          End Date
-                        </Label>
-                        <Flatpickr
-                          className="form-control"
-                          placeholder="Enter End Date"
-                          value={validation.values.endDate}
-                          onChange={([selectedDate]) => {
-                            validation.setFieldValue("endDate", selectedDate);
-                          }}
-                          options={{
-                            minDate: validation.values.releaseDate
-                              ? new Date(
-                                  new Date(
-                                    validation.values.releaseDate
-                                  ).getTime() +
-                                    30 * 24 * 60 * 60 * 1000
-                                )
-                              : new Date().fp_incr(45), // Default to 45 days from now if no release date is selected
-                          }}
-                        />
-                        {validation.errors.endDate &&
-                        validation.touched.endDate ? (
-                          <div className="text-danger">
-                            {validation.errors.endDate}
-                          </div>
-                        ) : null}
-                      </div>
-                    </Col>
+                    {(validation.values.prices || []).map((price, index) => (
+                      <Row key={index} className="mb-3">
+                        <Col md={5}>
+                          <Input
+                            type="number"
+                            name={`prices.${index}.price`}
+                            placeholder="Nhập giá"
+                            value={validation.values.prices[index].price}
+                            onBlur={validation.handleBlur}
+                            onChange={validation.handleChange}
+                          />
+                        </Col>
+                        <Col md={5}>
+                          <Flatpickr
+                            className="form-control"
+                            placeholder="Enter Release Date"
+                            value={validation.values.prices[index].date}
+                            onChange={([selectedDate]) => {
+                              const updatedPrices = [
+                                ...validation.values.prices,
+                              ];
+                              updatedPrices[index].date = new Date(selectedDate)
+                                .toISOString()
+                                .split("T")[0];
+                              validation.setFieldValue("prices", updatedPrices);
+                            }}
+                            options={{
+                              minDate: new Date(
+                                new Date().getTime() + 5 * 24 * 60 * 60 * 1000
+                              ),
+                              disable: validation.values.prices
+                                .filter((_, i) => i !== index)
+                                .map((price) => new Date(price.date)),
+                            }}
+                          />
+                          {validation.errors.prices &&
+                            validation.errors.prices[index] &&
+                            validation.errors.prices[index].date && (
+                              <div className="text-danger">
+                                {validation.errors.prices[index].date}
+                              </div>
+                            )}
+                        </Col>
+                        <Col md={2}>
+                          <Button
+                            color="danger"
+                            outline
+                            onClick={() => removePrice(index)}
+                          >
+                            Delete
+                          </Button>
+                        </Col>
+                      </Row>
+                    ))}
+                    <Button
+                      color="secondary"
+                      outline
+                      onClick={() => {
+                        const newPrices = [...(validation.values.prices || [])];
+                        newPrices.push({ price: "", date: "" });
+                        validation.setFieldValue("prices", newPrices);
+                      }}
+                    >
+                      Add
+                    </Button>
                   </CardBody>
                 </Card>
               </Col>
             </Col>
-            <div className="text-end mb-3">
+            <div className="mb-3">
               <button type="submit" className="btn btn-success w-sm">
                 Submit
               </button>

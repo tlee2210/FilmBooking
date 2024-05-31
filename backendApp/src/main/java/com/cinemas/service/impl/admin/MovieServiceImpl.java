@@ -84,7 +84,7 @@ public class MovieServiceImpl implements MovieService {
             optionsCountries.add(new SelectOptionReponse(country.getId(), country.getName()));
         }
 
-    return new SelectOptionAndModelReponse<>(movies, optionsCountries, optionsStatus);
+        return new SelectOptionAndModelReponse<>(movies, optionsCountries, optionsStatus);
     }
 
     @Override
@@ -162,11 +162,14 @@ public class MovieServiceImpl implements MovieService {
                 .collect(Collectors.toList());
         movie.setDirector(directors);
 
-        if(!movieRequest.getPrices().isEmpty()){
+        if (!movieRequest.getPrices().isEmpty()) {
             List<PriceMovie> prices = new ArrayList<>();
             movieRequest.getPrices().forEach(price -> {
-                prices.add(new PriceMovie(price.getDate(), price.getPrice()));
+                PriceMovie priceMovie = new PriceMovie(price.getDate(), price.getPrice());
+                priceMovie.setMovie(movie);
+                prices.add(priceMovie);
             });
+
             movie.setPriceMovies(prices);
         }
 
@@ -241,16 +244,22 @@ public class MovieServiceImpl implements MovieService {
             throw new AppException(NAME_EXISTED);
         }
 
+        String ImagePortrait = movie.getImagePortrait();
+        String ImageLandscape = movie.getImageLandscape();
+
         ObjectUtils.copyFields(movieRequest, movie);
-//        movie.setCategories(null);
-        if (!movieRequest.getImageLandscape().isEmpty()) {
+        if (movieRequest.getImageLandscape() != null && !movieRequest.getImageLandscape().isEmpty()) {
             fileStorageServiceImpl.deleteFile(movie.getImageLandscape());
             movie.setImageLandscape(fileStorageServiceImpl.uploadFile(movieRequest.getImageLandscape(), "movie"));
+        } else {
+            movie.setImageLandscape(ImageLandscape);
         }
 
-        if (!movieRequest.getImagePortrait().isEmpty()) {
+        if (movieRequest.getImagePortrait() != null && !movieRequest.getImagePortrait().isEmpty()) {
             fileStorageServiceImpl.deleteFile(movie.getImagePortrait());
             movie.setImagePortrait(fileStorageServiceImpl.uploadFile(movieRequest.getImagePortrait(), "movie"));
+        } else {
+            movie.setImagePortrait(ImagePortrait);
         }
 
         //set slug
@@ -274,12 +283,14 @@ public class MovieServiceImpl implements MovieService {
                 .collect(Collectors.toList());
         movie.setDirector(directors);
 
-        if(!movieRequest.getPrices().isEmpty()){
-            List<PriceMovie> prices = new ArrayList<>();
+        if (!movieRequest.getPrices().isEmpty()) {
+            movie.getPriceMovies().clear();
+
             movieRequest.getPrices().forEach(price -> {
-                prices.add(new PriceMovie(price.getDate(), price.getPrice()));
+                PriceMovie priceMovie = new PriceMovie(price.getDate(), price.getPrice());
+                priceMovie.setMovie(movie);
+                movie.getPriceMovies().add(priceMovie);
             });
-            movie.setPriceMovies(prices);
         }
 
         movieRepository.save(movie);

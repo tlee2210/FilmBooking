@@ -29,9 +29,8 @@ import Select from "react-select";
 import "react-toastify/dist/ReactToastify.css";
 import { createSelector } from "reselect";
 
-import { getCinema, deleteCinema } from "../../../slices/Cinemas/thunk";
-
-const Cinema = (props) => {
+import { getMovie, deleteMovie } from "../../../slices/Movie/thunk";
+const Movies = (props) => {
   const dispatch = useDispatch();
 
   const [modal_detele, setmodal_detele] = useState(false);
@@ -43,7 +42,7 @@ const Cinema = (props) => {
     searchParams.get("searchname") || null
   );
   const [status, setStatus] = useState(searchParams.get("status") || null);
-  const [city, setCity] = useState(searchParams.get("city") || null);
+  const [country, setCountry] = useState(searchParams.get("country") || null);
   const [pageNo, setPageNo] = useState(
     parseInt(searchParams.get("pageNo"), 10) || 1
   );
@@ -61,8 +60,8 @@ const Cinema = (props) => {
       params.status = status;
     }
 
-    if (city && city !== null && city !== undefined) {
-      params.city = city;
+    if (country && country !== null && country !== undefined) {
+      params.country = country;
     }
 
     params.pageNo = pageNo;
@@ -70,21 +69,29 @@ const Cinema = (props) => {
 
     setSearchParams(params);
 
-    dispatch(getCinema(searchname, status, city, pageNo, pageSize));
-  }, [dispatch, searchname, city, status, pageNo, pageSize]);
+    dispatch(getMovie(searchname, status, country, pageNo, pageSize));
+  }, [dispatch, searchname, country, status, pageNo, pageSize]);
 
-  const CinemaState = (state) => state;
-  const CinemaStateData = createSelector(CinemaState, (state) => ({
+  const MovieState = (state) => state;
+  const MovieStateData = createSelector(MovieState, (state) => ({
     success: state.Message.success,
     error: state.Message.error,
     messageSuccess: state.Message.messageSuccess,
     messageError: state.Message.messageError,
-    Cinema: state.Cinema.data,
-    item: state.Cinema.item,
+    Movie: state.Movie.data,
+    selectStatus: state.Movie.selectStatus,
+    selectcountry: state.Movie.selectcountry,
   }));
   // Inside your component
-  const { error, success, messageSuccess, messageError, Cinema, item } =
-    useSelector(CinemaStateData);
+  const {
+    error,
+    success,
+    messageSuccess,
+    messageError,
+    Movie,
+    selectStatus,
+    selectcountry,
+  } = useSelector(MovieStateData);
 
   useEffect(() => {
     if (success) {
@@ -104,13 +111,25 @@ const Cinema = (props) => {
     const newPageNo = page + 1;
     setPageNo(newPageNo);
 
-    setSearchParams({ searchname, status, city, pageNo: newPageNo, pageSize });
+    setSearchParams({
+      searchname,
+      status,
+      country,
+      pageNo: newPageNo,
+      pageSize,
+    });
   };
 
   const handlenumberOfElements = (elements) => {
     setPageSize(elements);
     setPageNo(1);
-    setSearchParams({ searchname, status, city, pageNo, pageSize: elements });
+    setSearchParams({
+      searchname,
+      status,
+      country,
+      pageNo,
+      pageSize: elements,
+    });
   };
 
   const searchForm = useFormik({
@@ -119,13 +138,13 @@ const Cinema = (props) => {
     initialValues: {
       name: searchname ? searchname : null,
       status: status ? status : null,
-      city: city ? city : null,
+      country: country ? country : null,
     },
     onSubmit: (values) => {
-      console.log(values);
+      // console.log(values);
       setSearch(values.name);
       setStatus(values.status);
-      setCity(values.city);
+      setCountry(values.country);
       setPageNo(1);
     },
   });
@@ -141,30 +160,19 @@ const Cinema = (props) => {
   function deleteitem(slug) {
     // console.log("delete : " + slug);
     if (slug) {
-      dispatch(deleteCinema(slug));
+      dispatch(deleteMovie(slug));
     }
   }
-
-  const statusOption = [
-    { label: "Active", value: "ACTIVE" },
-    { label: "Inactive", value: "INACTIVE" },
-  ];
 
   const columns = useMemo(
     () => [
       {
         header: "Image",
-        accessorKey: "images",
+        accessorKey: "imagePortrait",
         cell: (cell) => {
-          const imageUrls = cell.getValue()?.map((item) => item.url);
           return (
             <>
-              <Image.PreviewGroup items={imageUrls}>
-                <Image
-                  width={150}
-                  src={imageUrls && imageUrls[0] ? imageUrls[0] : ""}
-                />
-              </Image.PreviewGroup>
+              <Image width={150} src={cell.getValue()} />
             </>
           );
         },
@@ -176,20 +184,105 @@ const Cinema = (props) => {
         enableColumnFilter: false,
       },
       {
-        header: "Phone",
-        accessorKey: "phone",
-        enableColumnFilter: false,
-      },
-      {
-        header: "Address",
-        accessorKey: "address",
-        enableColumnFilter: false,
-      },
-      {
-        header: "city",
-        accessorKey: "city",
+        header: "country",
+        accessorKey: "country",
         cell: (cell) => {
-          return <span>{cell.getValue()}</span>;
+          return (
+            <>
+              <span>{cell.getValue().name}</span>
+            </>
+          );
+        },
+        enableColumnFilter: false,
+      },
+      {
+        header: "movie Format",
+        accessorKey: "movieFormat",
+        enableColumnFilter: false,
+      },
+      {
+        header: "duration movie",
+        accessorKey: "duration_movie",
+        cell: (cell) => {
+          return <span>{cell.getValue()} minutes</span>;
+        },
+        enableColumnFilter: false,
+      },
+      {
+        header: "release Date movie",
+        accessorKey: "releaseDate",
+        enableColumnFilter: false,
+      },
+      {
+        header: "end Date movie",
+        accessorKey: "endDate",
+        enableColumnFilter: false,
+      },
+      {
+        header: "price",
+        accessorKey: "price",
+        enableColumnFilter: false,
+      },
+      {
+        header: "categories",
+        accessorKey: "categories",
+        cell: (cell) => {
+          return (
+            <span>
+              {cell.getValue().map((item) => {
+                return (
+                  <span
+                    key={item.id}
+                    className="badge bg-secondary-subtle text-secondary me-1"
+                  >
+                    {item.name}
+                  </span>
+                );
+              })}
+            </span>
+          );
+        },
+        enableColumnFilter: false,
+      },
+      {
+        header: "director",
+        accessorKey: "director",
+        cell: (cell) => {
+          return (
+            <span>
+              {cell.getValue().map((item) => {
+                return (
+                  <span
+                    key={item.id}
+                    className="badge bg-primary-subtle text-primary me-1"
+                  >
+                    {item.name}
+                  </span>
+                );
+              })}
+            </span>
+          );
+        },
+        enableColumnFilter: false,
+      },
+      {
+        header: "actor",
+        accessorKey: "actor",
+        cell: (cell) => {
+          return (
+            <span>
+              {cell.getValue().map((item) => {
+                return (
+                  <span
+                    key={item.id}
+                    className="badge bg-info-subtle text-info me-2"
+                  >
+                    {item.name}
+                  </span>
+                );
+              })}
+            </span>
+          );
         },
         enableColumnFilter: false,
       },
@@ -201,12 +294,29 @@ const Cinema = (props) => {
           const value = cell.getValue();
           return (
             <React.Fragment>
-              {value === "ACTIVE" ? (
+              {value === "COMING_SOON" ? (
+                <span className="badge bg-warning-subtle  text-warning badge-border">
+                  {" "}
+                  {value}
+                </span>
+              ) : value === "NO_LONGER_SHOWING" ? (
+                <span className="badge bg-danger-subtle text-danger badge-border">
+                  {value}
+                </span>
+              ) : value === "NOW_SHOWING" ? (
                 <span className="badge bg-success-subtle text-success badge-border">
                   {value}
                 </span>
-              ) : (
+              ) : value === "LIMITED_RELEASE" ? (
                 <span className="badge bg-danger-subtle  text-danger badge-border">
+                  {value}
+                </span>
+              ) : value === "SPECIAL_SCREENING" ? (
+                <span className="badge bg-primary-subtle text-primary badge-border">
+                  {value}
+                </span>
+              ) : (
+                <span className="badge bg-secondary-subtle text-secondary  badge-border">
                   {value}
                 </span>
               )}
@@ -222,7 +332,7 @@ const Cinema = (props) => {
           // return <React.Fragment>Details</React.Fragment>;
           return (
             <React.Fragment>
-              <Link to={`/dashboard/cinema/${cell.getValue()}/edit`}>
+              <Link to={`/dashboard/movie/${cell.getValue()}/edit`}>
                 <span className="bg-gradient me-3 fs-4 text-info">
                   <i className="ri-edit-2-fill"></i>
                 </span>
@@ -289,7 +399,7 @@ const Cinema = (props) => {
                             placeholder="Search for name..."
                             onChange={searchForm.handleChange}
                             onBlur={searchForm.handleBlur}
-                            value={searchForm.values.name}
+                            value={searchForm.values.name || ""}
                           />
                           <i className="ri-search-line search-icon"></i>
                         </div>
@@ -297,21 +407,21 @@ const Cinema = (props) => {
                       <Col sm={3}>
                         <div className="search-box">
                           <Select
-                            name="city"
-                            options={item}
+                            name="country"
+                            options={selectcountry}
                             isClearable={true}
-                            placeholder="Select city"
+                            placeholder="Select country"
                             classNamePrefix="select"
                             onChange={(option) => {
                               const status = option ? option.value : null;
-                              searchForm.setFieldValue("city", status);
-                              searchForm.setFieldTouched("city", true);
+                              searchForm.setFieldValue("country", status);
+                              searchForm.setFieldTouched("country", true);
                             }}
                             onBlur={() =>
-                              searchForm.setFieldTouched("city", true)
+                              searchForm.setFieldTouched("country", true)
                             }
-                            value={statusOption.find(
-                              (opt) => opt.value === searchForm.values.city
+                            value={selectcountry.find(
+                              (opt) => opt.value === searchForm.values.country
                             )}
                           />
                         </div>
@@ -320,7 +430,7 @@ const Cinema = (props) => {
                         <div className="search-box">
                           <Select
                             name="status"
-                            options={statusOption}
+                            options={selectStatus}
                             isClearable={true}
                             placeholder="Select Status"
                             classNamePrefix="select"
@@ -332,7 +442,7 @@ const Cinema = (props) => {
                             onBlur={() =>
                               searchForm.setFieldTouched("status", true)
                             }
-                            value={statusOption.find(
+                            value={selectStatus.find(
                               (opt) => opt.value === searchForm.values.status
                             )}
                           />
@@ -356,9 +466,9 @@ const Cinema = (props) => {
                 <div className="card-body pt-0">
                   <TableContainer
                     columns={columns || []}
-                    data={Cinema.content || []}
-                    paginateData={Cinema}
-                    customPageSize={Cinema.size}
+                    data={Movie.content || []}
+                    paginateData={Movie}
+                    customPageSize={Movie.size}
                     paginate={handlePagination}
                     numberOfElements={handlenumberOfElements}
                     tableClass="table-centered align-middle table-nowrap mb-0"
@@ -411,4 +521,4 @@ const Cinema = (props) => {
   );
 };
 
-export default withRouter(Cinema);
+export default withRouter(Movies);

@@ -1,10 +1,12 @@
 package com.cinemas.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -19,16 +21,17 @@ public class PriceMovie {
     private Integer id;
 
     @Column(nullable = false)
-    private Date date;
+    private LocalDate date;
 
     @Column(nullable = false)
     private Float price;
 
-    @ManyToOne()
-    @JoinColumn(name = "movie_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "movie_id")
+    @JsonIgnore
     Movie movie;
 
-    public PriceMovie(Date date, Float price) {
+    public PriceMovie(LocalDate date, Float price) {
         this.date = date;
         this.price = price;
     }
