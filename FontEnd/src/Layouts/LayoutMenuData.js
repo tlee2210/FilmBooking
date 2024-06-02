@@ -91,6 +91,12 @@ const Navdata = () => {
           link: "/dashboard/cinema",
           parentId: "cinemas",
         },
+        {
+          id: "room",
+          label: "Room",
+          link: "/dashboard/room",
+          parentId: "cinemas",
+        },
       ],
     },
   ];

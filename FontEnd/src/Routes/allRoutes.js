@@ -2,7 +2,6 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import { lazy } from "react";
 
-
 // Lazy load components
 const Login = lazy(() => import("../pages/Authentication/Login"));
 const ForgetPasswordPage = lazy(() =>
@@ -38,6 +37,10 @@ const CinemaCreate = lazy(() => import("../pages/dashboard/Cinemas/create"));
 const CinemaEdit = lazy(() => import("../pages/dashboard/Cinemas/edit"));
 const Cinemas = lazy(() => import("../pages/dashboard/Cinemas/index"));
 
+const Room = lazy(() => import("../pages/dashboard/Room/index"));
+const RoomCreate = lazy(() => import("../pages/dashboard/Room/create"));
+const RoomEdit = lazy(() => import("../pages/dashboard/Room/edit"));
+
 const Movie = lazy(() => import("../pages/dashboard/Movie/index"));
 const MovieEdit = lazy(() => import("../pages/dashboard/Movie/edit"));
 const MovieCreate = lazy(() => import("../pages/dashboard/Movie/create"));
@@ -46,12 +49,15 @@ const MovieCreate = lazy(() => import("../pages/dashboard/Movie/create"));
 const Actor = lazy(() => import("../pages/Page/CinemaCorner/Actor"));
 const Director = lazy(() => import("../pages/Page/CinemaCorner/Director"));
 
-const ActorInfor = lazy(() => import("../pages/Page/CinemaCorner/Details/ActorInfor"))
-const DirectorInfor = lazy(() => import("../pages/Page/CinemaCorner/Details/DirectorInfor"))
-
+const ActorInfor = lazy(() =>
+  import("../pages/Page/CinemaCorner/Details/ActorInfor")
+);
+const DirectorInfor = lazy(() =>
+  import("../pages/Page/CinemaCorner/Details/DirectorInfor")
+);
 
 //Ticket Booking
-const TicketBooking = lazy(() => import("../pages/Page/BuyTicket/index"))
+const TicketBooking = lazy(() => import("../pages/Page/BuyTicket/index"));
 
 //Binh Luận Phim
 import BinhLuanPhim from "../pages/Page/BinhLuanPhim/index";
@@ -69,12 +75,17 @@ const authProtectedRoutes = [
   { path: "/dashboard/cinema/create", component: <CinemaCreate /> },
   { path: "/dashboard/cinema", component: <Cinemas /> },
   { path: "/dashboard/cinema/:slug/edit", component: <CinemaEdit /> },
+
   { path: "/dashboard/movie-genre", component: <MovieGenre /> },
 
   { path: "/dashboard/movie", component: <Movie /> },
   { path: "/dashboard/movie/:slug/edit", component: <MovieEdit /> },
   { path: "/dashboard/movie/create", component: <MovieCreate /> },
+  { path: "/dashboard/movie/create", component: <MovieCreate /> },
 
+  { path: "/dashboard/room/create", component: <RoomCreate /> },
+  { path: "/dashboard/room", component: <Room /> },
+  { path: "/dashboard/room/:id/edit", component: <RoomEdit /> },
   // {
   //   path: "/",
   //   exact: true,
@@ -110,7 +121,17 @@ const TicketBookingRoutes = [
 
 const BinhLuanPhimRoutes = [
   { path: "/binh-luan-phim", component: <BinhLuanPhim /> },
-  { path: "/binh-luan-phim/binh-luan-phim-details", component: <BinhLuanPhimDetails /> }
-]
+  {
+    path: "/binh-luan-phim/binh-luan-phim-details",
+    component: <BinhLuanPhimDetails />,
+  },
+];
 
-export { authProtectedRoutes, publicRoutes, homeRoutes, CinemaCornerRoutes, TicketBookingRoutes,BinhLuanPhimRoutes };
+export {
+  authProtectedRoutes,
+  publicRoutes,
+  homeRoutes,
+  CinemaCornerRoutes,
+  TicketBookingRoutes,
+  BinhLuanPhimRoutes,
+};

@@ -13,37 +13,38 @@ import {
 } from "reactstrap";
 
 import TableContainer from "../../../Components/Common/TableContainerReactTable";
-import { message, Image } from "antd";
+import { message } from "antd";
+
+import * as Yup from "yup";
+import { useFormik } from "formik";
 
 import withRouter from "../../../Components/Common/withRouter";
 import { Link, useSearchParams } from "react-router-dom";
 //Import Breadcrumb
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
-import { useFormik } from "formik";
 import { clearNotification } from "../../../slices/message/reducer";
 
+import Select from "react-select";
 //redux
 import { useSelector, useDispatch } from "react-redux";
-import Select from "react-select";
 
 import "react-toastify/dist/ReactToastify.css";
 import { createSelector } from "reselect";
 
-import { getCinema, deleteCinema } from "../../../slices/Cinemas/thunk";
+import { getRoomMovie, deleteRoom } from "../../../slices/Room/thunk";
 
-const Cinema = (props) => {
+const Room = (props) => {
   const dispatch = useDispatch();
 
   const [modal_detele, setmodal_detele] = useState(false);
   const [modal_togFirst, setmodal_togFirst] = useState(false);
-  const [slug, setSlug] = useState("");
+  const [id, setId] = useState("");
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchname, setSearch] = useState(
     searchParams.get("searchname") || null
   );
-  const [status, setStatus] = useState(searchParams.get("status") || null);
-  const [city, setCity] = useState(searchParams.get("city") || null);
+  const [cinema, setCinema] = useState(searchParams.get("cinema") || null);
   const [pageNo, setPageNo] = useState(
     parseInt(searchParams.get("pageNo"), 10) || 1
   );
@@ -51,40 +52,18 @@ const Cinema = (props) => {
     parseInt(searchParams.get("pageSize"), 10) || 15
   );
 
-  useEffect(() => {
-    let params = {};
-    if (searchname && searchname !== null && searchname !== undefined) {
-      params.searchname = searchname;
-    }
-
-    if (status && status !== null && status !== undefined) {
-      params.status = status;
-    }
-
-    if (city && city !== null && city !== undefined) {
-      params.city = city;
-    }
-
-    params.pageNo = pageNo;
-    params.pageSize = pageSize;
-
-    setSearchParams(params);
-
-    dispatch(getCinema(searchname, status, city, pageNo, pageSize));
-  }, [dispatch, searchname, city, status, pageNo, pageSize]);
-
-  const CinemaState = (state) => state;
-  const CinemaStateData = createSelector(CinemaState, (state) => ({
+  const CelebrityState = (state) => state;
+  const CelebrityStateData = createSelector(CelebrityState, (state) => ({
     success: state.Message.success,
     error: state.Message.error,
     messageSuccess: state.Message.messageSuccess,
     messageError: state.Message.messageError,
-    Cinema: state.Cinema.data,
-    item: state.Cinema.item,
+    data: state.RoomMovie.data,
+    selectOptions: state.RoomMovie.selectOptions,
   }));
   // Inside your component
-  const { error, success, messageSuccess, messageError, Cinema, item } =
-    useSelector(CinemaStateData);
+  const { error, success, messageSuccess, messageError, data, selectOptions } =
+    useSelector(CelebrityStateData);
 
   useEffect(() => {
     if (success) {
@@ -100,129 +79,108 @@ const Cinema = (props) => {
     dispatch(clearNotification());
   }, [dispatch, success, error]);
 
+  useEffect(() => {
+    let params = {};
+    if (searchname && searchname !== null && searchname !== undefined) {
+      params.searchname = searchname;
+    }
+
+    if (cinema && cinema !== cinema && cinema !== undefined) {
+      params.cinema = cinema;
+    }
+
+    params.pageNo = pageNo;
+    params.pageSize = pageSize;
+
+    setSearchParams(params);
+
+    dispatch(getRoomMovie(searchname, cinema, pageNo, pageSize));
+  }, [dispatch, searchname, cinema, pageNo, pageSize]);
+
   const handlePagination = (page) => {
     const newPageNo = page + 1;
     setPageNo(newPageNo);
 
-    setSearchParams({ searchname, status, city, pageNo: newPageNo, pageSize });
+    setSearchParams({ searchname, cinema, pageNo: newPageNo, pageSize });
   };
 
   const handlenumberOfElements = (elements) => {
     setPageSize(elements);
     setPageNo(1);
-    setSearchParams({ searchname, status, city, pageNo, pageSize: elements });
+    setSearchParams({ searchname, cinema, pageNo, pageSize: elements });
   };
 
   const searchForm = useFormik({
     enableReinitialize: true,
 
     initialValues: {
-      name: searchname ? searchname : null,
-      status: status ? status : null,
-      city: city ? city : null,
+      name: searchname ? searchname : "" || "",
+      cinema: cinema ? cinema : "" || "",
     },
     onSubmit: (values) => {
       console.log(values);
       setSearch(values.name);
-      setStatus(values.status);
-      setCity(values.city);
+      setCinema(values.cinema);
       setPageNo(1);
     },
   });
 
-  function tog_togdelete(slug) {
+  function tog_togdelete(id) {
     setmodal_detele(!modal_togFirst);
-    // console.log(slug);
-    if (slug) {
-      setSlug(slug);
+    // console.log(id);
+    if (id) {
+      setId(id);
     }
   }
 
-  function deleteitem(slug) {
-    // console.log("delete : " + slug);
-    if (slug) {
-      dispatch(deleteCinema(slug));
+  function deleteitem(id) {
+    // console.log("delete : " + id);
+    if (id) {
+      dispatch(deleteRoom(id));
     }
   }
-
-  const statusOption = [
-    { label: "Active", value: "ACTIVE" },
-    { label: "Inactive", value: "INACTIVE" },
-  ];
 
   const columns = useMemo(
     () => [
-      {
-        header: "Image",
-        accessorKey: "images",
-        cell: (cell) => {
-          const imageUrls = cell.getValue()?.map((item) => item.url);
-          return (
-            <>
-              <Image.PreviewGroup items={imageUrls}>
-                <Image
-                  width={150}
-                  src={imageUrls && imageUrls[0] ? imageUrls[0] : ""}
-                />
-              </Image.PreviewGroup>
-            </>
-          );
-        },
-        enableColumnFilter: false,
-      },
       {
         header: "Name",
         accessorKey: "name",
         enableColumnFilter: false,
       },
       {
-        header: "Phone",
-        accessorKey: "phone",
+        header: "Cinema Name",
+        accessorKey: "cinemaName",
         enableColumnFilter: false,
       },
       {
-        header: "Address",
-        accessorKey: "address",
+        header: "Seat Columns",
+        accessorKey: "seatColumns",
         enableColumnFilter: false,
       },
       {
-        header: "city",
-        accessorKey: "city",
-        cell: (cell) => {
-          return <span>{cell.getValue()}</span>;
-        },
+        header: "Seat Rows",
+        accessorKey: "seatRows",
         enableColumnFilter: false,
       },
       {
-        header: "status",
-        accessorKey: "status",
+        header: "Double Seat Columns",
+        accessorKey: "doubleSeatColumns",
         enableColumnFilter: false,
-        cell: (cell) => {
-          const value = cell.getValue();
-          return (
-            <React.Fragment>
-              {value === "ACTIVE" ? (
-                <span className="badge bg-success-subtle text-success badge-border">
-                  {value}
-                </span>
-              ) : (
-                <span className="badge bg-danger-subtle  text-danger badge-border">
-                  {value}
-                </span>
-              )}
-            </React.Fragment>
-          );
-        },
+      },
+      {
+        header: "Double Seat Rows",
+        accessorKey: "doubleSeatRows",
+        enableColumnFilter: false,
       },
       {
         header: "Actions",
-        accessorKey: "slug",
+        accessorKey: "id",
         enableColumnFilter: false,
         cell: (cell) => {
           // return <React.Fragment>Details</React.Fragment>;
           return (
             <React.Fragment>
-              <Link to={`/dashboard/cinema/${cell.getValue()}/edit`}>
+              <Link to={`/dashboard/room/${cell.getValue()}/edit`}>
                 <span className="bg-gradient me-3 fs-4 text-info">
                   <i className="ri-edit-2-fill"></i>
                 </span>
@@ -243,12 +201,15 @@ const Cinema = (props) => {
     []
   );
 
-  document.title = "Cinema Manager";
+  document.title = "Actors and Directors Manager";
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="Cinema Manager" pageTitle="Cinema" />
+          <BreadCrumb
+            title="Actors and Directors Manager"
+            pageTitle="Actors and Directors"
+          />
           <Row>
             <Col lg={12}>
               <Card id="customerList">
@@ -256,17 +217,19 @@ const Cinema = (props) => {
                   <Row className="g-4 align-items-center">
                     <div className="col-sm">
                       <div>
-                        <h5 className="card-title mb-0">Cinema Manager</h5>
+                        <h5 className="card-title mb-0">
+                          Actors and Directors Manager
+                        </h5>
                       </div>
                     </div>
                     <div className="col-sm-auto">
                       <div>
                         <Link
                           className="btn btn-success add-btn"
-                          to={`/dashboard/cinema/create`}
+                          to={`/dashboard/room/create`}
                         >
                           <i className="ri-add-line align-bottom me-1"></i> Add
-                          New Cinema
+                          New
                         </Link>
                       </div>
                     </div>
@@ -289,7 +252,7 @@ const Cinema = (props) => {
                             placeholder="Search for name..."
                             onChange={searchForm.handleChange}
                             onBlur={searchForm.handleBlur}
-                            value={searchForm.values.name || ""}
+                            value={searchForm.values.name}
                           />
                           <i className="ri-search-line search-icon"></i>
                         </div>
@@ -297,43 +260,21 @@ const Cinema = (props) => {
                       <Col sm={3}>
                         <div className="search-box">
                           <Select
-                            name="city"
-                            options={item}
-                            isClearable={true}
-                            placeholder="Select city"
-                            classNamePrefix="select"
-                            onChange={(option) => {
-                              const status = option ? option.value : null;
-                              searchForm.setFieldValue("city", status);
-                              searchForm.setFieldTouched("city", true);
-                            }}
-                            onBlur={() =>
-                              searchForm.setFieldTouched("city", true)
-                            }
-                            value={statusOption.find(
-                              (opt) => opt.value === searchForm.values.city
-                            )}
-                          />
-                        </div>
-                      </Col>
-                      <Col sm={3}>
-                        <div className="search-box">
-                          <Select
                             name="status"
-                            options={statusOption}
+                            options={selectOptions}
                             isClearable={true}
-                            placeholder="Select Status"
+                            placeholder="Select cinema"
                             classNamePrefix="select"
                             onChange={(option) => {
-                              const status = option ? option.value : null;
-                              searchForm.setFieldValue("status", status);
-                              searchForm.setFieldTouched("status", true);
+                              const roleValue = option ? option.value : null;
+                              searchForm.setFieldValue("cinema", roleValue);
+                              searchForm.setFieldTouched("cinema", true);
                             }}
                             onBlur={() =>
-                              searchForm.setFieldTouched("status", true)
+                              searchForm.setFieldTouched("cinema", true)
                             }
-                            value={statusOption.find(
-                              (opt) => opt.value === searchForm.values.status
+                            value={selectOptions.find(
+                              (opt) => opt.value === searchForm.values.cinema
                             )}
                           />
                         </div>
@@ -353,23 +294,19 @@ const Cinema = (props) => {
                     </Row>
                   </Form>
                 </CardHeader>
-                <Row>
-                  <Col md={12}>
-                    <div className="card-body pt-0">
-                      <TableContainer
-                        columns={columns || []}
-                        data={Cinema.content || []}
-                        paginateData={Cinema}
-                        customPageSize={Cinema.size}
-                        paginate={handlePagination}
-                        numberOfElements={handlenumberOfElements}
-                        tableClass="table-centered align-middle table-nowrap mb-0"
-                        theadClass="text-muted table-light"
-                        SearchPlaceholder="Search Products..."
-                      />
-                    </div>
-                  </Col>
-                </Row>
+                <div className="card-body pt-0">
+                  <TableContainer
+                    columns={columns || []}
+                    data={data.content || []}
+                    paginateData={data}
+                    customPageSize={data.size}
+                    paginate={handlePagination}
+                    numberOfElements={handlenumberOfElements}
+                    tableClass="table-centered align-middle table-nowrap mb-0"
+                    theadClass="text-muted table-light"
+                    SearchPlaceholder="Search Products..."
+                  />
+                </div>
               </Card>
             </Col>
           </Row>
@@ -385,6 +322,12 @@ const Cinema = (props) => {
         centered
       >
         <ModalBody className="text-center p-5">
+          {/* <lord-icon
+              src="https://cdn.lordicon.com/tdrtiskw.json"
+              trigger="loop"
+              colors="primary:#f7b84b,secondary:#405189"
+              style={{ width: "130px", height: "130px" }}
+            ></lord-icon> */}
           <div className="pt-4">
             <h4>Confirm Deletion</h4>
             <p className="text-muted">
@@ -401,7 +344,7 @@ const Cinema = (props) => {
                 color="danger"
                 type="submit"
                 onClick={() => {
-                  deleteitem(slug);
+                  deleteitem(id);
                   setmodal_detele(false);
                 }}
               >
@@ -415,4 +358,4 @@ const Cinema = (props) => {
   );
 };
 
-export default withRouter(Cinema);
+export default withRouter(Room);

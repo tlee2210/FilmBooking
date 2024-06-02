@@ -1,6 +1,5 @@
 package com.cinemas.entities;
 
-import com.cinemas.enums.StatusCinema;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -9,49 +8,31 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "cinema")
+@Table(name = "room")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Cinema {
+public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column
     private String name;
-
     @Column
-    private String slug;
-
+    private Integer SeatRows;
     @Column
-    private String address;
-
+    private Integer SeatColumns;
     @Column
-    private String phone;
-
+    private Integer doubleSeatRows;
     @Column
-    private String description;
+    private Integer doubleSeatColumns;
 
-    @Column
-    private String city;
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "cinema_id", referencedColumnName = "id")
+    Cinema cinema;
 
-    @Column
-    private String lat;
-
-    @Column
-    private String lng;
-
-    @Column
-    private StatusCinema status;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cinema", cascade = CascadeType.ALL)
-    private List<CinemaImages> images;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cinema", cascade = CascadeType.ALL)
-    private List<Room> Rooms;
 }

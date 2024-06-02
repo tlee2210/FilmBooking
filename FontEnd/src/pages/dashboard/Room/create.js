@@ -1,0 +1,362 @@
+import React, { useState, useEffect, createRef } from "react";
+import withRouter from "../../../Components/Common/withRouter";
+
+import {
+  Card,
+  CardBody,
+  Col,
+  Container,
+  CardHeader,
+  Row,
+  Input,
+  Label,
+  FormFeedback,
+  Form,
+  Button,
+  FormGroup,
+} from "reactstrap";
+import { message } from "antd";
+import { clearNotification } from "../../../slices/message/reducer";
+
+import { createSelector } from "reselect";
+import { useDispatch, useSelector } from "react-redux";
+import BreadCrumb from "../../../Components/Common/BreadCrumb";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { getCreateRoom, CreateRoomMovie } from "../../../slices/Room/thunk";
+import Select from "react-select";
+
+const CreateRoom = (props) => {
+  document.title = "Create Room Movie";
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCreateRoom());
+  }, []);
+
+  const selectRoomMovieCreateState = (state) => state;
+  const roomMovieCreatepageData = createSelector(
+    selectRoomMovieCreateState,
+    (state) => ({
+      error: state.Message.error,
+      messageError: state.Message.messageError,
+      selectOptions: state.RoomMovie.selectOptions,
+    })
+  );
+  const { error, messageError, selectOptions } = useSelector(
+    roomMovieCreatepageData
+  );
+
+  useEffect(() => {
+    if (error) {
+      if (messageError != null) {
+        message.error(messageError);
+      }
+    }
+    dispatch(clearNotification());
+  }, [error]);
+
+  const validation = useFormik({
+    initialValues: {
+      name: "",
+      cinema: "",
+      rows: "",
+      columns: "",
+      doubleSeatColumns: "",
+      doubleSeatRows: "",
+    },
+    validationSchema: Yup.object({
+      name: Yup.string().required("Please Enter a Room Name"),
+      cinema: Yup.string().required("Please Enter a cinema"),
+      rows: Yup.number().required("Required").min(1, "Rows must be at least 1"),
+      columns: Yup.number()
+        .required("Required")
+        .min(1, "Columns must be at least 1"),
+      doubleSeatColumns: Yup.number()
+        .required("Required")
+        .min(0, "Double seat columns must be at least 0"),
+      doubleSeatRows: Yup.number()
+        .required("Required")
+        .min(0, "Double seat rows must be at least 0"),
+    }),
+    onSubmit: (values) => {
+      console.log(values);
+      const formData = new FormData();
+      formData.append("name", values.name);
+      formData.append("SeatRows", values.rows);
+      formData.append("SeatColumns", values.columns);
+      formData.append("doubleSeatColumns", values.doubleSeatColumns);
+      formData.append("doubleSeatRows", values.doubleSeatRows);
+      formData.append("cinema", values.cinema);
+
+      dispatch(CreateRoomMovie(formData, props.router.navigate));
+    },
+  });
+
+  const renderSeats = (numRows, numCols, isDouble = false) => {
+    const rows = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      .split("")
+      .slice(0, numRows + (isDouble ? validation.values.rows : 0))
+      .reverse();
+
+    return (
+      <div className="seating-grid">
+        {rows.slice(0, numRows).map((row) => (
+          <div className="seat-row" key={row}>
+            {[...Array(numCols).keys()].map((i) => {
+              const seatNumber = isDouble
+                ? `${row}${i * 2 + 1}-${i * 2 + 2}`
+                : `${row}${i + 1}`;
+              return (
+                <div
+                  className={isDouble ? "double-seat" : "seat"}
+                  key={seatNumber}
+                >
+                  {seatNumber}
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  return (
+    <div className="page-content">
+      <Container fluid>
+        <BreadCrumb title="Room Create" pageTitle="Movie" />
+        <Row>
+          <Col md={12}>
+            <Card>
+              <CardHeader>
+                <h5 className="card-title mb-0">Room Details</h5>
+              </CardHeader>
+              <CardBody>
+                <Form onSubmit={validation.handleSubmit}>
+                  <Row>
+                    <Col md={6}>
+                      <FormGroup className="mb-3">
+                        <Label htmlFor="validationCustom02">Cinema</Label>
+                        <Select
+                          name="cinema"
+                          options={selectOptions}
+                          classNamePrefix="select"
+                          onChange={(option) => {
+                            validation.setFieldValue("cinema", option.value);
+                          }}
+                          onBlur={() =>
+                            validation.setFieldTouched("cinema", true)
+                          }
+                          invalid={
+                            validation.touched.cinema &&
+                            validation.errors.cinema
+                              ? true
+                              : false
+                          }
+                          value={selectOptions.find(
+                            (opt) => opt.value === validation.values.cinema
+                          )}
+                        />
+
+                        {validation.touched.Category &&
+                          validation.errors.Category && (
+                            <div
+                              className="invalid-feedback"
+                              style={{ display: "block" }}
+                            >
+                              {validation.errors.Category}
+                            </div>
+                          )}
+                      </FormGroup>
+                    </Col>
+                    <Col md={6}>
+                      <div className="mb-3">
+                        <Label
+                          className="form-label"
+                          htmlFor="product-title-input"
+                        >
+                          Room name
+                        </Label>
+                        <Input
+                          type="text"
+                          className="form-control"
+                          id="product-title-input"
+                          placeholder="Enter Room name"
+                          name="name"
+                          value={validation.values.name || ""}
+                          onBlur={validation.handleBlur}
+                          onChange={validation.handleChange}
+                          invalid={
+                            validation.errors.name && validation.touched.name
+                              ? true
+                              : false
+                          }
+                        />
+                        {validation.errors.name && validation.touched.name ? (
+                          <FormFeedback type="invalid">
+                            {validation.errors.name}
+                          </FormFeedback>
+                        ) : null}
+                      </div>
+                    </Col>
+
+                    <Col md={3}>
+                      <div className="mb-3">
+                        <Label className="form-label" htmlFor="rows-input">
+                          Number of Rows
+                        </Label>
+                        <Input
+                          type="number"
+                          className="form-control"
+                          id="rows-input"
+                          placeholder="Enter number of rows"
+                          name="rows"
+                          value={validation.values.rows || ""}
+                          onBlur={validation.handleBlur}
+                          onChange={validation.handleChange}
+                          invalid={
+                            validation.errors.rows && validation.touched.rows
+                              ? true
+                              : false
+                          }
+                        />
+                        {validation.errors.rows && validation.touched.rows ? (
+                          <FormFeedback type="invalid">
+                            {validation.errors.rows}
+                          </FormFeedback>
+                        ) : null}
+                      </div>
+                    </Col>
+                    <Col md={3}>
+                      <div className="mb-3">
+                        <Label className="form-label" htmlFor="columns-input">
+                          Number of Columns
+                        </Label>
+                        <Input
+                          type="number"
+                          className="form-control"
+                          id="columns-input"
+                          placeholder="Enter number of columns"
+                          name="columns"
+                          value={validation.values.columns || ""}
+                          onBlur={validation.handleBlur}
+                          onChange={validation.handleChange}
+                          invalid={
+                            validation.errors.columns &&
+                            validation.touched.columns
+                              ? true
+                              : false
+                          }
+                        />
+                        {validation.errors.columns &&
+                        validation.touched.columns ? (
+                          <FormFeedback type="invalid">
+                            {validation.errors.columns}
+                          </FormFeedback>
+                        ) : null}
+                      </div>
+                    </Col>
+                    <Col md={3}>
+                      <div className="mb-3">
+                        <Label
+                          className="form-label"
+                          htmlFor="double-seat-columns-input"
+                        >
+                          Number of Double Seat Columns
+                        </Label>
+                        <Input
+                          type="number"
+                          className="form-control"
+                          id="double-seat-columns-input"
+                          placeholder="Enter number of double seat columns"
+                          name="doubleSeatColumns"
+                          value={validation.values.doubleSeatColumns || ""}
+                          onBlur={validation.handleBlur}
+                          onChange={validation.handleChange}
+                          invalid={
+                            validation.errors.doubleSeatColumns &&
+                            validation.touched.doubleSeatColumns
+                              ? true
+                              : false
+                          }
+                        />
+                        {validation.errors.doubleSeatColumns &&
+                        validation.touched.doubleSeatColumns ? (
+                          <FormFeedback type="invalid">
+                            {validation.errors.doubleSeatColumns}
+                          </FormFeedback>
+                        ) : null}
+                      </div>
+                    </Col>
+                    <Col md={3}>
+                      <div className="mb-3">
+                        <Label
+                          className="form-label"
+                          htmlFor="double-seat-rows-input"
+                        >
+                          Number of Double Seat Rows
+                        </Label>
+                        <Input
+                          type="number"
+                          className="form-control"
+                          id="double-seat-rows-input"
+                          placeholder="Enter number of double seat rows"
+                          name="doubleSeatRows"
+                          value={validation.values.doubleSeatRows || ""}
+                          onBlur={validation.handleBlur}
+                          onChange={validation.handleChange}
+                          invalid={
+                            validation.errors.doubleSeatRows &&
+                            validation.touched.doubleSeatRows
+                              ? true
+                              : false
+                          }
+                        />
+                        {validation.errors.doubleSeatRows &&
+                        validation.touched.doubleSeatRows ? (
+                          <FormFeedback type="invalid">
+                            {validation.errors.doubleSeatRows}
+                          </FormFeedback>
+                        ) : null}
+                      </div>
+                    </Col>
+                  </Row>
+                  <Button type="submit" color="primary">
+                    Submit
+                  </Button>
+                </Form>
+              </CardBody>
+            </Card>
+          </Col>
+          <Col md={12}>
+            <Card>
+              <CardHeader>
+                <h5 className="card-title mb-0">Seating Chart</h5>
+              </CardHeader>
+              <CardBody>
+                {validation.values.doubleSeatColumns > 0 &&
+                  validation.values.doubleSeatRows > 0 &&
+                  renderSeats(
+                    parseInt(validation.values.doubleSeatColumns, 10),
+                    parseInt(validation.values.doubleSeatRows, 10),
+                    true
+                  )}
+                {validation.values.rows > 0 &&
+                  validation.values.columns > 0 &&
+                  renderSeats(
+                    parseInt(validation.values.rows, 10),
+                    parseInt(validation.values.columns, 10)
+                  )}
+                <div className="border-2 border-orange-10 mt-3"></div>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    </div>
+  );
+};
+
+export default withRouter(CreateRoom);
