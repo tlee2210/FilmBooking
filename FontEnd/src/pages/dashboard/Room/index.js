@@ -201,14 +201,14 @@ const Room = (props) => {
     []
   );
 
-  document.title = "Actors and Directors Manager";
+  document.title = "Room Cinema Manager";
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
           <BreadCrumb
-            title="Actors and Directors Manager"
-            pageTitle="Actors and Directors"
+            title="Cinemas Management"
+            pageTitle="Room Cinema Manager"
           />
           <Row>
             <Col lg={12}>
@@ -217,9 +217,7 @@ const Room = (props) => {
                   <Row className="g-4 align-items-center">
                     <div className="col-sm">
                       <div>
-                        <h5 className="card-title mb-0">
-                          Actors and Directors Manager
-                        </h5>
+                        <h5 className="card-title mb-0">Room Cinema Manager</h5>
                       </div>
                     </div>
                     <div className="col-sm-auto">

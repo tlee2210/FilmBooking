@@ -79,6 +79,7 @@ public class RoomServiceImpl implements RoomService {
         roomTableReponse.setSeatRows(room.getSeatRows());
         roomTableReponse.setDoubleSeatColumns(room.getDoubleSeatColumns());
         roomTableReponse.setDoubleSeatRows(room.getDoubleSeatRows());
+        roomTableReponse.setTotalColumn(room.getTotalColumn());
         roomTableReponse.setCinemaId(room.getCinema().getId());
 
         List<Cinema> cinemaList = cinemaRespository.findAll();

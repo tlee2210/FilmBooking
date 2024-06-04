@@ -11,5 +11,6 @@ public class RoomRequest {
     public Integer SeatColumns;
     public Integer doubleSeatRows;
     public Integer doubleSeatColumns;
+    public Integer totalColumn;
     public Integer cinema;
 }

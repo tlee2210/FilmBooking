@@ -90,6 +90,7 @@ const CreateRoom = (props) => {
       formData.append("SeatColumns", values.columns);
       formData.append("doubleSeatColumns", values.doubleSeatColumns);
       formData.append("doubleSeatRows", values.doubleSeatRows);
+      formData.append("totalColumn", values.totalColumn);
       formData.append("cinema", values.cinema);
 
       dispatch(CreateRoomMovie(formData, props.router.navigate));
@@ -112,29 +113,30 @@ const CreateRoom = (props) => {
     return (
       <div className="seating-grid">
         {rows.slice(0, numRows).map((row) => (
-          <>
-            <div className="seat-row" key={row}>
-              {[...Array(numCols).keys()].map((i) => {
-                const seatNumber = isDouble
-                  ? `${row}${i * 2 + 1}-${i * 2 + 2}`
-                  : `${row}${i + 1}`;
-                const applyMargin =
-                  totalColumns !== 1 && i !== 0 && (i + 1) % seatsPerPart === 0;
+          <div className="seat-row" key={row}>
+            {[...Array(numCols).keys()].map((i) => {
+              const seatNumber = isDouble
+                ? `${row}${i * 2 + 1}-${i * 2 + 2}`
+                : `${row}${i + 1}`;
+              const applyMargin =
+                totalColumns !== 1 && i !== 0 && (i + 1) % seatsPerPart === 0;
 
-                return (
-                  <div className={applyMargin ? "margin-right-seat" : null}>
-                    <div
-                      className={isDouble ? "double-seat" : "seat"}
-                      key={seatNumber}
-                    >
-                      {seatNumber}
-                    </div>
+              return (
+                <div
+                  className={
+                    isDouble ? "" : applyMargin ? "margin-right-seat" : null
+                  }
+                >
+                  <div
+                    className={isDouble ? "double-seat" : "seat"}
+                    key={seatNumber}
+                  >
+                    {seatNumber}
                   </div>
-                );
-              })}
-            </div>
-            <Col md={1}></Col>
-          </>
+                </div>
+              );
+            })}
+          </div>
         ))}
       </div>
     );
@@ -153,7 +155,7 @@ const CreateRoom = (props) => {
               <CardBody>
                 <Form onSubmit={validation.handleSubmit}>
                   <Row>
-                    <Col md={6}>
+                    <Col md={4}>
                       <FormGroup className="mb-3">
                         <Label htmlFor="validationCustom02">Cinema</Label>
                         <Select
@@ -188,7 +190,7 @@ const CreateRoom = (props) => {
                           )}
                       </FormGroup>
                     </Col>
-                    <Col md={6}>
+                    <Col md={4}>
                       <div className="mb-3">
                         <Label
                           className="form-label"
@@ -217,6 +219,44 @@ const CreateRoom = (props) => {
                           </FormFeedback>
                         ) : null}
                       </div>
+                    </Col>
+                    <Col md={4}>
+                      <FormGroup className="mb-3">
+                        <Label htmlFor="validationCustom02">Total Column</Label>
+                        <Select
+                          name="totalColumn"
+                          options={RowOption}
+                          classNamePrefix="select"
+                          onChange={(option) => {
+                            validation.setFieldValue(
+                              "totalColumn",
+                              option.value
+                            );
+                          }}
+                          onBlur={() =>
+                            validation.setFieldTouched("totalColumn", true)
+                          }
+                          invalid={
+                            validation.touched.totalColumn &&
+                            validation.errors.totalColumn
+                              ? true
+                              : false
+                          }
+                          value={RowOption.find(
+                            (opt) => opt.value === validation.values.totalColumn
+                          )}
+                        />
+
+                        {validation.touched.totalColumn &&
+                          validation.errors.totalColumn && (
+                            <div
+                              className="invalid-feedback"
+                              style={{ display: "block" }}
+                            >
+                              {validation.errors.totalColumn}
+                            </div>
+                          )}
+                      </FormGroup>
                     </Col>
                     <Col md={3}>
                       <div className="mb-3">
@@ -338,44 +378,6 @@ const CreateRoom = (props) => {
                         ) : null}
                       </div>
                     </Col>
-                    <Col md={6}>
-                      <FormGroup className="mb-3">
-                        <Label htmlFor="validationCustom02">Total Column</Label>
-                        <Select
-                          name="totalColumn"
-                          options={RowOption}
-                          classNamePrefix="select"
-                          onChange={(option) => {
-                            validation.setFieldValue(
-                              "totalColumn",
-                              option.value
-                            );
-                          }}
-                          onBlur={() =>
-                            validation.setFieldTouched("totalColumn", true)
-                          }
-                          invalid={
-                            validation.touched.totalColumn &&
-                            validation.errors.totalColumn
-                              ? true
-                              : false
-                          }
-                          value={RowOption.find(
-                            (opt) => opt.value === validation.values.totalColumn
-                          )}
-                        />
-
-                        {validation.touched.totalColumn &&
-                          validation.errors.totalColumn && (
-                            <div
-                              className="invalid-feedback"
-                              style={{ display: "block" }}
-                            >
-                              {validation.errors.totalColumn}
-                            </div>
-                          )}
-                      </FormGroup>
-                    </Col>{" "}
                   </Row>
                   <Button type="submit" color="primary">
                     Submit

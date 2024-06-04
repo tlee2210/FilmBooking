@@ -29,6 +29,8 @@ public class Room {
     private Integer doubleSeatRows;
     @Column
     private Integer doubleSeatColumns;
+    @Column
+    private Integer totalColumn;
 
     @ManyToOne
     @JsonIgnore

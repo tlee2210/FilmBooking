@@ -73,8 +73,10 @@ const EditRoom = (props) => {
       columns: item.seatColumns || "",
       doubleSeatColumns: item.doubleSeatColumns || "",
       doubleSeatRows: item.doubleSeatRows || "",
+      totalColumn: item.totalColumn || "1",
     },
     validationSchema: Yup.object({
+      totalColumn: Yup.string().required("Please Enter a Room total Column"),
       name: Yup.string().required("Please Enter a Room Name"),
       cinema: Yup.string().required("Please Enter a cinema"),
       rows: Yup.number().required("Required").min(1, "Rows must be at least 1"),
@@ -97,18 +99,26 @@ const EditRoom = (props) => {
       formData.append("SeatColumns", values.columns);
       formData.append("doubleSeatColumns", values.doubleSeatColumns);
       formData.append("doubleSeatRows", values.doubleSeatRows);
+      formData.append("totalColumn", values.totalColumn);
       formData.append("cinema", values.cinema);
 
       dispatch(CreateRoomMovie(formData, props.router.navigate));
     },
   });
 
-  const renderSeats = (numRows, numCols, isDouble = false) => {
+  const RowOption = [
+    { value: "1", label: "1" },
+    { value: "2", label: "2" },
+    { value: "3", label: "3" },
+  ];
+
+  const renderSeats = (numRows, numCols, totalColumns, isDouble = false) => {
     const rows = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
       .split("")
       .slice(0, numRows + (isDouble ? validation.values.rows : 0))
       .reverse();
-
+    const seatsPerPart = Math.ceil(numCols / totalColumns);
+    // console.log(seatsPerPart);
     return (
       <div className="seating-grid">
         {rows.slice(0, numRows).map((row) => (
@@ -117,12 +127,21 @@ const EditRoom = (props) => {
               const seatNumber = isDouble
                 ? `${row}${i * 2 + 1}-${i * 2 + 2}`
                 : `${row}${i + 1}`;
+              const applyMargin =
+                totalColumns !== 1 && i !== 0 && (i + 1) % seatsPerPart === 0;
+
               return (
                 <div
-                  className={isDouble ? "double-seat" : "seat"}
-                  key={seatNumber}
+                  className={
+                    isDouble ? "" : applyMargin ? "margin-right-seat" : null
+                  }
                 >
-                  {seatNumber}
+                  <div
+                    className={isDouble ? "double-seat" : "seat"}
+                    key={seatNumber}
+                  >
+                    {seatNumber}
+                  </div>
                 </div>
               );
             })}
@@ -145,7 +164,7 @@ const EditRoom = (props) => {
               <CardBody>
                 <Form onSubmit={validation.handleSubmit}>
                   <Row>
-                    <Col md={6}>
+                    <Col md={4}>
                       <FormGroup className="mb-3">
                         <Label htmlFor="validationCustom02">Cinema</Label>
                         <Select
@@ -180,7 +199,7 @@ const EditRoom = (props) => {
                           )}
                       </FormGroup>
                     </Col>
-                    <Col md={6}>
+                    <Col md={4}>
                       <div className="mb-3">
                         <Label
                           className="form-label"
@@ -210,7 +229,44 @@ const EditRoom = (props) => {
                         ) : null}
                       </div>
                     </Col>
+                    <Col md={4}>
+                      <FormGroup className="mb-3">
+                        <Label htmlFor="validationCustom02">Total Column</Label>
+                        <Select
+                          name="totalColumn"
+                          options={RowOption}
+                          classNamePrefix="select"
+                          onChange={(option) => {
+                            validation.setFieldValue(
+                              "totalColumn",
+                              option.value
+                            );
+                          }}
+                          onBlur={() =>
+                            validation.setFieldTouched("totalColumn", true)
+                          }
+                          invalid={
+                            validation.touched.totalColumn &&
+                            validation.errors.totalColumn
+                              ? true
+                              : false
+                          }
+                          value={RowOption.find(
+                            (opt) => opt.value === validation.values.totalColumn
+                          )}
+                        />
 
+                        {validation.touched.totalColumn &&
+                          validation.errors.totalColumn && (
+                            <div
+                              className="invalid-feedback"
+                              style={{ display: "block" }}
+                            >
+                              {validation.errors.totalColumn}
+                            </div>
+                          )}
+                      </FormGroup>
+                    </Col>
                     <Col md={3}>
                       <div className="mb-3">
                         <Label className="form-label" htmlFor="rows-input">
@@ -350,13 +406,15 @@ const EditRoom = (props) => {
                   renderSeats(
                     parseInt(validation.values.doubleSeatColumns, 10),
                     parseInt(validation.values.doubleSeatRows, 10),
+                    parseInt(validation.values.totalColumn, 10),
                     true
                   )}
                 {validation.values.rows > 0 &&
                   validation.values.columns > 0 &&
                   renderSeats(
                     parseInt(validation.values.rows, 10),
-                    parseInt(validation.values.columns, 10)
+                    parseInt(validation.values.columns, 10),
+                    parseInt(validation.values.totalColumn, 10)
                   )}
                 <div className="border-2 border-orange-10 mt-3"></div>
               </CardBody>

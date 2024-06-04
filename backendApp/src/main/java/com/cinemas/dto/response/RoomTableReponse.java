@@ -12,6 +12,7 @@ public class RoomTableReponse {
     private Integer SeatColumns;
     private Integer doubleSeatRows;
     private Integer doubleSeatColumns;
+    private Integer totalColumn;
     private String cinemaName;
     private Integer cinemaId;
 }
