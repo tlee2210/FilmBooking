@@ -6,6 +6,7 @@ const Navdata = () => {
   //state data
   const [isMovie, setIsMovie] = useState(false);
   const [isCinema, setIsCinema] = useState(false);
+  const [isUser, setIsUser] = useState(false);
   const [iscurrentState, setIscurrentState] = useState("Dashboard");
 
   function updateIconSidebar(e) {
@@ -30,12 +31,38 @@ const Navdata = () => {
     if (iscurrentState !== "Cinema") {
       setIsCinema(false);
     }
-  }, [history, isMovie, isCinema]);
+    if (iscurrentState !== "User") {
+      setIsUser(false);
+    }
+  }, [history, isMovie, isCinema, isUser]);
 
   const menuItems = [
     {
       label: "Menu",
       isHeader: true,
+    },
+    {
+      id: "user",
+      label: "User Management",
+      icon: "ri-user-fill",
+      link: "/#",
+      stateVariables: isUser,
+      click: function (e) {
+        e.preventDefault();
+        setIsUser(!isUser);
+        setIscurrentState("User");
+        updateIconSidebar(e);
+      },
+      subItems: [
+        {
+          id: "user",
+          label: "User",
+          link: "/dashboard/users",
+          parentId: "user",
+          // badgeColor: "success",
+          // badgeName: "New",
+        },
+      ],
     },
     {
       id: "movie",

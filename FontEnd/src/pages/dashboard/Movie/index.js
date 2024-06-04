@@ -136,9 +136,9 @@ const Movies = (props) => {
     enableReinitialize: true,
 
     initialValues: {
-      name: searchname ? searchname : null,
-      status: status ? status : null,
-      country: country ? country : null,
+      name: searchname ? searchname : "",
+      status: status ? status : [],
+      country: country ? country : [],
     },
     onSubmit: (values) => {
       // console.log(values);
@@ -189,7 +189,7 @@ const Movies = (props) => {
         cell: (cell) => {
           return (
             <>
-              <span>{cell.getValue().name}</span>
+              <span>{cell.getValue()?.name}</span>
             </>
           );
         },
@@ -229,7 +229,7 @@ const Movies = (props) => {
         cell: (cell) => {
           return (
             <span>
-              {cell.getValue().map((item) => {
+              {cell.getValue()?.map((item) => {
                 return (
                   <span
                     key={item.id}
@@ -250,7 +250,7 @@ const Movies = (props) => {
         cell: (cell) => {
           return (
             <span>
-              {cell.getValue().map((item) => {
+              {cell.getValue()?.map((item) => {
                 return (
                   <span
                     key={item.id}
@@ -271,7 +271,7 @@ const Movies = (props) => {
         cell: (cell) => {
           return (
             <span>
-              {cell.getValue().map((item) => {
+              {cell.getValue()?.map((item) => {
                 return (
                   <span
                     key={item.id}
@@ -420,7 +420,7 @@ const Movies = (props) => {
                             onBlur={() =>
                               searchForm.setFieldTouched("country", true)
                             }
-                            value={selectcountry.find(
+                            value={selectcountry?.find(
                               (opt) => opt.value === searchForm.values.country
                             )}
                           />
@@ -442,7 +442,7 @@ const Movies = (props) => {
                             onBlur={() =>
                               searchForm.setFieldTouched("status", true)
                             }
-                            value={selectStatus.find(
+                            value={selectStatus?.find(
                               (opt) => opt.value === searchForm.values.status
                             )}
                           />

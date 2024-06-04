@@ -97,6 +97,9 @@ public class Movie {
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PriceMovie> priceMovies = new ArrayList<>();
 
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Showtimes> showtimes = new ArrayList<>();
+
     @Column(nullable = false)
     private LocalDate releaseDate;
 

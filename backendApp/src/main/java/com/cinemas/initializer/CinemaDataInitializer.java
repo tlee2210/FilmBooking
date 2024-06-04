@@ -67,6 +67,7 @@ public class CinemaDataInitializer {
                         "-74.00" + (i + 1),
                         StatusCinema.ACTIVE,
                         null,
+                        null,
                         null
                 );
 

@@ -310,7 +310,7 @@ const Cinema = (props) => {
                             onBlur={() =>
                               searchForm.setFieldTouched("city", true)
                             }
-                            value={statusOption.find(
+                            value={statusOption?.find(
                               (opt) => opt.value === searchForm.values.city
                             )}
                           />

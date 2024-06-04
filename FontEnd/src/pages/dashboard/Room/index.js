@@ -115,7 +115,7 @@ const Room = (props) => {
 
     initialValues: {
       name: searchname ? searchname : "" || "",
-      cinema: cinema ? cinema : "" || "",
+      cinema: cinema ? cinema : [] || [],
     },
     onSubmit: (values) => {
       console.log(values);
@@ -271,7 +271,7 @@ const Room = (props) => {
                             onBlur={() =>
                               searchForm.setFieldTouched("cinema", true)
                             }
-                            value={selectOptions.find(
+                            value={selectOptions?.find(
                               (opt) => opt.value === searchForm.values.cinema
                             )}
                           />
