@@ -9,7 +9,7 @@ export const getCinema =
         params: { search, status, city, pageNo, pageSize },
       })
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         dispatch(
           fetchSuccess({
             data: response.data?.result,
@@ -17,7 +17,7 @@ export const getCinema =
         );
       })
       .catch((err) => {
-        // console.error(err);
+        console.error(err);
         // dispatch(Error(err.response?.data?.message));
       });
   };
@@ -59,7 +59,7 @@ export const GetEditCinema = (slug, history) => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/admin/v1/cinema/${slug}/edit`)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       // dispatch(setSelectOption(response.data?.result.selectOptionReponse));
       dispatch(setItem(response.data?.result));
     })
@@ -86,7 +86,7 @@ export const UpdateCinema = (formData, history) => async (dispatch) => {
     })
     .catch((err) => {
       // console.error(err);
-      dispatch(Error(err.response?.data.message));
+      dispatch(Error(err.response.data?.message));
       // history("/dashboard/celebrity");
     });
 };

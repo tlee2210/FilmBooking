@@ -43,7 +43,7 @@ export const CreateRoomMovie = (formData, history) => async (dispatch) => {
   await axios
     .post(`http://localhost:8081/api/admin/v1/room/create`, formData)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(Success(response.data?.message));
       history("/dashboard/room");
     })
@@ -57,7 +57,7 @@ export const deleteRoom = (id) => async (dispatch) => {
   await axios
     .delete(`http://localhost:8081/api/admin/v1/room/${id}/delete`)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(Success(response.data?.message));
       dispatch(getRoomMovie({}));
     })
@@ -71,7 +71,7 @@ export const GetEditRoom = (id, history) => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/admin/v1/room/${id}/edit`)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(
         setItem({
           data: response.data?.result,
@@ -80,28 +80,24 @@ export const GetEditRoom = (id, history) => async (dispatch) => {
     })
     .catch((err) => {
       console.error(err);
-      // dispatch(Error(err.response?.data?.message));
-      // if (err.response?.status === 404) {
-      //   history("/dashboard/movie");
-      // }
+      dispatch(Error(err.response?.data?.message));
+      if (err.response?.status === 404) {
+        history("/dashboard/movie");
+      }
     });
 };
 
-// export const UpdateMovie = (formData, history) => async (dispatch) => {
-//   await axios
-//     .put(`http://localhost:8081/api/admin/v1/movie/update`, formData, {
-//       headers: {
-//         "Content-Type": "multipart/form-data",
-//       },
-//     })
-//     .then((response) => {
-//       // console.log(response);
-//       dispatch(Success(response.data?.message));
-//       history("/dashboard/movie");
-//     })
-//     .catch((err) => {
-//       // console.error(err);
-//       dispatch(Error(err.response?.data.message));
-//       // history("/dashboard/celebrity");
-//     });
-// };
+export const UpdateRoom = (formData, history) => async (dispatch) => {
+  await axios
+    .put(`http://localhost:8081/api/admin/v1/room/update`, formData)
+    .then((response) => {
+      // console.log(response);
+      dispatch(Success(response.data?.message));
+      history("/dashboard/movie");
+    })
+    .catch((err) => {
+      console.error(err);
+      dispatch(Error(err.response?.data?.message));
+      // history("/dashboard/celebrity");
+    });
+};

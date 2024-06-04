@@ -98,7 +98,7 @@ public class RoomServiceImpl implements RoomService {
     public boolean updateRoom(RoomRequest roomRequest) {
         Room room = roomRepository.findById(roomRequest.getId()).orElseThrow(() -> new AppException(NOT_FOUND));
 
-        if (roomRepository.findByNameAndCinemaId(roomRequest.getName(), roomRequest.getCinema()) != null) {
+        if (roomRepository.findByNameAndIdAndCinemaId(roomRequest.getName(), roomRequest.getCinema(), roomRequest.getId()) != null) {
             throw new AppException(NAME_EXISTED);
         }
         ObjectUtils.copyFields(roomRequest, room);

@@ -7,12 +7,12 @@ export const ForgetPassword = (formData, history) => async (dispatch) => {
     .post(`http://localhost:8081/api/auth/verifyMail`, formData)
     .then((response) => {
       // console.log(response);
-      dispatch(Success(response.data.message));
+      dispatch(Success(response.data?.message));
       history("/login");
     })
     .catch((err) => {
       // console.error(err);
-      dispatch(Error(err.response.data.message));
+      dispatch(Error(err.response.data?.message));
     });
 };
 
@@ -21,11 +21,11 @@ export const GetverifyOtp = (id, otp, history) => async (dispatch) => {
     .get(`http://localhost:8081/api/auth/verifyOtp/${otp}/${id}`)
     .then((response) => {
       // console.log(response);
-      dispatch(Success(response.data.message));
+      dispatch(Success(response.data?.message));
     })
     .catch((error) => {
       // console.error(error);
-      dispatch(Error(error.response.data.message));
+      dispatch(Error(error.response.data?.message));
     });
 };
 
@@ -34,11 +34,11 @@ export const ResetPassword = (id, formData, history) => async (dispatch) => {
     .post(`http://localhost:8081/api/auth/changePassword/${id}`, formData)
     .then((response) => {
       // console.log(response);
-      dispatch(Success(response.data.message));
+      dispatch(Success(response.data?.message));
     })
     .catch((err) => {
       // console.error(err);
-      dispatch(Error(err.response.data.message));
+      dispatch(Error(err.response.data?.message));
     })
     .finally(() => {
       history("/login");

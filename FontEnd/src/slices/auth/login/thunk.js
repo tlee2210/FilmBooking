@@ -15,17 +15,17 @@ export const loginUser = (user, history) => async (dispatch) => {
       .post("http://localhost:8081/api/auth/signin", user)
       .then((res) => {
         // console.log(res);
-        const { token, user: userLogin } = res.data.result;
+        const { token, user: userLogin } = res.data?.result;
         const tokenObj = { accessToken: token };
         const validUserObj = { ...userLogin, ...tokenObj };
-        sessionStorage.setItem("authUser", JSON.stringify(res.data.result));
-        // dispatch(loginSuccess(res.data.result.user));
+        sessionStorage.setItem("authUser", JSON.stringify(res.data?.result));
+        // dispatch(loginSuccess(res.data?.result.user));
         history("/pages-starter");
         resolve([200, validUserObj]);
       })
       .catch((err) => {
         // console.error(err);
-        dispatch(Error(err.response.data.message));
+        dispatch(Error(err.response.data?.message));
       });
   });
 };
@@ -35,17 +35,17 @@ export const loginWithGoogle = (user, history) => async (dispatch) => {
       .post("http://localhost:8081/api/auth/signin", user)
       .then((res) => {
         console.log(res);
-        // const { token, user: userLogin } = res.data.result;
+        // const { token, user: userLogin } = res.data?.result;
         // const tokenObj = { accessToken: token };
         // const validUserObj = { ...userLogin, ...tokenObj };
-        // sessionStorage.setItem("authUser", JSON.stringify(res.data.result));
-        // // dispatch(loginSuccess(res.data.result.user));
+        // sessionStorage.setItem("authUser", JSON.stringify(res.data?.result));
+        // // dispatch(loginSuccess(res.data?.result.user));
         // history("/pages-starter");
         // resolve([200, validUserObj]);
       })
       .catch((err) => {
         console.error(err);
-        // dispatch(Error(err.response.data.message));
+        // dispatch(Error(err.response.data?.message));
       });
   });
 };

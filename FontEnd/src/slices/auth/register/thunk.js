@@ -12,11 +12,11 @@ export const registerUser = (formData, history) => async (dispatch) => {
     .post(`http://localhost:8081/api/auth/signup`, formData)
     .then((res) => {
       // console.log(res);
-      dispatch(registerSuccessful(res.data.message));
+      dispatch(registerSuccessful(res.data?.message));
     })
     .catch((err) => {
       // console.error(err);
-      dispatch(registerFailed(err.response.data.message));
+      dispatch(registerFailed(err.response.data?.message));
     });
 };
 

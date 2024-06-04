@@ -23,7 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { GetEditRoom, CreateRoomMovie } from "../../../slices/Room/thunk";
+import { GetEditRoom, UpdateRoom } from "../../../slices/Room/thunk";
 import Select from "react-select";
 import Item from "antd/es/list/Item";
 
@@ -91,7 +91,7 @@ const EditRoom = (props) => {
         .min(0, "Double seat rows must be at least 0"),
     }),
     onSubmit: (values) => {
-      console.log(values);
+      // console.log(values);
       const formData = new FormData();
       formData.append("id", item.id);
       formData.append("name", values.name);
@@ -102,7 +102,7 @@ const EditRoom = (props) => {
       formData.append("totalColumn", values.totalColumn);
       formData.append("cinema", values.cinema);
 
-      dispatch(CreateRoomMovie(formData, props.router.navigate));
+      dispatch(UpdateRoom(formData, props.router.navigate));
     },
   });
 
@@ -132,14 +132,12 @@ const EditRoom = (props) => {
 
               return (
                 <div
+                  key={seatNumber}
                   className={
                     isDouble ? "" : applyMargin ? "margin-right-seat" : null
                   }
                 >
-                  <div
-                    className={isDouble ? "double-seat" : "seat"}
-                    key={seatNumber}
-                  >
+                  <div className={isDouble ? "double-seat" : "seat"}>
                     {seatNumber}
                   </div>
                 </div>

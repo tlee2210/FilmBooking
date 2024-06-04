@@ -74,7 +74,7 @@ public class RoomController {
     }
 
     @PutMapping("/update")
-    public APIResponse<String> updateRoom(@RequestBody RoomRequest roomRequest) {
+    public APIResponse<String> updateRoom(@ModelAttribute RoomRequest roomRequest) {
         boolean checkUpdate = roomService.updateRoom(roomRequest);
         if (checkUpdate) {
             APIResponse<String> apiResponse = new APIResponse();

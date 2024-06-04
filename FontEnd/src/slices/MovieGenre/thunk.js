@@ -9,7 +9,7 @@ export const getMovieGenre = (search, pageNo, pageSize) => async (dispatch) => {
       params: { search, pageNo, pageSize },
     })
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(getDate(response.data?.result));
     })
     .catch((err) => {
@@ -50,7 +50,7 @@ export const GetEditMovieGenre = (slug, history) => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/admin/v1/movie-genre/${slug}/edit`)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(getitem(response.data?.result));
     })
     .catch((err) => {

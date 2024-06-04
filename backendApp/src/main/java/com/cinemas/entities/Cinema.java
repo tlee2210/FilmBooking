@@ -53,9 +53,11 @@ public class Cinema {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cinema", cascade = CascadeType.ALL)
     private List<CinemaImages> images;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cinema", cascade = CascadeType.ALL)
     private List<Room> Rooms;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cinema", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Showtimes> showtimes = new ArrayList<>();
 }

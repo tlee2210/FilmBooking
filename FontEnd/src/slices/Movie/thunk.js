@@ -61,7 +61,7 @@ export const deleteMovie = (slug) => async (dispatch) => {
   await axios
     .delete(`http://localhost:8081/api/admin/v1/movie/delete/${slug}`)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(Success(response.data?.message));
       dispatch(getMovie({}));
     })

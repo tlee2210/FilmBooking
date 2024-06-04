@@ -123,14 +123,12 @@ const CreateRoom = (props) => {
 
               return (
                 <div
+                  key={seatNumber}
                   className={
                     isDouble ? "" : applyMargin ? "margin-right-seat" : null
                   }
                 >
-                  <div
-                    className={isDouble ? "double-seat" : "seat"}
-                    key={seatNumber}
-                  >
+                  <div className={isDouble ? "double-seat" : "seat"}>
                     {seatNumber}
                   </div>
                 </div>
