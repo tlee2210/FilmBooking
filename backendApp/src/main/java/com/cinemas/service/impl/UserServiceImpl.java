@@ -29,7 +29,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.cinemas.exception.ErrorCode.NAME_EXISTED;
 import static com.cinemas.exception.ErrorCode.NOT_FOUND;
@@ -37,7 +36,6 @@ import static com.cinemas.exception.ErrorCode.NOT_FOUND;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
     private final UserRepository userRepository;
 
     @Override
