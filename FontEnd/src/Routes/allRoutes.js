@@ -67,6 +67,11 @@ const TicketBooking = lazy(() => import("../pages/Page/BuyTicket/index"));
 import BinhLuanPhim from "../pages/Page/BinhLuanPhim/index";
 import BinhLuanPhimDetails from "../pages/Page/BinhLuanPhim/details";
 
+//Rạp Phim
+import RapPhim from "../pages/Page/RapPhim/Index";
+
+
+
 const authProtectedRoutes = [
   //User Profile
   { path: "/profile", component: <UserProfile /> },
@@ -134,6 +139,12 @@ const BinhLuanPhimRoutes = [
   },
 ];
 
+
+const RapPhimRoutes = [
+  { path: "/rap-phim", component: <RapPhim /> }
+];
+
+
 export {
   authProtectedRoutes,
   publicRoutes,
@@ -141,4 +152,5 @@ export {
   CinemaCornerRoutes,
   TicketBookingRoutes,
   BinhLuanPhimRoutes,
+  RapPhimRoutes
 };

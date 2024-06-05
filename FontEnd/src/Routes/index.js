@@ -15,6 +15,7 @@ import {
   CinemaCornerRoutes,
   TicketBookingRoutes,
   BinhLuanPhimRoutes,
+  RapPhimRoutes,
 } from "./allRoutes";
 import { AuthProtected } from "./AuthProtected";
 
@@ -83,6 +84,16 @@ const Index = () => {
 
           {/* Binh luận phim */}
           {BinhLuanPhimRoutes.map((route, idx) => (
+            <Route
+              path={route.path}
+              element={<LayoutHome>{route.component}</LayoutHome>}
+              key={idx}
+              exact={true}
+            />
+          ))}
+
+          {/* Rạp Phim */}
+          {RapPhimRoutes.map((route, idx) => (
             <Route
               path={route.path}
               element={<LayoutHome>{route.component}</LayoutHome>}
