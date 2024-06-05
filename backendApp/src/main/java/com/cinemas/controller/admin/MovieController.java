@@ -25,13 +25,14 @@ import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 
 @RestController
 @RequestMapping("/api/admin/v1/movie")
-@Tag(name = "Movie Controller")
+@Tag(name = "Dashboard Movie Controller")
 public class MovieController {
     @Autowired
     private MovieService movieService;
 
     /**
      * get list and search list Movie
+     *
      * @param name
      * @param countryId
      * @param status
@@ -48,7 +49,7 @@ public class MovieController {
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
             @RequestParam(required = false, defaultValue = "15") Integer pageSize,
             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort
-            ) {
+    ) {
         SearchMovie searchMovie = new SearchMovie(name, countryId, status, pageNo - 1, pageSize, sort);
         SelectOptionAndModelReponse<Page<Movie>> movieList = movieService.getAllMovie(searchMovie);
         APIResponse<SelectOptionAndModelReponse<Page<Movie>>> apiResponse = new APIResponse<>();
@@ -59,6 +60,8 @@ public class MovieController {
     }
 
     /**
+     * get categories, Actor, directors, Status, country for create Movie
+     *
      * @return
      */
     @GetMapping("/create")
@@ -97,7 +100,6 @@ public class MovieController {
      * @return
      * @throws IOException
      */
-
     @DeleteMapping("/delete/{slug}")
     public APIResponse<Integer> deleteMovie(@PathVariable String slug) throws IOException {
         int id = movieService.deleteMovie(slug);
@@ -112,6 +114,13 @@ public class MovieController {
         throw new AppException(CREATE_FAILED);
     }
 
+    /**
+     * get categories, Actor, directors, Status, country, Movie detail for update
+     *
+     * @param slug
+     * @return
+     * @throws IOException
+     */
     @GetMapping("/{slug}/edit")
     public APIResponse<SelectOptionMovie<Movie>> getMovieBySlug(@PathVariable String slug) throws IOException {
         APIResponse<SelectOptionMovie<Movie>> apiResponse = new APIResponse();
@@ -122,6 +131,13 @@ public class MovieController {
         return apiResponse;
     }
 
+    /**
+     * update Movie
+     *
+     * @param movieRequest
+     * @return
+     * @throws IOException
+     */
     @PutMapping("/update")
     public APIResponse<String> updateMovie(@ModelAttribute MovieRequest movieRequest) throws IOException {
         boolean checkUpdate = movieService.updateMovie(movieRequest);

@@ -22,10 +22,10 @@ import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 
 @RestController
 @RequestMapping("/api/admin/v1/watercorn")
-@Tag(name = "Watercorn Controller")
+@Tag(name = "Dashboard Watercorn Controller")
 public class WatercornController {
     @Autowired
-    WaterCornService  waterCornService;
+    WaterCornService waterCornService;
 
     /**
      * all list Celebrity
@@ -43,11 +43,8 @@ public class WatercornController {
         return apiResponse;
     }
 
-
-
     /**
      * create new Water-Corn
-     *      * @param celebrityRequestity
      *
      * @return
      * @throws IOException
@@ -96,7 +93,7 @@ public class WatercornController {
      */
     @GetMapping("/{slug}/edit")
     public APIResponse<WaterCorn> getEditWaterCorn(@PathVariable String slug) throws IOException {
-        WaterCorn waterCorn = waterCornService. getEditWaterCorn(slug);
+        WaterCorn waterCorn = waterCornService.getEditWaterCorn(slug);
 
         APIResponse<WaterCorn> apiResponse = new APIResponse();
         apiResponse.setCode(200);
@@ -107,8 +104,6 @@ public class WatercornController {
     }
 
     /**
-
-     *
      * @param
      * @return
      * @throws IOException

@@ -22,7 +22,7 @@ import static com.cinemas.exception.ErrorCode.*;
 
 @RestController
 @RequestMapping("/api/admin/v1/celebrity")
-@Tag(name = "Celebrity Controller")
+@Tag(name = "Dashboard Celebrity Controller")
 public class CelebrityController {
     @Autowired
     CelebrityService celebrityService;

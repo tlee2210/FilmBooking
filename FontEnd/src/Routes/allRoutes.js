@@ -45,6 +45,10 @@ const Movie = lazy(() => import("../pages/dashboard/Movie/index"));
 const MovieEdit = lazy(() => import("../pages/dashboard/Movie/edit"));
 const MovieCreate = lazy(() => import("../pages/dashboard/Movie/create"));
 
+const WaterCornCreate = lazy(() =>
+  import("../pages/dashboard/WaterCorn/create")
+);
+
 //Cinema Coner
 const Actor = lazy(() => import("../pages/Page/CinemaCorner/Actor"));
 const Director = lazy(() => import("../pages/Page/CinemaCorner/Director"));
@@ -86,6 +90,9 @@ const authProtectedRoutes = [
   { path: "/dashboard/room/create", component: <RoomCreate /> },
   { path: "/dashboard/room", component: <Room /> },
   { path: "/dashboard/room/:id/edit", component: <RoomEdit /> },
+
+  { path: "/dashboard/water-corn/create", component: <WaterCornCreate /> },
+
   // {
   //   path: "/",
   //   exact: true,

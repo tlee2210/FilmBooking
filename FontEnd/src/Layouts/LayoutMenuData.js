@@ -124,6 +124,12 @@ const Navdata = () => {
           link: "/dashboard/room",
           parentId: "cinemas",
         },
+        {
+          id: "watercorn",
+          label: "Water And Corn",
+          link: "/dashboard/water-corn",
+          parentId: "cinemas",
+        },
       ],
     },
   ];

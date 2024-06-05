@@ -2,14 +2,14 @@ package com.cinemas.controller.home;
 
 import com.cinemas.dto.request.ChangePasswordRequest;
 import com.cinemas.dto.request.ProfileRequest;
-import com.cinemas.dto.request.UserRequest;
 import com.cinemas.dto.response.APIResponse;
 import com.cinemas.dto.response.UserResponse;
-import com.cinemas.entities.ChangePassword;
 import com.cinemas.exception.AppException;
 import com.cinemas.service.home.HomeUserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
@@ -23,6 +23,11 @@ public class HomeUserController {
 
     @GetMapping(value = "/profile")
     public APIResponse<UserResponse> getUserFromToken(@RequestHeader("Authorization") String jwt) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        System.out.println("==========================");
+        System.out.println(userDetails);
+        System.out.println("==========================");
+
         APIResponse<UserResponse> apiResponse = new APIResponse();
 
         apiResponse.setCode(200);
@@ -33,6 +38,7 @@ public class HomeUserController {
 
     @PutMapping(value = "/update")
     public APIResponse<String> updateUser(@RequestHeader("Authorization") String jwt, @RequestBody ProfileRequest profileRequest) {
+
         int id = userService.findUserByJwt(jwt).getId();
         boolean checkUpdate = userService.updateUser(profileRequest, id);
         if (checkUpdate) {

@@ -18,7 +18,6 @@ import java.time.LocalDate;
 @Builder
 public class WaterCornRequest {
     private int id;
-
     @NotEmpty(message = "VALIDATION")
     private String name;
     private Long price;

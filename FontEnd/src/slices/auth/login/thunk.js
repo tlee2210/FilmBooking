@@ -25,7 +25,7 @@ export const loginUser = (user, history) => async (dispatch) => {
       })
       .catch((err) => {
         // console.error(err);
-        dispatch(Error(err.response.data?.message));
+        dispatch(Error(err.response?.data?.message));
       });
   });
 };

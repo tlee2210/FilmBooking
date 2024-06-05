@@ -17,11 +17,20 @@ import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 
 @RestController
 @RequestMapping("/api/admin/v1/movie-genre")
-@Tag(name = "Movie Genre Controller")
+@Tag(name = "Dashboard Movie Genre Controller")
 public class MovieGenreController {
     @Autowired
     private MovieGenreService movieGenreService;
 
+    /**
+     * get all or search list Movie Genres
+     *
+     * @param search
+     * @param pageNo
+     * @param pageSize
+     * @param sort
+     * @return
+     */
     @GetMapping
     public APIResponse<Page<MovieGenre>> getAllMovieGenres(
             @RequestParam(required = false) String search,
@@ -38,6 +47,12 @@ public class MovieGenreController {
         return apiResponse;
     }
 
+    /**
+     * create new Movie Genres
+     *
+     * @param movieGenreRequest
+     * @return
+     */
     @PostMapping(value = "/create")
     public APIResponse<String> createMovieGenre(@RequestBody MovieGenreRequest movieGenreRequest) {
         boolean checkCreate = movieGenreService.addMovieGenre(movieGenreRequest);
@@ -52,8 +67,14 @@ public class MovieGenreController {
         throw new AppException(CREATE_FAILED);
     }
 
+    /**
+     * get edit Movie Genres by slug
+     *
+     * @param slug
+     * @return
+     */
     @GetMapping("/{slug}/edit")
-    public APIResponse<MovieGenre> getMovieGenreById(@PathVariable String slug) {
+    public APIResponse<MovieGenre> getMovieGenreBySlug(@PathVariable String slug) {
         APIResponse<MovieGenre> apiResponse = new APIResponse();
 
         apiResponse.setCode(200);
@@ -62,6 +83,12 @@ public class MovieGenreController {
         return apiResponse;
     }
 
+    /**
+     * update Movie Genres
+     *
+     * @param movieGenreRequest
+     * @return
+     */
     @PutMapping(value = "/update")
     public APIResponse<String> updateMovieGenre(@ModelAttribute MovieGenreRequest movieGenreRequest) {
         boolean checkUpdate = movieGenreService.updateMovieGenre(movieGenreRequest);
@@ -76,6 +103,12 @@ public class MovieGenreController {
         throw new AppException(UPDATE_FAILED);
     }
 
+    /**
+     * delete Movie Genres by slug
+     *
+     * @param slug
+     * @return
+     */
     @DeleteMapping("/{slug}/delete")
     public APIResponse<Integer> deleteMovieGenre(@PathVariable String slug) {
 

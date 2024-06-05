@@ -23,7 +23,7 @@ import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 
 @RestController
 @RequestMapping("/api/admin/v1/cinema")
-@Tag(name = "Cinema Controller")
+@Tag(name = "Dashboard Cinema Controller")
 public class CinemaController {
 
     @Autowired

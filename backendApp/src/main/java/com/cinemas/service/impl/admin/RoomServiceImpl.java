@@ -36,6 +36,7 @@ public class RoomServiceImpl implements RoomService {
     @Autowired
     RoomRepository roomRepository;
 
+
     @Override
     public SelectOptionAndModelReponse<Page<RoomTableReponse>> getAllRoom(SearchRoomRequest roomRequest) {
         List<Room> roomList = roomRepository.searchByNameAndAndCinemaId(roomRequest.getName(), roomRequest.getCinemaId());

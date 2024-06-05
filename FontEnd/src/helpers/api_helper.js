@@ -21,12 +21,14 @@ axios.interceptors.response.use(
   function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     let message;
-    switch (error.status) {
+    switch (error.response?.status) {
       case 500:
         message = "Internal Server Error";
+        sessionStorage.removeItem("authUser");
         break;
       case 401:
         message = "Invalid credentials";
+        sessionStorage.removeItem("authUser");
         break;
       case 404:
         message = "Sorry! the data you are looking for could not be found";
@@ -34,10 +36,12 @@ axios.interceptors.response.use(
       default:
         // message = error.message || error;
         message = error;
+        if (message.message === "Network Error") {
+          sessionStorage.removeItem("authUser");
+        }
         break;
     }
-    return Promise.reject(message);
-    // return Promise.reject(error);
+    return Promise.reject(error);
   }
 );
 /**

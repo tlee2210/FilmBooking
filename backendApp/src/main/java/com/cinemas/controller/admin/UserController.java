@@ -1,4 +1,4 @@
-package com.cinemas.controller;
+package com.cinemas.controller.admin;
 
 import com.cinemas.dto.request.MovieGenreRequest;
 import com.cinemas.dto.request.SearchMovie;
@@ -25,7 +25,7 @@ import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 
 @RequestMapping("/api/admin/v1/user")
 @RestController
-@Tag(name = "User Controller")
+@Tag(name = "Dashboard User Controller")
 public class UserController {
     @Autowired
     private UserService userService;

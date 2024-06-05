@@ -59,14 +59,15 @@ FileStorageServiceImpl fileStorageServiceImpl;
 
     @Override
     public boolean addWaterCorn(WaterCornRequest watercorn) throws IOException {
-        WaterCorn addWaterCorn = new WaterCorn();
         if (waterCornRepository.findByName(watercorn.getName()) != null) {
             throw new AppException(NAME_EXISTED);
         }
-
+        WaterCorn addWaterCorn = new WaterCorn();
 
         ObjectUtils.copyFields(watercorn, addWaterCorn);
-        addWaterCorn.setSlug(watercorn.getName().toLowerCase().replaceAll("\\s+", "-"));
+
+        addWaterCorn.setSlug(watercorn.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
+
         addWaterCorn.setImage(fileStorageServiceImpl.uploadFile(watercorn.getFile(), "waterCorn"));
         waterCornRepository.save(addWaterCorn);
 

@@ -377,9 +377,11 @@ const CreateRoom = (props) => {
                       </div>
                     </Col>
                   </Row>
-                  <Button type="submit" color="primary">
-                    Submit
-                  </Button>
+                  <div className="mb-3">
+                    <button type="submit" className="btn btn-success w-sm">
+                      Submit
+                    </button>
+                  </div>
                 </Form>
               </CardBody>
             </Card>

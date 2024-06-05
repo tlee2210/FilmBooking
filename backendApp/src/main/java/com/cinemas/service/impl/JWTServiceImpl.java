@@ -1,5 +1,7 @@
 package com.cinemas.service.impl;
 
+import com.cinemas.exception.AppException;
+import com.cinemas.exception.ErrorCode;
 import com.cinemas.service.JWTService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -8,6 +10,8 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.cglib.core.internal.Function;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import static com.cinemas.exception.ErrorCode.*;
 
 import java.security.*;
 import java.util.Date;
@@ -62,12 +66,17 @@ public class JWTServiceImpl implements JWTService {
         return claimsTFunction.apply(claims);
     }
 
-    private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getPublicKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+    private Claims extractAllClaims(String token) throws AppException{
+        try {
+
+            return Jwts.parserBuilder()
+                    .setSigningKey(getPublicKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
     }
 
     private PrivateKey getPrivateKey() {
