@@ -168,8 +168,8 @@ const Navbar = () => {
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className="fs-16" href="#Tickets">
-                  Tickets
+                <NavLink className="fs-16" href="/rap-phim">
+                  Rạp Phim
                 </NavLink>
               </li>
             </Scrollspy>
