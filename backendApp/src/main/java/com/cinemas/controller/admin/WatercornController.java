@@ -55,7 +55,7 @@ public class WatercornController {
         if (checkCreate) {
             APIResponse<String> apiResponse = new APIResponse();
             apiResponse.setCode(200);
-            apiResponse.setMessage("Water-Corn created successfully");
+            apiResponse.setMessage("Water Corn created successfully");
 
             return apiResponse;
         }

@@ -30,10 +30,10 @@ import static com.cinemas.exception.ErrorCode.NOT_FOUND;
 
 @Service
 public class WaterCornServiceImpl implements WaterCornService {
-@Autowired
-WaterCornRepository waterCornRepository;
-@Autowired
-FileStorageServiceImpl fileStorageServiceImpl;
+    @Autowired
+    WaterCornRepository waterCornRepository;
+    @Autowired
+    FileStorageServiceImpl fileStorageServiceImpl;
 
     @Override
     public Page<WaterCorn> getAllWaterCorn(PaginationHelper PaginationHelper) {
@@ -75,10 +75,9 @@ FileStorageServiceImpl fileStorageServiceImpl;
     }
 
 
-
     @Override
     public Integer deleteWaterCorn(String slug) throws IOException {
-          WaterCorn watercorn = waterCornRepository.findBySlug(slug);
+        WaterCorn watercorn = waterCornRepository.findBySlug(slug);
 
         if (watercorn == null) throw new AppException(NOT_FOUND);
 
@@ -102,7 +101,7 @@ FileStorageServiceImpl fileStorageServiceImpl;
 
     @Override
     public boolean updateWaterCorn(WaterCornRequest watercorn) throws IOException {
-        WaterCorn wat= waterCornRepository
+        WaterCorn wat = waterCornRepository
                 .findById(watercorn.getId())
                 .orElseThrow(() -> new AppException(NOT_FOUND));
 
@@ -110,14 +109,13 @@ FileStorageServiceImpl fileStorageServiceImpl;
             throw new AppException(NAME_EXISTED);
         }
 
-//        if (watercorn.getFile() != null) {
-//            fileStorageServiceImpl.deleteFile(wat.getImage());
-//            wat.setImage(fileStorageServiceImpl.uploadFile(watercorn.getFile(), String.valueOf(watercorn.getName())));
-//        }
+        if (watercorn.getFile() != null) {
+            fileStorageServiceImpl.deleteFile(wat.getImage());
+            wat.setImage(fileStorageServiceImpl.uploadFile(watercorn.getFile(), "waterCorn"));
+        }
 
         ObjectUtils.copyFields(watercorn, wat);
-        String slug = watercorn.getName().toLowerCase().replaceAll("\\s+", "-");
-        wat.setSlug(slug);
+        wat.setSlug(watercorn.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
 
         waterCornRepository.save(wat);
 

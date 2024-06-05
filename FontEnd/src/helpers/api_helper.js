@@ -24,7 +24,7 @@ axios.interceptors.response.use(
     switch (error.response?.status) {
       case 500:
         message = "Internal Server Error";
-        sessionStorage.removeItem("authUser");
+        // sessionStorage.removeItem("authUser");
         break;
       case 401:
         message = "Invalid credentials";

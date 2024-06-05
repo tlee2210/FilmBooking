@@ -21,7 +21,10 @@ import { clearNotification } from "../../../slices/message/reducer";
 import { Link, useNavigate } from "react-router-dom";
 import { createSelector } from "reselect";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
-import { CreateWaterCorn } from "../../../slices/WaterCorn/thunk";
+import {
+  UpdateWaterCorn,
+  GetEditWaterCorn,
+} from "../../../slices/WaterCorn/thunk";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 //formik
@@ -35,13 +38,18 @@ const getBase64 = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
-const WaterCornCreate = (props) => {
-  document.title = "Create Water Corn";
+const WaterCornEdit = (props) => {
+  document.title = "Edit Water Corn";
+  const slug = props.router.params.slug;
   const history = useNavigate();
   const dispatch = useDispatch();
 
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
+
+  useEffect(() => {
+    dispatch(GetEditWaterCorn(slug, props.router.navigate));
+  }, []);
 
   const selectWaterCornCreateState = (state) => state;
   const WaterCornCreatepageData = createSelector(
@@ -49,17 +57,29 @@ const WaterCornCreate = (props) => {
     (state) => ({
       error: state.Message.error,
       messageError: state.Message.messageError,
+      item: state.WaterCorn.item,
     })
   );
-  const { error, messageError } = useSelector(WaterCornCreatepageData);
+  const { error, messageError, item } = useSelector(WaterCornCreatepageData);
 
+  function generateRandomUid() {
+    return Math.random().toString(36).substr(2, 9);
+  }
+  const uid = generateRandomUid();
+
+  const image = [
+    {
+      uid: "-1",
+      url: item.image,
+    },
+  ];
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
-      name: "",
-      price: "",
-      Description: "",
-      file: [],
+      name: item.name || "",
+      price: item.price || "",
+      Description: item.description || "",
+      file: image || [],
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Please Enter a name"),
@@ -70,7 +90,9 @@ const WaterCornCreate = (props) => {
           Yup.mixed().test(
             "fileType",
             "Unsupported File Format",
-            (value) => value && value.type.startsWith("image/")
+            (value) =>
+              !value.originFileObj ||
+              (value.originFileObj && value.type.startsWith("image/"))
           )
         )
         .min(1, "Please upload at least one Image"),
@@ -78,11 +100,15 @@ const WaterCornCreate = (props) => {
     onSubmit: (values) => {
       console.log(values);
       const formData = new FormData();
+      formData.append("id", item.id);
       formData.append("name", values.name);
       formData.append("price", values.price);
       formData.append("description", values.Description);
-      formData.append("file", values.file[0].originFileObj);
-      dispatch(CreateWaterCorn(formData, props.router.navigate));
+      if (values.file[0].originFileObj) {
+        formData.append("file", values.file[0].originFileObj);
+      }
+
+      dispatch(UpdateWaterCorn(formData, props.router.navigate));
 
       // CreateWaterCorn
     },
@@ -104,8 +130,9 @@ const WaterCornCreate = (props) => {
     setPreviewImage(file.url || file.preview);
     setPreviewOpen(true);
   };
-  const handleChange = ({ fileList: newFileList }) =>
+  const handleChange = ({ fileList: newFileList }) => {
     validation.setFieldValue("file", newFileList);
+  };
 
   const uploadButton = (
     <button
@@ -291,4 +318,4 @@ const WaterCornCreate = (props) => {
     </div>
   );
 };
-export default withRouter(WaterCornCreate);
+export default withRouter(WaterCornEdit);

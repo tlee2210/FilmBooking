@@ -48,6 +48,7 @@ const MovieCreate = lazy(() => import("../pages/dashboard/Movie/create"));
 const WaterCornCreate = lazy(() =>
   import("../pages/dashboard/WaterCorn/create")
 );
+const WaterCornEdit = lazy(() => import("../pages/dashboard/WaterCorn/edit"));
 
 //Cinema Coner
 const Actor = lazy(() => import("../pages/Page/CinemaCorner/Actor"));
@@ -69,8 +70,6 @@ import BinhLuanPhimDetails from "../pages/Page/BinhLuanPhim/details";
 
 //Rạp Phim
 import RapPhim from "../pages/Page/RapPhim/Index";
-
-
 
 const authProtectedRoutes = [
   //User Profile
@@ -97,6 +96,7 @@ const authProtectedRoutes = [
   { path: "/dashboard/room/:id/edit", component: <RoomEdit /> },
 
   { path: "/dashboard/water-corn/create", component: <WaterCornCreate /> },
+  { path: "/dashboard/water-corn/:slug/edit", component: <WaterCornEdit /> },
 
   // {
   //   path: "/",
@@ -139,11 +139,7 @@ const BinhLuanPhimRoutes = [
   },
 ];
 
-
-const RapPhimRoutes = [
-  { path: "/rap-phim", component: <RapPhim /> }
-];
-
+const RapPhimRoutes = [{ path: "/rap-phim", component: <RapPhim /> }];
 
 export {
   authProtectedRoutes,
@@ -152,5 +148,5 @@ export {
   CinemaCornerRoutes,
   TicketBookingRoutes,
   BinhLuanPhimRoutes,
-  RapPhimRoutes
+  RapPhimRoutes,
 };
