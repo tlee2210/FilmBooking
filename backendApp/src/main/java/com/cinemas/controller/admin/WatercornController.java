@@ -2,6 +2,7 @@ package com.cinemas.controller.admin;
 
 
 import com.cinemas.dto.request.PaginationHelper;
+import com.cinemas.dto.request.SearchRequest;
 import com.cinemas.dto.request.WaterCornRequest;
 import com.cinemas.dto.response.APIResponse;
 import com.cinemas.dto.response.SelectOptionAndModelReponse;
@@ -13,6 +14,7 @@ import com.cinemas.service.admin.WaterCornService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -28,14 +30,21 @@ public class WatercornController {
     WaterCornService waterCornService;
 
     /**
-     * all list Celebrity
      *
-     * @param PaginationHelper
+     * @param search
+     * @param pageNo
+     * @param pageSize
+     * @param sort
      * @return
      */
-    @PostMapping
-    public APIResponse<Page<WaterCorn>> getAllWaterCorn(@RequestBody(required = false) PaginationHelper PaginationHelper) {
-        Page<WaterCorn> watercornList = waterCornService.getAllWaterCorn(PaginationHelper);
+    @GetMapping
+    public APIResponse<Page<WaterCorn>> getAllWaterCorn( @RequestParam(required = false) String search,
+                                                         @RequestParam(required = false, defaultValue = "1") Integer pageNo,
+                                                         @RequestParam(required = false, defaultValue = "15") Integer pageSize,
+                                                         @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort) {
+        SearchRequest searchRequest = new SearchRequest(search, pageNo - 1, pageSize, sort);
+
+        Page<WaterCorn> watercornList = waterCornService.getAllWaterCorn(searchRequest);
         APIResponse<Page<WaterCorn>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(watercornList);

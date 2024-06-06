@@ -54,10 +54,12 @@ const MovieEdit = (props) => {
 
   useEffect(() => {
     dispatch(GetEditMovie(slug, props.router.navigate));
-  }, []);
+  }, [dispatch, slug, props.router.navigate]);
 
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
+  const [fileLandscape, setFileLandscape] = useState([]);
+  const [filePortrait, setFilePortrait] = useState([]);
 
   const selectMovieCreateState = (state) => state;
 
@@ -85,6 +87,20 @@ const MovieEdit = (props) => {
     selectcountry,
     item,
   } = useSelector(movieCreatepageData);
+
+  useEffect(() => {
+    if (item.imagePortrait) {
+      setFilePortrait([{ uid: item.imagePortrait, url: item.imagePortrait }]);
+    }
+  }, [item.imagePortrait]);
+
+  useEffect(() => {
+    if (item.imageLandscape) {
+      setFileLandscape([
+        { uid: item.imageLandscape, url: item.imageLandscape },
+      ]);
+    }
+  }, [item.imageLandscape]);
 
   useEffect(() => {
     if (error) {
@@ -166,12 +182,6 @@ const MovieEdit = (props) => {
     const newPrices = validation.values.prices.filter((_, i) => i !== index);
     validation.setFieldValue("prices", newPrices);
   };
-  const imageLandscape = [
-    {
-      uid: item.imageLandscape,
-      url: item.imageLandscape,
-    },
-  ];
 
   const validation = useFormik({
     enableReinitialize: true,
@@ -195,21 +205,11 @@ const MovieEdit = (props) => {
           date: new Date(item.date),
           price: item.price,
         })) || [],
-      fileLandscape: imageLandscape
-        ? [
-            {
-              uid: item.imageLandscape,
-              url: item.imageLandscape,
-            },
-          ]
+      fileLandscape: item.imageLandscape
+        ? [{ uid: item.imageLandscape, url: item.imageLandscape }]
         : [],
       filePortrait: item.imagePortrait
-        ? [
-            {
-              uid: item.imagePortrait,
-              url: item.imagePortrait,
-            },
-          ]
+        ? [{ uid: item.imagePortrait, url: item.imagePortrait }]
         : [],
       Category:
         item.categories?.map((cat) => {
@@ -349,10 +349,6 @@ const MovieEdit = (props) => {
     },
   });
 
-  // useEffect(() => {
-  //   console.log("Current validation errors:", validation.errors);
-  // }, [validation.errors]);
-
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -361,14 +357,12 @@ const MovieEdit = (props) => {
     setPreviewOpen(true);
   };
   const handleChangePortrait = ({ fileList: newFileList }) => {
-    console.log(newFileList);
+    setFilePortrait(newFileList);
     validation.setFieldValue("filePortrait", newFileList);
   };
 
   const handleChangeLandscape = ({ fileList: newFileList }) => {
-    console.log(newFileList);
-
-    // validation.setFieldValue("fileLandscape", []);
+    setFileLandscape(newFileList);
     validation.setFieldValue("fileLandscape", newFileList);
   };
 
@@ -938,32 +932,6 @@ const MovieEdit = (props) => {
                       onBlur={() =>
                         validation.setFieldTouched("Description", true)
                       }
-                      config={{
-                        toolbar: [
-                          "heading",
-                          "|",
-                          "bold",
-                          "italic",
-                          "link",
-                          "bulletedList",
-                          "numberedList",
-                          "blockQuote",
-                          "|",
-                          "undo",
-                          "redo",
-                          "alignment",
-                          "fontSize",
-                          "fontFamily",
-                          "fontColor",
-                          "highlight",
-                          "imageUpload",
-                          "mediaEmbed",
-                          "insertTable",
-                          "tableColumn",
-                          "tableRow",
-                          "mergeTableCells",
-                        ],
-                      }}
                     />
                     {validation.touched.Description &&
                     validation.errors.Description ? (
@@ -989,7 +957,7 @@ const MovieEdit = (props) => {
                         <Upload
                           beforeUpload={() => false}
                           listType="picture-card"
-                          fileList={validation.values.fileLandscape}
+                          fileList={fileLandscape || []}
                           onPreview={handlePreview}
                           onChange={handleChangeLandscape}
                         >
@@ -1032,7 +1000,7 @@ const MovieEdit = (props) => {
                         <Upload
                           beforeUpload={() => false}
                           listType="picture-card"
-                          fileList={validation.values.filePortrait}
+                          fileList={filePortrait || []}
                           onPreview={handlePreview}
                           onChange={handleChangePortrait}
                         >

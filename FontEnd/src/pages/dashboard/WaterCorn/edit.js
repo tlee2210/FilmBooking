@@ -46,10 +46,11 @@ const WaterCornEdit = (props) => {
 
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
+  const [file, setFile] = useState([]);
 
   useEffect(() => {
     dispatch(GetEditWaterCorn(slug, props.router.navigate));
-  }, []);
+  }, [slug, props.router.nav, dispatch]);
 
   const selectWaterCornCreateState = (state) => state;
   const WaterCornCreatepageData = createSelector(
@@ -62,24 +63,26 @@ const WaterCornEdit = (props) => {
   );
   const { error, messageError, item } = useSelector(WaterCornCreatepageData);
 
-  function generateRandomUid() {
-    return Math.random().toString(36).substr(2, 9);
-  }
-  const uid = generateRandomUid();
+  useEffect(() => {
+    if (item.image) {
+      setFile([{ uid: item.image, url: item.image }]);
+    }
+  }, [item.image]);
 
-  const image = [
-    {
-      uid: "-1",
-      url: item.image,
-    },
-  ];
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
       name: item.name || "",
       price: item.price || "",
       Description: item.description || "",
-      file: image || [],
+      file: item.image
+        ? [
+            {
+              uid: item.image,
+              url: item.image,
+            },
+          ]
+        : [],
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Please Enter a name"),
@@ -131,6 +134,7 @@ const WaterCornEdit = (props) => {
     setPreviewOpen(true);
   };
   const handleChange = ({ fileList: newFileList }) => {
+    setFile(newFileList);
     validation.setFieldValue("file", newFileList);
   };
 
@@ -243,7 +247,7 @@ const WaterCornEdit = (props) => {
                           <Upload
                             beforeUpload={() => false}
                             listType="picture-card"
-                            fileList={validation.values.file}
+                            fileList={file}
                             onPreview={handlePreview}
                             onChange={handleChange}
                           >

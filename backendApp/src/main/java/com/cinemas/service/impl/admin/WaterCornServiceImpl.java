@@ -3,6 +3,7 @@ package com.cinemas.service.impl.admin;
 import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.CelebrityRequest;
 import com.cinemas.dto.request.PaginationHelper;
+import com.cinemas.dto.request.SearchRequest;
 import com.cinemas.dto.request.WaterCornRequest;
 import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
@@ -36,8 +37,9 @@ public class WaterCornServiceImpl implements WaterCornService {
     FileStorageServiceImpl fileStorageServiceImpl;
 
     @Override
-    public Page<WaterCorn> getAllWaterCorn(PaginationHelper PaginationHelper) {
-        List<WaterCorn> watercornList = waterCornRepository.findAll();
+    public Page<WaterCorn> getAllWaterCorn(SearchRequest PaginationHelper) {
+
+        List<WaterCorn> watercornList = waterCornRepository.searchAllByName(PaginationHelper.getSearchname());
 
         watercornList.forEach(waterCorn -> {
             String imageUrl = fileStorageServiceImpl.getUrlFromPublicId(waterCorn.getImage());

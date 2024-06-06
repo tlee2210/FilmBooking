@@ -2,6 +2,7 @@ package com.cinemas.service.admin;
 
 import com.cinemas.dto.request.PaginationHelper;
 
+import com.cinemas.dto.request.SearchRequest;
 import com.cinemas.dto.request.WaterCornRequest;
 import com.cinemas.entities.WaterCorn;
 import org.springframework.data.domain.Page;
@@ -9,7 +10,7 @@ import org.springframework.data.domain.Page;
 import java.io.IOException;
 
 public interface WaterCornService {
-    Page<WaterCorn> getAllWaterCorn(PaginationHelper PaginationHelper);
+    Page<WaterCorn> getAllWaterCorn(SearchRequest PaginationHelper);
 
     boolean addWaterCorn(WaterCornRequest watercorn) throws IOException;
 
