@@ -118,35 +118,46 @@ const publicRoutes = [
   { path: "/auth-500", component: <Error500 /> },
 ];
 
-const homeRoutes = [{ path: "/", component: <Home /> }];
-
-const CinemaCornerRoutes = [
+const homeRoutes = 
+[
+  { path: "/", component: <Home /> },
   { path: "/dien-vien", component: <Actor /> },
   { path: "/dao-dien", component: <Director /> },
   { path: "/dien-vien/dien-vien-details", component: <ActorInfor /> },
   { path: "/dao-dien/dao-dien-details", component: <DirectorInfor /> },
-];
-
-const TicketBookingRoutes = [
   { path: "/ticket-booking/phim", component: <TicketBooking /> },
-];
-
-const BinhLuanPhimRoutes = [
   { path: "/binh-luan-phim", component: <BinhLuanPhim /> },
   {
     path: "/binh-luan-phim/binh-luan-phim-details",
     component: <BinhLuanPhimDetails />,
   },
+  { path: "/rap-phim", component: <RapPhim /> }
 ];
 
-const RapPhimRoutes = [{ path: "/rap-phim", component: <RapPhim /> }];
+// const CinemaCornerRoutes = [
+//   { path: "/dien-vien", component: <Actor /> },
+//   { path: "/dao-dien", component: <Director /> },
+//   { path: "/dien-vien/dien-vien-details", component: <ActorInfor /> },
+//   { path: "/dao-dien/dao-dien-details", component: <DirectorInfor /> },
+ 
+// ];
+
+// const TicketBookingRoutes = [
+//   { path: "/ticket-booking/phim", component: <TicketBooking /> },
+// ];
+
+// const BinhLuanPhimRoutes = [
+//   { path: "/binh-luan-phim", component: <BinhLuanPhim /> },
+//   {
+//     path: "/binh-luan-phim/binh-luan-phim-details",
+//     component: <BinhLuanPhimDetails />,
+//   },
+// ];
+
+// const RapPhimRoutes = [{ path: "/rap-phim", component: <RapPhim /> }];
 
 export {
   authProtectedRoutes,
   publicRoutes,
   homeRoutes,
-  CinemaCornerRoutes,
-  TicketBookingRoutes,
-  BinhLuanPhimRoutes,
-  RapPhimRoutes,
 };

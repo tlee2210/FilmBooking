@@ -63,46 +63,6 @@ const Index = () => {
             ))}
           </Route>
 
-          {/* CinemaCorner */}
-          {CinemaCornerRoutes.map((route, idx) => (
-            <Route
-              path={route.path}
-              element={<LayoutHome>{route.component}</LayoutHome>}
-              key={idx}
-              exact={true}
-            />
-          ))}
-          {/* Ticket Booking */}
-          {TicketBookingRoutes.map((route, idx) => (
-            <Route
-              path={route.path}
-              element={<LayoutHome>{route.component}</LayoutHome>}
-              key={idx}
-              exact={true}
-            />
-          ))}
-
-          {/* Binh luận phim */}
-          {BinhLuanPhimRoutes.map((route, idx) => (
-            <Route
-              path={route.path}
-              element={<LayoutHome>{route.component}</LayoutHome>}
-              key={idx}
-              exact={true}
-            />
-          ))}
-
-          {/* Rạp Phim */}
-          {RapPhimRoutes.map((route, idx) => (
-            <Route
-              path={route.path}
-              element={<LayoutHome>{route.component}</LayoutHome>}
-              key={idx}
-              exact={true}
-            />
-          ))}
-
-
           <Route>
             {authProtectedRoutes.map((route, idx) => (
               <Route
