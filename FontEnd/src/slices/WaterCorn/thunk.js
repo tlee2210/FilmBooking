@@ -2,25 +2,24 @@ import { fetchSuccess, removeItem, setItem } from "./reducer";
 import { Success, Error } from "../message/reducer";
 import axios from "axios";
 
-// export const getRoomMovie =
-//   (name, cinema, pageNo, pageSize) => async (dispatch) => {
-//     await axios
-//       .get(`http://localhost:8081/api/admin/v1/room`, {
-//         params: { name, cinema, pageNo, pageSize },
-//       })
-//       .then((response) => {
-//         console.log(response);
-//         dispatch(
-//           fetchSuccess({
-//             data: response.data?.result,
-//           })
-//         );
-//       })
-//       .catch((err) => {
-//         console.error(err);
-//         // dispatch(Error(err.response?.data?.message));
-//       });
-//   };
+export const getWaterCorn = (search, pageNo, pageSize) => async (dispatch) => {
+  await axios
+    .get(`http://localhost:8081/api/admin/v1/watercorn`, {
+      params: { search, pageNo, pageSize },
+    })
+    .then((response) => {
+      // console.log(response);
+      dispatch(
+        fetchSuccess({
+          data: response.data?.result,
+        })
+      );
+    })
+    .catch((err) => {
+      console.error(err);
+      dispatch(Error(err.response?.data?.message));
+    });
+};
 
 export const CreateWaterCorn = (formData, history) => async (dispatch) => {
   await axios
@@ -30,7 +29,7 @@ export const CreateWaterCorn = (formData, history) => async (dispatch) => {
       },
     })
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(Success(response.data?.message));
       history("/dashboard/water-corn");
     })
@@ -40,25 +39,25 @@ export const CreateWaterCorn = (formData, history) => async (dispatch) => {
     });
 };
 
-// export const deleteRoom = (id) => async (dispatch) => {
-//   await axios
-//     .delete(`http://localhost:8081/api/admin/v1/room/${id}/delete`)
-//     .then((response) => {
-//       // console.log(response);
-//       dispatch(Success(response.data?.message));
-//       dispatch(getRoomMovie({}));
-//     })
-//     .catch((err) => {
-//       console.error(err);
-//       dispatch(Error(err.response?.data?.message));
-//     });
-// };
+export const deleteWaterCorn = (slug) => async (dispatch) => {
+  await axios
+    .delete(`http://localhost:8081/api/admin/v1/watercorn/delete/${slug}`)
+    .then((response) => {
+      // console.log(response);
+      dispatch(Success(response.data?.message));
+      dispatch(getWaterCorn({}));
+    })
+    .catch((err) => {
+      console.error(err);
+      dispatch(Error(err.response?.data?.message));
+    });
+};
 
 export const GetEditWaterCorn = (slug, history) => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/admin/v1/watercorn/${slug}/edit`)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(
         setItem({
           data: response.data?.result,

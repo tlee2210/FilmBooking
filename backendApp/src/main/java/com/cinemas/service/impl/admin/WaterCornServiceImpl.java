@@ -39,7 +39,7 @@ public class WaterCornServiceImpl implements WaterCornService {
     @Override
     public Page<WaterCorn> getAllWaterCorn(SearchRequest PaginationHelper) {
 
-        List<WaterCorn> watercornList = waterCornRepository.searchAllByName(PaginationHelper.getSearchname());
+        List<WaterCorn> watercornList = waterCornRepository.searchByName(PaginationHelper.getSearchname());
 
         watercornList.forEach(waterCorn -> {
             String imageUrl = fileStorageServiceImpl.getUrlFromPublicId(waterCorn.getImage());

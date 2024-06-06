@@ -49,6 +49,7 @@ const WaterCornCreate = lazy(() =>
   import("../pages/dashboard/WaterCorn/create")
 );
 const WaterCornEdit = lazy(() => import("../pages/dashboard/WaterCorn/edit"));
+const WaterCorn = lazy(() => import("../pages/dashboard/WaterCorn/index"));
 
 //Cinema Coner
 const Actor = lazy(() => import("../pages/Page/CinemaCorner/Actor"));
@@ -97,7 +98,7 @@ const authProtectedRoutes = [
 
   { path: "/dashboard/water-corn/create", component: <WaterCornCreate /> },
   { path: "/dashboard/water-corn/:slug/edit", component: <WaterCornEdit /> },
-
+  { path: "/dashboard/water-corn", component: <WaterCorn /> },
   // {
   //   path: "/",
   //   exact: true,
@@ -118,8 +119,7 @@ const publicRoutes = [
   { path: "/auth-500", component: <Error500 /> },
 ];
 
-const homeRoutes = 
-[
+const homeRoutes = [
   { path: "/", component: <Home /> },
   { path: "/dien-vien", component: <Actor /> },
   { path: "/dao-dien", component: <Director /> },
@@ -131,7 +131,7 @@ const homeRoutes =
     path: "/binh-luan-phim/binh-luan-phim-details",
     component: <BinhLuanPhimDetails />,
   },
-  { path: "/rap-phim", component: <RapPhim /> }
+  { path: "/rap-phim", component: <RapPhim /> },
 ];
 
 // const CinemaCornerRoutes = [
@@ -139,7 +139,7 @@ const homeRoutes =
 //   { path: "/dao-dien", component: <Director /> },
 //   { path: "/dien-vien/dien-vien-details", component: <ActorInfor /> },
 //   { path: "/dao-dien/dao-dien-details", component: <DirectorInfor /> },
- 
+
 // ];
 
 // const TicketBookingRoutes = [
@@ -156,8 +156,4 @@ const homeRoutes =
 
 // const RapPhimRoutes = [{ path: "/rap-phim", component: <RapPhim /> }];
 
-export {
-  authProtectedRoutes,
-  publicRoutes,
-  homeRoutes,
-};
+export { authProtectedRoutes, publicRoutes, homeRoutes };

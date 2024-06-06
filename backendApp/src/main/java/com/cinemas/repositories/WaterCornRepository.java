@@ -15,6 +15,6 @@ public interface WaterCornRepository extends JpaRepository<WaterCorn, Integer> {
 
     @Query("SELECT w FROM WaterCorn w WHERE w.slug = ?1")
     WaterCorn findBySlug(String slug);
-    @Query("SELECT w FROM WaterCorn w WHERE (:name is not null or w.name like %:name%)")
-    List<WaterCorn>searchAllByName(String name);
+    @Query("SELECT w FROM WaterCorn w WHERE (:name is null or w.name like %:name%)")
+    List<WaterCorn>searchByName(String name);
 }

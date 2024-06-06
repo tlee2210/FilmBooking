@@ -12,7 +12,7 @@ import {
   Input,
 } from "reactstrap";
 import TableContainer from "../../../Components/Common/TableContainerReactTable";
-import { message } from "antd";
+import { message, Image } from "antd";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import withRouter from "../../../Components/Common/withRouter";
@@ -22,12 +22,13 @@ import { clearNotification } from "../../../slices/message/reducer";
 import { useSelector, useDispatch } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import { createSelector } from "reselect";
+import { getWaterCorn, deleteWaterCorn } from "../../../slices/WaterCorn/thunk";
 
 const WaterCorn = (props) => {
   const dispatch = useDispatch();
   const [modal_detele, setmodal_detele] = useState(false);
   const [modal_togFirst, setmodal_togFirst] = useState(false);
-  const [id, setId] = useState("");
+  const [slug, setSlug] = useState("");
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchname, setSearch] = useState(
@@ -46,7 +47,7 @@ const WaterCorn = (props) => {
     error: state.Message.error,
     messageSuccess: state.Message.messageSuccess,
     messageError: state.Message.messageError,
-    data: state.RoomMovie.data,
+    data: state.WaterCorn.data,
   }));
   // Inside your component
   const { error, success, messageSuccess, messageError, data } =
@@ -77,7 +78,7 @@ const WaterCorn = (props) => {
 
     setSearchParams(params);
 
-    dispatch(getRoomMovie(searchname, pageNo, pageSize));
+    dispatch(getWaterCorn(searchname, pageNo, pageSize));
   }, [dispatch, searchname, pageNo, pageSize]);
 
   const handlePagination = (page) => {
@@ -100,67 +101,59 @@ const WaterCorn = (props) => {
       name: searchname ? searchname : "" || "",
     },
     onSubmit: (values) => {
-      console.log(values);
+      // console.log(values);
       setSearch(values.name);
       setPageNo(1);
     },
   });
 
-  function tog_togdelete(id) {
+  function tog_togdelete(slug) {
     setmodal_detele(!modal_togFirst);
     // console.log(id);
-    if (id) {
-      setId(id);
+    if (slug) {
+      setSlug(slug);
     }
   }
 
-  function deleteitem(id) {
-    // console.log("delete : " + id);
-    if (id) {
-      dispatch(deleteRoom(id));
+  function deleteitem(slug) {
+    // console.log("delete : " + slug);
+    if (slug) {
+      dispatch(deleteWaterCorn(slug));
     }
   }
 
   const columns = useMemo(
     () => [
       {
+        header: "Image",
+        accessorKey: "image",
+        cell: (cell) => {
+          return (
+            <>
+              <Image width={150} src={cell.getValue()} />
+            </>
+          );
+        },
+        enableColumnFilter: false,
+      },
+      {
         header: "Name",
         accessorKey: "name",
         enableColumnFilter: false,
       },
       {
-        header: "Cinema Name",
-        accessorKey: "cinemaName",
-        enableColumnFilter: false,
-      },
-      {
-        header: "Seat Columns",
-        accessorKey: "seatColumns",
-        enableColumnFilter: false,
-      },
-      {
-        header: "Seat Rows",
-        accessorKey: "seatRows",
-        enableColumnFilter: false,
-      },
-      {
-        header: "Double Seat Columns",
-        accessorKey: "doubleSeatColumns",
-        enableColumnFilter: false,
-      },
-      {
-        header: "Double Seat Rows",
-        accessorKey: "doubleSeatRows",
+        header: "price",
+        accessorKey: "price",
         enableColumnFilter: false,
       },
       {
         header: "Actions",
-        accessorKey: "id",
+        accessorKey: "slug",
         enableColumnFilter: false,
         cell: (cell) => {
           return (
             <React.Fragment>
-              <Link to={`/dashboard/room/${cell.getValue()}/edit`}>
+              <Link to={`/dashboard/water-corn/${cell.getValue()}/edit`}>
                 <span className="bg-gradient me-3 fs-4 text-info">
                   <i className="ri-edit-2-fill"></i>
                 </span>
@@ -204,7 +197,7 @@ const WaterCorn = (props) => {
                       <div>
                         <Link
                           className="btn btn-success add-btn"
-                          to={`/dashboard/room/create`}
+                          to={`/dashboard/water-corn/create`}
                         >
                           <i className="ri-add-line align-bottom me-1"></i> Add
                           New
@@ -322,7 +315,7 @@ const WaterCorn = (props) => {
                 color="danger"
                 type="submit"
                 onClick={() => {
-                  deleteitem(id);
+                  deleteitem(slug);
                   setmodal_detele(false);
                 }}
               >

@@ -11,8 +11,7 @@ const WaterCornSlice = createSlice({
   initialState,
   reducers: {
     fetchSuccess: (state, action) => {
-      state.data = action.payload.data.model;
-      // state.selectOptions = action.payload.data.selectOptionReponse;
+      state.data = action.payload.data;
     },
     setItem(state, action) {
       state.item = null;
