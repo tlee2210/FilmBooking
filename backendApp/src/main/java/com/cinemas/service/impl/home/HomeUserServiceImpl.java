@@ -11,6 +11,7 @@ import com.cinemas.repositories.UserRepository;
 import com.cinemas.service.home.HomeUserService;
 import com.cinemas.service.impl.JWTServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -32,11 +33,9 @@ public class HomeUserServiceImpl implements HomeUserService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public UserResponse findUserByJwt(String jwt) {
-        String email = jwtService.getEmailFromToken(jwt);
-        Optional<User> user1 = userRepository.findByEmail(email);
+    public UserResponse findUserByUserDetails(UserDetails userDetails) {
         UserResponse userResponse = new UserResponse();
-        ObjectUtils.copyFields(user1.get(), userResponse);
+        ObjectUtils.copyFields(userDetails, userResponse);
         return userResponse;
     }
 

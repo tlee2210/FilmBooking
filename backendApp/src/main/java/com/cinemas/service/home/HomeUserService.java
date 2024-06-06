@@ -5,9 +5,10 @@ import com.cinemas.dto.request.ProfileRequest;
 import com.cinemas.dto.request.UserRequest;
 import com.cinemas.dto.response.UserResponse;
 import com.cinemas.entities.ChangePassword;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public interface HomeUserService {
-    UserResponse findUserByJwt(String jwt);
+    UserResponse findUserByUserDetails(UserDetails userDetails);
 
     boolean updateUser(ProfileRequest profileRequest, int id);
 

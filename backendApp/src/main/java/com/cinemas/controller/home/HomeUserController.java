@@ -24,22 +24,20 @@ public class HomeUserController {
     @GetMapping(value = "/profile")
     public APIResponse<UserResponse> getUserFromToken(@RequestHeader("Authorization") String jwt) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        System.out.println("==========================");
-        System.out.println(userDetails);
-        System.out.println("==========================");
 
         APIResponse<UserResponse> apiResponse = new APIResponse();
 
         apiResponse.setCode(200);
-        apiResponse.setResult(userService.findUserByJwt(jwt));
+        apiResponse.setResult(userService.findUserByUserDetails(userDetails));
 
         return apiResponse;
     }
 
     @PutMapping(value = "/update")
-    public APIResponse<String> updateUser(@RequestHeader("Authorization") String jwt, @RequestBody ProfileRequest profileRequest) {
+    public APIResponse<String> updateUser(@RequestBody ProfileRequest profileRequest) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        int id = userService.findUserByJwt(jwt).getId();
+        int id = userService.findUserByUserDetails(userDetails).getId();
         boolean checkUpdate = userService.updateUser(profileRequest, id);
         if (checkUpdate) {
             APIResponse<String> apiResponse = new APIResponse();
@@ -53,8 +51,10 @@ public class HomeUserController {
     }
 
     @PostMapping(value = "/change-password")
-    public APIResponse<String> changePassword(@RequestHeader("Authorization") String jwt, @RequestBody ChangePasswordRequest changePassword) {
-        int id = userService.findUserByJwt(jwt).getId();
+    public APIResponse<String> changePassword(@RequestBody ChangePasswordRequest changePassword) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        int id = userService.findUserByUserDetails(userDetails).getId();
         boolean changePass = userService.changePassword(changePassword, id);
         if (changePass) {
             APIResponse<String> apiResponse = new APIResponse();
