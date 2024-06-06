@@ -22,7 +22,7 @@ public class HomeUserController {
     private HomeUserService userService;
 
     @GetMapping(value = "/profile")
-    public APIResponse<UserResponse> getUserFromToken(@RequestHeader("Authorization") String jwt) {
+    public APIResponse<UserResponse> getUserFromToken() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         APIResponse<UserResponse> apiResponse = new APIResponse();
