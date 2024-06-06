@@ -19,5 +19,5 @@ public interface UserService {
 
     boolean updateUser(UserRequest userRequest);
 
-    SelectOptionAndModelReponse<Page<UserResponse>> getAllUser(SearchUser searchUser);
+    Page<UserResponse> getAllUser(SearchUser searchUser);
 }

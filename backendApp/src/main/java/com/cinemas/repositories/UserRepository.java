@@ -9,6 +9,7 @@ import com.cinemas.enums.RoleType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -30,8 +31,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     User findByEmailWithId(String name, int id);
 
     @Query("SELECT u FROM User u WHERE (:name is null or u.name like %:name%)" +
-            "AND (:role is null or u.role = :role)")
-    List<User> searchUser(String name, RoleType role);
+            "AND (:role is null or u.role = :role) " +
+            "AND u.role != RoleType.ADMIN")
+    List<User> searchUser(@Param("name") String name, @Param("role") RoleType role);
 
     @Query("SELECT DISTINCT u.role FROM User AS u")
     List<String> findByRole();

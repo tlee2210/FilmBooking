@@ -23,7 +23,6 @@ public class UserRequest {
     @NotEmpty
     private String email;
 
-    @NotEmpty
     private String password;
 
     @NotEmpty

@@ -442,7 +442,7 @@ const CreateActorsOrDirectors = (props) => {
                   </CardBody>
                 </Card>
 
-                <div className="text-end mb-3">
+                <div className="mb-3">
                   <button type="submit" className="btn btn-success w-sm">
                     Submit
                   </button>

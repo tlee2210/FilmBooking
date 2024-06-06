@@ -51,6 +51,12 @@ const WaterCornCreate = lazy(() =>
 const WaterCornEdit = lazy(() => import("../pages/dashboard/WaterCorn/edit"));
 const WaterCorn = lazy(() => import("../pages/dashboard/WaterCorn/index"));
 
+const UserManagement = lazy(() => import("../pages/dashboard/User/index"));
+const UserCreateManagement = lazy(() =>
+  import("../pages/dashboard/User/create")
+);
+const UserEditManagement = lazy(() => import("../pages/dashboard/User/edit"));
+
 //Cinema Coner
 const Actor = lazy(() => import("../pages/Page/CinemaCorner/Actor"));
 const Director = lazy(() => import("../pages/Page/CinemaCorner/Director"));
@@ -99,6 +105,11 @@ const authProtectedRoutes = [
   { path: "/dashboard/water-corn/create", component: <WaterCornCreate /> },
   { path: "/dashboard/water-corn/:slug/edit", component: <WaterCornEdit /> },
   { path: "/dashboard/water-corn", component: <WaterCorn /> },
+
+  { path: "/dashboard/users", component: <UserManagement /> },
+  { path: "/dashboard/users/create", component: <UserCreateManagement /> },
+  { path: "/dashboard/users/:id/edit", component: <UserEditManagement /> },
+
   // {
   //   path: "/",
   //   exact: true,

@@ -16,6 +16,7 @@ import MovieGenreReducer from "./MovieGenre/reducer";
 import MovieReducer from "./Movie/reducer";
 import RoomReducer from "./Room/reducer";
 import WaterCornReducer from "./WaterCorn/reducer";
+import UserReducer from "./User/reducer";
 
 const rootReducer = combineReducers({
   Layout: LayoutReducer,
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   Movie: MovieReducer,
   RoomMovie: RoomReducer,
   WaterCorn: WaterCornReducer,
+  User: UserReducer,
 });
 
 export default rootReducer;

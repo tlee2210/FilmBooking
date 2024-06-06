@@ -31,7 +31,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping()
-    public APIResponse<SelectOptionAndModelReponse<Page<UserResponse>>> getUser(
+    public APIResponse<Page<UserResponse>> getUser(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) RoleType role,
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
@@ -39,8 +39,8 @@ public class UserController {
             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort
     ) {
         SearchUser searchUser = new SearchUser(name, role, pageNo - 1, pageSize, sort);
-        SelectOptionAndModelReponse<Page<UserResponse>> userList = userService.getAllUser(searchUser);
-        APIResponse<SelectOptionAndModelReponse<Page<UserResponse>>> apiResponse = new APIResponse<>();
+        Page<UserResponse> userList = userService.getAllUser(searchUser);
+        APIResponse<Page<UserResponse>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(userList);
 

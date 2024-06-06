@@ -85,42 +85,14 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findByEmailWithId(userRequest.getEmail(), userRequest.getId()) != null) {
             throw new AppException(NAME_EXISTED);
         }
-
-//        ObjectUtils.copyFields(userRequest, user);
-        if(userRequest.getName() != null){
-            user.setName(userRequest.getName());
-        }
-
-        if(userRequest.getEmail() != null){
-            user.setEmail(userRequest.getEmail());
-        }
-
-        if(userRequest.getPassword() != null){
-            user.setPassword(new BCryptPasswordEncoder().encode(userRequest.getPassword()));
-        }
-
-        if(userRequest.getPhone() != null){
-            user.setPhone(userRequest.getPhone());
-        }
-
-        if(userRequest.getDOB() != null){
-            user.setDOB(userRequest.getDOB());
-        }
-
-        if(userRequest.getGender() != null){
-            user.setGender(userRequest.getGender());
-        }
-
-        if(userRequest.getRole() != null){
-            user.setRole(userRequest.getRole());
-        }
+        user.setRole(userRequest.getRole());
         userRepository.save(user);
 
         return true;
     }
 
     @Override
-    public SelectOptionAndModelReponse<Page<UserResponse>> getAllUser(SearchUser searchUser) {
+    public Page<UserResponse> getAllUser(SearchUser searchUser) {
         List<User> userList = userRepository.searchUser(searchUser.getName(), searchUser.getRole());
         List<UserResponse> userResponseList = new ArrayList<>();
 
@@ -140,13 +112,7 @@ public class UserServiceImpl implements UserService {
 
         Page<UserResponse> users = new PageImpl<>(pageList, new PaginationHelper().getPageable(searchUser), userResponseList.size());
 
-        List<String> roleList = userRepository.findByRole();
 
-        List<SelectOptionReponse> options = new ArrayList<>();
-        roleList.forEach(item -> {
-            options.add(new SelectOptionReponse(item, item));
-        });
-
-        return new SelectOptionAndModelReponse<>(options, users);
+        return users;
     }
 }

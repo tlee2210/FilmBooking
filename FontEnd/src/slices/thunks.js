@@ -13,3 +13,4 @@ export * from "./MovieGenre/thunk";
 export * from "./Movie/thunk";
 export * from "./Room/thunk";
 export * from "./WaterCorn/thunk";
+export * from "./User/thunk";
