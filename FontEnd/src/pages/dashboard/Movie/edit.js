@@ -1046,24 +1046,28 @@ const MovieEdit = (props) => {
                           <Input
                             type="number"
                             name={`prices.${index}.price`}
-                            placeholder="Nhập giá"
-                            value={validation.values.prices[index].price}
+                            placeholder="Enter price"
+                            value={price.price || ""}
                             onBlur={validation.handleBlur}
                             onChange={validation.handleChange}
                           />
+                          {validation.touched.prices?.[index]?.price &&
+                            validation.errors.prices?.[index]?.price && (
+                              <div className="text-danger">
+                                {validation.errors.prices[index].price}
+                              </div>
+                            )}
                         </Col>
                         <Col md={5}>
                           <Flatpickr
                             className="form-control"
                             placeholder="Enter Release Date"
-                            value={validation.values.prices[index].date}
+                            name={`prices.${index}.date`}
+                            value={price.date || ""}
                             onChange={([selectedDate]) => {
-                              const date = new Date(selectedDate)
-                                .toISOString()
-                                .split("T")[0];
                               validation.setFieldValue(
                                 `prices.${index}.date`,
-                                date
+                                selectedDate
                               );
                             }}
                             options={{
@@ -1075,9 +1079,8 @@ const MovieEdit = (props) => {
                                 .map((price) => new Date(price.date)),
                             }}
                           />
-                          {validation.errors.prices &&
-                            validation.errors.prices[index] &&
-                            validation.errors.prices[index].date && (
+                          {validation.touched.prices?.[index]?.date &&
+                            validation.errors.prices?.[index]?.date && (
                               <div className="text-danger">
                                 {validation.errors.prices[index].date}
                               </div>
@@ -1094,6 +1097,7 @@ const MovieEdit = (props) => {
                         </Col>
                       </Row>
                     ))}
+
                     <Button
                       color="secondary"
                       outline

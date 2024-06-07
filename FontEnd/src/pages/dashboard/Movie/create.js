@@ -181,6 +181,7 @@ const MovieCreate = (props) => {
       movieFormat: "",
       trailer: "",
       price: "",
+      // prices: [],
       prices: [],
       fileLandscape: [],
       filePortrait: [],
@@ -291,16 +292,19 @@ const MovieCreate = (props) => {
 
       values.prices.forEach((item, index) => {
         formData.append(`prices[${index}].price`, item.price);
-        formData.append(`prices[${index}].date`, item.date);
+        formData.append(
+          `prices[${index}].date`,
+          item.date.toISOString().split("T")[0]
+        );
       });
 
       dispatch(CreateMovies(formData, props.router.navigate));
     },
   });
 
-  // useEffect(() => {
-  //   console.log("Current validation errors:", validation.errors);
-  // }, [validation.errors]);
+  useEffect(() => {
+    console.table(validation.errors);
+  }, [validation.errors]);
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -995,25 +999,29 @@ const MovieCreate = (props) => {
                           <Input
                             type="number"
                             name={`prices.${index}.price`}
-                            placeholder="Nhập giá"
-                            value={validation.values.prices[index].price}
+                            placeholder="Enter price"
+                            value={price.price || ""}
                             onBlur={validation.handleBlur}
                             onChange={validation.handleChange}
                           />
+                          {validation.touched.prices?.[index]?.price &&
+                            validation.errors.prices?.[index]?.price && (
+                              <div className="text-danger">
+                                {validation.errors.prices[index].price}
+                              </div>
+                            )}
                         </Col>
                         <Col md={5}>
                           <Flatpickr
                             className="form-control"
                             placeholder="Enter Release Date"
-                            value={validation.values.prices[index].date}
+                            name={`prices.${index}.date`}
+                            value={price.date || ""}
                             onChange={([selectedDate]) => {
-                              const updatedPrices = [
-                                ...validation.values.prices,
-                              ];
-                              updatedPrices[index].date = new Date(selectedDate)
-                                .toISOString()
-                                .split("T")[0];
-                              validation.setFieldValue("prices", updatedPrices);
+                              validation.setFieldValue(
+                                `prices.${index}.date`,
+                                selectedDate
+                              );
                             }}
                             options={{
                               minDate: new Date(
@@ -1024,9 +1032,8 @@ const MovieCreate = (props) => {
                                 .map((price) => new Date(price.date)),
                             }}
                           />
-                          {validation.errors.prices &&
-                            validation.errors.prices[index] &&
-                            validation.errors.prices[index].date && (
+                          {validation.touched.prices?.[index]?.date &&
+                            validation.errors.prices?.[index]?.date && (
                               <div className="text-danger">
                                 {validation.errors.prices[index].date}
                               </div>
@@ -1043,6 +1050,7 @@ const MovieCreate = (props) => {
                         </Col>
                       </Row>
                     ))}
+
                     <Button
                       color="secondary"
                       outline
