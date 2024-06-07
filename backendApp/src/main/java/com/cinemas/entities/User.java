@@ -40,6 +40,9 @@ public class User implements UserDetails {
     @Column
     private RoleType role;
 
+    @Column
+    private String avatar;
+
     @OneToOne(mappedBy = "user")
     private ForgotPassword forgotPassword;
 

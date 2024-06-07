@@ -20,6 +20,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 import static com.cinemas.exception.ErrorCode.CREATE_FAILED;
 import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 
@@ -48,7 +50,7 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public APIResponse<String> createUser(@RequestBody UserRequest user) {
+    public APIResponse<String> createUser(@ModelAttribute UserRequest user) throws IOException {
         boolean checkCreate = userService.addUser(user);
         if (checkCreate) {
             APIResponse<String> apiResponse = new APIResponse();
@@ -72,7 +74,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/update")
-    public APIResponse<String> updateUser(@RequestBody UserRequest userRequest) {
+    public APIResponse<String> updateUser(@RequestBody UserRequest userRequest) throws IOException {
         boolean checkUpdate = userService.updateUser(userRequest);
         if (checkUpdate) {
             APIResponse<String> apiResponse = new APIResponse();

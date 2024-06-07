@@ -16,6 +16,7 @@ import com.cinemas.exception.AppException;
 import com.cinemas.repositories.UserRepository;
 import com.cinemas.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.beans.support.PropertyComparator;
@@ -27,6 +28,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +39,9 @@ import static com.cinemas.exception.ErrorCode.NOT_FOUND;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+
+    @Autowired
+    FileStorageServiceImpl fileStorageServiceImpl;
 
     @Override
     public UserDetailsService userDetailsService() {
@@ -50,7 +55,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean addUser(UserRequest userRequest) {
+    public boolean addUser(UserRequest userRequest) throws IOException {
         if (userRepository.findByEmail(userRequest.getEmail()).isPresent()) {
             throw new AppException(NAME_EXISTED);
         }
@@ -59,6 +64,7 @@ public class UserServiceImpl implements UserService {
 
         ObjectUtils.copyFields(userRequest, user);
         user.setPassword(new BCryptPasswordEncoder().encode(userRequest.getPassword()));
+        user.setAvatar(fileStorageServiceImpl.uploadFile(userRequest.getAvatar(), userRequest.getRole().name()));
         userRepository.save(user);
 
         return true;
@@ -70,6 +76,8 @@ public class UserServiceImpl implements UserService {
 
         if (user == null) throw new AppException(NOT_FOUND);
 
+        user.setAvatar(fileStorageServiceImpl.getUrlFromPublicId(user.getAvatar()));
+
         UserResponse userResponse = new UserResponse();
         ObjectUtils.copyFields(user, userResponse);
 
@@ -77,7 +85,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean updateUser(UserRequest userRequest) {
+    public boolean updateUser(UserRequest userRequest) throws IOException {
         User user = userRepository
                 .findById(userRequest.getId())
                 .orElseThrow(() -> new AppException(NOT_FOUND));
@@ -85,6 +93,12 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findByEmailWithId(userRequest.getEmail(), userRequest.getId()) != null) {
             throw new AppException(NAME_EXISTED);
         }
+
+        if (userRequest.getAvatar() != null) {
+            fileStorageServiceImpl.deleteFile(user.getAvatar());
+            user.setAvatar(fileStorageServiceImpl.uploadFile(userRequest.getAvatar(), userRequest.getRole().name()));
+        }
+
         user.setRole(userRequest.getRole());
         userRepository.save(user);
 

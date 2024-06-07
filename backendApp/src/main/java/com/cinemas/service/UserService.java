@@ -10,14 +10,16 @@ import com.cinemas.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.io.IOException;
+
 public interface UserService {
     UserDetailsService userDetailsService();
 
-    boolean addUser(UserRequest userRequest);
+    boolean addUser(UserRequest userRequest) throws IOException;
 
     UserResponse getEditUserById(int id);
 
-    boolean updateUser(UserRequest userRequest);
+    boolean updateUser(UserRequest userRequest) throws IOException;
 
     Page<UserResponse> getAllUser(SearchUser searchUser);
 }

@@ -26,4 +26,6 @@ public class UserResponse {
     private Gender gender;
 
     private RoleType role;
+
+    private String avatar;
 }
