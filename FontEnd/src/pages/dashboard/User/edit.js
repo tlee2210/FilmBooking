@@ -15,8 +15,9 @@ import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import { createSelector } from "reselect";
 import Flatpickr from "react-flatpickr";
 import withRouter from "../../../Components/Common/withRouter";
+import avatar from "../../../assets/images/User-avatar.png";
 
-import { message } from "antd";
+import { message, Image } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 //formik
 import { useFormik } from "formik";
@@ -90,20 +91,6 @@ const EditUser = (props) => {
       console.log(values);
       const formData = new FormData();
       formData.append("id", item.id);
-      formData.append("email", values.email);
-      formData.append("name", values.name);
-      formData.append("phone", values.phone);
-      if (values.dateOfBirth) {
-        const dob = new Date(values.dateOfBirth);
-        const formattedDate = [
-          dob.getFullYear(),
-          ("0" + (dob.getMonth() + 1)).slice(-2),
-          ("0" + dob.getDate()).slice(-2),
-        ].join("-"); // Format: YYYY-MM-DD
-
-        formData.append("DOB", formattedDate);
-      }
-      formData.append("gender", values.Gender);
       formData.append("role", values.role);
       dispatch(UpdateUser(formData, navigate));
     },
@@ -130,6 +117,14 @@ const EditUser = (props) => {
                 <Card>
                   <CardBody>
                     <Row>
+                      <Col md={12}>
+                        <div className="mb-3">
+                          <Image
+                            width={200}
+                            src={item.avatar ? item.avatar : avatar}
+                          />
+                        </div>
+                      </Col>
                       <Col md={6}>
                         <div className="mb-3">
                           <Label className="form-label" htmlFor="Name">

@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
 
         ObjectUtils.copyFields(userRequest, user);
         user.setPassword(new BCryptPasswordEncoder().encode(userRequest.getPassword()));
-        user.setAvatar(fileStorageServiceImpl.uploadFile(userRequest.getAvatar(), userRequest.getRole().name()));
+        user.setAvatar(fileStorageServiceImpl.uploadFile(userRequest.getAvatar(), "users"));
         userRepository.save(user);
 
         return true;
@@ -94,11 +94,6 @@ public class UserServiceImpl implements UserService {
             throw new AppException(NAME_EXISTED);
         }
 
-        if (userRequest.getAvatar() != null) {
-            fileStorageServiceImpl.deleteFile(user.getAvatar());
-            user.setAvatar(fileStorageServiceImpl.uploadFile(userRequest.getAvatar(), userRequest.getRole().name()));
-        }
-
         user.setRole(userRequest.getRole());
         userRepository.save(user);
 
@@ -113,6 +108,11 @@ public class UserServiceImpl implements UserService {
         userList.forEach(user -> {
             UserResponse userResponse = new UserResponse();
             ObjectUtils.copyFields(user, userResponse);
+            if (user.getAvatar() != null) {
+                userResponse.setAvatar(
+                        fileStorageServiceImpl.getUrlFromPublicId(user.getAvatar())
+                );
+            }
             userResponseList.add(userResponse);
         });
 

@@ -9,7 +9,7 @@ export const getUsers = (name, role, pageNo, pageSize) => async (dispatch) => {
       params: { name, role, pageNo, pageSize },
     })
     .then((response) => {
-      // console.log(response);
+      console.log(response);
       dispatch(getData(response?.data?.result));
     })
     .catch((err) => {
@@ -20,7 +20,11 @@ export const getUsers = (name, role, pageNo, pageSize) => async (dispatch) => {
 
 export const CreateUsers = (formData, history) => async (dispatch) => {
   await axios
-    .post(`http://localhost:8081/api/admin/v1/user/create`, formData)
+    .post(`http://localhost:8081/api/admin/v1/user/create`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
     .then((response) => {
       // console.log(response);
       dispatch(Success(response.data?.message));

@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 
 import TableContainer from "../../../Components/Common/TableContainerReactTable";
-import { message } from "antd";
+import { message, Image } from "antd";
 
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -33,6 +33,7 @@ import { createSelector } from "reselect";
 
 import { celebrity, deleteCelebrity } from "../../../slices/Celebrity/thunk";
 import { getUsers } from "../../../slices/User/thunk";
+import avatar from "../../../assets/images/User-avatar.png";
 
 const User = (props) => {
   const dispatch = useDispatch();
@@ -128,6 +129,21 @@ const User = (props) => {
 
   const columns = useMemo(
     () => [
+      {
+        header: "Avatar",
+        accessorKey: "avatar",
+        cell: (cell) => {
+          return (
+            <>
+              <Image
+                width={50}
+                src={cell.getValue() ? cell.getValue() : avatar}
+              />
+            </>
+          );
+        },
+        enableColumnFilter: false,
+      },
       {
         header: "Name",
         accessorKey: "name",

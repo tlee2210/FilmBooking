@@ -51,6 +51,7 @@ public class UserController {
 
     @PostMapping("/create")
     public APIResponse<String> createUser(@ModelAttribute UserRequest user) throws IOException {
+
         boolean checkCreate = userService.addUser(user);
         if (checkCreate) {
             APIResponse<String> apiResponse = new APIResponse();
@@ -75,6 +76,9 @@ public class UserController {
 
     @PutMapping(value = "/update")
     public APIResponse<String> updateUser(@RequestBody UserRequest userRequest) throws IOException {
+        System.out.println("=============");
+        System.out.println(userRequest);
+        System.out.println("=============");
         boolean checkUpdate = userService.updateUser(userRequest);
         if (checkUpdate) {
             APIResponse<String> apiResponse = new APIResponse();

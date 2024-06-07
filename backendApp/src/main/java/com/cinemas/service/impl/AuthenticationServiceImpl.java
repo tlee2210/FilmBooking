@@ -20,6 +20,7 @@ import com.cinemas.service.AuthenticationService;
 import com.cinemas.service.JWTService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,6 +45,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final EmailServiceimpl emailServiceimpl;
 
     private final ForgotPasswordRepository forgotPasswordRepository;
+
+    @Autowired
+    FileStorageServiceImpl fileStorageServiceImpl;
 
     public String signup(SignUpRequest signUpRequest) {
         if (userRepository.existsByEmail(signUpRequest.getEmail()))
@@ -79,6 +83,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         UserSignInRepose userRepo = new UserSignInRepose();
 
         ObjectUtils.copyFields(user, userRepo);
+        if (user.getAvatar() != null) {
+            userRepo.setAvatar(fileStorageServiceImpl.getUrlFromPublicId(user.getAvatar()));
+        }
 
         jwtAuthenticationResponse.setToken(jwt);
         jwtAuthenticationResponse.setUser(userRepo);

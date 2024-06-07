@@ -8,4 +8,5 @@ public class UserSignInRepose {
     private String name;
     private String email;
     private RoleType role;
+    private String avatar;
 }
