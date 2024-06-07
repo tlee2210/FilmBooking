@@ -31,4 +31,8 @@ public interface CelebrityRepository extends JpaRepository<Celebrity, Integer> {
 
     @Query("SELECT c FROM Celebrity c WHERE c.role = ?1")
     List<Celebrity> findByRole(RoleCeleb role);
+
+    @Query("SELECT c FROM Celebrity c WHERE c.role = :role " +
+            "AND (:countryId is null or c.country.id = :countryId)")
+    List<Celebrity> searchCeleb(RoleCeleb role, Integer countryId);
 }

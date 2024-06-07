@@ -29,4 +29,7 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
     @Query("SELECT m FROM Movie m WHERE (:name is null or m.name like %:name%)" +
             "AND (:status is null or m.status = :status)")
     List<Movie> findMovieByStatus(String name, MovieStatus status);
+
+    @Query("SELECT m FROM Movie m WHERE m.status = :status ORDER BY RAND() LIMIT 3")
+    List<Movie> radomMovieSoon(MovieStatus status);
 }
