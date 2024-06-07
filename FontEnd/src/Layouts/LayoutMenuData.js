@@ -7,6 +7,7 @@ const Navdata = () => {
   const [isMovie, setIsMovie] = useState(false);
   const [isCinema, setIsCinema] = useState(false);
   const [isUser, setIsUser] = useState(false);
+  const [isShowTime, setIsShowTime] = useState(false);
   const [iscurrentState, setIscurrentState] = useState("Dashboard");
 
   function updateIconSidebar(e) {
@@ -34,7 +35,10 @@ const Navdata = () => {
     if (iscurrentState !== "User") {
       setIsUser(false);
     }
-  }, [history, isMovie, isCinema, isUser]);
+    if (iscurrentState !== "showtime") {
+      setIsShowTime(false);
+    }
+  }, [history, isMovie, isCinema, isUser, isShowTime]);
 
   const menuItems = [
     {
@@ -129,6 +133,27 @@ const Navdata = () => {
           label: "Water And Corn",
           link: "/dashboard/water-corn",
           parentId: "cinemas",
+        },
+      ],
+    },
+    {
+      id: "showtime",
+      label: "Show Time Management",
+      icon: "ri-slideshow-2-fill",
+      link: "/#",
+      stateVariables: isShowTime,
+      click: function (e) {
+        e.preventDefault();
+        setIsShowTime(!isShowTime);
+        setIscurrentState("showtime");
+        updateIconSidebar(e);
+      },
+      subItems: [
+        {
+          id: "cinema",
+          label: "Show Time Movie",
+          link: "/dashboard/cinema",
+          parentId: "showtime",
         },
       ],
     },

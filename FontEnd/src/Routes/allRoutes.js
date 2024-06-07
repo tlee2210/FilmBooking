@@ -57,6 +57,8 @@ const UserCreateManagement = lazy(() =>
 );
 const UserEditManagement = lazy(() => import("../pages/dashboard/User/edit"));
 
+const ShowTimeCreate = lazy(() => import("../pages/dashboard/ShowTime/create"));
+
 //Cinema Coner
 const Actor = lazy(() => import("../pages/Page/CinemaCorner/Actor"));
 const Director = lazy(() => import("../pages/Page/CinemaCorner/Director"));
@@ -109,6 +111,8 @@ const authProtectedRoutes = [
   { path: "/dashboard/users", component: <UserManagement /> },
   { path: "/dashboard/users/create", component: <UserCreateManagement /> },
   { path: "/dashboard/users/:id/edit", component: <UserEditManagement /> },
+
+  { path: "/dashboard/show-time/create", component: <ShowTimeCreate /> },
 
   // {
   //   path: "/",
