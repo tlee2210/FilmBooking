@@ -95,11 +95,4 @@ public class JWTServiceImpl implements JWTService {
     private boolean isTokenExprired(String token) {
         return extracClaim(token, Claims::getExpiration).before(new Date());
     }
-
-    public String getEmailFromToken(String token) {
-        token = token.substring(7);
-        Claims claims = extractAllClaims(token);
-        String email = String.valueOf(claims.get("sub"));
-        return email;
-    }
 }

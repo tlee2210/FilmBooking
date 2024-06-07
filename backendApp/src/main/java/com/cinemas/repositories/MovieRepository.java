@@ -25,4 +25,8 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
 
     @Query("SELECT m FROM Movie m WHERE m.name = ?1 AND m.id != ?2")
     Movie findByNameWithId(String name, int id);
+
+    @Query("SELECT m FROM Movie m WHERE (:name is null or m.name like %:name%)" +
+            "AND (:status is null or m.status = :status)")
+    List<Movie> findMovieByStatus(String name, MovieStatus status);
 }

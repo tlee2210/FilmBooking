@@ -27,9 +27,6 @@ public class HomeUserServiceImpl implements HomeUserService {
     private UserRepository userRepository;
 
     @Autowired
-    private JWTServiceImpl jwtService;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
