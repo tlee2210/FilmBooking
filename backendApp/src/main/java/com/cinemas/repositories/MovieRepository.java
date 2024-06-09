@@ -32,4 +32,6 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
 
     @Query("SELECT m FROM Movie m WHERE m.status = :status ORDER BY RAND() LIMIT 3")
     List<Movie> radomMovieSoon(MovieStatus status);
+    @Query("SELECT m FROM Movie m WHERE m.endDate > CURRENT_DATE")
+    List<Movie>findAllMovieSetTime();
 }

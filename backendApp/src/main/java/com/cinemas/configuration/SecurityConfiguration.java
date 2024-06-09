@@ -43,13 +43,12 @@ public class SecurityConfiguration {
                                 "/api/admin/v1/user/**",
                                 "/api/admin/v1/room/**",
                                 "/api/home/v1/movie/**",
+                                "/api/admin/v1/show-time/**",
                                 "/api/home/v1/celebrity/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-//                        .requestMatchers("/api/admin").hasAnyAuthority(RoleType.ADMIN.name(), RoleType.MANAGER.name())
                         .requestMatchers("/api/admin").hasAnyAuthority(RoleType.ADMIN.name())
                         .requestMatchers("/api/user").hasAnyAuthority(RoleType.USER.name())
                         .anyRequest().authenticated())
-//                .oauth2Login(withDefaults())
 
                 .sessionManagement(mannager -> mannager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())

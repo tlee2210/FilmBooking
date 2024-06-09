@@ -4,9 +4,6 @@ import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.MovieRequest;
 import com.cinemas.dto.request.PaginationHelper;
 
-import java.text.Normalizer.Form;
-
-import com.cinemas.dto.request.PriceRequest;
 import com.cinemas.dto.request.SearchMovie;
 import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.SelectOptionMovie;
@@ -27,10 +24,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.cinemas.exception.ErrorCode.NAME_EXISTED;
@@ -295,6 +290,14 @@ public class MovieServiceImpl implements MovieService {
 
         movieRepository.save(movie);
         return true;
+    }
+
+    @Override
+    public Movie findMovieById(Integer id) {
+        Movie movie = movieRepository.findById(id).orElseThrow(() -> new AppException(NOT_FOUND));
+        movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
+
+        return movie;
     }
 
 }

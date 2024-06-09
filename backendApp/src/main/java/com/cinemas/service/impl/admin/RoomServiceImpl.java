@@ -120,6 +120,17 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    public List<SelectOptionReponse> getAllRoomByCinemaId(Integer id) {
+        List<Room> rooms = roomRepository.getRoomByCinemaId(id);
+        List<SelectOptionReponse> selectOptionReponses = new ArrayList<>();
+
+        rooms.forEach(room -> {
+            selectOptionReponses.add(new SelectOptionReponse<>(room.getId(), room.getName()));
+        });
+        return selectOptionReponses;
+    }
+
+    @Override
     public List<SelectOptionReponse<?>> getCreate() {
         List<Cinema> cinemaList = cinemaRespository.findAll();
         List<SelectOptionReponse<?>> selectOptionReponses = new ArrayList<>();

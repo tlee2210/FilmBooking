@@ -19,4 +19,6 @@ public interface CinemaService {
     Cinema getCinemaEdit(String slug);
 
     boolean updateCinema(CinemaRequest cinemaRequest) throws IOException;
+
+    Cinema findCinemaById(Integer id);
 }

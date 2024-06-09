@@ -1,16 +1,13 @@
 package com.cinemas.service.admin;
 
 import com.cinemas.dto.request.MovieRequest;
-import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.SearchMovie;
 import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.SelectOptionMovie;
-import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Movie;
 import org.springframework.data.domain.Page;
 
 import java.io.IOException;
-import java.util.List;
 
 public interface MovieService {
     SelectOptionAndModelReponse<Page<Movie>> getAllMovie(SearchMovie searchMovie);
@@ -24,4 +21,6 @@ public interface MovieService {
     SelectOptionMovie<Movie> getEditCelebrityBySlug(String slug);
 
     boolean updateMovie(MovieRequest movieRequest) throws IOException;
+
+    Movie findMovieById(Integer id);
 }

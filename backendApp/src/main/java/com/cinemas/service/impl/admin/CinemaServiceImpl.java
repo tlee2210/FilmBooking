@@ -169,6 +169,12 @@ public class CinemaServiceImpl implements CinemaService {
     }
 
     @Override
+    public Cinema findCinemaById(Integer id) {
+        return cinemaRespository.findById(id)
+                .orElseThrow(() -> new AppException(NOT_FOUND));
+    }
+
+    @Override
     @Transactional
     public boolean createCinema(CinemaRequest cinemaRequest) throws IOException {
 

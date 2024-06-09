@@ -4,6 +4,7 @@ import com.cinemas.dto.request.RoomRequest;
 import com.cinemas.dto.request.SearchRequest;
 import com.cinemas.dto.request.SearchRoomRequest;
 import com.cinemas.dto.response.*;
+import com.cinemas.entities.Cinema;
 import com.cinemas.entities.Movie;
 import com.cinemas.entities.MovieGenre;
 import com.cinemas.entities.Room;
@@ -140,5 +141,15 @@ public class RoomController {
         }
 
         throw new AppException(CREATE_FAILED);
+    }
+
+    @GetMapping("/{id}")
+    public APIResponse<List<SelectOptionReponse>> getAllRoomByCinemaIdToSelectOption(@PathVariable Integer id) {
+        List<SelectOptionReponse> cinemaList = roomService.getAllRoomByCinemaId(id);
+        APIResponse<List<SelectOptionReponse>> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setResult(cinemaList);
+
+        return apiResponse;
     }
 }
