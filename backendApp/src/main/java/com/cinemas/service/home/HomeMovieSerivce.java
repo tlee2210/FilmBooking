@@ -9,10 +9,14 @@ import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Movie;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface HomeMovieSerivce {
-    SelectOptionAndModelReponse<Page<Movie>> getMovieActive(SearchMovieHome paginationHelper);
+    List<Movie> getMovieActive();
 
-    SelectOptionAndModelReponse<Page<Movie>> getMovieSoon(SearchMovieHome paginationHelper);
+    List<Movie> getMovieSoon();
 
-    SelectOptionMovie<Movie> getMoiveBySlug(String slug);
+    Movie getMoiveBySlug(String slug);
+
+    List<Movie> getListMovieSoon();
 }

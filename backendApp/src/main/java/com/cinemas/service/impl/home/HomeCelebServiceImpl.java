@@ -65,9 +65,7 @@ public class HomeCelebServiceImpl implements HomeCelebService {
             optionsCountries.add(new SelectOptionReponse(country.getId(), country.getName()));
         }
 
-        List<Movie> movieList = movieRepository.radomMovieSoon(MovieStatus.COMING_SOON);
-
-        return new SelectOptionCeleb<>(celebrities, optionsCountries, movieList);
+        return new SelectOptionCeleb<>(celebrities, optionsCountries);
     }
 
     @Override
@@ -95,8 +93,6 @@ public class HomeCelebServiceImpl implements HomeCelebService {
             optionsCountries.add(new SelectOptionReponse(country.getId(), country.getName()));
         }
 
-        List<Movie> movieList = movieRepository.radomMovieSoon(MovieStatus.COMING_SOON);
-
-        return new SelectOptionCeleb<>(celebrities, optionsCountries, movieList);
+        return new SelectOptionCeleb<>(celebrities, optionsCountries);
     }
 }
