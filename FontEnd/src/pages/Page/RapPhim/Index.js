@@ -48,7 +48,7 @@ const index = () => {
 
     return (
         <React.Fragment>
-            <div style={{ paddingTop: 100 }}>
+            <div style={{ paddingTop: 80, backgroundColor: "rgb(228 228 228)" }}>
                 <Row>
                     <Card>
                         <CardBody>
@@ -81,38 +81,39 @@ const index = () => {
                                 <div className="swiper-pagination swiper-pagination-dark"></div>
                             </Swiper>
                         </CardBody>
+                        <Container style={{ paddingTop: 26 }}>
+                            <Row>
+                                <Col md="9">
+                                    <h1 style={{ fontSize: 25, fontWeight: 'bold' }}>Galaxy Tân Bình</h1>
+                                    <p>Địa Chỉ: 391 Nam Kỳ Khởi Nghĩa, Quận 3 , Thành Phố Hồ Chí Minh <br /><p>Hotline: 1900123</p></p>
+                                </Col>
+                                <Col md="3" className="d-flex">
+                                    <Input type="select" className="mx-2" style={{ height: 45, cursor: "pointer", fontSize: "15px", width: "auto" }}>
+                                        <option>Tất Cả Tỉnh</option>
+                                        <option>Tân Bình</option>
+                                        <option>Option 2</option>
+                                    </Input>
+                                    <Input type="select" className="mx-2" style={{ height: 45, cursor: "pointer", fontSize: "15px", width: "auto" }}>
+                                        <option>Rạp Phim</option>
+                                        <option>Option 1</option>
+                                        <option>Option 2</option>
+                                    </Input>
+                                </Col>
+                            </Row>
+                        </Container>
                     </Card>
-                    <Container style={{ paddingTop: 26 }}>
-                        <Row>
-                            <Col md="9">
-                                <h1 style={{ fontSize: 25, fontWeight: 'bold' }}>Galaxy Tân Bình</h1>
-                                <p>Địa Chỉ: 391 Nam Kỳ Khởi Nghĩa, Quận 3 , Thành Phố Hồ Chí Minh <br /><p>Hotline: 1900123</p></p>
-                            </Col>
-                            <Col md="3" className="d-flex">
-                                <Input type="select" className="mx-2" style={{ height: 45, cursor: "pointer", fontSize: "15px", width: "auto" }}>
-                                    <option>Tất Cả Tỉnh</option>
-                                    <option>Tân Bình</option>
-                                    <option>Option 2</option>
-                                </Input>
-                                <Input type="select" className="mx-2" style={{ height: 45, cursor: "pointer", fontSize: "15px", width: "auto" }}>
-                                    <option>Rạp Phim</option>
-                                    <option>Option 1</option>
-                                    <option>Option 2</option>
-                                </Input>
-                            </Col>
-                        </Row>
-                    </Container>
+
                 </Row>
                 <Container>
                     <Row>
                         {/* PHIM */}
                         <div className="movies-section-ActorInfor" style={{ paddingTop: 70 }}>
-                            <div className="d-flex align-items-center pb-3">
-                                <div className="text-xl inline-block font-bold uppercase" style={{ borderLeft: "4px solid #007bff", fontSize: "23px", fontWeight: "bold", textTransform: "uppercase", paddingLeft: "0.5rem" }}>PHIM</div>
-                            </div>
                             <Row>
                                 <Card style={{ marginTop: "5px" }} className="bg-light">
                                     <CardHeader>
+                                        <div className="d-flex align-items-center pb-3">
+                                            <div className="text-xl inline-block font-bold uppercase" style={{ borderLeft: "4px solid #007bff", fontSize: "23px", fontWeight: "bold", textTransform: "uppercase", paddingLeft: "0.5rem" }}>PHIM</div>
+                                        </div>
                                         <Nav className="nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
                                             <NavItem>
                                                 <NavLink
@@ -206,14 +207,14 @@ const index = () => {
                                                                     <img className="gallery-img img-fluid mx-auto" src={item.img} alt="" />
                                                                     <div className="gallery-overlay">
                                                                         <h5 className="overlay-caption">
-                                                                            <div className="mb-3">
+                                                                            <div className="mb-3" style={{ fontSize: 14 }}>
                                                                                 <Button color="warning" className="custom-toggle active" style={{ width: "134px" }}>
                                                                                     <span className="icon-off">
                                                                                         <i className="ri-ticket-2-line align-bottom me-1"></i> Buy Tickets
                                                                                     </span>
                                                                                 </Button>
                                                                             </div>
-                                                                            <Button color="warning" outline className="waves-effect waves-light material-shadow-none text-light align-items-center" style={{ width: "134px" }}>
+                                                                            <Button color="warning" outline className="waves-effect waves-light material-shadow-none text-light align-items-center" style={{ width: "134px", fontSize: '14px' }}>
                                                                                 <span className="icon-off">
                                                                                     <i className="ri-play-circle-line align-bottom me-1"></i> <span>Trailer</span>
                                                                                 </span>
@@ -227,7 +228,7 @@ const index = () => {
                                                                         <div className="flex-grow-1 text-muted">
                                                                             <div className="d-flex justify-content-between">
                                                                                 <span style={{ fontSize: 17 }}>{item.title}</span>
-                                                                                <span className="badge bg-warning text-dark" style={{ height: 23 }}><i className='ri-star-fill' style={{ paddingRight: 3 }}></i>{item.rating}</span>
+                                                                                <span className="badge bg-warning text-dark" style={{ height: 23 }}></span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -246,48 +247,14 @@ const index = () => {
                     </Row>
                     <Row>
                         {/* Thông tin chi tiết */}
-                        <div className="movies-section-ActorInfor" style={{ paddingTop: 70 }}>
-                            {/* Header */}
-                            <Row className="mb-4">
-                                <Col>
-                                    <div className="d-flex align-items-center pb-3">
-                                        <div className="text-xl inline-block font-bold uppercase" style={{ borderLeft: "4px solid #007bff", fontSize: "23px", paddingLeft: "0.5rem" }}>
-                                            THÔNG TIN CHI TIẾT
-                                        </div>
-                                    </div>
-                                </Col>
-                            </Row>
-
-                            {/* Address and Phone */}
-                            <Row className="mb-3">
-                                <Col>
-                                    <div style={{ fontSize: '18px', marginBottom: '10px' }}>
-                                        <strong>Địa Chỉ:</strong> 116 Nguyễn Du, Quận 1, Tp.HCM
-                                        <br />
-                                        <strong>Số Điện Thoại:</strong> 19002024
-                                    </div>
-                                </Col>
-                            </Row>
-
+                        <div className="movies-section-ActorInfor" style={{ paddingTop: 50 }}>
                             {/* Google Map */}
                             <Row className="mb-4">
                                 <Col>
                                     <GoogleMap />
                                 </Col>
                             </Row>
-
                             {/* Description */}
-                            <Row>
-                                <Col>
-                                    <p style={{ textAlign: 'justify', lineHeight: '1.6', fontSize: '16px' }}>
-                                        Là rạp chiếu đầu tiên và đông khách nhất trong hệ thống, Galaxy Nguyễn Du chính thức đi vào hoạt động từ ngày 20/5/2005 và được xem là một trong những cụm rạp mang tiêu chuẩn quốc tế hiện đại bậc nhất đầu tiên xuất hiện tại Việt Nam. Galaxy Nguyễn Du là một trong những rạp chiếu phim tiên phong mang đến cho khán giả những trải nghiệm phim chiếu rạp tốt nhất.
-                                        <br /><br />
-                                        Galaxy Nguyễn Du gồm 5 phòng chiếu với hơn 1000 chỗ ngồi, trong đó có 1 phòng chiếu phim 3D và 4 phòng chiếu phim 2D. Các phòng chiếu được thiết kế tinh tế giúp khách hàng có thể xem những bộ phim hay một cách thoải mái và thuận tiện nhất. Chất lượng hình ảnh rõ nét, âm thanh Dolby 7.1 cùng màn hình chiếu kỹ thuật 3D và Digital vô cùng sắc mịn, mang đến một không gian giải trí vô cùng sống động.
-                                        <br /><br />
-                                        Bên cạnh đó, với lợi thế gần khu vực sầm uất bậc nhất ở trung tâm thành phố, bãi để xe rộng rãi, có tiệm cafe ngoài trời – đây là nơi cực thu hút bạn trẻ đến xem phim và check-in.
-                                    </p>
-                                </Col>
-                            </Row>
                         </div>
                     </Row>
                 </Container>
