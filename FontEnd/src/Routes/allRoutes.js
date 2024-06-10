@@ -80,6 +80,9 @@ import BinhLuanPhimDetails from "../pages/Page/BinhLuanPhim/details";
 //Rạp Phim
 import RapPhim from "../pages/Page/RapPhim/Index";
 
+//Order 
+import Order from "../pages/Page/Order/index";
+
 const authProtectedRoutes = [
   //User Profile
   { path: "/profile", component: <UserProfile /> },
@@ -147,6 +150,7 @@ const homeRoutes = [
     component: <BinhLuanPhimDetails />,
   },
   { path: "/rap-phim", component: <RapPhim /> },
+  { path: "/order", component: <Order /> },
 ];
 
 // const CinemaCornerRoutes = [
