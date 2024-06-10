@@ -19,9 +19,7 @@ import {
 import classnames from "classnames";
 import img1 from "../../assets/images/galaxy/img-1.png";
 import filmtest from "../../assets/images/filmtest.jpg";
-
-// filmtest.jpg
-// C:\Users\Dell\Documents\GitHub\FilmBooking\FontEnd\src\assets\images\filmtest.jpg
+import '../home/home.css';
 // Swiper
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -43,24 +41,19 @@ const homepage = () => {
     if (activeTab !== tab) setActiveTab(tab);
   };
 
-  const data = ["item1", "item1", "item1", "item1", "item1", "item1"];
-
+  const data = ["item1", "item1"];
+  const data2 = ["item1", "item1", "item1", "item1", "item1", "item1"];
   return (
-    // <React.Fragment>
-    //   <div className="layout-wrapper landing">
-    //     <Home />
-
-    //   </div>
-    // </React.Fragment>
     <React.Fragment>
       <section className="section job-hero-section pb-0" id="hero">
         <Swiper
+          slidesPerView={"1"}
           pagination={{ clickable: true, dynamicBullets: true }}
           modules={[Pagination, Autoplay]}
           loop={true}
           centeredSlides={true}
           autoplay={{ delay: 2500, disableOnInteraction: false }}
-          className="mySwiper swiper pagination-dynamic-swiper rounded bg-light"
+          className="mySwiper swiper pagination-dynamic-swiper rounded bg-light custom-swiper-height"
         >
           <div className="swiper-wrapper">
             <SwiperSlide>
@@ -88,7 +81,6 @@ const homepage = () => {
               marginBottom: "100px",
               position: "relative",
               zIndex: 1,
-              marginBottom: "100px",
             }}
           >
             <Form action="#" className="job-panel-filter shadow">
@@ -197,10 +189,8 @@ const homepage = () => {
             <CardBody className="p-4">
               <TabContent activeTab={activeTab}>
                 <TabPane tabId="1">
-                  {" "}
+
                   <Masonry className="row gallery-wrapper">
-                    {/* {filteredGallery.map(
-                      ({ img, title, auther, likes, comments }, key) => ( */}
                     {data.map((item, index) => (
                       <Col
                         xxl={3}
@@ -214,9 +204,7 @@ const homepage = () => {
                             <Link
                               className="image-popup"
                               to="#"
-                              // title={title}
                               title="test"
-                              // onClick={() => setIndex(key)}
                             >
                               <img
                                 className="gallery-img img-fluid mx-auto"
@@ -225,7 +213,6 @@ const homepage = () => {
                               />
                               <div className="gallery-overlay">
                                 <h5 className="overlay-caption">
-                                  {" "}
                                   <div className="mb-3">
                                     <Button
                                       color="warning"
@@ -233,8 +220,7 @@ const homepage = () => {
                                       style={{ width: "134px" }}
                                     >
                                       <span className="icon-off">
-                                        <i className="ri-ticket-2-line align-bottom me-1"></i>{" "}
-                                        {/* ri-ticket-2-line */}
+                                        <i className="ri-ticket-2-line align-bottom me-1"></i>
                                         Buy Tickets
                                       </span>
                                     </Button>
@@ -245,14 +231,8 @@ const homepage = () => {
                                     className="waves-effect waves-light material-shadow-none text-light align-items-center"
                                     style={{ width: "134px" }}
                                   >
-                                    {" "}
-                                    {/* <span>
-                                    {" "}
-                                    <i className="bx bx-play-circle me-2 align-bottom"></i>
-                                    Trailer{" "}
-                                  </span> */}
                                     <span className="icon-off">
-                                      <i className=" ri-play-circle-line align-bottom me-1"></i>{" "}
+                                      <i className=" ri-play-circle-line align-bottom me-1"></i>
                                       <span>Trailer</span>
                                     </span>
                                   </Button>
@@ -268,7 +248,6 @@ const homepage = () => {
                                   to="#"
                                   className="text-body text-truncate"
                                 >
-                                  {/* {auther} */}
                                   Lật Mặt 7: Một Điều Ước
                                 </Link>
                               </div>
@@ -277,15 +256,11 @@ const homepage = () => {
                         </Card>
                       </Col>
                     ))}
-                    {/* ) )} */}
                   </Masonry>
                 </TabPane>
                 <TabPane tabId="2">
-                  {" "}
                   <Masonry className="row gallery-wrapper">
-                    {/* {filteredGallery.map(
-                      ({ img, title, auther, likes, comments }, key) => ( */}
-                    {data.map((item, index) => (
+                    {data2.map((item, index) => (
                       <Col
                         xxl={3}
                         xl={4}
@@ -298,9 +273,7 @@ const homepage = () => {
                             <Link
                               className="image-popup"
                               to="#"
-                              // title={title}
                               title="test"
-                              // onClick={() => setIndex(key)}
                             >
                               <img
                                 className="gallery-img img-fluid mx-auto"
@@ -309,7 +282,6 @@ const homepage = () => {
                               />
                               <div className="gallery-overlay">
                                 <h5 className="overlay-caption">
-                                  {" "}
                                   <div className="mb-3">
                                     <Button
                                       color="warning"
@@ -317,8 +289,7 @@ const homepage = () => {
                                       style={{ width: "134px" }}
                                     >
                                       <span className="icon-off">
-                                        <i className="ri-ticket-2-line align-bottom me-1"></i>{" "}
-                                        {/* ri-ticket-2-line */}
+                                        <i className="ri-ticket-2-line align-bottom me-1"></i>
                                         Buy Tickets
                                       </span>
                                     </Button>
@@ -329,14 +300,8 @@ const homepage = () => {
                                     className="waves-effect waves-light material-shadow-none text-light align-items-center"
                                     style={{ width: "134px" }}
                                   >
-                                    {" "}
-                                    {/* <span>
-                                    {" "}
-                                    <i className="bx bx-play-circle me-2 align-bottom"></i>
-                                    Trailer{" "}
-                                  </span> */}
                                     <span className="icon-off">
-                                      <i className=" ri-play-circle-line align-bottom me-1"></i>{" "}
+                                      <i className=" ri-play-circle-line align-bottom me-1"></i>
                                       <span>Trailer</span>
                                     </span>
                                   </Button>
@@ -352,7 +317,6 @@ const homepage = () => {
                                   to="#"
                                   className="text-body text-truncate"
                                 >
-                                  {/* {auther} */}
                                   Lật Mặt 7: Một Điều Ước
                                 </Link>
                               </div>
@@ -361,14 +325,128 @@ const homepage = () => {
                         </Card>
                       </Col>
                     ))}
-                    {/* ) )} */}
                   </Masonry>
                 </TabPane>
               </TabContent>
             </CardBody>
           </Card>
         </Container>
-        <Container className="mt-5"></Container>
+
+        {/* Góc Điển Ảnh */}
+        <Container className="mt-5">
+          <Card style={{ marginTop: "80px" }} className="bg-light">
+            <CardHeader>
+              <Nav
+                className="nav-tabs-custom rounded card-header-tabs border-bottom-0"
+                role="tablist"
+              >
+                <NavItem>
+                  <NavLink
+                    className={classnames({
+                      active: activeTab === "3",
+                      "text-secondary-emphasis": activeTab === "3",
+                      "bg-light": activeTab === "3",
+                      "bg-opacity-50": activeTab === "3",
+                    })}
+                    onClick={() => {
+                      tabChange("3");
+                    }}
+                  >
+                    <i className="fas fa-home"></i>
+                    Bình Luận Phim
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink
+                    to="#"
+                    className={classnames({
+                      active: activeTab === "4",
+                      "text-secondary-emphasis": activeTab === "4",
+                      "bg-light": activeTab === "4",
+                      "bg-opacity-50": activeTab === "4",
+                    })}
+                    onClick={() => {
+                      tabChange("4");
+                    }}
+                    type="button"
+                  >
+                    <i className="far fa-user"></i>
+                    Blog Điện Ảnh
+                  </NavLink>
+                </NavItem>
+              </Nav>
+            </CardHeader>
+
+            <CardBody className="p-4">
+              <TabContent activeTab={activeTab}>
+                <TabPane tabId="3">
+                  <Row>
+                    <Col md={6}>
+                      <div className="text-center mb-3">
+                        <img src={filmtest} alt="" style={{ width: "300px", height: "300px" }} />
+                        <h5 className="mt-2">Lật Mặt 7: Một Điều Ước</h5>
+                      </div>
+                    </Col>
+                    <Col md={6}>
+                      {data.map((item, index) => (
+                        <Row key={index} className="mb-3">
+                          <Col md={4}>
+                            <Card className="gallery-box">
+                              <div className="gallery-container">
+                                <Link className="image-popup" to="#" title="test">
+                                  <img className="gallery-img img-fluid mx-auto" src={filmtest} alt="" style={{ width: "100%" }} />
+                                </Link>
+                              </div>
+                              <div className="box-content">
+                                <div className="d-flex align-items-center mt-1">
+                                  <div className="flex-grow-1 text-muted">
+                                    <Link to="#" className="text-body text-truncate">Lật Mặt 7: Một Điều Ước</Link>
+                                  </div>
+                                </div>
+                              </div>
+                            </Card>
+                          </Col>
+                        </Row>
+                      ))}
+                    </Col>
+                  </Row>
+                </TabPane>
+                <TabPane tabId="4">
+                  <Row>
+                    <Col md={6}>
+                      <div className="text-center mb-3">
+                        <img src={filmtest} alt="" style={{ width: "300px", height: "300px" }} />
+                        <h5 className="mt-2">Lật Mặt 7: Một Điều Ước</h5>
+                      </div>
+                    </Col>
+                    <Col md={6}>
+                      {data.map((item, index) => (
+                        <Row key={index} className="mb-3">
+                          <Col md={4}>
+                            <Card className="gallery-box">
+                              <div className="gallery-container">
+                                <Link className="image-popup" to="#" title="test">
+                                  <img className="gallery-img img-fluid mx-auto" src={filmtest} alt="" style={{ width: "100%" }} />
+                                </Link>
+                              </div>
+                              <div className="box-content">
+                                <div className="d-flex align-items-center mt-1">
+                                  <div className="flex-grow-1 text-muted">
+                                    <Link to="#" className="text-body text-truncate">Lật Mặt 7: Một Điều Ước</Link>
+                                  </div>
+                                </div>
+                              </div>
+                            </Card>
+                          </Col>
+                        </Row>
+                      ))}
+                    </Col>
+                  </Row>
+                </TabPane>
+              </TabContent>
+            </CardBody>
+          </Card>
+        </Container>
       </section>
     </React.Fragment>
   );
