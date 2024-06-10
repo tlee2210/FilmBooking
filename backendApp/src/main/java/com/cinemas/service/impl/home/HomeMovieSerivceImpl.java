@@ -72,6 +72,28 @@ public class HomeMovieSerivceImpl implements HomeMovieSerivce {
     }
 
     @Override
+    public List<Movie> getMovieActiveNoLimit() {
+        List<Movie> movieList = movieRepository.getMovieForStatus(MovieStatus.NOW_SHOWING);
+
+        movieList.forEach(movie -> {
+            movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
+        });
+
+        return movieList;
+    }
+
+    @Override
+    public List<Movie> getMovieSoonNoLimit() {
+        List<Movie> movieList = movieRepository.getMovieForStatus(MovieStatus.COMING_SOON);
+
+        movieList.forEach(movie -> {
+            movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
+        });
+
+        return movieList;
+    }
+
+    @Override
     public Movie getMoiveBySlug(String slug) {
         Movie movie = movieRepository.findBySlug(slug);
 

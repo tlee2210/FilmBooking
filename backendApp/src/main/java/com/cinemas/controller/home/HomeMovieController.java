@@ -64,4 +64,24 @@ public class HomeMovieController {
 
         return apiResponse;
     }
+
+    @GetMapping("/full-active")
+    public APIResponse<List<Movie>> getMovieActiveNoLimit() {
+        List<Movie> movieList = homeMovieSerivce.getMovieActiveNoLimit();
+        APIResponse<List<Movie>> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setResult(movieList);
+
+        return apiResponse;
+    }
+
+    @GetMapping("/full-soon")
+    public APIResponse<List<Movie>> getMovieSoonNoLimit() {
+        List<Movie> movieList = homeMovieSerivce.getMovieSoonNoLimit();
+        APIResponse<List<Movie>> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setResult(movieList);
+
+        return apiResponse;
+    }
 }

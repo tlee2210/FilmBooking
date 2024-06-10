@@ -16,6 +16,10 @@ public interface HomeMovieSerivce {
 
     List<Movie> getMovieSoon();
 
+    List<Movie> getMovieActiveNoLimit();
+
+    List<Movie> getMovieSoonNoLimit();
+
     Movie getMoiveBySlug(String slug);
 
     List<Movie> getListMovieSoon();
