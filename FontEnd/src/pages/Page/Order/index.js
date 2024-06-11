@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import BreadCrumb from '../../../Components/Common/BreadCrumb';
+import '../Order/css/order.css';
 import {
     Container,
     Form,
@@ -60,127 +60,193 @@ const checkOut = () => {
 
     return (
         <React.Fragment>
-            <Container>
-                <div style={{ paddingTop: 100, paddingBottom: 50 }} className="page-content">
-                    <Container fluid>
-                        <Row>
-                            <Col xl="12">
-                                <Card>
-                                    <CardBody className="checkout-tab">
-                                        <Form action="#">
-                                            <div className="step-arrow-nav mt-n3 mx-n3 mb-3">
-                                                <Nav
-                                                    className="nav-pills nav-justified custom-nav"
-                                                    role="tablist"
+            <div style={{ backgroundColor: '#e9e9e9' }}>
+
+                <div style={{ paddingTop: 100 }}>
+                    <Col xl="12">
+                        <Card>
+                            <CardBody className="checkout-tab">
+                                <Form action="#">
+                                    <div className="step-arrow-nav">
+                                        <Nav
+                                            className="nav-pills nav-justified custom-nav"
+                                            role="tablist"
+                                        >
+                                            <NavItem role="presentation">
+                                                <NavLink
+                                                    href="#"
+                                                    className={classnames({ active: activeTab === 1, done: activeTab >= 1 }, "p-3 fs-15")}
+                                                    onClick={() => { passedSteps.includes(1) && toggleTab(1); }}
                                                 >
-                                                    <NavItem role="presentation">
-                                                        <NavLink
-                                                            href="#"
-                                                            className={classnames({ active: activeTab === 1, done: activeTab >= 1 }, "p-3 fs-15")}
-                                                            onClick={() => { passedSteps.includes(1) && toggleTab(1); }}
-                                                        >
-                                                            <i className="ri-user-2-line fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle me-2"></i>
-                                                            Chọn Phim / Rạp / Suất / Ghế
-                                                        </NavLink>
-                                                    </NavItem>
-                                                    <NavItem role="presentation">
-                                                        <NavLink
-                                                            href="#"
-                                                            className={classnames({ active: activeTab === 2, done: activeTab >= 2 }, "p-3 fs-15")}
-                                                            onClick={() => { passedSteps.includes(2) && toggleTab(2); }}
-                                                        >
-                                                            <i className="ri-truck-line fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle me-2"> </i>
-                                                            Chọn Thức Ăn
-                                                        </NavLink>
-                                                    </NavItem>
-                                                    <NavItem role="presentation">
-                                                        <NavLink
-                                                            href="#"
-                                                            className={classnames({ active: activeTab === 3, done: activeTab >= 3 }, "p-3 fs-15")}
-                                                            onClick={() => { passedSteps.includes(3) && toggleTab(3); }}
-                                                        >
-                                                            <i className="ri-bank-card-line fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle me-2"> </i>
-                                                            Thanh Toán
-                                                        </NavLink>
-                                                    </NavItem>
-                                                    <NavItem role="presentation">
-                                                        <NavLink
-                                                            href="#"
-                                                            className={classnames({ active: activeTab === 4, done: activeTab >= 4 }, "p-3 fs-15")}
-                                                            onClick={() => { passedSteps.includes(4) && toggleTab(4); }}
-                                                        >
-                                                            <i className="ri-checkbox-circle-line fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle me-2"></i>
-                                                            Xác Nhận
-                                                        </NavLink>
-                                                    </NavItem>
-                                                </Nav>
-                                            </div>
-                                        </Form>
-                                    </CardBody>
-                                </Card>
-                            </Col>
-                            <Row>
-                                <Col xl={8}>
-                                    <TabContent activeTab={activeTab}>
-                                        <TabPane tabId={1} id="pills-bill-info">
-                                            Tab 1
-                                        </TabPane>
-
-                                        <TabPane tabId={2}>
-                                            Tab 2
-                                        </TabPane>
-
-                                        <TabPane tabId={3}>
-                                            Tab 3
-                                        </TabPane>
-
-                                        <TabPane tabId={4} id="pills-finish">
-                                            Tab4
-                                        </TabPane>
-                                    </TabContent>
-                                </Col>
-                                <Col xl={4}>
-                                    <Card>
-                                        <CardHeader>
-                                            <div className="d-flex">
-                                                <div className="flex-grow-1">
-                                                    <h5 className="card-title mb-0">Chi Tiết Vé</h5>
-                                                </div>
-                                            </div>
-                                        </CardHeader>
-                                        <CardBody>
-                                            <div className="table-responsive table-card">
-                                                <table className="table table-borderless align-middle mb-0">
-                                                    {/* Bảng chi tiết */}
-                                                </table>
-                                                <div className="d-flex align-items-start gap-3 mt-3">
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-secondary btn-label left me-auto prevtab"
-                                                        onClick={handlePrevTab}
-                                                        disabled={activeTab === 1}
-                                                    >
-                                                        <i className="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>
-                                                        Quay Lại
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-primary btn-label right ms-auto nexttab"
-                                                        onClick={handleNextTab}
-                                                    >
-                                                        <i className="ri-truck-line label-icon align-middle fs-16 ms-2"></i>
-                                                        Tiếp Tục
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </CardBody>
-                                    </Card>
-                                </Col>
-                            </Row>
-                        </Row>
-                    </Container>
+                                                    <i className="ri-user-2-line fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle me-2"></i>
+                                                    Chọn Phim / Rạp / Suất / Ghế
+                                                </NavLink>
+                                            </NavItem>
+                                            <NavItem role="presentation">
+                                                <NavLink
+                                                    href="#"
+                                                    className={classnames({ active: activeTab === 2, done: activeTab >= 2 }, "p-3 fs-15")}
+                                                    onClick={() => { passedSteps.includes(2) && toggleTab(2); }}
+                                                >
+                                                    <i className="ri-truck-line fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle me-2"> </i>
+                                                    Chọn Thức Ăn
+                                                </NavLink>
+                                            </NavItem>
+                                            <NavItem role="presentation">
+                                                <NavLink
+                                                    href="#"
+                                                    className={classnames({ active: activeTab === 3, done: activeTab >= 3 }, "p-3 fs-15")}
+                                                    onClick={() => { passedSteps.includes(3) && toggleTab(3); }}
+                                                >
+                                                    <i className="ri-bank-card-line fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle me-2"> </i>
+                                                    Thanh Toán
+                                                </NavLink>
+                                            </NavItem>
+                                            <NavItem role="presentation">
+                                                <NavLink
+                                                    href="#"
+                                                    className={classnames({ active: activeTab === 4, done: activeTab >= 4 }, "p-3 fs-15")}
+                                                    onClick={() => { passedSteps.includes(4) && toggleTab(4); }}
+                                                >
+                                                    <i className="ri-checkbox-circle-line fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle me-2"></i>
+                                                    Xác Nhận
+                                                </NavLink>
+                                            </NavItem>
+                                        </Nav>
+                                    </div>
+                                </Form>
+                            </CardBody>
+                        </Card>
+                    </Col>
                 </div>
-            </Container>
+                <Container >
+                    <div style={{ paddingTop: 30, paddingBottom: 50 }} className="page-content">
+                        <Container fluid>
+                            <Row>
+                                <Row>
+                                    <Col xl={8}>
+                                        <TabContent activeTab={activeTab}>
+                                            <TabPane tabId={1}>
+                                                <div>
+                                                    {/* Seat Selection Content */}
+                                                    <div className="btn-group-order" style={{ backgroundColor: 'white', padding: 20 }}>
+                                                        <span className="showtime-title-order">Đổi Suất Chiếu</span>
+                                                        <div className="btn-group-order" role="group">
+                                                            <button className="btn btn-outline-primary">13:15</button>
+                                                            <button className="btn btn-primary">15:15</button>
+                                                            <button className="btn btn-outline-primary">17:15</button>
+                                                            <button className="btn btn-outline-primary">18:30</button>
+                                                        </div>
+                                                    </div>
+                                                    <div className="" style={{ backgroundColor: 'white', padding: 20 }}>
+                                                        <div>
+                                                            <table>
+                                                                <tbody>
+                                                                    <tr><td>I</td>{[...Array(8)].map((_, i) => <td key={i} className="sold-seat">{i + 1}</td>)}</tr>
+                                                                    <tr><td>H</td>{[...Array(8)].map((_, i) => <td key={i} className="sold-seat">{i + 1}</td>)}</tr>
+                                                                    <tr><td>G</td>{[...Array(8)].map((_, i) => <td key={i} className="sold-seat">{i + 1}</td>)}</tr>
+                                                                    <tr><td>F</td>{[...Array(8)].map((_, i) => <td key={i} className="sold-seat">{i + 1}</td>)}</tr>
+                                                                    <tr><td>E</td>{[...Array(8)].map((_, i) => <td key={i} className="sold-seat">{i + 1}</td>)}</tr>
+                                                                    <tr><td>D</td>{[...Array(9)].map((_, i) => <td key={i} className={i === 2 ? 'selected-seat' : 'sold-seat'}>{i + 1}</td>)}</tr>
+                                                                    <tr><td>C</td>{[...Array(9)].map((_, i) => <td key={i} className={i === 2 ? 'selected-seat' : 'sold-seat'}>{i + 1}</td>)}</tr>
+                                                                    <tr><td>B</td>{[...Array(9)].map((_, i) => <td key={i} className={i === 2 ? 'selected-seat' : 'sold-seat'}>{i + 1}</td>)}</tr>
+                                                                    <tr><td>A</td>{[...Array(9)].map((_, i) => <td key={i} className={i === 2 ? 'selected-seat' : 'sold-seat'}>{i + 1}</td>)}</tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <div className="screen-title-order">
+                                                            <span className='span-order'>màn hình</span>
+                                                            <hr className='hr-order' />
+                                                        </div>
+                                                        <div className="seat-legend">
+                                                            <div className="left-seats">
+                                                                <div className="seat-status">
+                                                                    <div className="seat ghe-da-ban"></div>
+                                                                    <span>ghế đã bán</span>
+                                                                </div>
+                                                                <div className="seat-status">
+                                                                    <div className="seat ghe-dang-chon"></div>
+                                                                    <span>ghế đang chọn</span>
+                                                                </div>
+                                                            </div>
+                                                            <div className="right-seats">
+                                                                <div className="seat-status">
+                                                                    <div className="seat ghe-vip"></div>
+                                                                    <span>ghế vip</span>
+                                                                </div>
+                                                                <div className="seat-status">
+                                                                    <div className="seat ghe-don"></div>
+                                                                    <span>ghế đơn</span>
+                                                                </div>
+                                                                <div className="seat-status">
+                                                                    <div className="seat ghe-doi"></div>
+                                                                    <span>ghế đôi</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </TabPane>
+
+                                            <TabPane tabId={2}>
+                                                Tab 2
+                                            </TabPane>
+
+                                            <TabPane tabId={3}>
+                                                Tab 3
+                                            </TabPane>
+
+                                            <TabPane tabId={4} id="pills-finish">
+                                                Tab4
+                                            </TabPane>
+                                        </TabContent>
+                                    </Col>
+                                    <Col xl={4}>
+                                        <Card>
+                                            <CardBody>
+                                                <div className="image-description">
+                                                    <div className="image-info">
+                                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMkk96j-MG-Z72sqHopPg92OTAVspYk5VwJQ&s" alt="Rạp" width="120" height="180" />
+                                                    </div>
+                                                    <div className="movie-title">
+                                                        <p><strong>Tên Phim:</strong> Tên phim đã chọn</p>
+                                                    </div>
+                                                    <div className="movie-info">
+                                                        <p><strong>Rạp đã chọn:</strong> Tên rạp</p>
+                                                        <p><strong>Suất chiếu đã chọn:</strong> Thời gian suất chiếu</p>
+                                                        <hr />
+                                                        <p className="total">Tổng Cộng</p>
+                                                    </div>
+                                                </div>
+                                            </CardBody>
+                                        </Card>
+
+                                        <div className="d-flex align-items-start gap-3 mt-3">
+                                            <button
+                                                type="button"
+                                                className="btn btn-secondary btn-label left me-auto prevtab"
+                                                onClick={handlePrevTab}
+                                                disabled={activeTab === 1}
+                                            >
+                                                <i className="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>
+                                                Quay Lại
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="btn btn-primary btn-label right ms-auto nexttab"
+                                                onClick={handleNextTab}
+                                            >
+                                                <i className="ri-truck-line label-icon align-middle fs-16 ms-2"></i>
+                                                Tiếp Tục
+                                            </button>
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </Row>
+                        </Container>
+                    </div>
+                </Container>
+            </div>
         </React.Fragment>
     );
 };
