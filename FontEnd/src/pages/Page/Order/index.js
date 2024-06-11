@@ -14,17 +14,12 @@ import {
     NavLink,
     TabContent,
     TabPane,
-    Modal,
-    ModalFooter,
-    ModalHeader,
-    ModalBody,
-    Label,
     Input,
 } from 'reactstrap';
 
-import Select from "react-select";
+
 import classnames from "classnames";
-import { orderSummary } from "../../../Components/Common/ecommerce";
+import { shoppingCart } from '../../../Components/Common/ecommerce';
 
 const checkOut = () => {
     const [selectedCountry, setselectedCountry] = useState(null);
@@ -33,21 +28,21 @@ const checkOut = () => {
     const [passedSteps, setPassedSteps] = useState([1]);
     const [modal, setModal] = useState(false);
     const [deletemodal, setDeleteModal] = useState(false);
-
+    const [productList, setproductList] = useState(shoppingCart);
     function toggleTab(tab) {
         if (tab >= 1 && tab <= 4) {
             setactiveTab(tab);
         }
     }
 
-    // Hàm xử lý nút quay lại
+
     function handlePrevTab() {
         if (activeTab > 1) {
             setactiveTab(activeTab - 1);
         }
     }
 
-    // Hàm xử lý nút tiếp tục
+
     function handleNextTab() {
         if (passedSteps.includes(activeTab)) {
             setactiveTab(activeTab + 1);
@@ -55,13 +50,27 @@ const checkOut = () => {
         }
     }
 
+    function countUP(id, prev_data_attr, itemPrice) {
+        setproductList(
+            productList.map((p) =>
+                p.id === id ? { ...p, data_attr: prev_data_attr + 1, total: (prev_data_attr + 1) * itemPrice } : p
+            )
+        );
+    }
+
+    function countDown(id, prev_data_attr, itemPrice) {
+        setproductList(
+            productList.map((p) =>
+                (p.id === id && p.data_attr > 0) ? { ...p, data_attr: prev_data_attr - 1, total: (prev_data_attr - 1) * itemPrice } : p
+            )
+        );
+    }
 
     document.title = "Order";
 
     return (
         <React.Fragment>
             <div style={{ backgroundColor: '#e9e9e9' }}>
-
                 <div style={{ paddingTop: 100 }}>
                     <Col xl="12">
                         <Card>
@@ -123,7 +132,7 @@ const checkOut = () => {
                     <div style={{ paddingTop: 30, paddingBottom: 50 }} className="page-content">
                         <Container fluid>
                             <Row>
-                                <Row>
+                                <Row className='gx-3'>
                                     <Col xl={8}>
                                         <TabContent activeTab={activeTab}>
                                             <TabPane tabId={1}>
@@ -189,7 +198,86 @@ const checkOut = () => {
                                             </TabPane>
 
                                             <TabPane tabId={2}>
-                                                Tab 2
+                                                {productList.map((cartItem, key) => (
+                                                    <React.Fragment key={cartItem.id}>
+                                                        <Card className="product mb-3">
+                                                            <CardBody>
+                                                                <Row className="gy-3">
+                                                                    <div className="col-sm-auto">
+                                                                        <div className="avatar-lg bg-light rounded p-1">
+                                                                            <img
+                                                                                src={cartItem.img}
+                                                                                alt=""
+                                                                                className="img-fluid d-block"
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="col-sm">
+                                                                        <h5 className="fs-14 text-truncate">
+                                                                            <Link
+                                                                                to="/ecommerce-product-detail"
+                                                                                className="text-body"
+                                                                            >
+                                                                                {cartItem.name}
+                                                                            </Link>
+                                                                        </h5>
+                                                                        <ul className="list-inline text-muted">
+                                                                            <li className="list-inline-item">
+                                                                                Color :{" "}
+                                                                                <span className="fw-medium">
+                                                                                    {cartItem.color}
+                                                                                </span>
+                                                                            </li>
+                                                                            <li className="list-inline-item">
+                                                                                Size :{" "}
+                                                                                <span className="fw-medium">{cartItem.size}</span>
+                                                                            </li>
+                                                                        </ul>
+
+                                                                        <div className="input-step">
+                                                                            <button
+                                                                                type="button"
+                                                                                className="minus material-shadow"
+                                                                                onClick={() => {
+                                                                                    countDown(cartItem.id, cartItem.data_attr, cartItem.price);
+                                                                                }}
+                                                                            >
+                                                                                –
+                                                                            </button>
+                                                                            <Input
+                                                                                type="text"
+                                                                                className="product-quantity"
+                                                                                value={cartItem.data_attr}
+                                                                                name="demo_vertical"
+                                                                                readOnly
+                                                                            />
+                                                                            <button
+                                                                                type="button"
+                                                                                className="plus material-shadow"
+                                                                                onClick={() => {
+                                                                                    countUP(cartItem.id, cartItem.data_attr, cartItem.price);
+                                                                                }}
+                                                                            >
+                                                                                +
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="col-sm-auto">
+                                                                        <div className="text-lg-end">
+                                                                            <p className="text-muted mb-1">Item Price:</p>
+                                                                            <h5 className="fs-14">
+                                                                                $
+                                                                                <span id="ticket_price" className="product-price">
+                                                                                    {cartItem.price}
+                                                                                </span>
+                                                                            </h5>
+                                                                        </div>
+                                                                    </div>
+                                                                </Row>
+                                                            </CardBody>
+                                                        </Card>
+                                                    </React.Fragment>
+                                                ))}
                                             </TabPane>
 
                                             <TabPane tabId={3}>
@@ -209,7 +297,7 @@ const checkOut = () => {
                                                         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMkk96j-MG-Z72sqHopPg92OTAVspYk5VwJQ&s" alt="Rạp" width="120" height="180" />
                                                     </div>
                                                     <div className="movie-title">
-                                                        <p><strong>Tên Phim:</strong> Tên phim đã chọn</p>
+                                                        <p><strong>Tên Phim:</strong> <span>Tên phim đã chọn</span> </p>
                                                     </div>
                                                     <div className="movie-info">
                                                         <p><strong>Rạp đã chọn:</strong> Tên rạp</p>
@@ -220,7 +308,6 @@ const checkOut = () => {
                                                 </div>
                                             </CardBody>
                                         </Card>
-
                                         <div className="d-flex align-items-start gap-3 mt-3">
                                             <button
                                                 type="button"
