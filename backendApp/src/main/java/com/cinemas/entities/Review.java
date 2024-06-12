@@ -26,8 +26,7 @@ public class Review {
 
     @Column
     private String slug;
-    @Column
-    private String image;
-    @Column
+
+    @Column(columnDefinition = "TEXT")
     private String description;
 }

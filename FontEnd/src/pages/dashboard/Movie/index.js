@@ -172,7 +172,7 @@ const Movies = (props) => {
         cell: (cell) => {
           return (
             <>
-              <Image width={150} src={cell.getValue()} />
+              <Image width={70} src={cell.getValue()} />
             </>
           );
         },

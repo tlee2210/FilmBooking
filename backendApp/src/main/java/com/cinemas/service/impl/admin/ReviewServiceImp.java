@@ -37,11 +37,6 @@ public class ReviewServiceImp implements ReviewService {
     public Page<Review> getAllReview(SearchRequest PaginationHelper) {
         List<Review> reviewList = reviewRepository.searchByName(PaginationHelper.getSearchname());
 
-        reviewList.forEach(review -> {
-            String imageUrl = fileStorageServiceImpl.getUrlFromPublicId(review.getImage());
-            review.setImage(imageUrl);
-        });
-
         PagedListHolder<Review> pagedListHolder = new PagedListHolder<Review>(reviewList);
         pagedListHolder.setPage(PaginationHelper.getPageNo());
         pagedListHolder.setPageSize(PaginationHelper.getPageSize());
@@ -56,7 +51,7 @@ public class ReviewServiceImp implements ReviewService {
     }
 
     @Override
-    public boolean addReview(ReviewRequest review) throws IOException {
+    public boolean addReview(ReviewRequest review) {
         if (reviewRepository.findByName(review.getName()) != null) {
             throw new AppException(NAME_EXISTED);
         }
@@ -66,7 +61,6 @@ public class ReviewServiceImp implements ReviewService {
 
         addReview.setSlug(review.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
 
-        addReview.setImage(fileStorageServiceImpl.uploadFile(review.getFile(), "waterCorn"));
         reviewRepository.save(addReview);
 
         return true;
@@ -79,7 +73,6 @@ public class ReviewServiceImp implements ReviewService {
 
         if (review == null) throw new AppException(NOT_FOUND);
 
-        fileStorageServiceImpl.deleteFile(review.getImage());
         reviewRepository.delete(review);
 
         return review.getId();
@@ -90,7 +83,6 @@ public class ReviewServiceImp implements ReviewService {
         Review review = reviewRepository.findBySlug(slug);
 
         if (review == null) throw new AppException(NOT_FOUND);
-        review.setImage(fileStorageServiceImpl.getUrlFromPublicId(review.getImage()));
 
         return review;
     }
@@ -103,11 +95,6 @@ public class ReviewServiceImp implements ReviewService {
 
         if (reviewRepository.findByNameWithId(review.getName(), review.getId()) != null) {
             throw new AppException(NAME_EXISTED);
-        }
-
-        if (review.getFile() != null) {
-            fileStorageServiceImpl.deleteFile(wat.getImage());
-            wat.setImage(fileStorageServiceImpl.uploadFile(review.getFile(), "waterCorn"));
         }
 
         ObjectUtils.copyFields(review, wat);

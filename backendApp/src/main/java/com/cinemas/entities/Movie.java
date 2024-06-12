@@ -45,7 +45,7 @@ public class Movie {
     @Column(nullable = false)
     private String producer;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(nullable = false)

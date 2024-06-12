@@ -157,7 +157,7 @@ public class MovieServiceImpl implements MovieService {
                 .collect(Collectors.toList());
         movie.setDirector(directors);
 
-        if (!movieRequest.getPrices().isEmpty()) {
+        if (movieRequest.getPrices() != null) {
             List<PriceMovie> prices = new ArrayList<>();
             movieRequest.getPrices().forEach(price -> {
                 PriceMovie priceMovie = new PriceMovie(price.getDate(), price.getPrice());

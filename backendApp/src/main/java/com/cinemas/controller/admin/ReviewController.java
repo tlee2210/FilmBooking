@@ -54,7 +54,7 @@ public class ReviewController {
      * @throws IOException
      */
     @PostMapping("/create")
-    public APIResponse<String> createReview(@ModelAttribute ReviewRequest reviewRequest) throws IOException {
+    public APIResponse<String> createReview(@RequestBody ReviewRequest reviewRequest) throws IOException {
         boolean checkCreate = reviewService.addReview(reviewRequest);
         if (checkCreate) {
             APIResponse<String> apiResponse = new APIResponse();
@@ -113,7 +113,7 @@ public class ReviewController {
      * @throws IOException
      */
     @PutMapping(value = "/update")
-    public APIResponse<String> updateReview(@ModelAttribute ReviewRequest reviewRequest) throws IOException {
+    public APIResponse<String> updateReview(@RequestBody ReviewRequest reviewRequest) throws IOException {
 //        System.out.println(celebrity);
         boolean checkUpdate = reviewService.updateReview(reviewRequest);
         if (checkUpdate) {
