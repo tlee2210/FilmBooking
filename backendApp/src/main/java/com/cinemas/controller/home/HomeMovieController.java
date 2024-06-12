@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RequestMapping("/api/home/v1/movie")
 @RestController
@@ -25,16 +26,9 @@ public class HomeMovieController {
     private HomeMovieSerivce homeMovieSerivce;
 
     @GetMapping("/active")
-    public APIResponse<SelectOptionAndModelReponse<Page<Movie>>> getMovieActive(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) MovieStatus status,
-            @RequestParam(required = false, defaultValue = "1") Integer pageNo,
-            @RequestParam(required = false, defaultValue = "8") Integer pageSize,
-            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort
-    ) {
-        SearchMovieHome searchMovie = new SearchMovieHome(name, status, pageNo - 1, pageSize, sort);
-        SelectOptionAndModelReponse<Page<Movie>> movieList = homeMovieSerivce.getMovieActive(searchMovie);
-        APIResponse<SelectOptionAndModelReponse<Page<Movie>>> apiResponse = new APIResponse<>();
+    public APIResponse<List<Movie>> getMovieActive() {
+        List<Movie> movieList = homeMovieSerivce.getMovieActive();
+        APIResponse<List<Movie>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(movieList);
 
@@ -42,16 +36,9 @@ public class HomeMovieController {
     }
 
     @GetMapping("/soon")
-    public APIResponse<SelectOptionAndModelReponse<Page<Movie>>> getMovieSoon(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) MovieStatus status,
-            @RequestParam(required = false, defaultValue = "1") Integer pageNo,
-            @RequestParam(required = false, defaultValue = "8") Integer pageSize,
-            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort
-    ) {
-        SearchMovieHome searchMovie = new SearchMovieHome(name, status, pageNo - 1, pageSize, sort);
-        SelectOptionAndModelReponse<Page<Movie>> movieList = homeMovieSerivce.getMovieSoon(searchMovie);
-        APIResponse<SelectOptionAndModelReponse<Page<Movie>>> apiResponse = new APIResponse<>();
+    public APIResponse<List<Movie>> getMovieSoon() {
+        List<Movie> movieList = homeMovieSerivce.getMovieSoon();
+        APIResponse<List<Movie>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(movieList);
 
@@ -59,11 +46,41 @@ public class HomeMovieController {
     }
 
     @GetMapping("/detail/{slug}")
-    public APIResponse<SelectOptionMovie<Movie>> getMovieBySlug(@PathVariable String slug) throws IOException {
-        APIResponse<SelectOptionMovie<Movie>> apiResponse = new APIResponse();
+    public APIResponse<Movie> getMovieBySlug(@PathVariable String slug) throws IOException {
+        APIResponse<Movie> apiResponse = new APIResponse();
 
         apiResponse.setCode(200);
         apiResponse.setResult(homeMovieSerivce.getMoiveBySlug(slug));
+
+        return apiResponse;
+    }
+
+    @GetMapping("/coming-soon")
+    public APIResponse<List<Movie>> getRandomMovie() {
+        APIResponse<List<Movie>> apiResponse = new APIResponse();
+
+        apiResponse.setCode(200);
+        apiResponse.setResult(homeMovieSerivce.getListMovieSoon());
+
+        return apiResponse;
+    }
+
+    @GetMapping("/full-active")
+    public APIResponse<List<Movie>> getMovieActiveNoLimit() {
+        List<Movie> movieList = homeMovieSerivce.getMovieActiveNoLimit();
+        APIResponse<List<Movie>> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setResult(movieList);
+
+        return apiResponse;
+    }
+
+    @GetMapping("/full-soon")
+    public APIResponse<List<Movie>> getMovieSoonNoLimit() {
+        List<Movie> movieList = homeMovieSerivce.getMovieSoonNoLimit();
+        APIResponse<List<Movie>> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setResult(movieList);
 
         return apiResponse;
     }

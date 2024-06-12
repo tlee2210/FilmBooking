@@ -67,7 +67,9 @@ const ShowTimeCreate = (props) => {
     initialValues: {
       cinema: "",
       movie: "",
-      showTime: [],
+      day: [],
+      time: [],
+      room: [],
     },
     onSubmit: (values) => {
       console.log(values);
@@ -78,37 +80,42 @@ const ShowTimeCreate = (props) => {
     if (validation.values.cinema) {
       dispatch(getRoomForShowTime(validation.values.cinema));
     }
-    validation.setFieldValue("showTime", []);
+    validation.setFieldValue("time", []);
+    validation.setFieldValue("day", []);
+    validation.setFieldValue("room", []);
   }, [validation.values.cinema]);
 
   useEffect(() => {
     if (validation.values.movie) {
       dispatch(getMovieForShowTime(validation.values.movie));
     }
-    validation.setFieldValue("showTime", []);
+    validation.setFieldValue("time", []);
+    validation.setFieldValue("day", []);
+    validation.setFieldValue("room", []);
   }, [validation.values.movie]);
 
-  const remove = (index) => {
-    const newPrices = validation.values.showTime.filter((_, i) => i !== index);
-    validation.setFieldValue("showTime", newPrices);
+  const Styles = {
+    multiValue: (styles, { data }) => {
+      return {
+        ...styles,
+        backgroundColor: "#81ce40",
+      };
+    },
+    multiValueLabel: (styles, { data }) => ({
+      ...styles,
+      backgroundColor: "#81ce40",
+      color: "white",
+    }),
+    multiValueRemove: (styles, { data }) => ({
+      ...styles,
+      color: "white",
+      backgroundColor: "#81ce40",
+      ":hover": {
+        backgroundColor: "#405189",
+        color: "white",
+      },
+    }),
   };
-
-  const areShowTimesComplete = (showTimes) => {
-    return showTimes.every((item) => item.day && item.time && item.room);
-  };
-
-  const canAddShowTime = () => {
-    const { showTime } = validation.values;
-    return showTime.length < 1 || areShowTimesComplete(showTime);
-  };
-
-  useEffect(() => {
-    const lastShowTime =
-      validation.values.showTime[validation.values.showTime.length - 1];
-    if (lastShowTime?.day && lastShowTime?.room && lastShowTime?.time) {
-      console.log("Last showTime entry:", lastShowTime);
-    }
-  }, [validation.values.showTime]);
 
   return (
     <div className="page-content">
@@ -126,146 +133,6 @@ const ShowTimeCreate = (props) => {
         >
           <Row>
             <Col md={8}>
-              <Card>
-                <CardHeader>
-                  <h5 className="card-title mb-0">Set Show Time Details</h5>
-                </CardHeader>
-                <CardBody>
-                  {(validation.values.showTime || []).map((item, index) => (
-                    <Card
-                      key={index}
-                      className="shadow-lg p-3 mb-5 bg-white rounded"
-                    >
-                      <Row className="mb-3">
-                        <Col sm={12}>
-                          <div className="text-end mb-3">
-                            {/* ri-close-line */}
-                            <Button
-                              color="danger"
-                              outline
-                              onClick={() => remove(index)}
-                            >
-                              <i className="ri-close-line"></i>
-                            </Button>
-                          </div>
-                        </Col>
-                        <Col sm={4}>
-                          <div className="mb-3">
-                            <label className="form-label mb-0">Day</label>
-                            <Flatpickr
-                              className="form-control"
-                              placeholder="select days"
-                              // value={`showTime.${index}.day` || null}
-                              value={item.day ? new Date(item.day) : null}
-                              // disabled
-                              disabled={
-                                index < validation.values.showTime.length - 1
-                              }
-                              onChange={([selectedDate]) => {
-                                const formatDate =
-                                  selectedDate.getFullYear() +
-                                  "-" +
-                                  String(selectedDate.getMonth() + 1).padStart(
-                                    2,
-                                    "0"
-                                  ) +
-                                  "-" +
-                                  String(selectedDate.getDate()).padStart(
-                                    2,
-                                    "0"
-                                  );
-                                validation.setFieldValue(
-                                  `showTime.${index}.day`,
-                                  formatDate
-                                );
-                              }}
-                              options={{
-                                minDate: movieItem.releaseDate,
-                                maxDate: movieItem.endDate,
-                              }}
-                            />
-                          </div>
-                        </Col>
-                        <Col sm={4}>
-                          <div className="mb-3">
-                            <label className="form-label mb-0">Time</label>
-                            <Flatpickr
-                              placeholder="select time"
-                              className="form-control"
-                              disabled={
-                                index < validation.values.showTime.length - 1
-                              }
-                              value={item.time || null}
-                              onChange={([selectedDate]) => {
-                                const formattedTime = selectedDate
-                                  .toTimeString()
-                                  .slice(0, 5);
-                                validation.setFieldValue(
-                                  `showTime.${index}.time`,
-                                  formattedTime
-                                );
-                              }}
-                              options={{
-                                enableTime: true,
-                                noCalendar: true,
-                                dateFormat: "H:i",
-                              }}
-                            />
-                          </div>
-                        </Col>
-                        <Col sm={4}>
-                          <div className="mb-3">
-                            <label className="form-label mb-0">Room</label>
-                            <Select
-                              options={selectRoom}
-                              placeholder="Select Room..."
-                              classNamePrefix="select"
-                              isDisabled={
-                                index < validation.values.showTime.length - 1
-                              }
-                              onChange={(option) => {
-                                validation.setFieldValue(
-                                  `showTime.${index}.room`,
-                                  option.value
-                                );
-                              }}
-                              onBlur={() =>
-                                validation.setFieldTouched(
-                                  `showTime.${index}.room`,
-                                  true
-                                )
-                              }
-                              value={selectRoom.find(
-                                (opt) => opt.value === validation.values.Room
-                              )}
-                            />
-                          </div>
-                        </Col>
-                      </Row>
-                    </Card>
-                  ))}
-                  {validation.values.movie &&
-                  validation.values.cinema &&
-                  selectRoom.length > 0 &&
-                  canAddShowTime() ? (
-                    <Button
-                      color="secondary"
-                      outline
-                      onClick={() => {
-                        const newPrices = [
-                          ...(validation.values.showTime || []),
-                        ];
-                        newPrices.push({});
-                        validation.setFieldValue("showTime", newPrices);
-                      }}
-                    >
-                      Set ShowTime
-                    </Button>
-                  ) : null}
-                </CardBody>
-              </Card>
-            </Col>
-            <Col md={4}>
               <Card>
                 <CardHeader>
                   <h5 className="card-title mb-0">Set Movie And Cinema</h5>
@@ -325,6 +192,102 @@ const ShowTimeCreate = (props) => {
                   </Col>
                 </CardBody>
               </Card>
+              <Card>
+                <CardHeader>
+                  <h5 className="card-title mb-0">Set Show Time Details</h5>
+                </CardHeader>
+                {validation.values.movie &&
+                validation.values.cinema &&
+                selectRoom.length > 0 ? (
+                  <CardBody>
+                    <Card className="shadow-lg p-3 mb-5 bg-white rounded">
+                      <Row className="mb-3">
+                        <Col sm={4}>
+                          <div className="mb-3">
+                            <label className="form-label mb-0">Day</label>
+                            <Flatpickr
+                              className="form-control"
+                              placeholder="select days"
+                              value={validation.values.day || null}
+                              onChange={(selectedDates) => {
+                                const formatDate = selectedDates.map((date) => {
+                                  return (
+                                    date.getFullYear() +
+                                    "-" +
+                                    String(date.getMonth() + 1).padStart(
+                                      2,
+                                      "0"
+                                    ) +
+                                    "-" +
+                                    String(date.getDate()).padStart(2, "0")
+                                  );
+                                });
+                                validation.setFieldValue("day", formatDate);
+                              }}
+                              options={{
+                                mode: "multiple",
+                                minDate: movieItem.releaseDate,
+                                maxDate: movieItem.endDate,
+                              }}
+                            />
+                          </div>
+                        </Col>
+                        <Col sm={4}>
+                          <div className="mb-3">
+                            <label className="form-label mb-0">Time</label>
+                            <Flatpickr
+                              placeholder="select times"
+                              className="form-control"
+                              value={validation.values.time}
+                              onChange={([selectedDate]) => {
+                                const formattedTime = selectedDate
+                                  .toTimeString()
+                                  .slice(0, 5);
+                                validation.setFieldValue("time", formattedTime);
+                              }}
+                              options={{
+                                // mode: "multiple",
+                                enableTime: true,
+                                noCalendar: true,
+                                dateFormat: "H:i",
+                              }}
+                            />
+                          </div>
+                        </Col>
+                        <Col sm={4}>
+                          <div className="mb-3">
+                            <label className="form-label mb-0">Room</label>
+                            <Select
+                              options={selectRoom}
+                              isMulti={true}
+                              styles={Styles}
+                              placeholder="Select Room..."
+                              classNamePrefix="select"
+                              onChange={(option) => {
+                                validation.setFieldValue(
+                                  "room",
+                                  option.map((item) => item.value)
+                                );
+                              }}
+                              onBlur={() =>
+                                validation.setFieldTouched(
+                                  validation.values.room,
+                                  true
+                                )
+                              }
+                              value={selectRoom.find(
+                                (opt) => opt.value === validation.values.Room
+                              )}
+                            />
+                          </div>
+                        </Col>
+                      </Row>
+                    </Card>
+                  </CardBody>
+                ) : null}
+              </Card>
+            </Col>
+            <Col md={4}>
               <Row>
                 <Col sm={12} xl={12}>
                   <Card>

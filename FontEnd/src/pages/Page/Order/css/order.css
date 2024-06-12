@@ -1,0 +1,136 @@
+.showtime-buttons-order {
+    display: flex;
+    align-items: center;
+
+
+}
+
+.showtime-title-order {
+    margin-right: 80px;
+    /* Khoảng cách giữa chữ và các nút */
+    font-size: 20px;
+    font-weight: bold;
+
+}
+
+.btn-group-order {
+    display: flex;
+    gap: 20px;
+    /* Khoảng cách giữa các nút */
+
+}
+
+
+.screen-title-order {
+    position: relative;
+    text-align: center;
+    margin-top: 10px;
+    /* Khoảng cách từ phần tử phía trên */
+}
+
+.screen-title-order .span-order {
+    position: relative;
+    /* Điều chỉnh vị trí của chữ */
+    background-color: white;
+    /* Để làm nền chữ màu trắng */
+    /* Khoảng cách hai bên chữ */
+    font-size: 12px;
+    /* Kích thước chữ nhỏ */
+}
+
+.screen-title-order .hr-order {
+    margin-top: 0px;
+    /* Tạo khoảng cách để chữ không bị cắt */
+    border: 0;
+    border-top: 3px solid rgb(249, 88, 7);
+}
+
+
+
+
+.seat-legend {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    /* Khoảng cách từ phần tử phía trên */
+}
+
+.left-seats,
+.right-seats {
+    display: flex;
+}
+
+.seat-status {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    /* Khoảng cách giữa các ô vuông */
+}
+
+.seat {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    border: 1px solid #ffffff;
+    /* Đường viền cho ô vuông */
+}
+
+.ghe-da-ban {
+    background-color: gray;
+}
+
+.ghe-dang-chon {
+    background-color: orange;
+}
+
+.ghe-vip {
+    background-color: white;
+    /* Màu nền của ghế VIP */
+    border: 1px solid gold;
+    /* Đường viền màu vàng */
+}
+
+.ghe-don {
+    background-color: white;
+    /* Màu nền của ghế đơn */
+    border: 1px solid blue;
+    /* Đường viền màu xanh dương */
+}
+
+.ghe-doi {
+    background-color: white;
+    /* Màu nền của ghế đôi */
+    border: 1px solid green;
+    /* Đường viền màu xanh lá */
+    width: 40px;
+}
+
+
+
+.image-description {
+    margin-top: 3px; /* Khoảng cách từ phần tử phía trên */
+}
+
+.image-description img {
+    width: 120px;
+    height: 180px;
+}
+
+.image-description hr {
+    border-top: 1px solid black;
+    width: 80%;
+    margin: 10px auto;
+}
+
+.image-description p {
+    margin-bottom: 5px; /* Khoảng cách giữa các dòng */
+}
+
+.image-description p.total {
+    font-weight: bold;
+}
+
+.image-description .movie-title {
+    font-weight: bold;
+}

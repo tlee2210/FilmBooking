@@ -3,6 +3,7 @@ package com.cinemas.controller.home;
 import com.cinemas.dto.request.SearchCelebRequest;
 import com.cinemas.dto.request.SearchMovie;
 import com.cinemas.dto.response.APIResponse;
+import com.cinemas.dto.response.CelebResponse;
 import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.SelectOptionCeleb;
 import com.cinemas.entities.Celebrity;
@@ -13,10 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/home/v1/celebrity")
@@ -53,6 +51,16 @@ public class HomeCelebrityController {
         APIResponse<SelectOptionCeleb<Page<Celebrity>>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(actors);
+
+        return apiResponse;
+    }
+
+    @GetMapping("/detail/{slug}")
+    public APIResponse<CelebResponse> getDetail(@PathVariable String slug){
+        CelebResponse celebResponse = homeCelebService.getDetailCeleb(slug);
+        APIResponse<CelebResponse> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setResult(celebResponse);
 
         return apiResponse;
     }

@@ -60,6 +60,7 @@ const Navbar = () => {
   return (
     <React.Fragment>
       <nav
+      style={{backgroundColor:"white"}}
         className={
           "navbar navbar-expand-lg navbar-landing fixed-top job-navbar" +
           navClass
@@ -138,7 +139,7 @@ const Navbar = () => {
                   <DropdownToggle className='fs-16 nav-link' caret style={{ backgroundColor: 'transparent', color: 'black', borderColor: 'transparent' }}>
                     Cinema Corner
                   </DropdownToggle>
-                  <DropdownMenu style={{boxShadow:"20px 20px 50px 10px #95d8f3 inset"}}>
+                  <DropdownMenu style={{ }}>
                     <DropdownItem tag={Link} to='/the-loai-phim'>
                       Thể Loại Phim
                     </DropdownItem>

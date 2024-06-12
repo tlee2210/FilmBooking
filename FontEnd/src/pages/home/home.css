@@ -1,0 +1,26 @@
+.custom-swiper-height {
+    height: 500px;
+  }
+  
+  .custom-swiper-height .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  .hover-img-home {
+    transition: transform 0.3s ease;
+  }
+
+  .hover-img-home:hover {
+    transform: scale(1.05);
+  }
+
+  .hover-link-home {
+    transition: color 0.3s ease;
+  }
+
+  .hover-link-home:hover {
+    color: blue;
+  }

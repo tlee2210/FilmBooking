@@ -24,6 +24,9 @@ public class Country {
     @Column
     private String name;
 
+    @Column
+    private String slug;
+
     @Transient
     @OneToMany(mappedBy = "country", cascade = CascadeType.ALL)
     private List<Celebrity> celebrities;

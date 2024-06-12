@@ -50,102 +50,66 @@ public class HomeMovieSerivceImpl implements HomeMovieSerivce {
     FileStorageServiceImpl fileStorageServiceImpl;
 
     @Override
-    public SelectOptionAndModelReponse<Page<Movie>> getMovieActive(SearchMovieHome paginationHelper) {
-        List<Movie> movieList = movieRepository.findMovieByStatus(paginationHelper.getName(), MovieStatus.NOW_SHOWING);
+    public List<Movie> getMovieActive() {
+        List<Movie> movieList = movieRepository.getLimitMovie(MovieStatus.NOW_SHOWING, 8);
 
         movieList.forEach(movie -> {
-            movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
+            movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
         });
 
-        PagedListHolder<Movie> pagedListHolder = new PagedListHolder<Movie>(movieList);
-        pagedListHolder.setPage(paginationHelper.getPageNo());
-        pagedListHolder.setPageSize(paginationHelper.getPageSize());
-
-        List<Movie> pageList = pagedListHolder.getPageList();
-        boolean ascending = paginationHelper.getSort().isAscending();
-        PropertyComparator.sort(pageList, new MutableSortDefinition(paginationHelper.getSortByColumn(), true, ascending));
-
-        Page<Movie> movies = new PageImpl<>(pageList, new PaginationHelper().getPageable(paginationHelper), movieList.size());
-
-        List<SelectOptionReponse> optionsStatus = new ArrayList<>();
-
-        for (MovieStatus movieStatus : MovieStatus.values()) {
-            optionsStatus.add(new SelectOptionReponse(movieStatus.name(), movieStatus.getValue()));
-        }
-
-        return new SelectOptionAndModelReponse<>(optionsStatus, movies);
+        return movieList;
     }
 
     @Override
-    public SelectOptionAndModelReponse<Page<Movie>> getMovieSoon(SearchMovieHome paginationHelper) {
-        List<Movie> movieList = movieRepository.findMovieByStatus(paginationHelper.getName(), MovieStatus.COMING_SOON);
+    public List<Movie> getMovieSoon() {
+        List<Movie> movieList = movieRepository.getLimitMovie(MovieStatus.COMING_SOON, 8);
 
         movieList.forEach(movie -> {
-            movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
+            movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
         });
 
-        PagedListHolder<Movie> pagedListHolder = new PagedListHolder<Movie>(movieList);
-        pagedListHolder.setPage(paginationHelper.getPageNo());
-        pagedListHolder.setPageSize(paginationHelper.getPageSize());
-
-        List<Movie> pageList = pagedListHolder.getPageList();
-        boolean ascending = paginationHelper.getSort().isAscending();
-        PropertyComparator.sort(pageList, new MutableSortDefinition(paginationHelper.getSortByColumn(), true, ascending));
-
-        Page<Movie> movies = new PageImpl<>(pageList, new PaginationHelper().getPageable(paginationHelper), movieList.size());
-
-        List<SelectOptionReponse> optionsStatus = new ArrayList<>();
-
-        for (MovieStatus movieStatus : MovieStatus.values()) {
-            optionsStatus.add(new SelectOptionReponse(movieStatus.name(), movieStatus.getValue()));
-        }
-
-        return new SelectOptionAndModelReponse<>(optionsStatus, movies);
+        return movieList;
     }
 
     @Override
-    public SelectOptionMovie<Movie> getMoiveBySlug(String slug) {
+    public List<Movie> getMovieActiveNoLimit() {
+        List<Movie> movieList = movieRepository.getMovieForStatus(MovieStatus.NOW_SHOWING);
+
+        movieList.forEach(movie -> {
+            movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
+        });
+
+        return movieList;
+    }
+
+    @Override
+    public List<Movie> getMovieSoonNoLimit() {
+        List<Movie> movieList = movieRepository.getMovieForStatus(MovieStatus.COMING_SOON);
+
+        movieList.forEach(movie -> {
+            movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
+        });
+
+        return movieList;
+    }
+
+    @Override
+    public Movie getMoiveBySlug(String slug) {
         Movie movie = movieRepository.findBySlug(slug);
 
         if (movie == null) throw new AppException(NOT_FOUND);
 
-        movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
         movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
 
-        List<SelectOptionReponse> optionsCategory = new ArrayList<>();
-        List<MovieGenre> categories = movieGenreRepository.findAll();
+        return movie;
+    }
 
-        for (MovieGenre category : categories) {
-            optionsCategory.add(new SelectOptionReponse(category.getId(), category.getName()));
-        }
-
-        List<SelectOptionReponse> optionsActor = new ArrayList<>();
-        List<Celebrity> actors = celebrityRepository.findByRole(RoleCeleb.ACTOR);
-
-        for (Celebrity actor : actors) {
-            optionsActor.add(new SelectOptionReponse(actor.getId(), actor.getName()));
-        }
-
-        List<SelectOptionReponse> optionsDirector = new ArrayList<>();
-        List<Celebrity> directors = celebrityRepository.findByRole(RoleCeleb.DIRECTOR);
-
-        for (Celebrity director : directors) {
-            optionsDirector.add(new SelectOptionReponse(director.getId(), director.getName()));
-        }
-
-        List<SelectOptionReponse> optionsStatus = new ArrayList<>();
-
-        for (MovieStatus movieStatus : MovieStatus.values()) {
-            optionsStatus.add(new SelectOptionReponse(movieStatus.name(), movieStatus.getValue()));
-        }
-
-        List<Country> countryList = countryRepository.findAll();
-        List<SelectOptionReponse> optionsCountries = new ArrayList<>();
-
-        for (Country country : countryList) {
-            optionsCountries.add(new SelectOptionReponse(country.getId(), country.getName()));
-        }
-
-        return new SelectOptionMovie<>(optionsCategory, optionsDirector, optionsActor, optionsStatus, optionsCountries, movie);
+    @Override
+    public List<Movie> getListMovieSoon() {
+        List<Movie> movies = movieRepository.getLimitMovie(MovieStatus.COMING_SOON,3);
+        movies.forEach(movie -> {
+            movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
+        });
+        return movies;
     }
 }

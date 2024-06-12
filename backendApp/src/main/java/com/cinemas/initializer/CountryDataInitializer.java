@@ -26,6 +26,7 @@ public class CountryDataInitializer {
             for (String nationality : nationalities) {
                 Country country = Country.builder()
                         .name(nationality)
+                        .slug(nationality)
                         .build();
                 countries.add(country);
             }

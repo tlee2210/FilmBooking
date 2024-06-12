@@ -19,9 +19,7 @@ import {
 import classnames from "classnames";
 import img1 from "../../assets/images/galaxy/img-1.png";
 import filmtest from "../../assets/images/filmtest.jpg";
-
-// filmtest.jpg
-// C:\Users\Dell\Documents\GitHub\FilmBooking\FontEnd\src\assets\images\filmtest.jpg
+import '../home/home.css';
 // Swiper
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -43,24 +41,28 @@ const homepage = () => {
     if (activeTab !== tab) setActiveTab(tab);
   };
 
-  const data = ["item1", "item1", "item1", "item1", "item1", "item1"];
+  const [activeTab1, setActiveTab1] = useState("3");
+  const tabChange1 = (tab) => {
+    if (activeTab1 !== tab) setActiveTab1(tab);
+  };
 
+  const data = ["item1", "item1"];
+  const data2 = [
+    { title: 'TitleTitleTitleTitleTitleTitleTitleTitleTitle1', items: ["item1", "item1", "item1"] },
+    { title: 'Title 2', items: ["item2", "item2", "item2"] },
+    { title: 'Title 3', items: ["item3", "item3", "item3"] }
+  ];
   return (
-    // <React.Fragment>
-    //   <div className="layout-wrapper landing">
-    //     <Home />
-
-    //   </div>
-    // </React.Fragment>
     <React.Fragment>
       <section className="section job-hero-section pb-0" id="hero">
         <Swiper
+          slidesPerView={"1"}
           pagination={{ clickable: true, dynamicBullets: true }}
           modules={[Pagination, Autoplay]}
           loop={true}
           centeredSlides={true}
           autoplay={{ delay: 2500, disableOnInteraction: false }}
-          className="mySwiper swiper pagination-dynamic-swiper rounded bg-light"
+          className="mySwiper swiper pagination-dynamic-swiper rounded bg-light custom-swiper-height"
         >
           <div className="swiper-wrapper">
             <SwiperSlide>
@@ -88,7 +90,6 @@ const homepage = () => {
               marginBottom: "100px",
               position: "relative",
               zIndex: 1,
-              marginBottom: "100px",
             }}
           >
             <Form action="#" className="job-panel-filter shadow">
@@ -197,10 +198,8 @@ const homepage = () => {
             <CardBody className="p-4">
               <TabContent activeTab={activeTab}>
                 <TabPane tabId="1">
-                  {" "}
+
                   <Masonry className="row gallery-wrapper">
-                    {/* {filteredGallery.map(
-                      ({ img, title, auther, likes, comments }, key) => ( */}
                     {data.map((item, index) => (
                       <Col
                         xxl={3}
@@ -214,9 +213,7 @@ const homepage = () => {
                             <Link
                               className="image-popup"
                               to="#"
-                              // title={title}
                               title="test"
-                              // onClick={() => setIndex(key)}
                             >
                               <img
                                 className="gallery-img img-fluid mx-auto"
@@ -225,7 +222,6 @@ const homepage = () => {
                               />
                               <div className="gallery-overlay">
                                 <h5 className="overlay-caption">
-                                  {" "}
                                   <div className="mb-3">
                                     <Button
                                       color="warning"
@@ -233,8 +229,7 @@ const homepage = () => {
                                       style={{ width: "134px" }}
                                     >
                                       <span className="icon-off">
-                                        <i className="ri-ticket-2-line align-bottom me-1"></i>{" "}
-                                        {/* ri-ticket-2-line */}
+                                        <i className="ri-ticket-2-line align-bottom me-1"></i>
                                         Buy Tickets
                                       </span>
                                     </Button>
@@ -245,14 +240,8 @@ const homepage = () => {
                                     className="waves-effect waves-light material-shadow-none text-light align-items-center"
                                     style={{ width: "134px" }}
                                   >
-                                    {" "}
-                                    {/* <span>
-                                    {" "}
-                                    <i className="bx bx-play-circle me-2 align-bottom"></i>
-                                    Trailer{" "}
-                                  </span> */}
                                     <span className="icon-off">
-                                      <i className=" ri-play-circle-line align-bottom me-1"></i>{" "}
+                                      <i className=" ri-play-circle-line align-bottom me-1"></i>
                                       <span>Trailer</span>
                                     </span>
                                   </Button>
@@ -268,7 +257,6 @@ const homepage = () => {
                                   to="#"
                                   className="text-body text-truncate"
                                 >
-                                  {/* {auther} */}
                                   Lật Mặt 7: Một Điều Ước
                                 </Link>
                               </div>
@@ -277,15 +265,11 @@ const homepage = () => {
                         </Card>
                       </Col>
                     ))}
-                    {/* ) )} */}
                   </Masonry>
                 </TabPane>
                 <TabPane tabId="2">
-                  {" "}
                   <Masonry className="row gallery-wrapper">
-                    {/* {filteredGallery.map(
-                      ({ img, title, auther, likes, comments }, key) => ( */}
-                    {data.map((item, index) => (
+                    {data2.map((item, index) => (
                       <Col
                         xxl={3}
                         xl={4}
@@ -298,9 +282,7 @@ const homepage = () => {
                             <Link
                               className="image-popup"
                               to="#"
-                              // title={title}
                               title="test"
-                              // onClick={() => setIndex(key)}
                             >
                               <img
                                 className="gallery-img img-fluid mx-auto"
@@ -309,7 +291,6 @@ const homepage = () => {
                               />
                               <div className="gallery-overlay">
                                 <h5 className="overlay-caption">
-                                  {" "}
                                   <div className="mb-3">
                                     <Button
                                       color="warning"
@@ -317,8 +298,7 @@ const homepage = () => {
                                       style={{ width: "134px" }}
                                     >
                                       <span className="icon-off">
-                                        <i className="ri-ticket-2-line align-bottom me-1"></i>{" "}
-                                        {/* ri-ticket-2-line */}
+                                        <i className="ri-ticket-2-line align-bottom me-1"></i>
                                         Buy Tickets
                                       </span>
                                     </Button>
@@ -329,14 +309,8 @@ const homepage = () => {
                                     className="waves-effect waves-light material-shadow-none text-light align-items-center"
                                     style={{ width: "134px" }}
                                   >
-                                    {" "}
-                                    {/* <span>
-                                    {" "}
-                                    <i className="bx bx-play-circle me-2 align-bottom"></i>
-                                    Trailer{" "}
-                                  </span> */}
                                     <span className="icon-off">
-                                      <i className=" ri-play-circle-line align-bottom me-1"></i>{" "}
+                                      <i className=" ri-play-circle-line align-bottom me-1"></i>
                                       <span>Trailer</span>
                                     </span>
                                   </Button>
@@ -352,7 +326,6 @@ const homepage = () => {
                                   to="#"
                                   className="text-body text-truncate"
                                 >
-                                  {/* {auther} */}
                                   Lật Mặt 7: Một Điều Ước
                                 </Link>
                               </div>
@@ -361,14 +334,187 @@ const homepage = () => {
                         </Card>
                       </Col>
                     ))}
-                    {/* ) )} */}
                   </Masonry>
                 </TabPane>
               </TabContent>
             </CardBody>
           </Card>
         </Container>
-        <Container className="mt-5"></Container>
+
+        {/* Góc Điển Ảnh */}
+        <Container className="mt-5 pb-5">
+          <Card style={{ marginTop: "80px" }} className="bg-light">
+            <CardHeader style={{paddingBottom:30}}>
+              <Nav className="nav-tabs-custom rounded card-header-tabs border-bottom-0 d-flex align-items-center" role="tablist">
+                <div className="text-xl inline-block font-bold uppercase d-flex align-items-center" style={{ borderLeft: "4px solid #007bff", fontSize: "23px", fontWeight: "bold", textTransform: "uppercase", paddingLeft: "0.5rem", marginRight: "1rem" }}>
+                  GÓC ĐIỆN ẢNH
+                </div>
+                <NavItem>
+                  <NavLink
+                    className={classnames({
+                      active: activeTab1 === "3",
+                      "text-secondary-emphasis": activeTab1 === "3",
+                     
+                     
+                    })}
+                    onClick={() => {
+                      tabChange1("3");
+                    }}
+                    type="button"
+                  >
+                      
+                    <i className="fas fa-home"></i>
+                    Bình Luận Phim
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink
+                    to="#"
+                    className={classnames({
+                      active: activeTab1 === "4",
+                      "text-secondary-emphasis": activeTab1 === "4",
+                     
+                      
+                    })}
+                    onClick={() => {
+                      tabChange1("4");
+                    }}
+                    type="button"
+                  >
+                    <i className="far fa-user"></i>
+                    Blog Điện Ảnh
+                  </NavLink>
+                </NavItem>
+              </Nav>
+            </CardHeader>
+
+            <CardBody className="p-4">
+              <TabContent activeTab={activeTab1}>
+                <TabPane tabId="3">
+                  <Row>
+                    <Col md={6}>
+                      <div className="mb-3">
+                        <img
+                          src={filmtest}
+                          alt=""
+                          className="hover-img-home"
+                          style={{ width: "500px", height: "400px", objectFit: "cover" }}
+                        />
+                        <Link
+                          to="#"
+                          className="hover-link-home"
+                          style={{
+                            fontSize: 23,
+                            fontWeight: "bold",
+                            width: "100%",
+                          }}
+                        >
+                          [Review] Badboi và gã đồ tể
+                        </Link>
+                      </div>
+                    </Col>
+                    <Col md={6}>
+                      {data2.map((item, index) => (
+                        <Row key={index} className="mb-3">
+                          <Col md={6}>
+                            <div className="d-flex align-items-center">
+                              <img
+                                src={filmtest}
+                                alt=""
+                                className="hover-img-home"
+                                style={{
+                                  width: "195px",
+                                  height: "130px",
+                                  marginRight: "15px",
+                                  objectFit: "cover",
+                                  flexShrink: 0,
+                                }}
+                              />
+                              <div style={{ flexGrow: 1, marginTop: "-70px", width: "99%" }}>
+                                <Link
+                                  to="#"
+                                  className="hover-link-home"
+                                  style={{
+                                    fontSize: 23,
+                                    fontWeight: "bold",
+                                    width: "100%",
+                                  }}
+                                >
+                                  {item.title}
+                                </Link>
+                              </div>
+                            </div>
+                          </Col>
+                        </Row>
+                      ))}
+                    </Col>
+                  </Row>
+                </TabPane>
+
+                <TabPane tabId="4">
+                  <Row>
+                    <Col md={6}>
+                      <div className="mb-3">
+                        <img
+                          src={filmtest}
+                          alt=""
+                          className="hover-img-home"
+                          style={{ width: "500px", height: "400px", objectFit: "cover" }}
+                        />
+                        <Link
+                          to="#"
+                          className="hover-link-home"
+                          style={{
+                            fontSize: 23,
+                            fontWeight: "bold",
+                            width: "100%",
+                          }}
+                        >
+                          VENOM 3 sẽ chết
+                        </Link>
+                      </div>
+                    </Col>
+                    <Col md={6}>
+                      {data2.map((item, index) => (
+                        <Row key={index} className="mb-3">
+                          <Col md={6}>
+                            <div className="d-flex align-items-center">
+                              <img
+                                src={filmtest}
+                                alt=""
+                                className="hover-img-home"
+                                style={{
+                                  width: "195px",
+                                  height: "130px",
+                                  marginRight: "15px",
+                                  objectFit: "cover",
+                                  flexShrink: 0,
+                                }}
+                              />
+                              <div style={{ flexGrow: 1, marginTop: "-70px", width: "99%" }}>
+                                <Link
+                                  to="#"
+                                  className="hover-link-home"
+                                  style={{
+                                    fontSize: 23,
+                                    fontWeight: "bold",
+                                    width: "100%",
+                                  }}
+                                >
+                                  {item.title}
+                                </Link>
+                              </div>
+                            </div>
+                          </Col>
+                        </Row>
+                      ))}
+                    </Col>
+                  </Row>
+                </TabPane>
+              </TabContent>
+            </CardBody>
+          </Card>
+        </Container>
       </section>
     </React.Fragment>
   );

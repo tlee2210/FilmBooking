@@ -1,15 +1,15 @@
 package com.cinemas.service.impl.home;
 
+import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.SearchCelebRequest;
-import com.cinemas.dto.response.SelectOptionAndModelReponse;
-import com.cinemas.dto.response.SelectOptionCeleb;
-import com.cinemas.dto.response.SelectOptionReponse;
+import com.cinemas.dto.response.*;
 import com.cinemas.entities.Celebrity;
 import com.cinemas.entities.Country;
 import com.cinemas.entities.Movie;
 import com.cinemas.enums.MovieStatus;
 import com.cinemas.enums.RoleCeleb;
+import com.cinemas.exception.AppException;
 import com.cinemas.repositories.CelebrityRepository;
 import com.cinemas.repositories.CountryRepository;
 import com.cinemas.repositories.MovieRepository;
@@ -25,6 +25,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.cinemas.exception.ErrorCode.NOT_FOUND;
 
 @Component
 public class HomeCelebServiceImpl implements HomeCelebService {
@@ -65,9 +67,7 @@ public class HomeCelebServiceImpl implements HomeCelebService {
             optionsCountries.add(new SelectOptionReponse(country.getId(), country.getName()));
         }
 
-        List<Movie> movieList = movieRepository.radomMovieSoon(MovieStatus.COMING_SOON);
-
-        return new SelectOptionCeleb<>(celebrities, optionsCountries, movieList);
+        return new SelectOptionCeleb<>(celebrities, optionsCountries);
     }
 
     @Override
@@ -95,8 +95,36 @@ public class HomeCelebServiceImpl implements HomeCelebService {
             optionsCountries.add(new SelectOptionReponse(country.getId(), country.getName()));
         }
 
-        List<Movie> movieList = movieRepository.radomMovieSoon(MovieStatus.COMING_SOON);
+        return new SelectOptionCeleb<>(celebrities, optionsCountries);
+    }
 
-        return new SelectOptionCeleb<>(celebrities, optionsCountries, movieList);
+    @Override
+    public CelebResponse getDetailCeleb(String slug) {
+        Celebrity celebrity = celebrityRepository.findBySlug(slug);
+
+        if (celebrity == null) throw new AppException(NOT_FOUND);
+
+        celebrity.setImage(fileStorageServiceImpl.getUrlFromPublicId(celebrity.getImage()));
+
+        CelebResponse celebResponse = new CelebResponse();
+        ObjectUtils.copyFields(celebrity, celebResponse);
+
+        List<Movie> movieList = new ArrayList<>();
+        if(celebrity.getRole() == RoleCeleb.ACTOR){
+            movieList = celebrity.getMoviesActor();
+        }
+        else{
+            movieList = celebrity.getMoviesDirector();
+        }
+
+        List<MovieCelebResponse> movieCelebList = new ArrayList<>();
+        for (Movie movie : movieList) {
+            MovieCelebResponse movieCelebResponse = new MovieCelebResponse();
+            ObjectUtils.copyFields(movie, movieCelebResponse);
+            movieCelebResponse.setImage(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
+            movieCelebList.add(movieCelebResponse);
+        }
+        celebResponse.setMovieList(movieCelebList);
+        return celebResponse;
     }
 }
