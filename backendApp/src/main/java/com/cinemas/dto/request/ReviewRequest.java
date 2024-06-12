@@ -1,5 +1,6 @@
 package com.cinemas.dto.request;
 
+import com.cinemas.enums.ReviewType;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,5 +17,8 @@ public class ReviewRequest {
     private int id;
     @NotEmpty(message = "VALIDATION")
     private String name;
+    @NotEmpty
     private String description;
+    @NotEmpty
+    private ReviewType type;
 }

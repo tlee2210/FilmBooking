@@ -4,6 +4,7 @@ import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.ReviewRequest;
 import com.cinemas.dto.request.SearchRequest;
+import com.cinemas.dto.request.SearchReviewRequest;
 import com.cinemas.entities.Celebrity;
 import com.cinemas.entities.Review;
 import com.cinemas.entities.WaterCorn;
@@ -30,12 +31,10 @@ import static com.cinemas.exception.ErrorCode.NOT_FOUND;
 public class ReviewServiceImp implements ReviewService {
     @Autowired
     ReviewRepository reviewRepository;
-    @Autowired
-    FileStorageServiceImpl fileStorageServiceImpl;
 
     @Override
-    public Page<Review> getAllReview(SearchRequest PaginationHelper) {
-        List<Review> reviewList = reviewRepository.searchByName(PaginationHelper.getSearchname());
+    public Page<Review> getAllReview(SearchReviewRequest PaginationHelper) {
+        List<Review> reviewList = reviewRepository.findByType(PaginationHelper.getType());
 
         PagedListHolder<Review> pagedListHolder = new PagedListHolder<Review>(reviewList);
         pagedListHolder.setPage(PaginationHelper.getPageNo());
@@ -68,7 +67,7 @@ public class ReviewServiceImp implements ReviewService {
 
 
     @Override
-    public Integer deleteReview(String slug) throws IOException {
+    public Integer deleteReview(String slug) {
         Review review = reviewRepository.findBySlug(slug);
 
         if (review == null) throw new AppException(NOT_FOUND);
@@ -79,7 +78,7 @@ public class ReviewServiceImp implements ReviewService {
     }
 
     @Override
-    public Review getEditReview(String slug) throws IOException {
+    public Review getEditReview(String slug) {
         Review review = reviewRepository.findBySlug(slug);
 
         if (review == null) throw new AppException(NOT_FOUND);
@@ -88,7 +87,7 @@ public class ReviewServiceImp implements ReviewService {
     }
 
     @Override
-    public boolean updateReview(ReviewRequest review) throws IOException {
+    public boolean updateReview(ReviewRequest review) {
         Review wat = reviewRepository
                 .findById(review.getId())
                 .orElseThrow(() -> new AppException(NOT_FOUND));

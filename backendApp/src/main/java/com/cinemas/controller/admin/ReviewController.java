@@ -2,8 +2,10 @@ package com.cinemas.controller.admin;
 
 import com.cinemas.dto.request.ReviewRequest;
 import com.cinemas.dto.request.SearchRequest;
+import com.cinemas.dto.request.SearchReviewRequest;
 import com.cinemas.dto.response.APIResponse;
 import com.cinemas.entities.Review;
+import com.cinemas.enums.ReviewType;
 import com.cinemas.exception.AppException;
 import com.cinemas.service.admin.ReviewService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,11 +35,12 @@ public class ReviewController {
      * @return
      */
     @GetMapping
-    public APIResponse<Page<Review>> getReview(@RequestParam(required = false) String search,
-                                                        @RequestParam(required = false, defaultValue = "1") Integer pageNo,
-                                                        @RequestParam(required = false, defaultValue = "15") Integer pageSize,
-                                                        @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort) {
-        SearchRequest searchRequest = new SearchRequest(search, pageNo - 1, pageSize, sort);
+    public APIResponse<Page<Review>> getReview(
+            @RequestParam(required = false) ReviewType search,
+            @RequestParam(required = false, defaultValue = "1") Integer pageNo,
+            @RequestParam(required = false, defaultValue = "15") Integer pageSize,
+            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort) {
+        SearchReviewRequest searchRequest = new SearchReviewRequest(search, pageNo - 1, pageSize, sort);
 
         Page<Review> reviewList = reviewService.getAllReview(searchRequest);
         APIResponse<Page<Review>> apiResponse = new APIResponse<>();
@@ -54,7 +57,7 @@ public class ReviewController {
      * @throws IOException
      */
     @PostMapping("/create")
-    public APIResponse<String> createReview(@RequestBody ReviewRequest reviewRequest) throws IOException {
+    public APIResponse<String> createReview(@RequestBody ReviewRequest reviewRequest){
         boolean checkCreate = reviewService.addReview(reviewRequest);
         if (checkCreate) {
             APIResponse<String> apiResponse = new APIResponse();
@@ -75,7 +78,7 @@ public class ReviewController {
      * @throws IOException
      */
     @DeleteMapping("/delete/{slug}")
-    public APIResponse<Integer> deleteReview(@PathVariable String slug) throws IOException {
+    public APIResponse<Integer> deleteReview(@PathVariable String slug) {
 
         int id = reviewService.deleteReview(slug);
         if (id > 0) {
@@ -96,7 +99,7 @@ public class ReviewController {
      * @return
      */
     @GetMapping("/{slug}/edit")
-    public APIResponse<Review> getEditWaterCorn(@PathVariable String slug) throws IOException {
+    public APIResponse<Review> getEditWaterCorn(@PathVariable String slug) {
         Review review = reviewService.getEditReview(slug);
 
         APIResponse<Review> apiResponse = new APIResponse();
@@ -113,7 +116,7 @@ public class ReviewController {
      * @throws IOException
      */
     @PutMapping(value = "/update")
-    public APIResponse<String> updateReview(@RequestBody ReviewRequest reviewRequest) throws IOException {
+    public APIResponse<String> updateReview(@RequestBody ReviewRequest reviewRequest) {
 //        System.out.println(celebrity);
         boolean checkUpdate = reviewService.updateReview(reviewRequest);
         if (checkUpdate) {
