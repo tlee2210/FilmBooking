@@ -246,7 +246,7 @@ const ShowTimeCreate = (props) => {
                                 validation.setFieldValue("time", formattedTime);
                               }}
                               options={{
-                                // mode: "multiple",
+                                mode: "multiple",
                                 enableTime: true,
                                 noCalendar: true,
                                 dateFormat: "H:i",

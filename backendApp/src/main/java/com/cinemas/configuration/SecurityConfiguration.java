@@ -44,6 +44,7 @@ public class SecurityConfiguration {
                                 "/api/admin/v1/room/**",
                                 "/api/home/v1/movie/**",
                                 "/api/admin/v1/show-time/**",
+                                "/api/admin/v1/review/**",
                                 "/api/home/v1/celebrity/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/admin").hasAnyAuthority(RoleType.ADMIN.name())

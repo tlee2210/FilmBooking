@@ -68,13 +68,13 @@
     /* Khoảng cách giữa các ô vuông */
 }
 
-.seat {
+/* .seat {
     width: 20px;
     height: 20px;
     margin-right: 5px;
     border: 1px solid #ffffff;
     /* Đường viền cho ô vuông */
-}
+/* }  */
 
 .ghe-da-ban {
     background-color: gray;

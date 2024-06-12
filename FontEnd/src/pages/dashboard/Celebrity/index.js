@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 
 import TableContainer from "../../../Components/Common/TableContainerReactTable";
-import { message } from "antd";
+import { message, Image } from "antd";
 
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -151,7 +151,11 @@ const Celebrity = (props) => {
         accessorKey: "image",
         cell: (cell) => {
           return (
-            <img src={cell.getValue()} alt={cell.getValue()} width={100} />
+            <Image
+              width={70}
+              src={cell.getValue()}
+              alt={cell.getValue()}
+            />
           );
         },
         enableColumnFilter: false,

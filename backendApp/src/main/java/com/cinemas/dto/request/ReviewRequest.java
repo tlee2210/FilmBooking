@@ -17,5 +17,4 @@ public class ReviewRequest {
     @NotEmpty(message = "VALIDATION")
     private String name;
     private String description;
-    private MultipartFile file;
 }

@@ -1,10 +1,8 @@
 package com.cinemas.entities;
 
+import com.cinemas.enums.ReviewType;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Table(name = "review")
 public class Review {
     @Id
     @GeneratedValue
@@ -25,9 +24,14 @@ public class Review {
     private String name;
 
     @Column
+    private ReviewType type;
+
+    @Column
+    private Integer views = 0;
+
+    @Column
     private String slug;
-    @Column
-    private String image;
-    @Column
+
+    @Column(columnDefinition = "TEXT")
     private String description;
 }
