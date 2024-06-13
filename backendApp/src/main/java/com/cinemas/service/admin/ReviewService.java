@@ -1,5 +1,6 @@
 package com.cinemas.service.admin;
 
+import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.ReviewRequest;
 import com.cinemas.dto.request.SearchRequest;
 import com.cinemas.dto.request.SearchReviewRequest;
@@ -11,7 +12,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ReviewService {
-    Page<Review> getAllReview(SearchReviewRequest PaginationHelper);
+    Page<Review> getAllReview(PaginationHelper paginationHelper);
     boolean addReview(ReviewRequest review);
 
     Integer deleteReview(String slug);

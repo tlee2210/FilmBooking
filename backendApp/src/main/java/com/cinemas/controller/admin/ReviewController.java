@@ -1,5 +1,6 @@
 package com.cinemas.controller.admin;
 
+import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.ReviewRequest;
 import com.cinemas.dto.request.SearchRequest;
 import com.cinemas.dto.request.SearchReviewRequest;
@@ -36,13 +37,12 @@ public class ReviewController {
      */
     @GetMapping
     public APIResponse<Page<Review>> getReview(
-            @RequestParam(required = false) ReviewType search,
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
             @RequestParam(required = false, defaultValue = "15") Integer pageSize,
             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort) {
-        SearchReviewRequest searchRequest = new SearchReviewRequest(search, pageNo - 1, pageSize, sort);
+        PaginationHelper paginationHelper = new PaginationHelper(pageNo, pageSize, sort, "id");
 
-        Page<Review> reviewList = reviewService.getAllReview(searchRequest);
+        Page<Review> reviewList = reviewService.getAllReview(paginationHelper);
         APIResponse<Page<Review>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(reviewList);
