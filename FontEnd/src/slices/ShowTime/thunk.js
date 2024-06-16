@@ -1,7 +1,29 @@
-import { setMovieAndCinema, setMovieItem, setRoomItem } from "./reducer";
+import {
+  setMovieAndCinema,
+  setMovieItem,
+  setRoomItem,
+  fetchSuccess,
+  setShowTime,
+} from "./reducer";
 import { Success, Error } from "../message/reducer";
 
 import axios from "axios";
+
+export const getShowTime =
+  (cinema, startDay, endDay, pageNo, pageSize) => async (dispatch) => {
+    await axios
+      .get(`http://localhost:8081/api/admin/v1/show-time`, {
+        params: { cinema, startDay, endDay, pageNo, pageSize },
+      })
+      .then((response) => {
+        console.log(response);
+        dispatch(fetchSuccess({ data: response?.data?.result }));
+      })
+      .catch((err) => {
+        console.error(err);
+        // dispatch(Error(err.response.data?.message));
+      });
+  };
 
 export const getMovieAndCinema = () => async (dispatch) => {
   await axios
@@ -41,5 +63,52 @@ export const getMovieForShowTime = (id) => async (dispatch) => {
     .catch((err) => {
       console.error(err);
       // dispatch(Error(err.response.data?.message));
+    });
+};
+
+export const createShowTime = (formData, history) => async (dispatch) => {
+  await axios
+    .post(`http://localhost:8081/api/admin/v1/show-time/create`, formData)
+    .then((response) => {
+      console.log(response);
+      dispatch(Success(response?.data?.message));
+      history("/dashboard/show-time");
+    })
+    .catch((err) => {
+      console.error(err);
+      dispatch(Error(err.response.data?.message));
+    });
+};
+
+export const deleteShowTime = (id) => async (dispatch) => {
+  await axios
+    .delete(`http://localhost:8081/api/admin/v1/show-time/${id}/delete`)
+    .then((response) => {
+      console.log(response);
+      dispatch(Success(response?.data?.message));
+      dispatch(getShowTime());
+
+      // history("/dashboard/show-time");
+    })
+    .catch((err) => {
+      console.error(err);
+      dispatch(Error(err.response.data?.message));
+    });
+};
+
+export const getShowTimeEdit = (id) => async (dispatch) => {
+  await axios
+    .get(`http://localhost:8081/api/admin/v1/show-time/${id}/edit`)
+    .then((response) => {
+      console.log(response);
+      dispatch(setShowTime(response?.data?.result));
+      // history("/dashboard/show-time");
+    })
+    .catch((err) => {
+      console.error(err);
+      // dispatch(Error(err.response.data?.message));
+      // if (err.response?.status === 404) {
+      //   history("/dashboard/show-time");
+      // }
     });
 };

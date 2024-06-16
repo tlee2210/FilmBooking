@@ -376,7 +376,7 @@ const Movies = (props) => {
                           to={`/dashboard/movie/create`}
                         >
                           <i className="ri-add-line align-bottom me-1"></i> Add
-                          New Cinema
+                          New
                         </Link>
                       </div>
                     </div>

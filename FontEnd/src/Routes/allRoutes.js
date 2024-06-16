@@ -58,6 +58,8 @@ const UserCreateManagement = lazy(() =>
 const UserEditManagement = lazy(() => import("../pages/dashboard/User/edit"));
 
 const ShowTimeCreate = lazy(() => import("../pages/dashboard/ShowTime/create"));
+const ShowTimeEdit = lazy(() => import("../pages/dashboard/ShowTime/edit"));
+const ShowTime = lazy(() => import("../pages/dashboard/ShowTime/index"));
 
 //Cinema Coner
 const Actor = lazy(() => import("../pages/Page/CinemaCorner/Actor"));
@@ -80,7 +82,7 @@ import BinhLuanPhimDetails from "../pages/Page/BinhLuanPhim/details";
 //Rạp Phim
 import RapPhim from "../pages/Page/RapPhim/Index";
 
-//Order 
+//Order
 import Order from "../pages/Page/Order/index";
 
 const authProtectedRoutes = [
@@ -116,7 +118,8 @@ const authProtectedRoutes = [
   { path: "/dashboard/users/:id/edit", component: <UserEditManagement /> },
 
   { path: "/dashboard/show-time/create", component: <ShowTimeCreate /> },
-
+  { path: "/dashboard/show-time/:id/edit", component: <ShowTimeEdit /> },
+  { path: "/dashboard/show-time", component: <ShowTime /> },
   // {
   //   path: "/",
   //   exact: true,

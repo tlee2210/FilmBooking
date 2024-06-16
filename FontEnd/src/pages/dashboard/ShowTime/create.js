@@ -22,6 +22,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import filmImageDefaut from "../../../assets/images/film.jpg";
+import { message } from "antd";
+import { clearNotification } from "../../../slices/message/reducer";
 
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -30,6 +32,7 @@ import {
   getMovieAndCinema,
   getRoomForShowTime,
   getMovieForShowTime,
+  createShowTime,
 } from "../../../slices/ShowTime/thunk";
 
 const ShowTimeCreate = (props) => {
@@ -61,6 +64,15 @@ const ShowTimeCreate = (props) => {
     selectRoom,
   } = useSelector(ShowTimeStateData);
 
+  useEffect(() => {
+    if (error) {
+      if (messageError != null) {
+        message.error(messageError);
+      }
+    }
+    dispatch(clearNotification());
+  }, [error]);
+
   const validation = useFormik({
     enableReinitialize: true,
 
@@ -71,8 +83,30 @@ const ShowTimeCreate = (props) => {
       time: [],
       room: [],
     },
+    validationSchema: Yup.object({
+      cinema: Yup.string().required("Please Select a Cinema"),
+      movie: Yup.string().required("Please Select a Movie"),
+      day: Yup.array().min(1, "Please Select a Day"),
+      time: Yup.array().min(1, "Please Select a time"),
+      room: Yup.array().min(1, "Please Select a room"),
+    }),
     onSubmit: (values) => {
       console.log(values);
+      const formData = new FormData();
+      formData.append("cinemaId", values.cinema);
+      formData.append("movieId", values.movie);
+      formData.append("roomId", values.room);
+      values.room.forEach((value, index) => {
+        formData.append(`roomId[${index}]`, value);
+      });
+      values.time.forEach((value, index) => {
+        formData.append(`times[${index}]`, value);
+      });
+      // formData.append("days", values.day);
+      values.day.forEach((value, index) => {
+        formData.append(`days[${index}]`, value);
+      });
+      dispatch(createShowTime(formData, props.router.navigate));
     },
   });
 
@@ -115,6 +149,24 @@ const ShowTimeCreate = (props) => {
         color: "white",
       },
     }),
+  };
+
+  const generateTimeOptions = (startTime, duration, interval) => {
+    const options = [];
+    let currentTime = new Date(`1970-01-01T${startTime}:00`);
+    const midnight = new Date(`1970-01-02T00:00:00`);
+
+    while (currentTime < midnight) {
+      const formattedTime = currentTime.toTimeString().slice(0, 5);
+      options.push({
+        value: formattedTime,
+        label: formattedTime,
+      });
+
+      currentTime.setMinutes(currentTime.getMinutes() + duration + interval);
+    }
+
+    return options;
   };
 
   return (
@@ -161,6 +213,14 @@ const ShowTimeCreate = (props) => {
                           (opt) => opt.value === validation.values.movie
                         )}
                       />
+                      {validation.touched.movie && validation.errors.movie && (
+                        <div
+                          className="invalid-feedback"
+                          style={{ display: "block" }}
+                        >
+                          {validation.errors.movie}
+                        </div>
+                      )}
                     </div>
                   </Col>
                   <Col sm={12}>
@@ -188,6 +248,15 @@ const ShowTimeCreate = (props) => {
                           (opt) => opt.value === validation.values.cinema
                         )}
                       />
+                      {validation.touched.cinema &&
+                        validation.errors.cinema && (
+                          <div
+                            className="invalid-feedback"
+                            style={{ display: "block" }}
+                          >
+                            {validation.errors.cinema}
+                          </div>
+                        )}
                     </div>
                   </Col>
                 </CardBody>
@@ -202,7 +271,7 @@ const ShowTimeCreate = (props) => {
                   <CardBody>
                     <Card className="shadow-lg p-3 mb-5 bg-white rounded">
                       <Row className="mb-3">
-                        <Col sm={4}>
+                        <Col sm={12}>
                           <div className="mb-3">
                             <label className="form-label mb-0">Day</label>
                             <Flatpickr
@@ -230,31 +299,85 @@ const ShowTimeCreate = (props) => {
                                 maxDate: movieItem.endDate,
                               }}
                             />
+                            {validation.touched.day &&
+                              validation.errors.day && (
+                                <div
+                                  className="invalid-feedback"
+                                  style={{ display: "block" }}
+                                >
+                                  {validation.errors.day}
+                                </div>
+                              )}
                           </div>
                         </Col>
-                        <Col sm={4}>
+                        <Col sm={6}>
                           <div className="mb-3">
                             <label className="form-label mb-0">Time</label>
-                            <Flatpickr
-                              placeholder="select times"
-                              className="form-control"
-                              value={validation.values.time}
-                              onChange={([selectedDate]) => {
-                                const formattedTime = selectedDate
-                                  .toTimeString()
-                                  .slice(0, 5);
-                                validation.setFieldValue("time", formattedTime);
-                              }}
-                              options={{
-                                mode: "multiple",
-                                enableTime: true,
-                                noCalendar: true,
-                                dateFormat: "H:i",
-                              }}
-                            />
+                            {validation.values.time.length > 0 &&
+                            validation.values.time != null ? (
+                              <Select
+                                options={generateTimeOptions(
+                                  validation.values.time[0],
+                                  movieItem.duration_movie,
+                                  5
+                                )}
+                                isMulti={true}
+                                styles={Styles}
+                                placeholder="Select Time..."
+                                classNamePrefix="select"
+                                onChange={(option) => {
+                                  validation.setFieldValue(
+                                    "time",
+                                    option.map((item) => item.value)
+                                  );
+                                }}
+                                onBlur={() =>
+                                  validation.setFieldTouched("time", true)
+                                }
+                                value={generateTimeOptions(
+                                  validation.values.time[0],
+                                  movieItem.duration_movie,
+                                  5
+                                ).filter((opt) =>
+                                  validation.values.time.includes(opt.value)
+                                )}
+                              />
+                            ) : (
+                              <Flatpickr
+                                placeholder="select times"
+                                className="form-control"
+                                value={validation.values.time}
+                                onChange={(selectedTimes) => {
+                                  const formattedTimes = selectedTimes.map(
+                                    (time) => {
+                                      return time.toTimeString().slice(0, 5);
+                                    }
+                                  );
+                                  validation.setFieldValue(
+                                    "time",
+                                    formattedTimes
+                                  );
+                                }}
+                                options={{
+                                  mode: "multiple",
+                                  enableTime: true,
+                                  noCalendar: true,
+                                  dateFormat: "H:i",
+                                }}
+                              />
+                            )}
+                            {validation.touched.time &&
+                              validation.errors.time && (
+                                <div
+                                  className="invalid-feedback"
+                                  style={{ display: "block" }}
+                                >
+                                  {validation.errors.time}
+                                </div>
+                              )}
                           </div>
                         </Col>
-                        <Col sm={4}>
+                        <Col sm={6}>
                           <div className="mb-3">
                             <label className="form-label mb-0">Room</label>
                             <Select
@@ -276,9 +399,18 @@ const ShowTimeCreate = (props) => {
                                 )
                               }
                               value={selectRoom.find(
-                                (opt) => opt.value === validation.values.Room
+                                (opt) => opt.value === validation.values.room
                               )}
                             />
+                            {validation.touched.room &&
+                              validation.errors.room && (
+                                <div
+                                  className="invalid-feedback"
+                                  style={{ display: "block" }}
+                                >
+                                  {validation.errors.room}
+                                </div>
+                              )}
                           </div>
                         </Col>
                       </Row>
@@ -299,7 +431,7 @@ const ShowTimeCreate = (props) => {
                           : filmImageDefaut
                       }
                       alt="Card cap"
-                      width={100}
+                      width={70}
                     />
                     {movieItem && movieItem.name ? (
                       <CardBody>

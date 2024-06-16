@@ -26,6 +26,7 @@ public class GlobalExceptionHandler {
         apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
         return ResponseEntity.badRequest().body(apiResponse);
     }
+
     @ExceptionHandler(value = IOException.class)
     ResponseEntity<APIResponse> handleIOException(IOException exception) {
         APIResponse apiResponse = new APIResponse<>();
@@ -66,42 +67,72 @@ public class GlobalExceptionHandler {
                         .build());
     }
 
+//    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+//    ResponseEntity<APIResponse> handlingValidationException(MethodArgumentNotValidException exception) {
+//        String enumKey = exception.getFieldError().getDefaultMessage();
+//
+//        ErrorCode errorCode = ErrorCode.INVALID_KEY;
+//        Map<String, String> errors = new HashMap<>();
+//        errorCode = ErrorCode.valueOf(enumKey);
+//
+//        exception.getBindingResult().getFieldErrors().forEach(error -> {
+//
+//            ErrorCode errortype = ErrorCode.valueOf(error.getDefaultMessage());
+//
+//            var constraintViolation = error.unwrap(ConstraintViolation.class);
+//
+//            Map<String, Object> attributes = constraintViolation.getConstraintDescriptor().getAttributes();
+//
+//            String errorMessage = Objects.nonNull(attributes)
+//                    ? mapAttribute(errortype.getMessageDetail(), attributes)
+//                    : errortype.getMessageDetail();
+//            errorMessage = errorMessage.replace("{field}", error.getField());
+//            errors.put(error.getField(), errorMessage);
+//        });
+//
+//        APIResponse apiResponse = new APIResponse();
+//
+//        apiResponse.setCode(errorCode.getStatusCode().value());
+//        apiResponse.setMessage(errorCode.getMessage());
+//        apiResponse.setResult(errors);
+//
+//        return ResponseEntity.badRequest().body(apiResponse);
+//    }
+
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    ResponseEntity<APIResponse> handlingValidationException(MethodArgumentNotValidException exception) {
-        String enumKey = exception.getFieldError().getDefaultMessage();
-
-        ErrorCode errorCode = ErrorCode.INVALID_KEY;
+    public ResponseEntity<APIResponse> handlingValidationException(MethodArgumentNotValidException exception) {
         Map<String, String> errors = new HashMap<>();
-        try {
-            errorCode = ErrorCode.valueOf(enumKey);
 
-            exception.getBindingResult().getFieldErrors().forEach(error -> {
+        exception.getBindingResult().getFieldErrors().forEach(error -> {
+            String field = error.getField();
+            String defaultMessage = error.getDefaultMessage();
+            ErrorCode errorCode;
 
-                ErrorCode errortype = ErrorCode.valueOf(error.getDefaultMessage());
+            try {
+                errorCode = ErrorCode.valueOf(defaultMessage);
+            } catch (IllegalArgumentException e) {
+                errorCode = ErrorCode.INVALID_KEY;
+            }
 
-                var constraintViolation = error.unwrap(ConstraintViolation.class);
+            var constraintViolation = error.unwrap(ConstraintViolation.class);
+            Map<String, Object> attributes = constraintViolation.getConstraintDescriptor().getAttributes();
 
-                Map<String, Object> attributes = constraintViolation.getConstraintDescriptor().getAttributes();
+            String errorMessage = Objects.nonNull(attributes)
+                    ? mapAttribute(errorCode.getMessageDetail(), attributes)
+                    : errorCode.getMessageDetail();
+            errorMessage = errorMessage.replace("{field}", field);
 
-                String errorMessage = Objects.nonNull(attributes)
-                        ? mapAttribute(errortype.getMessageDetail(), attributes)
-                        : errortype.getMessageDetail();
-                errorMessage = errorMessage.replace("{field}", error.getField());
-                errors.put(error.getField(), errorMessage);
-            });
-
-        } catch (IllegalArgumentException e) {
-
-        }
+            errors.put(field, errorMessage);
+        });
 
         APIResponse apiResponse = new APIResponse();
-
-        apiResponse.setCode(errorCode.getStatusCode().value());
-        apiResponse.setMessage(errorCode.getMessage());
+        apiResponse.setCode(ErrorCode.INVALID_KEY.getStatusCode().value());
+        apiResponse.setMessage("Validation failed");
         apiResponse.setResult(errors);
 
         return ResponseEntity.badRequest().body(apiResponse);
     }
+
 
     private String mapAttribute(String message, Map<String, Object> attributes) {
         String minValue = String.valueOf(attributes.get(MIN_ATTRIBUTE));

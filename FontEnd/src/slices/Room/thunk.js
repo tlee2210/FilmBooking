@@ -9,7 +9,7 @@ export const getRoomMovie =
         params: { name, cinema, pageNo, pageSize },
       })
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         dispatch(
           fetchSuccess({
             data: response.data?.result,
@@ -26,7 +26,7 @@ export const getCreateRoom = () => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/admin/v1/room/create`)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(
         setSelectOption({
           data: response.data?.result,
@@ -82,7 +82,7 @@ export const GetEditRoom = (id, history) => async (dispatch) => {
       console.error(err);
       dispatch(Error(err.response?.data?.message));
       if (err.response?.status === 404) {
-        history("/dashboard/movie");
+        history("/dashboard/room");
       }
     });
 };

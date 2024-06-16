@@ -2,10 +2,10 @@ package com.cinemas.exception;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
-@Getter
 public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "Uncategorized error"),
 
@@ -39,6 +39,11 @@ public enum ErrorCode {
 
     NOT_FOUND(HttpStatus.NOT_FOUND, "not found"),
 
+    NOT_FOUND_MOVIE(HttpStatus.NOT_FOUND, "not found movie"),
+
+    NOT_FOUND_CINEMA(HttpStatus.NOT_FOUND, "not found cinema"),
+
+    NOT_FOUND_ROOM(HttpStatus.NOT_FOUND, "not found room"),
     //    USERNAME_INVALID("{field} must be at least {min} characters", HttpStatus.BAD_REQUEST, "Validation Error"),
     INVALID_EMAIL("Invalid email format", HttpStatus.BAD_REQUEST, "Validation Error"),
 
@@ -49,9 +54,34 @@ public enum ErrorCode {
     FIELD_TOO_LENGTH("{field} must be at least {min} characters", HttpStatus.BAD_REQUEST, "Validation Error"),
 
     CREATE_FAILED(HttpStatus.BAD_REQUEST, "Create failed"),
+    DELETE_FAILED(HttpStatus.BAD_REQUEST, "Delete failed"),
 
     UPDATE_FAILED(HttpStatus.BAD_REQUEST, "Update failed"),
     ;
+
+    public String getMessageDetail() {
+        return messageDetail;
+    }
+
+    public void setMessageDetail(String messageDetail) {
+        this.messageDetail = messageDetail;
+    }
+
+    public HttpStatusCode getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(HttpStatusCode statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     private String messageDetail;
     private HttpStatusCode statusCode;

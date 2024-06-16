@@ -24,14 +24,19 @@ public class Room {
 
     @Column
     private String name;
+
     @Column
     private Integer SeatRows;
+
     @Column
     private Integer SeatColumns;
+
     @Column
     private Integer doubleSeatRows;
+
     @Column
     private Integer doubleSeatColumns;
+
     @Column
     private Integer totalColumn;
 

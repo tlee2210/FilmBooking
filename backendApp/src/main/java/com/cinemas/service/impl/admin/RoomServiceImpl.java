@@ -70,8 +70,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public SelectOptionAndModelReponse<RoomTableReponse> getEditRoom(Integer id) {
-        Room room = roomRepository.getById(id);
-        if (room == null) throw new AppException(NOT_FOUND);
+        Room room = roomRepository.findById(id).orElseThrow(() -> new AppException(NOT_FOUND));
 
         RoomTableReponse roomTableReponse = new RoomTableReponse();
         roomTableReponse.setId(room.getId());
