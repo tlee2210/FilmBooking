@@ -15,6 +15,11 @@ import {
     TabContent,
     TabPane,
     Input,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+    Button,
 } from 'reactstrap';
 
 
@@ -44,11 +49,21 @@ const checkOut = () => {
 
 
     function handleNextTab() {
-        if (passedSteps.includes(activeTab)) {
+        if (activeTab === 3) {
+            setModal(true); // Hiển thị modal khi ở Tab 3
+        } else {
             setactiveTab(activeTab + 1);
             setPassedSteps([...passedSteps, activeTab + 1]);
         }
     }
+
+    const handleConfirmation = () => {
+
+        setModal(false);
+
+        setactiveTab(4);
+    };
+
 
     function countUP(id, prev_data_attr, itemPrice) {
         setproductList(
@@ -65,6 +80,21 @@ const checkOut = () => {
             )
         );
     }
+    const [promoCode, setPromoCode] = useState('');
+    const [selectedPayment, setSelectedPayment] = useState('payoo');
+
+    const handlePromoCodeChange = (e) => {
+        setPromoCode(e.target.value);
+    };
+
+    const handlePaymentChange = (e) => {
+        setSelectedPayment(e.target.value);
+    };
+
+    const applyPromoCode = () => {
+        // Xử lý logic áp dụng mã khuyến mãi ở đây
+        alert(`Mã khuyến mãi ${promoCode} đã được áp dụng!`);
+    };
 
     document.title = "Order";
 
@@ -135,6 +165,7 @@ const checkOut = () => {
                                 <Row className='gx-3'>
                                     <Col xl={8}>
                                         <TabContent activeTab={activeTab}>
+
                                             <TabPane tabId={1}>
                                                 <div>
                                                     {/* Seat Selection Content */}
@@ -151,15 +182,7 @@ const checkOut = () => {
                                                         <div>
                                                             <table>
                                                                 <tbody>
-                                                                    <tr><td>I</td>{[...Array(8)].map((_, i) => <td key={i} className="sold-seat">{i + 1}</td>)}</tr>
-                                                                    <tr><td>H</td>{[...Array(8)].map((_, i) => <td key={i} className="sold-seat">{i + 1}</td>)}</tr>
-                                                                    <tr><td>G</td>{[...Array(8)].map((_, i) => <td key={i} className="sold-seat">{i + 1}</td>)}</tr>
-                                                                    <tr><td>F</td>{[...Array(8)].map((_, i) => <td key={i} className="sold-seat">{i + 1}</td>)}</tr>
-                                                                    <tr><td>E</td>{[...Array(8)].map((_, i) => <td key={i} className="sold-seat">{i + 1}</td>)}</tr>
-                                                                    <tr><td>D</td>{[...Array(9)].map((_, i) => <td key={i} className={i === 2 ? 'selected-seat' : 'sold-seat'}>{i + 1}</td>)}</tr>
-                                                                    <tr><td>C</td>{[...Array(9)].map((_, i) => <td key={i} className={i === 2 ? 'selected-seat' : 'sold-seat'}>{i + 1}</td>)}</tr>
-                                                                    <tr><td>B</td>{[...Array(9)].map((_, i) => <td key={i} className={i === 2 ? 'selected-seat' : 'sold-seat'}>{i + 1}</td>)}</tr>
-                                                                    <tr><td>A</td>{[...Array(9)].map((_, i) => <td key={i} className={i === 2 ? 'selected-seat' : 'sold-seat'}>{i + 1}</td>)}</tr>
+                                                                    ghế
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -281,11 +304,88 @@ const checkOut = () => {
                                             </TabPane>
 
                                             <TabPane tabId={3}>
-                                                Tab 3
+                                                <Row className='gy-3'>
+                                                    <div className="container-order">
+                                                        <h2 style={{ fontSize: 20, fontWeight: 'bold' }}>Khuyến mãi</h2>
+                                                        <div className="promo-code-order" style={{ width: 400 }}>
+                                                            <input
+                                                                type="text"
+                                                                value={promoCode}
+                                                                onChange={handlePromoCodeChange}
+                                                                placeholder="Mã khuyến mãi"
+                                                            />
+                                                            <button className='button-order' onClick={applyPromoCode}>Áp Dụng</button>
+                                                        </div>
+                                                    </div>
+                                                    <div className="container-order">
+                                                        <h2 style={{ fontSize: 20, fontWeight: 'bold' }}>Phương thức thanh toán</h2>
+                                                        <div className="payment-methods-order">
+                                                            <label>
+                                                                <input
+                                                                    type="radio"
+                                                                    name="payment"
+                                                                    value="payoo"
+                                                                    checked={selectedPayment === 'payoo'}
+                                                                    onChange={handlePaymentChange}
+                                                                />
+                                                                <img src="payoo-logo.png" alt="Payoo" width="20" /> HSBC/Payoo - ATM/VISA/MASTER/JCB/QRCode
+                                                            </label>
+                                                            <label>
+                                                                <input
+                                                                    type="radio"
+                                                                    name="payment"
+                                                                    value="shopeepay"
+                                                                    checked={selectedPayment === 'shopeepay'}
+                                                                    onChange={handlePaymentChange}
+                                                                />
+                                                                <img src="shopeepay-logo.png" alt="ShopeePay" width="20" /> Ví ShopeePay - Nhập mã: SPPCINE06 Giảm 20K cho đơn từ 100K
+                                                            </label>
+                                                            <label>
+                                                                <input
+                                                                    type="radio"
+                                                                    name="payment"
+                                                                    value="momo"
+                                                                    checked={selectedPayment === 'momo'}
+                                                                    onChange={handlePaymentChange}
+                                                                />
+                                                                <img src="momo-logo.png" alt="MoMo" width="20" /> Ví Điện Tử MoMo
+                                                            </label>
+                                                            <label>
+                                                                <input
+                                                                    type="radio"
+                                                                    name="payment"
+                                                                    value="zalopay"
+                                                                    checked={selectedPayment === 'zalopay'}
+                                                                    onChange={handlePaymentChange}
+                                                                />
+                                                                <img src="zalopay-logo.png" alt="ZaloPay" width="20" /> ZaloPay - Bạn mới Zalopay nhập mã GLX50 - Giảm 50k cho đơn từ 200k
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </Row>
                                             </TabPane>
 
                                             <TabPane tabId={4} id="pills-finish">
-                                                Tab4
+                                                <div className="text-center py-5">
+                                                    <div className="mb-4">
+                                                    <i className="bx bxs-check-circle" style={{ fontSize: "120px", color:'green' }}></i>
+                                                    </div>
+                                                    <h5>Thank you ! Your Order is Completed !</h5>
+                                                    <p className="text-muted">
+                                                        You will receive an order confirmation email with
+                                                        details of your order.
+                                                    </p>
+
+                                                    <h3 className="fw-semibold">
+                                                        Order ID:{" "}
+                                                        <a
+                                                            href="apps-ecommerce-order-details"
+                                                            className="text-decoration-underline"
+                                                        >
+                                                            VZ2451
+                                                        </a>
+                                                    </h3>
+                                                </div>
                                             </TabPane>
                                         </TabContent>
                                     </Col>
@@ -334,6 +434,41 @@ const checkOut = () => {
                     </div>
                 </Container>
             </div>
+            {/* Modal */}
+            <Modal isOpen={modal} toggle={() => setModal(!modal)}>
+                <ModalHeader toggle={() => setModal(!modal)}>
+                    XÁC NHẬN ĐẶT VÉ
+                </ModalHeader>
+                <ModalBody>
+                    <div className="ticket-info">
+                        <div className="ticket-section">
+                            <strong>PHIM</strong><br />
+                            Tên phim đã chọn
+                        </div>
+                        <div className="ticket-section">
+                            <strong>RẠP</strong><br />
+                            Tên rạp đã chọn
+                        </div>
+                        <div className="ticket-section">
+                            <strong>SUẤT CHIẾU</strong><br />
+                            Thời gian suất chiếu
+                        </div>
+                        <div className="ticket-section">
+                            <div className="price-tag"></div>&nbsp;
+                            <strong>TỔNG</strong><br />
+                            Số tiền
+                        </div>
+                    </div>
+                    <div className="confirmation-checkbox">
+                        <input type="checkbox" /> TÔI XÁC NHẬN CÁC THÔNG TIN ĐẶT VÉ ĐÃ CHÍNH XÁC
+                    </div>
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="secondary" onClick={() => setModal(!modal)}>Hủy</Button>
+                    <Button color="primary" onClick={handleConfirmation}>Xác Nhận</Button>
+                </ModalFooter>
+            </Modal>
+
         </React.Fragment>
     );
 };

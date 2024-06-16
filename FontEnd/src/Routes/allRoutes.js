@@ -84,6 +84,8 @@ import RapPhim from "../pages/Page/RapPhim/Index";
 
 //Order
 import Order from "../pages/Page/Order/index";
+import BlogDienAnh from "../pages/Page/BlogDienAnh";
+import BlogDienAnhDetails from "../pages/Page/BlogDienAnh/details";
 
 const authProtectedRoutes = [
   //User Profile
@@ -154,28 +156,9 @@ const homeRoutes = [
   },
   { path: "/rap-phim", component: <RapPhim /> },
   { path: "/order", component: <Order /> },
+  { path: "/blog-dien-anh", component: <BlogDienAnh /> },
+  { path: "/blog-dien-anh/blog-dien-anh-details", component: <BlogDienAnhDetails /> },
 ];
 
-// const CinemaCornerRoutes = [
-//   { path: "/dien-vien", component: <Actor /> },
-//   { path: "/dao-dien", component: <Director /> },
-//   { path: "/dien-vien/dien-vien-details", component: <ActorInfor /> },
-//   { path: "/dao-dien/dao-dien-details", component: <DirectorInfor /> },
-
-// ];
-
-// const TicketBookingRoutes = [
-//   { path: "/ticket-booking/phim", component: <TicketBooking /> },
-// ];
-
-// const BinhLuanPhimRoutes = [
-//   { path: "/binh-luan-phim", component: <BinhLuanPhim /> },
-//   {
-//     path: "/binh-luan-phim/binh-luan-phim-details",
-//     component: <BinhLuanPhimDetails />,
-//   },
-// ];
-
-// const RapPhimRoutes = [{ path: "/rap-phim", component: <RapPhim /> }];
 
 export { authProtectedRoutes, publicRoutes, homeRoutes };

@@ -153,35 +153,37 @@ const homepage = () => {
             </Form>
           </div>
           <Card style={{ marginTop: "80px" }} className="bg-light">
-            <CardHeader>
-              <Nav
-                className="nav-tabs-custom rounded card-header-tabs border-bottom-0"
-                role="tablist"
-              >
+            <CardHeader style={{ paddingBottom: 30 }}>
+              <Nav className="nav-tabs-custom rounded card-header-tabs border-bottom-0 d-flex align-items-center" role="tablist">
+                <div className="text-xl inline-block font-bold uppercase d-flex align-items-center" style={{ borderLeft: "4px solid #007bff", fontSize: "23px", fontWeight: "bold", textTransform: "uppercase", paddingLeft: "0.5rem", marginRight: "1rem" }}>
+                  Phim
+                </div>
                 <NavItem>
                   <NavLink
                     className={classnames({
-                      active: activeTab === "1",
-                      "text-secondary-emphasis": activeTab === "1",
-                      "bg-light": activeTab === "1",
-                      "bg-opacity-50": activeTab === "1",
+                      active: activeTab1 === "1",
+                      "text-secondary-emphasis": activeTab1 === "1",
+
+
                     })}
                     onClick={() => {
                       tabChange("1");
                     }}
+                    type="button"
                   >
+
                     <i className="fas fa-home"></i>
-                    Now showing
+                    Phim Đang Chiếu
                   </NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink
                     to="#"
                     className={classnames({
-                      active: activeTab === "2",
-                      "text-secondary-emphasis": activeTab === "2",
-                      "bg-light": activeTab === "2",
-                      "bg-opacity-50": activeTab === "2",
+                      active: activeTab1 === "2",
+                      "text-secondary-emphasis": activeTab1 === "2",
+
+
                     })}
                     onClick={() => {
                       tabChange("2");
@@ -189,7 +191,7 @@ const homepage = () => {
                     type="button"
                   >
                     <i className="far fa-user"></i>
-                    Coming soon
+                   Sắp Chiếu
                   </NavLink>
                 </NavItem>
               </Nav>
@@ -344,7 +346,7 @@ const homepage = () => {
         {/* Góc Điển Ảnh */}
         <Container className="mt-5 pb-5">
           <Card style={{ marginTop: "80px" }} className="bg-light">
-            <CardHeader style={{paddingBottom:30}}>
+            <CardHeader style={{ paddingBottom: 30 }}>
               <Nav className="nav-tabs-custom rounded card-header-tabs border-bottom-0 d-flex align-items-center" role="tablist">
                 <div className="text-xl inline-block font-bold uppercase d-flex align-items-center" style={{ borderLeft: "4px solid #007bff", fontSize: "23px", fontWeight: "bold", textTransform: "uppercase", paddingLeft: "0.5rem", marginRight: "1rem" }}>
                   GÓC ĐIỆN ẢNH
@@ -354,15 +356,15 @@ const homepage = () => {
                     className={classnames({
                       active: activeTab1 === "3",
                       "text-secondary-emphasis": activeTab1 === "3",
-                     
-                     
+
+
                     })}
                     onClick={() => {
                       tabChange1("3");
                     }}
                     type="button"
                   >
-                      
+
                     <i className="fas fa-home"></i>
                     Bình Luận Phim
                   </NavLink>
@@ -373,8 +375,8 @@ const homepage = () => {
                     className={classnames({
                       active: activeTab1 === "4",
                       "text-secondary-emphasis": activeTab1 === "4",
-                     
-                      
+
+
                     })}
                     onClick={() => {
                       tabChange1("4");

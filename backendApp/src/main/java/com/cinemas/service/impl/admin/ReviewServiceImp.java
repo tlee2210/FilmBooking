@@ -33,18 +33,18 @@ public class ReviewServiceImp implements ReviewService {
     ReviewRepository reviewRepository;
 
     @Override
-    public Page<Review> getAllReview(SearchReviewRequest PaginationHelper) {
-        List<Review> reviewList = reviewRepository.findByType(PaginationHelper.getType());
+    public Page<Review> getAllReview(PaginationHelper paginationHelper) {
+        List<Review> reviewList = reviewRepository.findAll();
 
         PagedListHolder<Review> pagedListHolder = new PagedListHolder<Review>(reviewList);
-        pagedListHolder.setPage(PaginationHelper.getPageNo());
-        pagedListHolder.setPageSize(PaginationHelper.getPageSize());
+        pagedListHolder.setPage(paginationHelper.getPageNo());
+        pagedListHolder.setPageSize(paginationHelper.getPageSize());
 
         List<Review> pageList = pagedListHolder.getPageList();
-        boolean ascending = PaginationHelper.getSort().isAscending();
-        PropertyComparator.sort(pageList, new MutableSortDefinition(PaginationHelper.getSortByColumn(), true, ascending));
+        boolean ascending = paginationHelper.getSort().isAscending();
+        PropertyComparator.sort(pageList, new MutableSortDefinition(paginationHelper.getSortByColumn(), true, ascending));
 
-        Page<Review> reviews = new PageImpl<>(pageList, new PaginationHelper().getPageable(PaginationHelper), reviewList.size());
+        Page<Review> reviews = new PageImpl<>(pageList, new PaginationHelper().getPageable(paginationHelper), reviewList.size());
 
         return reviews;
     }
