@@ -66,7 +66,11 @@ const BinhLuanPhim = () => {
                             <Col lg={8}>
                                 <div fluid className="director-header-container-cinemaCorner">
                                     <Row>
-                                        <Col md="4" className="d-flex">
+                                        <Col md="12" className="d-flex align-items-center">
+                                            <div className="title-icon-cinemaCorner"></div>
+                                            <h2 className="title-cinemaCorner">Bình Luận Phim</h2>
+                                        </Col>
+                                        <Col md="4" className="d-flex" style={{paddingTop:20}}>
                                             <Input type="select" className="custom-select-cinemaCorner mx-2" style={{ cursor: "pointer", fontSize: "12px", width: "auto" }}>
                                                 <option>Tất Cả</option>
                                                 <option>Option 1</option>
@@ -105,7 +109,7 @@ const BinhLuanPhim = () => {
                                                         <h1 className="title-cinemaCorner-name mb-0">{title}</h1>
                                                     </CardHeader>
                                                     <CardBody>
-                                                        <p className="card-text mb-2 text-muted" style={{fontFamily:"Arial",fontSize:"12px"}}>
+                                                        <p className="card-text mb-2 text-muted" style={{ fontFamily: "Arial", fontSize: "12px" }}>
                                                             For that very reason, I went on a quest and spoke to many different professional graphic designers and asked them what graphic design tips they live.
                                                         </p>
                                                         <p className="card-text">

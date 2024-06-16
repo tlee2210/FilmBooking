@@ -134,3 +134,60 @@
 .image-description .movie-title {
     font-weight: bold;
 }
+
+
+
+
+.container-order {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+
+
+.promo-code-order {
+    margin-bottom: 20px;
+}
+
+.promo-code-order input {
+    width: calc(100% - 100px);
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.promo-code-order .button-order {
+    padding: 10px;
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.payment-methods-order {
+    margin-bottom: 20px;
+}
+
+.payment-methods-order  {
+    display: block;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.payment-methods-order  {
+    margin-right: 10px;
+}
+
+.payment-methods-order  {
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+
+
+
+
