@@ -28,7 +28,10 @@ public class ShowTimeController {
     public APIResponse<SelectOptionAndModelReponse<Page<ShowTimeTableResponse>>> getAllShowTime(
             @RequestParam(required = false) String cinema,
             @RequestParam(required = false) LocalDate startDay,
-            @RequestParam(required = false) LocalDate endDay, @RequestParam(required = false, defaultValue = "1") Integer pageNo, @RequestParam(required = false, defaultValue = "15") Integer pageSize, @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort) {
+            @RequestParam(required = false) LocalDate endDay,
+            @RequestParam(required = false, defaultValue = "1") Integer pageNo,
+            @RequestParam(required = false, defaultValue = "15") Integer pageSize,
+            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort) {
         searchShowTimeRequest showTimeRequest = new searchShowTimeRequest(pageNo - 1, pageSize, sort, cinema, startDay, endDay);
         SelectOptionAndModelReponse<Page<ShowTimeTableResponse>> showtimes = showTimeService.getAllShowTime(showTimeRequest);
 
@@ -96,4 +99,16 @@ public class ShowTimeController {
         throw new AppException(DELETE_FAILED);
     }
 
+    @PutMapping("/update")
+    public APIResponse<String> updateShowTime(@RequestBody showTimeItemRequet showTimeItemRequet) {
+        boolean checkUpdate = showTimeService.updateShowTime(showTimeItemRequet);
+        if (checkUpdate) {
+            APIResponse<String> apiResponse = new APIResponse();
+            apiResponse.setCode(200);
+            apiResponse.setMessage("Update successfully");
+
+            return apiResponse;
+        }
+        throw new AppException(UPDATE_FAILED);
+    }
 }

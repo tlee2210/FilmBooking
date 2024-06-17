@@ -27,7 +27,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,6 +103,32 @@ public class ShowTimeServiceImpl implements ShowTimeService {
     }
 
     @Override
+    public boolean updateShowTime(showTimeItemRequet showTimeItemRequet) {
+        Showtimes showtimes = showTimeResponsitory.findById(showTimeItemRequet.getId()).orElseThrow(() -> new AppException(NOT_FOUND));
+
+        Movie movie = movieRepository.findById(showTimeItemRequet.getMovieId()).orElseThrow(() -> new AppException(NOT_FOUND_MOVIE));
+
+        Cinema cinema = cinemaRespository.findById(showTimeItemRequet.getCinemaId()).orElseThrow(() -> new AppException(NOT_FOUND_CINEMA));
+
+        Room room = roomRepository.findById(showTimeItemRequet.getRoomId()).orElseThrow(() -> new AppException(NOT_FOUND_ROOM));
+        LocalTime endTime = showTimeItemRequet.getTimes().plusMinutes(movie.getDuration_movie() + 5);
+        List<Showtimes> overlappingShowtimesList = showTimeResponsitory.findOverlappingShowtimesUpdate(room.getId(), showTimeItemRequet.getDays(), showTimeItemRequet.getTimes(), endTime, showTimeItemRequet.getId());
+        if (overlappingShowtimesList.isEmpty()) {
+            showtimes.setDate(showTimeItemRequet.getDays());
+            showtimes.setTime(showTimeItemRequet.getTimes());
+            showtimes.setCinema(cinema);
+            showtimes.setRoom(room);
+            showtimes.setMovie(movie);
+
+            showTimeResponsitory.save(showtimes);
+
+            return true;
+        }
+
+        throw new AppException(CREATE_FAILED, "Showtime conflict detected for room " + room.getName() + " on " + showTimeItemRequet.getDays() + " at " + showTimeItemRequet.getTimes());
+    }
+
+    @Override
     public ShowTimeCreateResponse getcreate() {
         List<Cinema> cinemaList = cinemaRespository.findAll();
         List<Movie> movieList = movieRepository.findAllMovieSetTime();
@@ -158,7 +183,6 @@ public class ShowTimeServiceImpl implements ShowTimeService {
                     } else {
                         throw new AppException(CREATE_FAILED, "Showtime conflict detected for room " + room.getName() + " on " + day + " at " + time);
                     }
-
                 });
             });
         });

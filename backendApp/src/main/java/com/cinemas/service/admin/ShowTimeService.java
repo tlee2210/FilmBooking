@@ -25,4 +25,6 @@ public interface ShowTimeService {
     boolean delete(Integer id);
 
     showTimeItemRequet getEdit(Integer id);
+
+    boolean updateShowTime(showTimeItemRequet showTimeItemRequet);
 }

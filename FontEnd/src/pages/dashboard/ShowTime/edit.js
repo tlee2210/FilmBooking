@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import withRouter from "../../../Components/Common/withRouter";
 import {
   Card,
@@ -30,7 +30,7 @@ import {
   getMovieAndCinema,
   getRoomForShowTime,
   getMovieForShowTime,
-  createShowTime,
+  updateShowTimeEdit,
   getShowTimeEdit,
 } from "../../../slices/ShowTime/thunk";
 
@@ -92,37 +92,44 @@ const ShowTimeCreate = (props) => {
     initialValues: {
       cinema: item.cinemaId || "",
       movie: item.movieId || "",
-      day: item.days || "",
-      time: item.times || "",
+      day: item.days ? item.days : "",
+      time: item.times ? item.times : "",
       room: item.roomId || "",
     },
     validationSchema,
     onSubmit: (values) => {
+      console.log(values);
       const formData = new FormData();
-      formData.append("cinemaId", values.cinema);
+      formData.append("id", item.id);
       formData.append("movieId", values.movie);
+      formData.append("cinemaId", values.cinema);
       formData.append("roomId", values.room);
-      // Add other fields as necessary
-      dispatch(createShowTime(formData, props.router.navigate));
+      formData.append("days", values.day);
+      formData.append("times", values.time);
+      dispatch(updateShowTimeEdit(formData, props.router.navigate));
     },
   });
+
+  // useEffect(() => {
+  //   console.log("validation" + validation.values.time);
+  // });
 
   useEffect(() => {
     if (validation.values.cinema) {
       dispatch(getRoomForShowTime(validation.values.cinema));
     }
-    validation.setFieldValue("time", "");
-    validation.setFieldValue("day", "");
-    validation.setFieldValue("room", "");
+    // validation.setFieldValue("time", "");
+    // validation.setFieldValue("day", "");
+    // validation.setFieldValue("room", "");
   }, [validation.values.cinema, dispatch]);
 
   useEffect(() => {
     if (validation.values.movie) {
       dispatch(getMovieForShowTime(validation.values.movie));
     }
-    validation.setFieldValue("time", "");
-    validation.setFieldValue("day", "");
-    validation.setFieldValue("room", "");
+    // validation.setFieldValue("time", "");
+    // validation.setFieldValue("day", "");
+    // validation.setFieldValue("room", "");
   }, [validation.values.movie, dispatch]);
 
   const Styles = {
@@ -180,6 +187,10 @@ const ShowTimeCreate = (props) => {
                         placeholder="Select Movie..."
                         classNamePrefix="select"
                         onChange={(option) => {
+                          validation.setFieldValue("time", "");
+                          validation.setFieldValue("day", "");
+                          validation.setFieldValue("room", "");
+
                           validation.setFieldValue(
                             "movie",
                             option ? option.value : null
@@ -212,6 +223,10 @@ const ShowTimeCreate = (props) => {
                         placeholder="Select Cinema..."
                         classNamePrefix="select"
                         onChange={(option) => {
+                          validation.setFieldValue("time", "");
+                          validation.setFieldValue("day", "");
+                          validation.setFieldValue("room", "");
+
                           validation.setFieldValue(
                             "cinema",
                             option ? option.value : null
@@ -254,7 +269,7 @@ const ShowTimeCreate = (props) => {
                             <Flatpickr
                               className="form-control"
                               placeholder="Select days"
-                              value={validation.values.day || null}
+                              value={validation.values.day}
                               onChange={([selectedDate]) => {
                                 if (selectedDate) {
                                   const formattedDate =
@@ -290,15 +305,10 @@ const ShowTimeCreate = (props) => {
                               placeholder="Select times"
                               className="form-control"
                               value={validation.values.time}
-                              onChange={(selectedTimes) => {
-                                const formattedTimes = selectedTimes.map(
-                                  (time) => {
-                                    return time.toTimeString().slice(0, 5);
-                                  }
-                                );
+                              onChange={([selectedTimes]) => {
                                 validation.setFieldValue(
                                   "time",
-                                  formattedTimes
+                                  selectedTimes.toTimeString().slice(0, 5)
                                 );
                               }}
                               options={{
