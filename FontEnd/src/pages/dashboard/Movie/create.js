@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createRef } from "react";
+import React, { useState, useEffect } from "react";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 import { createSelector } from "reselect";
 import withRouter from "../../../Components/Common/withRouter";
@@ -29,7 +29,8 @@ import { getCreate, CreateMovies } from "../../../slices/Movie/thunk";
 import { clearNotification } from "../../../slices/message/reducer";
 
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import * as ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { Link, useNavigate } from "react-router-dom";
 //formik
 import { useFormik } from "formik";

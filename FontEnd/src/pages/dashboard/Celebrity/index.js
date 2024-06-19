@@ -151,11 +151,7 @@ const Celebrity = (props) => {
         accessorKey: "image",
         cell: (cell) => {
           return (
-            <Image
-              width={70}
-              src={cell.getValue()}
-              alt={cell.getValue()}
-            />
+            <Image width={70} src={cell.getValue()} alt={cell.getValue()} />
           );
         },
         enableColumnFilter: false,
@@ -257,8 +253,8 @@ const Celebrity = (props) => {
                           className="btn btn-success add-btn"
                           to={`/dashboard/celebrity/create`}
                         >
-                          <i className="ri-add-line align-bottom me-1"></i> Add
-                          New
+                          <i className="ri-add-line align-bottom me-1"></i>
+                          Create New
                         </Link>
                       </div>
                     </div>

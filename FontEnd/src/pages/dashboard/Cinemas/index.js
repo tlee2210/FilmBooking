@@ -265,8 +265,8 @@ const Cinema = (props) => {
                           className="btn btn-success add-btn"
                           to={`/dashboard/cinema/create`}
                         >
-                          <i className="ri-add-line align-bottom me-1"></i> Add
-                          New Cinema
+                          <i className="ri-add-line align-bottom me-1"></i>
+                          Create New
                         </Link>
                       </div>
                     </div>

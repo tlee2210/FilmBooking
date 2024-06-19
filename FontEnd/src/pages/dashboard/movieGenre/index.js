@@ -255,8 +255,8 @@ const MovieGenre = (props) => {
                                 settitle(true);
                               }}
                             >
-                              <i className="ri-add-line align-bottom me-1"></i>{" "}
-                              Add Movie Genre
+                              <i className="ri-add-line align-bottom me-1"></i>
+                              Create New
                             </Link>
                           </div>
                         </div>

@@ -375,8 +375,8 @@ const Movies = (props) => {
                           className="btn btn-success add-btn"
                           to={`/dashboard/movie/create`}
                         >
-                          <i className="ri-add-line align-bottom me-1"></i> Add
-                          New
+                          <i className="ri-add-line align-bottom me-1"></i>
+                          Create New
                         </Link>
                       </div>
                     </div>

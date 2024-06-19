@@ -90,10 +90,20 @@ const ShowTime = (props) => {
       params.cinema = cinema;
     }
 
-    if (startDay && startDay !== null && startDay !== undefined) {
+    if (
+      startDay &&
+      startDay !== null &&
+      startDay !== undefined &&
+      !isNaN(new Date(startDay))
+    ) {
       params.startday = startDay;
     }
-    if (lastday && lastday !== null && lastday !== undefined) {
+    if (
+      lastday &&
+      lastday !== null &&
+      lastday !== undefined &&
+      !isNaN(new Date(lastday))
+    ) {
       params.lastday = lastday;
     }
 
@@ -233,8 +243,8 @@ const ShowTime = (props) => {
                           className="btn btn-success add-btn"
                           to={`/dashboard/show-time/create`}
                         >
-                          <i className="ri-add-line align-bottom me-1"></i> Add
-                          New
+                          <i className="ri-add-line align-bottom me-1"></i>
+                          Create New
                         </Link>
                       </div>
                     </div>

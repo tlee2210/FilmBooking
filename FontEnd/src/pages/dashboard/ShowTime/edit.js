@@ -118,18 +118,12 @@ const ShowTimeCreate = (props) => {
     if (validation.values.cinema) {
       dispatch(getRoomForShowTime(validation.values.cinema));
     }
-    // validation.setFieldValue("time", "");
-    // validation.setFieldValue("day", "");
-    // validation.setFieldValue("room", "");
   }, [validation.values.cinema, dispatch]);
 
   useEffect(() => {
     if (validation.values.movie) {
       dispatch(getMovieForShowTime(validation.values.movie));
     }
-    // validation.setFieldValue("time", "");
-    // validation.setFieldValue("day", "");
-    // validation.setFieldValue("room", "");
   }, [validation.values.movie, dispatch]);
 
   const Styles = {

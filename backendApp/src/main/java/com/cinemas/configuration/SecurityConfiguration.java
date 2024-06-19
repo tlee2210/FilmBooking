@@ -48,6 +48,7 @@ public class SecurityConfiguration {
                                 "/api/home/v1/celebrity/**",
                                 "/api/admin/v1/movie-blog/**",
                                 "/api/home/v1/blog/**",
+                                "/api/admin/v1/file-upload",
                                 "/api/home/v1/review/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/admin").hasAnyAuthority(RoleType.ADMIN.name())

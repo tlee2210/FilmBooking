@@ -61,6 +61,8 @@ const ShowTimeCreate = lazy(() => import("../pages/dashboard/ShowTime/create"));
 const ShowTimeEdit = lazy(() => import("../pages/dashboard/ShowTime/edit"));
 const ShowTime = lazy(() => import("../pages/dashboard/ShowTime/index"));
 
+const BlogCreate = lazy(() => import("../pages/dashboard/Blog/create"));
+
 //Cinema Coner
 const Actor = lazy(() => import("../pages/Page/CinemaCorner/Actor"));
 const Director = lazy(() => import("../pages/Page/CinemaCorner/Director"));
@@ -122,6 +124,9 @@ const authProtectedRoutes = [
   { path: "/dashboard/show-time/create", component: <ShowTimeCreate /> },
   { path: "/dashboard/show-time/:id/edit", component: <ShowTimeEdit /> },
   { path: "/dashboard/show-time", component: <ShowTime /> },
+  
+  { path: "/dashboard/blog/create", component: <BlogCreate /> },
+  // /dashboard/blog/create
   // {
   //   path: "/",
   //   exact: true,
@@ -157,8 +162,10 @@ const homeRoutes = [
   { path: "/rap-phim", component: <RapPhim /> },
   { path: "/order", component: <Order /> },
   { path: "/blog-dien-anh", component: <BlogDienAnh /> },
-  { path: "/blog-dien-anh/blog-dien-anh-details", component: <BlogDienAnhDetails /> },
+  {
+    path: "/blog-dien-anh/blog-dien-anh-details",
+    component: <BlogDienAnhDetails />,
+  },
 ];
-
 
 export { authProtectedRoutes, publicRoutes, homeRoutes };

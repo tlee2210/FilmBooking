@@ -8,6 +8,7 @@ const Navdata = () => {
   const [isCinema, setIsCinema] = useState(false);
   const [isUser, setIsUser] = useState(false);
   const [isShowTime, setIsShowTime] = useState(false);
+  const [isBlogAndReview, setIsBlogAndReview] = useState(false);
   const [iscurrentState, setIscurrentState] = useState("Dashboard");
 
   function updateIconSidebar(e) {
@@ -38,7 +39,10 @@ const Navdata = () => {
     if (iscurrentState !== "showtime") {
       setIsShowTime(false);
     }
-  }, [history, isMovie, isCinema, isUser, isShowTime]);
+    if (iscurrentState !== "blogAndReview") {
+      setIsBlogAndReview(false);
+    }
+  }, [history, isMovie, isCinema, isUser, isShowTime, isBlogAndReview]);
 
   const menuItems = [
     {
@@ -154,6 +158,33 @@ const Navdata = () => {
           label: "Show Time Movie",
           link: "/dashboard/show-time",
           parentId: "showtime",
+        },
+      ],
+    },
+    {
+      id: "blogAndReview",
+      label: "Blog & Review Management",
+      icon: "ri-slideshow-2-fill",
+      link: "/#",
+      stateVariables: isBlogAndReview,
+      click: function (e) {
+        e.preventDefault();
+        setIsBlogAndReview(!isBlogAndReview);
+        setIscurrentState("blogAndReview");
+        updateIconSidebar(e);
+      },
+      subItems: [
+        {
+          id: "blog",
+          label: "Blog Management",
+          link: "/dashboard/blog/create",
+          parentId: "blogAndReview",
+        },
+        {
+          id: "review",
+          label: "Review Management",
+          link: "/dashboard/show-time",
+          parentId: "blogAndReview",
         },
       ],
     },
