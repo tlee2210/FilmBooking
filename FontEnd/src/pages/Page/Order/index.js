@@ -366,9 +366,9 @@ const checkOut = () => {
                                             </TabPane>
 
                                             <TabPane tabId={4} id="pills-finish">
-                                                <div className="text-center py-5">
+                                                <div className="text-center py-5" style={{backgroundColor:'white'}}>
                                                     <div className="mb-4">
-                                                    <i className="bx bxs-check-circle" style={{ fontSize: "120px", color:'green' }}></i>
+                                                        <i className="bx bxs-check-circle" style={{ fontSize: "120px", color: 'green' }}></i>
                                                     </div>
                                                     <h5>Thank you ! Your Order is Completed !</h5>
                                                     <p className="text-muted">
@@ -440,35 +440,35 @@ const checkOut = () => {
                     XÁC NHẬN ĐẶT VÉ
                 </ModalHeader>
                 <ModalBody>
-                    <div className="ticket-info">
-                        <div className="ticket-section">
+                    <div className="ticket-info-order">
+                        <div className="ticket-section-order">
                             <strong>PHIM</strong><br />
                             Tên phim đã chọn
                         </div>
-                        <div className="ticket-section">
+                        <div className="ticket-section-order">
                             <strong>RẠP</strong><br />
                             Tên rạp đã chọn
                         </div>
-                        <div className="ticket-section">
+                        <div className="ticket-section-order">
                             <strong>SUẤT CHIẾU</strong><br />
                             Thời gian suất chiếu
                         </div>
-                        <div className="ticket-section">
-                            <div className="price-tag"></div>&nbsp;
+                        <div>
                             <strong>TỔNG</strong><br />
-                            Số tiền
+                        </div>
+                        <div className="ticket-section-order">
+                            <div className="price-tag-order"></div>
+                            75.000
                         </div>
                     </div>
-                    <div className="confirmation-checkbox">
+                    <div className="confirmation-checkbox-order">
                         <input type="checkbox" /> TÔI XÁC NHẬN CÁC THÔNG TIN ĐẶT VÉ ĐÃ CHÍNH XÁC
                     </div>
                 </ModalBody>
                 <ModalFooter>
-                    <Button color="secondary" onClick={() => setModal(!modal)}>Hủy</Button>
-                    <Button color="primary" onClick={handleConfirmation}>Xác Nhận</Button>
+                    <Button color='danger' onClick={handleConfirmation}>Thanh Toán</Button>
                 </ModalFooter>
             </Modal>
-
         </React.Fragment>
     );
 };

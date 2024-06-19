@@ -191,3 +191,109 @@
 
 
 
+
+/* General modal styles */
+.modal-header {
+    background-color: #f8f9fa;
+    border-bottom: none;
+    color: #333;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.modal-body {
+    color: #333;
+    font-size: 1em;
+    padding: 20px;
+    background-color: #ffffff;
+}
+
+.modal-footer {
+    border-top: none;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+
+/* Ticket information styles */
+.ticket-info-order {
+    font-family: Arial, sans-serif;
+    margin-bottom: 20px;
+}
+
+.ticket-section-order {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #eee;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.ticket-section-order strong {
+    font-size: 1em;
+    color: #333;
+}
+
+.price-tag-order {
+    font-size: 1.2em;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.total-section-order {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+/* Confirmation checkbox styles */
+.confirmation-checkbox-order {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.confirmation-checkbox-order input {
+    margin-right: 10px;
+}
+
+/* Button styles */
+button.primary {
+    background-color: #ff7900;
+    border-color: #ff7900;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+button.secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+button:focus {
+    outline: none;
+}
+
+
+.modal-header .close {
+    font-size: 1.5em;
+    color: #333;
+}
+
+
+
+
