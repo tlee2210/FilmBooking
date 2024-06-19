@@ -21,4 +21,6 @@ public class ReviewRequest {
     private String description;
     @NotEmpty
     private ReviewType type;
+    @NotEmpty
+    private MultipartFile thumbnail;
 }

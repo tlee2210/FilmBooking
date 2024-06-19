@@ -43,7 +43,7 @@ public class MovieBlogController {
     }
 
     @PostMapping("/create")
-    public APIResponse<String> createMovieBlog(@RequestBody MovieBlogRequest movieBlogRequest) {
+    public APIResponse<String> createMovieBlog(@ModelAttribute MovieBlogRequest movieBlogRequest) throws IOException {
         boolean checkCreate = movieBlogService.addBlog(movieBlogRequest);
         if (checkCreate) {
             APIResponse<String> apiResponse = new APIResponse();
@@ -67,7 +67,7 @@ public class MovieBlogController {
     }
 
     @PutMapping( "/update")
-    public APIResponse<String> updateMovieBlog(@RequestBody MovieBlogRequest movieBlogRequest){
+    public APIResponse<String> updateMovieBlog(@ModelAttribute MovieBlogRequest movieBlogRequest) throws IOException {
         boolean checkUpdate = movieBlogService.updateBlog(movieBlogRequest);
         if (checkUpdate) {
             APIResponse<String> apiResponse = new APIResponse();
@@ -78,5 +78,20 @@ public class MovieBlogController {
         }
 
         throw new AppException(UPDATE_FAILED);
+    }
+
+    @DeleteMapping("/delete/{slug}")
+    public APIResponse<Integer> deleteBlog(@PathVariable String slug) throws IOException {
+
+        int id = movieBlogService.deleteBlog(slug);
+        if (id > 0) {
+            APIResponse<Integer> apiResponse = new APIResponse();
+            apiResponse.setCode(200);
+            apiResponse.setMessage("Successfully deleted blog");
+            apiResponse.setResult(id);
+
+            return apiResponse;
+        }
+        throw new AppException(CREATE_FAILED);
     }
 }

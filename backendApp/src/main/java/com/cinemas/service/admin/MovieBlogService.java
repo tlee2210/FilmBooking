@@ -5,12 +5,16 @@ import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.entities.MovieBlog;
 import org.springframework.data.domain.Page;
 
+import java.io.IOException;
+
 public interface MovieBlogService {
     Page<MovieBlog> getAllBlog(PaginationHelper paginationHelper);
 
-    boolean addBlog(MovieBlogRequest movieBlogRequest);
+    boolean addBlog(MovieBlogRequest movieBlogRequest) throws IOException;
 
     MovieBlog getEditBlog(String slug);
 
-    boolean updateBlog(MovieBlogRequest movieBlogRequest);
+    boolean updateBlog(MovieBlogRequest movieBlogRequest) throws IOException;
+
+    Integer deleteBlog(String slug) throws IOException;
 }

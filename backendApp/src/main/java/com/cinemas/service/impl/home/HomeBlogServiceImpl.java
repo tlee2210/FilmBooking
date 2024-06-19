@@ -6,6 +6,7 @@ import com.cinemas.entities.MovieBlog;
 import com.cinemas.exception.AppException;
 import com.cinemas.repositories.MovieBlogRepository;
 import com.cinemas.service.home.HomeBlogService;
+import com.cinemas.service.impl.FileStorageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PagedListHolder;
@@ -24,10 +25,17 @@ public class HomeBlogServiceImpl implements HomeBlogService {
     @Autowired
     private MovieBlogRepository movieBlogRepository;
 
+    @Autowired
+    FileStorageServiceImpl fileStorageServiceImpl;
 
     @Override
     public Page<MovieBlog> getAllBlog(PaginationHelper paginationHelper) {
         List<MovieBlog> movieBlogs = movieBlogRepository.findAll();
+
+        movieBlogs.forEach(blog -> {
+            String imageUrl = fileStorageServiceImpl.getUrlFromPublicId(blog.getThumbnail());
+            blog.setThumbnail(imageUrl);
+        });
 
         PagedListHolder<MovieBlog> pagedListHolder = new PagedListHolder<MovieBlog>(movieBlogs);
         pagedListHolder.setPage(paginationHelper.getPageNo());
@@ -48,6 +56,7 @@ public class HomeBlogServiceImpl implements HomeBlogService {
 
         if (movieBlog == null) throw new AppException(NOT_FOUND);
 
+        movieBlog.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(movieBlog.getThumbnail()));
         return movieBlog;
     }
 }

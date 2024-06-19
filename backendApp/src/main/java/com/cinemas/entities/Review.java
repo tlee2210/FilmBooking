@@ -34,4 +34,7 @@ public class Review {
 
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    @Column
+    private String thumbnail;
 }

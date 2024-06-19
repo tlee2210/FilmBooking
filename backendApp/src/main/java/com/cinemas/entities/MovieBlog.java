@@ -27,4 +27,7 @@ public class MovieBlog {
 
     @Column
     private String slug;
+
+    @Column
+    private String thumbnail;
 }

@@ -32,9 +32,17 @@ public class ReviewServiceImp implements ReviewService {
     @Autowired
     ReviewRepository reviewRepository;
 
+    @Autowired
+    FileStorageServiceImpl fileStorageServiceImpl;
+
     @Override
     public Page<Review> getAllReview(PaginationHelper paginationHelper) {
         List<Review> reviewList = reviewRepository.findAll();
+
+        reviewList.forEach(review -> {
+            String imageUrl = fileStorageServiceImpl.getUrlFromPublicId(review.getThumbnail());
+            review.setThumbnail(imageUrl);
+        });
 
         PagedListHolder<Review> pagedListHolder = new PagedListHolder<Review>(reviewList);
         pagedListHolder.setPage(paginationHelper.getPageNo());
@@ -50,7 +58,7 @@ public class ReviewServiceImp implements ReviewService {
     }
 
     @Override
-    public boolean addReview(ReviewRequest review) {
+    public boolean addReview(ReviewRequest review) throws IOException {
         if (reviewRepository.findByName(review.getName()) != null) {
             throw new AppException(NAME_EXISTED);
         }
@@ -59,6 +67,7 @@ public class ReviewServiceImp implements ReviewService {
         ObjectUtils.copyFields(review, addReview);
 
         addReview.setSlug(review.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
+        addReview.setThumbnail(fileStorageServiceImpl.uploadFile(review.getThumbnail(), "review"));
 
         reviewRepository.save(addReview);
 
@@ -67,11 +76,12 @@ public class ReviewServiceImp implements ReviewService {
 
 
     @Override
-    public Integer deleteReview(String slug) {
+    public Integer deleteReview(String slug) throws IOException {
         Review review = reviewRepository.findBySlug(slug);
 
         if (review == null) throw new AppException(NOT_FOUND);
 
+        fileStorageServiceImpl.deleteFile(review.getThumbnail());
         reviewRepository.delete(review);
 
         return review.getId();
@@ -83,17 +93,24 @@ public class ReviewServiceImp implements ReviewService {
 
         if (review == null) throw new AppException(NOT_FOUND);
 
+        review.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(review.getThumbnail()));
+
         return review;
     }
 
     @Override
-    public boolean updateReview(ReviewRequest review) {
+    public boolean updateReview(ReviewRequest review) throws IOException {
         Review wat = reviewRepository
                 .findById(review.getId())
                 .orElseThrow(() -> new AppException(NOT_FOUND));
 
         if (reviewRepository.findByNameWithId(review.getName(), review.getId()) != null) {
             throw new AppException(NAME_EXISTED);
+        }
+
+        if (review.getThumbnail() != null) {
+            fileStorageServiceImpl.deleteFile(wat.getThumbnail());
+            wat.setThumbnail(fileStorageServiceImpl.uploadFile(review.getThumbnail(), "review"));
         }
 
         ObjectUtils.copyFields(review, wat);

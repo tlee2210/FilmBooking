@@ -13,12 +13,12 @@ import java.util.List;
 
 public interface ReviewService {
     Page<Review> getAllReview(PaginationHelper paginationHelper);
-    boolean addReview(ReviewRequest review);
+    boolean addReview(ReviewRequest review) throws IOException;
 
-    Integer deleteReview(String slug);
+    Integer deleteReview(String slug) throws IOException;
 
     Review getEditReview(String slug);
 
-    boolean updateReview(ReviewRequest review);
+    boolean updateReview(ReviewRequest review) throws IOException;
 
 }
