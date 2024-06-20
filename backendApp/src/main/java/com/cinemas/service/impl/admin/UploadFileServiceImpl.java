@@ -1,5 +1,7 @@
 package com.cinemas.service.impl.admin;
 
+import com.cinemas.entities.imageDescription;
+import com.cinemas.repositories.imageDescriptionRespository;
 import com.cinemas.service.admin.UploadFileService;
 import com.cinemas.service.impl.FileStorageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +14,15 @@ import java.io.IOException;
 public class UploadFileServiceImpl implements UploadFileService {
     @Autowired
     FileStorageServiceImpl fileStorageServiceImpl;
+    @Autowired
+    imageDescriptionRespository descriptionRespository;
 
     @Override
     public String UploadFile(MultipartFile file, String folder) throws IOException {
-        String key = fileStorageServiceImpl.uploadFile(file, folder);
-        return fileStorageServiceImpl.getUrlFromPublicId(key);
+        imageDescription imageDescription = new imageDescription();
+        imageDescription.setUrl(fileStorageServiceImpl.uploadFile(file, folder));
+        descriptionRespository.save(imageDescription);
+
+        return fileStorageServiceImpl.getUrlFromPublicId(imageDescription.getUrl());
     }
 }

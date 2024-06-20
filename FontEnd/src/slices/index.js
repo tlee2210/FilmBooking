@@ -18,6 +18,7 @@ import RoomReducer from "./Room/reducer";
 import WaterCornReducer from "./WaterCorn/reducer";
 import UserReducer from "./User/reducer";
 import ShowTimeReducer from "./ShowTime/reducer";
+import BlogReducer from "./Blog/reducer";
 
 const rootReducer = combineReducers({
   Layout: LayoutReducer,
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
   WaterCorn: WaterCornReducer,
   User: UserReducer,
   ShowTime: ShowTimeReducer,
+  Blog: BlogReducer,
 });
 
 export default rootReducer;

@@ -27,7 +27,7 @@ import { Image, Upload, message } from "antd";
 import { clearNotification } from "../../../slices/message/reducer";
 
 // CreateBlog
-import { CreateBlog } from "../../../slices/Blog/thunk";
+import { updateBlog, editBlog } from "../../../slices/Blog/thunk";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -37,11 +37,18 @@ const getBase64 = (file) =>
     reader.onerror = (error) => reject(error);
   });
 
-const BlogCreate = (props) => {
+const BlogEdit = (props) => {
   document.title = "Create Blog";
-
+  const slug = props.router.params.slug;
+  // console.log(slug);
   const history = useNavigate();
   const dispatch = useDispatch();
+  const [fileList, setFileList] = useState([]);
+
+  useEffect(() => {
+    dispatch(editBlog(slug, props.router.navigate));
+  }, [dispatch, slug, props.router.navigate]);
+
   const [imageSrcs, setImageSrcs] = useState([]);
   // const [missingImages, setMissingImages] = useState([]);
 
@@ -52,8 +59,9 @@ const BlogCreate = (props) => {
   const blogCreatepageData = createSelector(selectBlogCreateState, (state) => ({
     error: state.Message.error,
     messageError: state.Message.messageError,
+    item: state.Blog.item,
   }));
-  const { error, messageError } = useSelector(blogCreatepageData);
+  const { error, messageError, item } = useSelector(blogCreatepageData);
 
   useEffect(() => {
     if (error) {
@@ -86,9 +94,11 @@ const BlogCreate = (props) => {
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
-      name: "",
-      description: "",
-      file: [],
+      name: item.name || "",
+      description: item.description || "",
+      file: item.thumbnail
+        ? [{ uid: item.thumbnail, url: item.thumbnail }]
+        : [],
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Please Enter name"),
@@ -98,7 +108,9 @@ const BlogCreate = (props) => {
           Yup.mixed().test(
             "fileType",
             "Unsupported File Format",
-            (value) => value && value.type.startsWith("image/")
+            (value) =>
+              !value.originFileObj ||
+              (value.originFileObj && value.type.startsWith("image/"))
           )
         )
         .min(1, "Please upload at least one Image"),
@@ -106,19 +118,32 @@ const BlogCreate = (props) => {
     onSubmit: (values) => {
       // console.log(values);
       const formData = new FormData();
+      formData.append("id", item.id);
       formData.append("name", values.name);
       formData.append("description", values.description);
-      formData.append("file", values.file[0].originFileObj);
+
+      if (values.file[0].originFileObj) {
+        formData.append("file", values.file[0].originFileObj);
+      }
+
       imageSrcs.forEach((image, index) => {
         // console.log("image: ", image);
         formData.append(`url[${index}]`, image);
       });
-      dispatch(CreateBlog(formData, props.router.navigate));
+      dispatch(updateBlog(formData, props.router.navigate));
     },
   });
 
-  const handleChange = ({ fileList: newFileList }) =>
+  useEffect(() => {
+    if (item.thumbnail) {
+      setFileList([{ uid: item.thumbnail, url: item.thumbnail }]);
+    }
+  }, [item.thumbnail]);
+
+  const handleChange = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
     validation.setFieldValue("file", newFileList);
+  };
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -163,14 +188,7 @@ const BlogCreate = (props) => {
     const srcs = getImageSrcs(htmlContent);
     // const oldImageSrcs = imageSrcs;
     setImageSrcs(srcs);
-    // checkMissingImages(oldImageSrcs, srcs);
   }, [validation.values.description]);
-
-  // function checkMissingImages(oldSrcs, newSrcs) {
-  //   const missing = oldSrcs.filter((src) => !newSrcs.includes(src));
-  //   setMissingImages((prevMissing) => [...prevMissing, ...missing]);
-  //   console.log("Missing images:", missing);
-  // }
 
   function getImageSrcs(html) {
     const parser = new DOMParser();
@@ -183,25 +201,6 @@ const BlogCreate = (props) => {
     });
     return srcs;
   }
-
-  const handleDeleteImage = async (url) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/delete?publicId=${publicId}`,
-        {
-          method: "DELETE",
-        }
-      );
-      const data = await response.json();
-      if (data.result === "ok") {
-        console.log("Image deleted successfully");
-      } else {
-        console.error("Error deleting image");
-      }
-    } catch (error) {
-      console.error("Error deleting image:", error);
-    }
-  };
 
   return (
     <div className="page-content">
@@ -228,7 +227,7 @@ const BlogCreate = (props) => {
                           <Upload
                             beforeUpload={() => false}
                             listType="picture-card"
-                            fileList={validation.values.file}
+                            fileList={fileList || []}
                             onPreview={handlePreview}
                             onChange={handleChange}
                           >
@@ -339,4 +338,4 @@ const BlogCreate = (props) => {
   );
 };
 
-export default withRouter(BlogCreate);
+export default withRouter(BlogEdit);

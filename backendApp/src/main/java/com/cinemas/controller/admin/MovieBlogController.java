@@ -30,14 +30,17 @@ public class MovieBlogController {
 
     @GetMapping
     public APIResponse<Page<MovieBlog>> getAllMovieBlog(
+            @RequestParam(required = false) String name,
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
             @RequestParam(required = false, defaultValue = "15") Integer pageSize,
             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort
-    ){
-        PaginationHelper paginationHelper = new PaginationHelper(pageNo, pageSize, sort, "id");
+    ) {
+        SearchRequest searchRequest = new SearchRequest(name, pageNo - 1, pageSize, sort);
+
+//        PaginationHelper paginationHelper = new PaginationHelper(pageNo, pageSize, sort, "id");
         APIResponse<Page<MovieBlog>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
-        apiResponse.setResult(movieBlogService.getAllBlog(paginationHelper));
+        apiResponse.setResult(movieBlogService.getAllBlog(searchRequest));
 
         return apiResponse;
     }
@@ -66,7 +69,7 @@ public class MovieBlogController {
         return apiResponse;
     }
 
-    @PutMapping( "/update")
+    @PutMapping("/update")
     public APIResponse<String> updateMovieBlog(@ModelAttribute MovieBlogRequest movieBlogRequest) throws IOException {
         boolean checkUpdate = movieBlogService.updateBlog(movieBlogRequest);
         if (checkUpdate) {

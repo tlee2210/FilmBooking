@@ -5,6 +5,8 @@ import com.cinemas.entities.MovieBlog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface MovieBlogRepository extends JpaRepository<MovieBlog, Integer> {
     MovieBlog findByName(String name);
 
@@ -12,4 +14,7 @@ public interface MovieBlogRepository extends JpaRepository<MovieBlog, Integer> {
 
     @Query("SELECT b FROM MovieBlog b WHERE b.name = ?1 AND b.id != ?2")
     MovieBlog findByNameWithId(String name, int id);
+
+    @Query("select b FROM MovieBlog b where (:name is null or b.name like %:name%)")
+    List<MovieBlog> searchByName(String name);
 }

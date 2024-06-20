@@ -61,7 +61,9 @@ const ShowTimeCreate = lazy(() => import("../pages/dashboard/ShowTime/create"));
 const ShowTimeEdit = lazy(() => import("../pages/dashboard/ShowTime/edit"));
 const ShowTime = lazy(() => import("../pages/dashboard/ShowTime/index"));
 
+const Blog = lazy(() => import("../pages/dashboard/Blog/index"));
 const BlogCreate = lazy(() => import("../pages/dashboard/Blog/create"));
+const BlogEdit = lazy(() => import("../pages/dashboard/Blog/edit"));
 
 //Cinema Coner
 const Actor = lazy(() => import("../pages/Page/CinemaCorner/Actor"));
@@ -124,8 +126,11 @@ const authProtectedRoutes = [
   { path: "/dashboard/show-time/create", component: <ShowTimeCreate /> },
   { path: "/dashboard/show-time/:id/edit", component: <ShowTimeEdit /> },
   { path: "/dashboard/show-time", component: <ShowTime /> },
-  
+
+  { path: "/dashboard/blog", component: <Blog /> },
   { path: "/dashboard/blog/create", component: <BlogCreate /> },
+  { path: "/dashboard/blog/:slug/edit", component: <BlogEdit /> },
+  
   // /dashboard/blog/create
   // {
   //   path: "/",

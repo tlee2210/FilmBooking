@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Data
 public class MovieBlogRequest {
     private Integer id;
@@ -15,6 +17,8 @@ public class MovieBlogRequest {
     @NotEmpty
     private String description;
 
+    private List<String> url;
+
     @NotEmpty
-    private MultipartFile thumbnail;
+    private MultipartFile file;
 }

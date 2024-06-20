@@ -177,7 +177,7 @@ const Navdata = () => {
         {
           id: "blog",
           label: "Blog Management",
-          link: "/dashboard/blog/create",
+          link: "/dashboard/blog",
           parentId: "blogAndReview",
         },
         {

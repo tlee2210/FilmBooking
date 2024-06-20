@@ -13,24 +13,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Table(name = "movie_blog")
-public class MovieBlog {
+@Table(name = "image_description")
+public class imageDescription {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, nullable = false)
     private Integer id;
-
     @Column
-    private String name;
-
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
+    private String url;
     @Column
-    private String slug;
-
-    @Column
-    private Integer view = 0;
-
-    @Column
-    private String thumbnail;
+    private String slug_name = null;
 }

@@ -15,3 +15,4 @@ export * from "./Room/thunk";
 export * from "./WaterCorn/thunk";
 export * from "./User/thunk";
 export * from "./ShowTime/thunk";
+export * from "./Blog/thunk";
