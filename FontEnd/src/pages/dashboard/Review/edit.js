@@ -38,7 +38,7 @@ const getBase64 = (file) =>
   });
 
 const BlogEdit = (props) => {
-  document.title = "Edit Blog";
+  document.title = "Create Blog";
   const slug = props.router.params.slug;
   // console.log(slug);
   const history = useNavigate();
@@ -205,7 +205,7 @@ const BlogEdit = (props) => {
   return (
     <div className="page-content">
       <Container fluid>
-        <BreadCrumb title="Blog management" pageTitle="Blog Edit" />
+        <BreadCrumb title="Blog Create" pageTitle="Blog" />
         <Form
           onSubmit={(e) => {
             e.preventDefault();

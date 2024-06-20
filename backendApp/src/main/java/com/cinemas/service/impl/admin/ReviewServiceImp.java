@@ -5,12 +5,17 @@ import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.ReviewRequest;
 import com.cinemas.dto.request.SearchRequest;
 import com.cinemas.dto.request.SearchReviewRequest;
+import com.cinemas.dto.response.SelectOptionAndModelReponse;
+import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Celebrity;
 import com.cinemas.entities.Review;
 import com.cinemas.entities.WaterCorn;
+import com.cinemas.entities.imageDescription;
+import com.cinemas.enums.ReviewType;
 import com.cinemas.exception.AppException;
 import com.cinemas.repositories.CelebrityRepository;
 import com.cinemas.repositories.ReviewRepository;
+import com.cinemas.repositories.imageDescriptionRespository;
 import com.cinemas.service.admin.ReviewService;
 import com.cinemas.service.impl.FileStorageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +27,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.cinemas.exception.ErrorCode.NAME_EXISTED;
 import static com.cinemas.exception.ErrorCode.NOT_FOUND;
@@ -35,9 +42,12 @@ public class ReviewServiceImp implements ReviewService {
     @Autowired
     FileStorageServiceImpl fileStorageServiceImpl;
 
+    @Autowired
+    imageDescriptionRespository imageDescriptionRespository;
+
     @Override
-    public Page<Review> getAllReview(PaginationHelper paginationHelper) {
-        List<Review> reviewList = reviewRepository.findAll();
+    public SelectOptionAndModelReponse<Page<Review>> getAllReview(SearchRequest paginationHelper) {
+        List<Review> reviewList = reviewRepository.searchByName(paginationHelper.getSearchname(), (ReviewType) paginationHelper.getRole());
 
         reviewList.forEach(review -> {
             String imageUrl = fileStorageServiceImpl.getUrlFromPublicId(review.getThumbnail());
@@ -53,8 +63,13 @@ public class ReviewServiceImp implements ReviewService {
         PropertyComparator.sort(pageList, new MutableSortDefinition(paginationHelper.getSortByColumn(), true, ascending));
 
         Page<Review> reviews = new PageImpl<>(pageList, new PaginationHelper().getPageable(paginationHelper), reviewList.size());
+        List<SelectOptionReponse> selectOptionReponses = new ArrayList<>();
 
-        return reviews;
+        for (ReviewType reviewType : ReviewType.values()) {
+            selectOptionReponses.add(new SelectOptionReponse(reviewType.getValue(), reviewType.name()));
+        }
+
+        return new SelectOptionAndModelReponse<>(selectOptionReponses, reviews);
     }
 
     @Override
@@ -67,7 +82,18 @@ public class ReviewServiceImp implements ReviewService {
         ObjectUtils.copyFields(review, addReview);
 
         addReview.setSlug(review.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
-        addReview.setThumbnail(fileStorageServiceImpl.uploadFile(review.getThumbnail(), "review"));
+        addReview.setThumbnail(fileStorageServiceImpl.uploadFile(review.getFile(), "review"));
+        List<imageDescription> imageDescriptionList = new ArrayList<>();
+
+        if (review.getUrl() != null) {
+            review.getUrl().forEach(item -> {
+                imageDescription imageDescription = imageDescriptionRespository.findByUrl(item);
+                imageDescription.setSlug_name(addReview.getSlug());
+                imageDescriptionList.add(imageDescription);
+            });
+        }
+
+        imageDescriptionRespository.saveAll(imageDescriptionList);
 
         reviewRepository.save(addReview);
 
@@ -81,6 +107,15 @@ public class ReviewServiceImp implements ReviewService {
 
         if (review == null) throw new AppException(NOT_FOUND);
 
+        List<imageDescription> imageDescriptionList = imageDescriptionRespository.findBySlug_name(slug);
+        imageDescriptionList.forEach(item -> {
+            try {
+                fileStorageServiceImpl.deleteFile(item.getUrl());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
         fileStorageServiceImpl.deleteFile(review.getThumbnail());
         reviewRepository.delete(review);
 
@@ -88,14 +123,18 @@ public class ReviewServiceImp implements ReviewService {
     }
 
     @Override
-    public Review getEditReview(String slug) {
+    public SelectOptionAndModelReponse<Review> getEditReview(String slug) {
         Review review = reviewRepository.findBySlug(slug);
 
         if (review == null) throw new AppException(NOT_FOUND);
 
         review.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(review.getThumbnail()));
+        List<SelectOptionReponse> selectOptionReponses = new ArrayList<>();
 
-        return review;
+        for (ReviewType reviewType : ReviewType.values()) {
+            selectOptionReponses.add(new SelectOptionReponse(reviewType.getValue(), reviewType.name()));
+        }
+        return new SelectOptionAndModelReponse<>(selectOptionReponses, review);
     }
 
     @Override
@@ -108,18 +147,60 @@ public class ReviewServiceImp implements ReviewService {
             throw new AppException(NAME_EXISTED);
         }
 
-        if (review.getThumbnail() != null) {
+        if (review.getFile() != null) {
             fileStorageServiceImpl.deleteFile(wat.getThumbnail());
-            wat.setThumbnail(fileStorageServiceImpl.uploadFile(review.getThumbnail(), "review"));
+            wat.setThumbnail(fileStorageServiceImpl.uploadFile(review.getFile(), "reviewThumbnail"));
         }
+        String slugOld = wat.getSlug();
 
         ObjectUtils.copyFields(review, wat);
         wat.setSlug(review.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
+
+        List<imageDescription> imageDescriptionList = imageDescriptionRespository.findBySlug_name(slugOld);
+
+        if (review.getUrl() != null) {
+            List<imageDescription> imageDelete = imageDescriptionList.stream().filter(image -> !review.getUrl().contains(image.getUrl())).peek(images -> {
+                try {
+                    fileStorageServiceImpl.deleteFile(images.getUrl());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }).collect(Collectors.toList());
+
+            List<String> existingUrls = imageDescriptionList.stream()
+                    .map(imageDescription::getUrl)
+                    .collect(Collectors.toList());
+
+            List<imageDescription> newImages = review.getUrl().stream()
+                    .filter(url -> !existingUrls.contains(url))
+                    .map(url -> {
+                        imageDescription imageDescription = imageDescriptionRespository.findByUrl(url);
+                        imageDescription.setSlug_name(wat.getSlug());
+                        return imageDescription;
+                    })
+                    .collect(Collectors.toList());
+
+            imageDescriptionRespository.saveAll(newImages);
+
+            imageDescriptionRespository.deleteAll(imageDelete);
+
+        } else {
+            imageDescriptionRespository.deleteAll(imageDescriptionList);
+        }
 
         reviewRepository.save(wat);
 
         return true;
     }
 
+    @Override
+    public List<SelectOptionReponse> getCreate() {
+        List<SelectOptionReponse> selectOptionReponses = new ArrayList<>();
 
+        for (ReviewType reviewType : ReviewType.values()) {
+            selectOptionReponses.add(new SelectOptionReponse(reviewType.getValue(), reviewType.name()));
+        }
+
+        return selectOptionReponses;
+    }
 }

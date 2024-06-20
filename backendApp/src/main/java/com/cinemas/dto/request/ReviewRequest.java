@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 
 @Data
 @NoArgsConstructor
@@ -15,12 +17,18 @@ import org.springframework.web.multipart.MultipartFile;
 @Builder
 public class ReviewRequest {
     private int id;
+
     @NotEmpty(message = "VALIDATION")
     private String name;
+
     @NotEmpty
     private String description;
+
     @NotEmpty
     private ReviewType type;
+
+    private List<String> url;
+
     @NotEmpty
-    private MultipartFile thumbnail;
+    private MultipartFile file;
 }

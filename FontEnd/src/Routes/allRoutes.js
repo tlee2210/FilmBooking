@@ -65,6 +65,10 @@ const Blog = lazy(() => import("../pages/dashboard/Blog/index"));
 const BlogCreate = lazy(() => import("../pages/dashboard/Blog/create"));
 const BlogEdit = lazy(() => import("../pages/dashboard/Blog/edit"));
 
+const Review = lazy(() => import("../pages/dashboard/Review/index"));
+const ReviewCreate = lazy(() => import("../pages/dashboard/Review/create"));
+const ReviewEdit = lazy(() => import("../pages/dashboard/Review/edit"));
+
 //Cinema Coner
 const Actor = lazy(() => import("../pages/Page/CinemaCorner/Actor"));
 const Director = lazy(() => import("../pages/Page/CinemaCorner/Director"));
@@ -130,7 +134,11 @@ const authProtectedRoutes = [
   { path: "/dashboard/blog", component: <Blog /> },
   { path: "/dashboard/blog/create", component: <BlogCreate /> },
   { path: "/dashboard/blog/:slug/edit", component: <BlogEdit /> },
-  
+
+  { path: "/dashboard/review", component: <Review /> },
+  { path: "/dashboard/review/create", component: <ReviewEdit /> },
+  { path: "/dashboard/blog/:slug/edit", component: <ReviewCreate /> },
+
   // /dashboard/blog/create
   // {
   //   path: "/",

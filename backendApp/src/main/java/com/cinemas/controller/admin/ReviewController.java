@@ -5,6 +5,8 @@ import com.cinemas.dto.request.ReviewRequest;
 import com.cinemas.dto.request.SearchRequest;
 import com.cinemas.dto.request.SearchReviewRequest;
 import com.cinemas.dto.response.APIResponse;
+import com.cinemas.dto.response.SelectOptionAndModelReponse;
+import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Review;
 import com.cinemas.enums.ReviewType;
 import com.cinemas.exception.AppException;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 import static com.cinemas.exception.ErrorCode.CREATE_FAILED;
 import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
@@ -28,24 +31,35 @@ public class ReviewController {
     ReviewService reviewService;
 
     /**
-     *
-     * @param search
+     * @param name
      * @param pageNo
      * @param pageSize
      * @param sort
      * @return
      */
     @GetMapping
-    public APIResponse<Page<Review>> getReview(
+    public APIResponse<SelectOptionAndModelReponse<Page<Review>>> getReview(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) ReviewType type,
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
             @RequestParam(required = false, defaultValue = "15") Integer pageSize,
             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort) {
-        PaginationHelper paginationHelper = new PaginationHelper(pageNo, pageSize, sort, "id");
+        SearchRequest searchRequest = new SearchRequest(name, type, pageNo - 1, pageSize, sort);
 
-        Page<Review> reviewList = reviewService.getAllReview(paginationHelper);
-        APIResponse<Page<Review>> apiResponse = new APIResponse<>();
+        SelectOptionAndModelReponse<Page<Review>> reviewList = reviewService.getAllReview(searchRequest);
+        APIResponse<SelectOptionAndModelReponse<Page<Review>>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(reviewList);
+
+        return apiResponse;
+    }
+
+    @GetMapping("/create")
+    public APIResponse<List<SelectOptionReponse>> getReview() {
+
+        APIResponse<List<SelectOptionReponse>> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setResult(reviewService.getCreate());
 
         return apiResponse;
     }
@@ -99,13 +113,12 @@ public class ReviewController {
      * @return
      */
     @GetMapping("/{slug}/edit")
-    public APIResponse<Review> getEditWaterCorn(@PathVariable String slug) {
-        Review review = reviewService.getEditReview(slug);
+    public APIResponse<SelectOptionAndModelReponse<Review>> getEditWaterCorn(@PathVariable String slug) {
+        SelectOptionAndModelReponse<Review> modelReponse = reviewService.getEditReview(slug);
 
-        APIResponse<Review> apiResponse = new APIResponse();
+        APIResponse<SelectOptionAndModelReponse<Review>> apiResponse = new APIResponse();
         apiResponse.setCode(200);
-        apiResponse.setResult(review);
-
+        apiResponse.setResult(modelReponse);
 
         return apiResponse;
     }

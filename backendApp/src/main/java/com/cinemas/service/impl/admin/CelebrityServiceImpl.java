@@ -8,6 +8,7 @@ import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Celebrity;
 import com.cinemas.entities.Country;
+import com.cinemas.enums.RoleCeleb;
 import com.cinemas.exception.AppException;
 import com.cinemas.repositories.CelebrityRepository;
 import com.cinemas.repositories.CountryRepository;
@@ -38,7 +39,7 @@ public class    CelebrityServiceImpl implements CelebrityService {
 
     @Override
     public Page<Celebrity> getAllCelebrity(SearchRequest searchRequest) {
-        List<Celebrity> celebrityList = celebrityRepository.searchCelebrity(searchRequest.getSearchname(), searchRequest.getRole());
+        List<Celebrity> celebrityList = celebrityRepository.searchCelebrity(searchRequest.getSearchname(), (RoleCeleb) searchRequest.getRole());
 
         celebrityList.forEach(celebrity -> {
             String imageUrl = fileStorageServiceImpl.getUrlFromPublicId(celebrity.getImage());

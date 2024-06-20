@@ -183,7 +183,7 @@ const Navdata = () => {
         {
           id: "review",
           label: "Review Management",
-          link: "/dashboard/show-time",
+          link: "/dashboard/review",
           parentId: "blogAndReview",
         },
       ],

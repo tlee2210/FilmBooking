@@ -9,11 +9,11 @@ import org.springframework.data.domain.Sort;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchRequest extends PaginationHelper{
+public class SearchRequest<T> extends PaginationHelper{
     public String searchname;
-    public RoleCeleb role;
+    public T role;
 
-    public SearchRequest(String searchname, RoleCeleb role,Integer pageNo, Integer pageSize, Sort.Direction sort) {
+    public SearchRequest(String searchname, T role,Integer pageNo, Integer pageSize, Sort.Direction sort) {
         super(pageNo, pageSize, sort, "id");
         this.searchname = searchname;
         this.role = role;

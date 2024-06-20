@@ -135,9 +135,8 @@ public class MovieBlogServiceImpl implements MovieBlogService {
             List<imageDescription> newImages = movieBlogRequest.getUrl().stream()
                     .filter(url -> !existingUrls.contains(url))
                     .map(url -> {
-                        imageDescription imageDescription = new imageDescription();
+                        imageDescription imageDescription = imageDescriptionRespository.findByUrl(url);
                         imageDescription.setSlug_name(blog.getSlug());
-                        imageDescription.setUrl(url);
                         return imageDescription;
                     })
                     .collect(Collectors.toList());
@@ -169,6 +168,13 @@ public class MovieBlogServiceImpl implements MovieBlogService {
         fileStorageServiceImpl.deleteFile(blog.getThumbnail());
 
         List<imageDescription> imageDescriptionList = imageDescriptionRespository.findBySlug_name(slug);
+        imageDescriptionList.forEach(item -> {
+            try {
+                fileStorageServiceImpl.deleteFile(item.getUrl());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         imageDescriptionRespository.deleteAll(imageDescriptionList);
         movieBlogRepository.delete(blog);

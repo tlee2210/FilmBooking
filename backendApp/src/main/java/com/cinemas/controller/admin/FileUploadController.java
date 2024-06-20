@@ -32,9 +32,19 @@ public class FileUploadController {
 //        System.out.println("=======================");
 //        return apiResponse;
 //    }
-    @PostMapping()
+    @PostMapping("")
     public ResponseEntity<Map<String, String>> uploadFile(@RequestParam("upload") MultipartFile file) throws IOException {
         String url = uploadFileService.UploadFile(file, "blog");
+
+        Map<String, String> response = new HashMap<>();
+        response.put("url", url);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/review")
+    public ResponseEntity<Map<String, String>> uploadFileReview(@RequestParam("upload") MultipartFile file) throws IOException {
+        String url = uploadFileService.UploadFile(file, "review");
 
         Map<String, String> response = new HashMap<>();
         response.put("url", url);
