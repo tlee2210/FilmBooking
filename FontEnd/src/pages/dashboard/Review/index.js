@@ -29,7 +29,7 @@ import Select from "react-select";
 import "react-toastify/dist/ReactToastify.css";
 import { createSelector } from "reselect";
 
-import { getBlog, deleteBlog } from "../../../slices/Blog/thunk";
+import { getReview, deleteReview } from "../../../slices/Review/thunk";
 
 const BlogIndex = (props) => {
   const dispatch = useDispatch();
@@ -42,6 +42,8 @@ const BlogIndex = (props) => {
   const [searchname, setSearch] = useState(
     searchParams.get("searchname") || null
   );
+  const [type, setType] = useState(searchParams.get("type") || null);
+
   const [pageNo, setPageNo] = useState(
     parseInt(searchParams.get("pageNo"), 10) || 1
   );
@@ -54,14 +56,17 @@ const BlogIndex = (props) => {
     if (searchname && searchname !== null && searchname !== undefined) {
       params.searchname = searchname;
     }
+    if (type && type !== null && type !== undefined) {
+      params.type = type;
+    }
 
     params.pageNo = pageNo;
     params.pageSize = pageSize;
 
     setSearchParams(params);
-
-    dispatch(getBlog(searchname, pageNo, pageSize));
-  }, [dispatch, searchname, pageNo, pageSize]);
+    // getReview
+    dispatch(getReview(searchname, type, pageNo, pageSize));
+  }, [dispatch, searchname, type, pageNo, pageSize]);
 
   const BlogState = (state) => state;
   const BlogStateData = createSelector(BlogState, (state) => ({
@@ -69,10 +74,11 @@ const BlogIndex = (props) => {
     error: state.Message.error,
     messageSuccess: state.Message.messageSuccess,
     messageError: state.Message.messageError,
-    Blog: state.Blog.data,
+    Review: state.Review.data,
+    SelectOption: state.Review.SelectOption,
   }));
   // Inside your component
-  const { error, success, messageSuccess, messageError, Blog } =
+  const { error, success, messageSuccess, messageError, Review, SelectOption } =
     useSelector(BlogStateData);
 
   useEffect(() => {
@@ -107,10 +113,12 @@ const BlogIndex = (props) => {
 
     initialValues: {
       name: searchname ? searchname : null,
+      type: type ? type : null,
     },
     onSubmit: (values) => {
       //   console.log(values);
       setSearch(values.name);
+      setType(values.type);
       setPageNo(1);
     },
   });
@@ -124,9 +132,8 @@ const BlogIndex = (props) => {
   }
 
   function deleteitem(slug) {
-    // console.log("delete : " + slug);
     if (slug) {
-      dispatch(deleteBlog(slug));
+      dispatch(deleteReview(slug));
     }
   }
 
@@ -150,8 +157,13 @@ const BlogIndex = (props) => {
         enableColumnFilter: false,
       },
       {
+        header: "Type",
+        accessorKey: "type",
+        enableColumnFilter: false,
+      },
+      {
         header: "view",
-        accessorKey: "view",
+        accessorKey: "views",
         enableColumnFilter: false,
         cell: (cell) => {
           const value = cell.getValue();
@@ -187,7 +199,7 @@ const BlogIndex = (props) => {
           // return <React.Fragment>Details</React.Fragment>;
           return (
             <React.Fragment>
-              <Link to={`/dashboard/blog/${cell.getValue()}/edit`}>
+              <Link to={`/dashboard/review/${cell.getValue()}/edit`}>
                 <span className="bg-gradient me-3 fs-4 text-info">
                   <i className="ri-edit-2-fill"></i>
                 </span>
@@ -259,6 +271,26 @@ const BlogIndex = (props) => {
                           <i className="ri-search-line search-icon"></i>
                         </div>
                       </Col>
+                      <Col sm={4}>
+                        <Select
+                          name="type"
+                          options={SelectOption}
+                          isClearable={true}
+                          placeholder="Select type"
+                          classNamePrefix="select"
+                          onChange={(option) => {
+                            const status = option ? option.value : null;
+                            searchForm.setFieldValue("type", status);
+                            searchForm.setFieldTouched("type", true);
+                          }}
+                          onBlur={() =>
+                            searchForm.setFieldTouched("type", true)
+                          }
+                          value={SelectOption?.find(
+                            (opt) => opt.value === searchForm.values.type
+                          )}
+                        />
+                      </Col>
                       <Col className="col-sm-auto ms-auto">
                         <div className="list-grid-nav hstack gap-1">
                           <button
@@ -279,9 +311,9 @@ const BlogIndex = (props) => {
                     <div className="card-body pt-0">
                       <TableContainer
                         columns={columns || []}
-                        data={Blog.content || []}
-                        paginateData={Blog}
-                        customPageSize={Blog.size}
+                        data={Review.content || []}
+                        paginateData={Review}
+                        customPageSize={Review.size}
                         paginate={handlePagination}
                         numberOfElements={handlenumberOfElements}
                         tableClass="table-centered align-middle table-nowrap mb-0"

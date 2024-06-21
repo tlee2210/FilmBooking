@@ -25,10 +25,10 @@ import { upload } from "@testing-library/user-event/dist/cjs/utility/upload.js";
 import { PlusOutlined } from "@ant-design/icons";
 import { Image, Upload, message } from "antd";
 import { clearNotification } from "../../../slices/message/reducer";
+import Select from "react-select";
 
 // CreateBlog
-import { updateBlog, editBlog } from "../../../slices/Blog/thunk";
-
+import { editReview, updateReview } from "../../../slices/Review/thunk";
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -46,7 +46,7 @@ const BlogEdit = (props) => {
   const [fileList, setFileList] = useState([]);
 
   useEffect(() => {
-    dispatch(editBlog(slug, props.router.navigate));
+    dispatch(editReview(slug, props.router.navigate));
   }, [dispatch, slug, props.router.navigate]);
 
   const [imageSrcs, setImageSrcs] = useState([]);
@@ -59,9 +59,11 @@ const BlogEdit = (props) => {
   const blogCreatepageData = createSelector(selectBlogCreateState, (state) => ({
     error: state.Message.error,
     messageError: state.Message.messageError,
-    item: state.Blog.item,
+    item: state.Review.item,
+    SelectOption: state.Review.SelectOption,
   }));
-  const { error, messageError, item } = useSelector(blogCreatepageData);
+  const { error, messageError, item, SelectOption } =
+    useSelector(blogCreatepageData);
 
   useEffect(() => {
     if (error) {
@@ -95,6 +97,7 @@ const BlogEdit = (props) => {
     enableReinitialize: true,
     initialValues: {
       name: item.name || "",
+      type: item.type || "",
       description: item.description || "",
       file: item.thumbnail
         ? [{ uid: item.thumbnail, url: item.thumbnail }]
@@ -102,6 +105,7 @@ const BlogEdit = (props) => {
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Please Enter name"),
+      type: Yup.string().required("Please Enter type"),
       description: Yup.string().required("Please Enter description"),
       file: Yup.array()
         .of(
@@ -120,6 +124,7 @@ const BlogEdit = (props) => {
       const formData = new FormData();
       formData.append("id", item.id);
       formData.append("name", values.name);
+      formData.append("type", values.type);
       formData.append("description", values.description);
 
       if (values.file[0].originFileObj) {
@@ -130,7 +135,7 @@ const BlogEdit = (props) => {
         // console.log("image: ", image);
         formData.append(`url[${index}]`, image);
       });
-      dispatch(updateBlog(formData, props.router.navigate));
+      dispatch(updateReview(formData, props.router.navigate));
     },
   });
 
@@ -160,6 +165,8 @@ const BlogEdit = (props) => {
           const body = new FormData();
           loader.file.then((file) => {
             body.append("upload", file);
+            body.append("type", "blog");
+
             fetch("http://localhost:8081/api/admin/v1/file-upload", {
               method: "POST",
               body: body,
@@ -264,31 +271,68 @@ const BlogEdit = (props) => {
                       </div>
                     </Col>
                     <Col md={10}>
-                      <div className="mb-3">
-                        <Label className="form-label" htmlFor="name">
-                          Name
-                        </Label>
-                        <Input
-                          type="text"
-                          className="form-control"
-                          id="product-title-input"
-                          placeholder="Enter name"
-                          name="name"
-                          value={validation.values.name || ""}
-                          onBlur={validation.handleBlur}
-                          onChange={validation.handleChange}
-                          invalid={
-                            validation.errors.name && validation.touched.name
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.errors.name && validation.touched.name ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.name}
-                          </FormFeedback>
-                        ) : null}
-                      </div>
+                      <Row>
+                        <Col md={12}>
+                          <div className="mb-3">
+                            <Label className="form-label" htmlFor="name">
+                              Name
+                            </Label>
+                            <Input
+                              type="text"
+                              className="form-control"
+                              id="product-title-input"
+                              placeholder="Enter name"
+                              name="name"
+                              value={validation.values.name || ""}
+                              onBlur={validation.handleBlur}
+                              onChange={validation.handleChange}
+                              invalid={
+                                validation.errors.name &&
+                                validation.touched.name
+                                  ? true
+                                  : false
+                              }
+                            />
+                            {validation.errors.name &&
+                            validation.touched.name ? (
+                              <FormFeedback type="invalid">
+                                {validation.errors.name}
+                              </FormFeedback>
+                            ) : null}
+                          </div>
+                        </Col>
+                        <Col md={12}>
+                          <div className="mb-3">
+                            <Label className="form-label" htmlFor="name">
+                              Type
+                            </Label>
+                            <Select
+                              name="type"
+                              options={SelectOption}
+                              isClearable={true}
+                              placeholder="Select type"
+                              classNamePrefix="select"
+                              onChange={(option) => {
+                                const status = option ? option.value : null;
+                                validation.setFieldValue("type", status);
+                                validation.setFieldTouched("type", true);
+                              }}
+                              onBlur={() =>
+                                validation.setFieldTouched("type", true)
+                              }
+                              value={SelectOption?.find(
+                                (opt) => opt.value === validation.values.type
+                              )}
+                            />
+                            {validation.errors.name &&
+                            validation.touched.name ? (
+                              <FormFeedback type="invalid">
+                                {validation.errors.name}
+                              </FormFeedback>
+                            ) : null}
+                          </div>
+                        </Col>
+                      </Row>
                     </Col>
                     <Col md={12}>
                       <Card>

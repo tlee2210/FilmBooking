@@ -24,7 +24,6 @@ public class ReviewRequest {
     @NotEmpty
     private String description;
 
-    @NotEmpty
     private ReviewType type;
 
     private List<String> url;

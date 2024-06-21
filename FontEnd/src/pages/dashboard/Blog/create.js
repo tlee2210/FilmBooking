@@ -135,6 +135,7 @@ const BlogCreate = (props) => {
           const body = new FormData();
           loader.file.then((file) => {
             body.append("upload", file);
+            body.append("type", "blog");
             fetch("http://localhost:8081/api/admin/v1/file-upload", {
               method: "POST",
               body: body,
@@ -183,25 +184,6 @@ const BlogCreate = (props) => {
     });
     return srcs;
   }
-
-  const handleDeleteImage = async (url) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/delete?publicId=${publicId}`,
-        {
-          method: "DELETE",
-        }
-      );
-      const data = await response.json();
-      if (data.result === "ok") {
-        console.log("Image deleted successfully");
-      } else {
-        console.error("Error deleting image");
-      }
-    } catch (error) {
-      console.error("Error deleting image:", error);
-    }
-  };
 
   return (
     <div className="page-content">

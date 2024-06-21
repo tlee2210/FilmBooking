@@ -19,6 +19,7 @@ import WaterCornReducer from "./WaterCorn/reducer";
 import UserReducer from "./User/reducer";
 import ShowTimeReducer from "./ShowTime/reducer";
 import BlogReducer from "./Blog/reducer";
+import ReviewReducer from "./Review/reducer";
 
 const rootReducer = combineReducers({
   Layout: LayoutReducer,
@@ -36,6 +37,7 @@ const rootReducer = combineReducers({
   User: UserReducer,
   ShowTime: ShowTimeReducer,
   Blog: BlogReducer,
+  Review: ReviewReducer,
 });
 
 export default rootReducer;

@@ -66,7 +66,7 @@ public class ReviewServiceImp implements ReviewService {
         List<SelectOptionReponse> selectOptionReponses = new ArrayList<>();
 
         for (ReviewType reviewType : ReviewType.values()) {
-            selectOptionReponses.add(new SelectOptionReponse(reviewType.getValue(), reviewType.name()));
+            selectOptionReponses.add(new SelectOptionReponse(reviewType.name(), reviewType.name()));
         }
 
         return new SelectOptionAndModelReponse<>(selectOptionReponses, reviews);
@@ -132,8 +132,9 @@ public class ReviewServiceImp implements ReviewService {
         List<SelectOptionReponse> selectOptionReponses = new ArrayList<>();
 
         for (ReviewType reviewType : ReviewType.values()) {
-            selectOptionReponses.add(new SelectOptionReponse(reviewType.getValue(), reviewType.name()));
+            selectOptionReponses.add(new SelectOptionReponse(reviewType.name(), reviewType.name()));
         }
+
         return new SelectOptionAndModelReponse<>(selectOptionReponses, review);
     }
 
@@ -155,7 +156,7 @@ public class ReviewServiceImp implements ReviewService {
 
         ObjectUtils.copyFields(review, wat);
         wat.setSlug(review.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
-
+        wat.setType(review.getType());
         List<imageDescription> imageDescriptionList = imageDescriptionRespository.findBySlug_name(slugOld);
 
         if (review.getUrl() != null) {
@@ -167,12 +168,7 @@ public class ReviewServiceImp implements ReviewService {
                 }
             }).collect(Collectors.toList());
 
-            List<String> existingUrls = imageDescriptionList.stream()
-                    .map(imageDescription::getUrl)
-                    .collect(Collectors.toList());
-
             List<imageDescription> newImages = review.getUrl().stream()
-                    .filter(url -> !existingUrls.contains(url))
                     .map(url -> {
                         imageDescription imageDescription = imageDescriptionRespository.findByUrl(url);
                         imageDescription.setSlug_name(wat.getSlug());
@@ -181,7 +177,6 @@ public class ReviewServiceImp implements ReviewService {
                     .collect(Collectors.toList());
 
             imageDescriptionRespository.saveAll(newImages);
-
             imageDescriptionRespository.deleteAll(imageDelete);
 
         } else {
@@ -198,7 +193,7 @@ public class ReviewServiceImp implements ReviewService {
         List<SelectOptionReponse> selectOptionReponses = new ArrayList<>();
 
         for (ReviewType reviewType : ReviewType.values()) {
-            selectOptionReponses.add(new SelectOptionReponse(reviewType.getValue(), reviewType.name()));
+            selectOptionReponses.add(new SelectOptionReponse(reviewType.name(), reviewType.name()));
         }
 
         return selectOptionReponses;

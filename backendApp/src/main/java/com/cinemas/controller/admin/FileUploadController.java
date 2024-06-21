@@ -22,29 +22,12 @@ public class FileUploadController {
     @Autowired
     private UploadFileService uploadFileService;
 
-    //    @PostMapping()
-//    public APIResponse<String> uploadFile(@RequestParam("upload") MultipartFile file) throws IOException {
-//        String url = uploadFileService.UploadFile(file, "blog");
-//        APIResponse<String> apiResponse = new APIResponse<>();
-//        apiResponse.setResult(url);
-//        System.out.println("=======================");
-//        System.out.println(url);
-//        System.out.println("=======================");
-//        return apiResponse;
-//    }
     @PostMapping("")
-    public ResponseEntity<Map<String, String>> uploadFile(@RequestParam("upload") MultipartFile file) throws IOException {
-        String url = uploadFileService.UploadFile(file, "blog");
-
-        Map<String, String> response = new HashMap<>();
-        response.put("url", url);
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @PostMapping("/review")
-    public ResponseEntity<Map<String, String>> uploadFileReview(@RequestParam("upload") MultipartFile file) throws IOException {
-        String url = uploadFileService.UploadFile(file, "review");
+    public ResponseEntity<Map<String, String>> uploadFileReview(
+            @RequestParam("upload") MultipartFile file,
+            @RequestParam("type") String type
+    ) throws IOException {
+        String url = uploadFileService.UploadFile(file, type);
 
         Map<String, String> response = new HashMap<>();
         response.put("url", url);

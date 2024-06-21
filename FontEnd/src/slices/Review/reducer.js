@@ -6,19 +6,21 @@ export const initialState = {
   item: {},
 };
 
-const BlogSlice = createSlice({
-  name: "Blog",
+const ReviewSlice = createSlice({
+  name: "Review",
   initialState,
   reducers: {
     fetchSuccess: (state, action) => {
       // state.loading = false;
-      state.data = action.payload.data;
+      state.data = action.payload.data.model;
+      state.SelectOption = action.payload.data.selectOptionReponse;
     },
     setSelectOption(state, action) {
       state.SelectOption = action.payload;
     },
     setItem(state, action) {
-      state.item = action.payload.data;
+      state.item = action.payload.data.model;
+      state.SelectOption = action.payload.data.selectOptionReponse;
     },
     removeItem(state, action) {
       // console.log(action.payload);
@@ -31,6 +33,6 @@ const BlogSlice = createSlice({
 });
 
 export const { fetchSuccess, setSelectOption, removeItem, setItem } =
-  BlogSlice.actions;
+  ReviewSlice.actions;
 
-export default BlogSlice.reducer;
+export default ReviewSlice.reducer;

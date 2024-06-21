@@ -160,6 +160,7 @@ const BlogEdit = (props) => {
           const body = new FormData();
           loader.file.then((file) => {
             body.append("upload", file);
+            body.append("type", "blog");
             fetch("http://localhost:8081/api/admin/v1/file-upload", {
               method: "POST",
               body: body,

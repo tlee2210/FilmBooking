@@ -136,8 +136,8 @@ const authProtectedRoutes = [
   { path: "/dashboard/blog/:slug/edit", component: <BlogEdit /> },
 
   { path: "/dashboard/review", component: <Review /> },
-  { path: "/dashboard/review/create", component: <ReviewEdit /> },
-  { path: "/dashboard/blog/:slug/edit", component: <ReviewCreate /> },
+  { path: "/dashboard/review/create", component: <ReviewCreate /> },
+  { path: "/dashboard/review/:slug/edit", component: <ReviewEdit /> },
 
   // /dashboard/blog/create
   // {

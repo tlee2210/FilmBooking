@@ -72,6 +72,9 @@ public class ReviewController {
      */
     @PostMapping("/create")
     public APIResponse<String> createReview(@ModelAttribute ReviewRequest reviewRequest) throws IOException {
+        System.out.println("=======================================");
+        System.out.println(reviewRequest);
+        System.out.println("=======================================");
         boolean checkCreate = reviewService.addReview(reviewRequest);
         if (checkCreate) {
             APIResponse<String> apiResponse = new APIResponse();

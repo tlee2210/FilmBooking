@@ -9,7 +9,7 @@ export const getBlog = (name, pageNo, pageSize) => async (dispatch) => {
       params: { name, pageNo, pageSize },
     })
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(
         fetchSuccess({
           data: response.data?.result,
@@ -29,7 +29,7 @@ export const CreateBlog = (formData, history) => async (dispatch) => {
       },
     })
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(Success(response.data?.message));
       history("/dashboard/blog");
     })
@@ -43,7 +43,7 @@ export const deleteBlog = (slug, history) => async (dispatch) => {
   await axios
     .delete(`http://localhost:8081/api/admin/v1/movie-blog/delete/${slug}`)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(Success(response.data?.message));
       dispatch(getBlog());
       // dispatch(removeItem(response.data?.result));
@@ -58,7 +58,7 @@ export const editBlog = (slug, history) => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/admin/v1/movie-blog/${slug}/edit`)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(
         setItem({
           data: response.data?.result,
@@ -82,7 +82,7 @@ export const updateBlog = (formData, history) => async (dispatch) => {
       },
     })
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(Success(response.data?.message));
       history("/dashboard/blog");
     })

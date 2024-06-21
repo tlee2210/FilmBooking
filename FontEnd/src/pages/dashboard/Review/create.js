@@ -25,9 +25,10 @@ import { upload } from "@testing-library/user-event/dist/cjs/utility/upload.js";
 import { PlusOutlined } from "@ant-design/icons";
 import { Image, Upload, message } from "antd";
 import { clearNotification } from "../../../slices/message/reducer";
+import Select from "react-select";
 
 // CreateBlog
-import { CreateBlog } from "../../../slices/Blog/thunk";
+import { getCreateReview, CreateReview } from "../../../slices/Review/thunk";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -52,8 +53,14 @@ const BlogCreate = (props) => {
   const blogCreatepageData = createSelector(selectBlogCreateState, (state) => ({
     error: state.Message.error,
     messageError: state.Message.messageError,
+    SelectOption: state.Review.SelectOption,
   }));
-  const { error, messageError } = useSelector(blogCreatepageData);
+  const { error, messageError, SelectOption } = useSelector(blogCreatepageData);
+
+  useEffect(() => {
+    // getReview
+    dispatch(getCreateReview());
+  }, [dispatch]);
 
   useEffect(() => {
     if (error) {
@@ -88,10 +95,12 @@ const BlogCreate = (props) => {
     initialValues: {
       name: "",
       description: "",
+      type: "",
       file: [],
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Please Enter name"),
+      type: Yup.string().required("Please Enter type"),
       description: Yup.string().required("Please Enter description"),
       file: Yup.array()
         .of(
@@ -104,16 +113,17 @@ const BlogCreate = (props) => {
         .min(1, "Please upload at least one Image"),
     }),
     onSubmit: (values) => {
-      // console.log(values);
+      console.log(values);
       const formData = new FormData();
       formData.append("name", values.name);
+      formData.append("type", values.type);
       formData.append("description", values.description);
       formData.append("file", values.file[0].originFileObj);
       imageSrcs.forEach((image, index) => {
         // console.log("image: ", image);
         formData.append(`url[${index}]`, image);
       });
-      dispatch(CreateBlog(formData, props.router.navigate));
+      dispatch(CreateReview(formData, props.router.navigate));
     },
   });
 
@@ -135,6 +145,7 @@ const BlogCreate = (props) => {
           const body = new FormData();
           loader.file.then((file) => {
             body.append("upload", file);
+            body.append("type", "blog");
             fetch("http://localhost:8081/api/admin/v1/file-upload", {
               method: "POST",
               body: body,
@@ -265,31 +276,68 @@ const BlogCreate = (props) => {
                       </div>
                     </Col>
                     <Col md={10}>
-                      <div className="mb-3">
-                        <Label className="form-label" htmlFor="name">
-                          Name
-                        </Label>
-                        <Input
-                          type="text"
-                          className="form-control"
-                          id="product-title-input"
-                          placeholder="Enter name"
-                          name="name"
-                          value={validation.values.name || ""}
-                          onBlur={validation.handleBlur}
-                          onChange={validation.handleChange}
-                          invalid={
-                            validation.errors.name && validation.touched.name
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.errors.name && validation.touched.name ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.name}
-                          </FormFeedback>
-                        ) : null}
-                      </div>
+                      <Row>
+                        <Col md={12}>
+                          <div className="mb-3">
+                            <Label className="form-label" htmlFor="name">
+                              Name
+                            </Label>
+                            <Input
+                              type="text"
+                              className="form-control"
+                              id="product-title-input"
+                              placeholder="Enter name"
+                              name="name"
+                              value={validation.values.name || ""}
+                              onBlur={validation.handleBlur}
+                              onChange={validation.handleChange}
+                              invalid={
+                                validation.errors.name &&
+                                validation.touched.name
+                                  ? true
+                                  : false
+                              }
+                            />
+                            {validation.errors.name &&
+                            validation.touched.name ? (
+                              <FormFeedback type="invalid">
+                                {validation.errors.name}
+                              </FormFeedback>
+                            ) : null}
+                          </div>
+                        </Col>
+                        <Col md={12}>
+                          <div className="mb-3">
+                            <Label className="form-label" htmlFor="name">
+                              Type
+                            </Label>
+                            <Select
+                              name="type"
+                              options={SelectOption}
+                              isClearable={true}
+                              placeholder="Select type"
+                              classNamePrefix="select"
+                              onChange={(option) => {
+                                const status = option ? option.value : null;
+                                validation.setFieldValue("type", status);
+                                validation.setFieldTouched("type", true);
+                              }}
+                              onBlur={() =>
+                                validation.setFieldTouched("type", true)
+                              }
+                              value={SelectOption?.find(
+                                (opt) => opt.value === validation.values.type
+                              )}
+                            />
+                            {validation.errors.name &&
+                            validation.touched.name ? (
+                              <FormFeedback type="invalid">
+                                {validation.errors.name}
+                              </FormFeedback>
+                            ) : null}
+                          </div>
+                        </Col>
+                      </Row>
                     </Col>
                     <Col md={12}>
                       <Card>
