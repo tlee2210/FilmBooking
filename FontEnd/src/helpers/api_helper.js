@@ -29,6 +29,7 @@ axios.interceptors.response.use(
       case 401:
         message = "Invalid credentials";
         sessionStorage.removeItem("authUser");
+        window.location.href = "/";
         break;
       case 404:
         message = "Sorry! the data you are looking for could not be found";

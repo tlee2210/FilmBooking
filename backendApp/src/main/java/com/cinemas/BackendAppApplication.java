@@ -21,6 +21,9 @@ public class BackendAppApplication implements CommandLineRunner {
     CelebrityDataInitializer celebrityDataInitializer;
     @Autowired
     CinemaDataInitializer cinemaDataInitializer;
+    @Autowired
+    ReviewDataInitializer reviewDataInitializer;
+
     public static void main(String[] args) {
         SpringApplication.run(BackendAppApplication.class, args);
     }
@@ -32,5 +35,6 @@ public class BackendAppApplication implements CommandLineRunner {
         movieGenreDataInitializer.initMovieGenre();
         celebrityDataInitializer.initCelebrities();
         cinemaDataInitializer.initCinemas();
+        reviewDataInitializer.initReviewData();
     }
 }

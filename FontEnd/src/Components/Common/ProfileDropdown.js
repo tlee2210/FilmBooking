@@ -51,7 +51,8 @@ const ProfileDropdown = () => {
                 {userName}
               </span>
               <span className="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">
-                Founder
+                {role}
+                {/* Founder */}
               </span>
             </span>
           </span>
@@ -59,29 +60,29 @@ const ProfileDropdown = () => {
         <DropdownMenu className="dropdown-menu-end">
           <h6 className="dropdown-header">Welcome {role}!</h6>
           <DropdownItem className="p-0">
-            <Link to="/profile" className="dropdown-item">
+            <Link to="/dashboard/profile" className="dropdown-item">
               <i className="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i>
               <span className="align-middle">Profile</span>
             </Link>
           </DropdownItem>
-          <DropdownItem className="p-0">
+          {/* <DropdownItem className="p-0">
             <Link to="/apps-chat" className="dropdown-item">
               <i className="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i>{" "}
               <span className="align-middle">Messages</span>
             </Link>
-          </DropdownItem>
-          <DropdownItem className="p-0">
+          </DropdownItem> */}
+          {/* <DropdownItem className="p-0">
             <Link to="#" className="dropdown-item">
               <i className="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i>{" "}
               <span className="align-middle">Taskboard</span>
             </Link>
-          </DropdownItem>
-          <DropdownItem className="p-0">
+          </DropdownItem> */}
+          {/* <DropdownItem className="p-0">
             <Link to="/pages-faqs" className="dropdown-item">
               <i className="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i>{" "}
               <span className="align-middle">Help</span>
             </Link>
-          </DropdownItem>
+          </DropdownItem> */}
           <div className="dropdown-divider"></div>
           <DropdownItem className="p-0">
             <Link to="/logout" className="dropdown-item">

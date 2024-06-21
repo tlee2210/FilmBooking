@@ -30,6 +30,7 @@ const UserProfile = () => {
   const dispatch = useDispatch();
 
   const [email, setemail] = useState("admin@gmail.com");
+  const [role, setRole] = useState();
   const [idx, setidx] = useState("1");
 
   const [userName, setUserName] = useState("Admin");
@@ -48,18 +49,17 @@ const UserProfile = () => {
       const obj = JSON.parse(sessionStorage.getItem("authUser"));
 
       if (!isEmpty(user)) {
-        obj.data.first_name = user.first_name;
+        obj.user.name = user.name;
         sessionStorage.removeItem("authUser");
         sessionStorage.setItem("authUser", JSON.stringify(obj));
       }
 
-      setUserName(obj.data.first_name);
-      setemail(obj.data.email);
-      setidx(obj.data._id || "1");
-
-      setTimeout(() => {
-        dispatch(resetProfileFlag());
-      }, 3000);
+      setUserName(obj.user?.name);
+      setemail(obj.user?.email);
+      setidx(obj.user.id || "1");
+      // setTimeout(() => {
+      //   dispatch(resetProfileFlag());
+      // }, 3000);
     }
   }, [dispatch, user]);
 
@@ -68,11 +68,11 @@ const UserProfile = () => {
     enableReinitialize: true,
 
     initialValues: {
-      first_name: userName || "Admin",
+      name: userName || "Admin",
       idx: idx || "",
     },
     validationSchema: Yup.object({
-      first_name: Yup.string().required("Please Enter Your UserName"),
+      name: Yup.string().required("Please Enter Your UserName"),
     }),
     onSubmit: (values) => {
       dispatch(editProfile(values));
@@ -129,25 +129,23 @@ const UserProfile = () => {
                 <div className="form-group">
                   <Label className="form-label">User Name</Label>
                   <Input
-                    name="first_name"
+                    name="name"
                     // value={name}
                     className="form-control"
                     placeholder="Enter User Name"
                     type="text"
                     onChange={validation.handleChange}
                     onBlur={validation.handleBlur}
-                    value={validation.values.first_name || ""}
+                    value={validation.values.name || ""}
                     invalid={
-                      validation.touched.first_name &&
-                      validation.errors.first_name
+                      validation.touched.name && validation.errors.name
                         ? true
                         : false
                     }
                   />
-                  {validation.touched.first_name &&
-                  validation.errors.first_name ? (
+                  {validation.touched.name && validation.errors.name ? (
                     <FormFeedback type="invalid">
-                      {validation.errors.first_name}
+                      {validation.errors.name}
                     </FormFeedback>
                   ) : null}
                   <Input name="idx" value={idx} type="hidden" />

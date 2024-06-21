@@ -75,7 +75,7 @@ export const GetEditMovie = (slug, history) => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/admin/v1/movie/${slug}/edit`)
     .then((response) => {
-      // console.log(response);
+      console.log(response);
       dispatch(
         setItem({
           data: response.data?.result,

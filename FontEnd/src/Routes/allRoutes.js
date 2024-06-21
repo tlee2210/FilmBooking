@@ -95,9 +95,9 @@ import Order from "../pages/Page/Order/index";
 import BlogDienAnh from "../pages/Page/BlogDienAnh";
 import BlogDienAnhDetails from "../pages/Page/BlogDienAnh/details";
 
-const authProtectedRoutes = [
+const adminProtectedRoutes = [
   //User Profile
-  { path: "/profile", component: <UserProfile /> },
+  { path: "/dashboard/profile", component: <UserProfile /> },
   { path: "/pages-starter", component: <Starter /> },
 
   { path: "/dashboard/celebrity", component: <Celebrity /> },
@@ -147,6 +147,7 @@ const authProtectedRoutes = [
   // },
   // { path: "*", component: <Navigate to="/profile" /> },
 ];
+// authProtectedRoutes
 
 const publicRoutes = [
   // Authentication Page
@@ -181,4 +182,4 @@ const homeRoutes = [
   },
 ];
 
-export { authProtectedRoutes, publicRoutes, homeRoutes };
+export { adminProtectedRoutes, publicRoutes, homeRoutes };

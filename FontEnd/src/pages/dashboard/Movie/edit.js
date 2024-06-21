@@ -348,6 +348,7 @@ const MovieEdit = (props) => {
       dispatch(UpdateMovie(formData, props.router.navigate));
     },
   });
+  console.log(validation.values);
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -866,11 +867,11 @@ const MovieEdit = (props) => {
                                 selectedDate
                               );
                             }}
-                            options={{
-                              minDate: new Date(
-                                new Date().getTime() + 15 * 24 * 60 * 60 * 1000
-                              ),
-                            }}
+                            // options={{
+                            //   minDate: new Date(
+                            //     new Date().getTime() + 15 * 24 * 60 * 60 * 1000
+                            //   ),
+                            // }}
                           />
                           {validation.errors.releaseDate &&
                           validation.touched.releaseDate ? (
@@ -1042,7 +1043,7 @@ const MovieEdit = (props) => {
                   <CardBody>
                     {(validation.values.prices || []).map((price, index) => (
                       <Row key={index} className="mb-3">
-                        <Col md={5}>
+                        <Col md={4}>
                           <Input
                             type="number"
                             name={`prices.${index}.price`}
@@ -1071,9 +1072,9 @@ const MovieEdit = (props) => {
                               );
                             }}
                             options={{
-                              minDate: new Date(
-                                new Date().getTime() + 5 * 24 * 60 * 60 * 1000
-                              ),
+                              // minDate: new Date(
+                              //   new Date().getTime() + 5 * 24 * 60 * 60 * 1000
+                              // ),
                               disable: validation.values.prices
                                 .filter((_, i) => i !== index)
                                 .map((price) => new Date(price.date)),

@@ -19,10 +19,6 @@ const AuthProtected = (props) => {
     }
   }, [token, userProfile, loading, dispatch]);
 
-  /*
-    Navigate is un-auth access protected routes via url
-    */
-
   if (!userProfile && loading && !token) {
     return (
       <Navigate to={{ pathname: "/login", state: { from: props.location } }} />
@@ -32,20 +28,61 @@ const AuthProtected = (props) => {
   return <>{props.children}</>;
 };
 
-const AccessRoute = ({ component: Component, ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      render={(props) => {
-        return (
-          <>
-            {" "}
-            <Component {...props} />{" "}
-          </>
-        );
-      }}
-    />
-  );
+// const AccessRoute = ({ component: Component, ...rest }) => {
+//   return (
+//     <Route
+//       {...rest}
+//       render={(props) => {
+//         return (
+//           <>
+//             {" "}
+//             <Component {...props} />{" "}
+//           </>
+//         );
+//       }}
+//     />
+//   );
+// };
+
+//admin
+const AdminProtected = (props) => {
+  const dispatch = useDispatch();
+  const { userProfile, token } = useProfile();
+
+  // console.log("userProfile: ", userProfile);
+  if (!userProfile) {
+    return <Navigate to={{ pathname: "/", state: { from: props.location } }} />;
+  } else {
+    const user = userProfile.user;
+    if (user && user.role !== "ADMIN" && user.role !== "MANAGER") {
+      return (
+        <Navigate to={{ pathname: "/", state: { from: props.location } }} />
+      );
+    }
+  }
+  useEffect(() => {
+    if (userProfile && token) {
+      setAuthorization(token);
+    } else if (!userProfile && !token) {
+      dispatch(logoutUser());
+    }
+  }, [token, userProfile, dispatch]);
+
+  return <>{props.children}</>;
 };
 
-export { AuthProtected, AccessRoute };
+//login
+const AccessRoute = (props) => {
+  const dispatch = useDispatch();
+  const { userProfile, loading, token } = useProfile();
+
+  if (userProfile) {
+    return (
+      <Navigate to={{ pathname: "/", state: { from: props.location } }} />
+    );
+  }
+
+  return <>{props.children}</>;
+};
+
+export { AuthProtected, AdminProtected, AccessRoute };

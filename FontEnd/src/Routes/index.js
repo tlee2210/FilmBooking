@@ -8,16 +8,8 @@ import VerticalLayout from "../Layouts/index";
 import LayoutHome from "../Layouts/home/index";
 
 //routes
-import {
-  authProtectedRoutes,
-  publicRoutes,
-  homeRoutes,
-  CinemaCornerRoutes,
-  TicketBookingRoutes,
-  BinhLuanPhimRoutes,
-  RapPhimRoutes,
-} from "./allRoutes";
-import { AuthProtected } from "./AuthProtected";
+import { adminProtectedRoutes, publicRoutes, homeRoutes } from "./allRoutes";
+import { AuthProtected, AdminProtected, AccessRoute } from "./AuthProtected";
 
 const loading = (
   <div
@@ -42,9 +34,11 @@ const Index = () => {
               <Route
                 path={route.path}
                 element={
-                  <NonAuthLayout>
-                    {route.element ? route.element : route.component}
-                  </NonAuthLayout>
+                  <AccessRoute>
+                    <NonAuthLayout>
+                      {route.element ? route.element : route.component}
+                    </NonAuthLayout>
+                  </AccessRoute>
                 }
                 key={idx}
                 exact={true}
@@ -64,15 +58,15 @@ const Index = () => {
           </Route>
 
           <Route>
-            {authProtectedRoutes.map((route, idx) => (
+            {adminProtectedRoutes.map((route, idx) => (
               <Route
                 path={route.path}
                 element={
-                  <AuthProtected>
+                  <AdminProtected>
                     <VerticalLayout>
                       {route.element ? route.element : route.component}
                     </VerticalLayout>
-                  </AuthProtected>
+                  </AdminProtected>
                 }
                 key={idx}
                 exact={true}
