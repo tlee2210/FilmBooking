@@ -163,7 +163,7 @@ const publicRoutes = [
 
 const homeRoutes = [
   { path: "/", component: <Home /> },
-  { path: "/dien-vien", component: <Actor /> },
+  { path: "/actor", component: <Actor /> },
   { path: "/dao-dien", component: <Director /> },
   { path: "/dien-vien/dien-vien-details", component: <ActorInfor /> },
   { path: "/dao-dien/dao-dien-details", component: <DirectorInfor /> },

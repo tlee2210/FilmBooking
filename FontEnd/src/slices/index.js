@@ -21,6 +21,9 @@ import ShowTimeReducer from "./ShowTime/reducer";
 import BlogReducer from "./Blog/reducer";
 import ReviewReducer from "./Review/reducer";
 
+//home
+import HomeCelebrityReducer from "./home/ActorHome/reducer";
+
 const rootReducer = combineReducers({
   Layout: LayoutReducer,
   Login: LoginReducer,
@@ -38,6 +41,7 @@ const rootReducer = combineReducers({
   ShowTime: ShowTimeReducer,
   Blog: BlogReducer,
   Review: ReviewReducer,
+  HomeCelebrity: HomeCelebrityReducer,
 });
 
 export default rootReducer;

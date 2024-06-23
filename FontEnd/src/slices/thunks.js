@@ -17,3 +17,6 @@ export * from "./User/thunk";
 export * from "./ShowTime/thunk";
 export * from "./Blog/thunk";
 export * from "./Review/thunk";
+
+//home
+export * from "./home/ActorHome/thunk";

@@ -1,70 +1,92 @@
-
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Card, CardBody, CardHeader, Col, Container, Input, Label, Row, FormGroup, Button } from 'reactstrap';
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Container,
+  Input,
+  Label,
+  Row,
+  FormGroup,
+  Button,
+} from "reactstrap";
 import "./css/CinemaCorner.css";
+import { createSelector } from "reselect";
+import { message, Image } from "antd";
+
+import { getHomeActor } from "../../../slices/home/ActorHome/thunk";
+import withRouter from "../../../Components/Common/withRouter";
+import { useSelector, useDispatch } from "react-redux";
 
 import RightColumn from "./RightColumn";
 
-// Import Images
-// import avatar3 from "../../../assets/images/users/avatar-3.jpg";
-// import avatar4 from "../../../assets/images/users/avatar-4.jpg";
+const HomeActor = () => {
+  const dispatch = useDispatch();
 
-const Actor = () => {
-  const SingleOptions = [
-    { value: 'Watches', label: 'Watches' },
-    { value: 'Headset', label: 'Headset' },
-    { value: 'Sweatshirt', label: 'Sweatshirt' },
-    { value: '20% off', label: '20% off' },
-    { value: '4 star', label: '4 star' },
-  ];
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [selectedMulti, setSelectedMulti] = useState(null);
+  const [pageNo, setPageNo] = useState(
+    parseInt(searchParams.get("pageNo"), 10) || 1
+  );
+  const [pageSize, setPageSize] = useState(
+    parseInt(searchParams.get("pageSize"), 10) || 10
+  );
+  const CelebrityState = (state) => state;
+  const CelebrityStateData = createSelector(CelebrityState, (state) => ({
+    error: state.Message.error,
+    messageError: state.Message.messageError,
+    data: state.HomeCelebrity.data,
+  }));
 
-  const handleMulti = (selectedMulti) => {
-    setSelectedMulti(selectedMulti);
+  const { error, messageError, data } = useSelector(CelebrityStateData);
+
+  useEffect(() => {
+    let params = {};
+
+    // if (role && role !== null && role !== undefined) {
+    //   params.role = role;
+    // }
+
+    params.pageNo = pageNo;
+    params.pageSize = pageSize;
+
+    setSearchParams(params);
+
+    dispatch(getHomeActor(pageNo, pageSize));
+  }, [dispatch, pageNo, pageSize]);
+
+  const handlePagination = (page) => {
+    // console.log(page);
+    const newPageNo = page + 1;
+    setPageNo(newPageNo);
+    setSearchParams({ pageNo: newPageNo, pageSize });
   };
 
-  const [selectedMovie, setSelectedMovie] = useState('');
-  const [selectedTheater, setSelectedTheater] = useState('');
-  const [selectedDate, setSelectedDate] = useState('');
+  // HomeCelebrity
 
-  const handleMovieChange = (event) => {
-    setSelectedMovie(event.target.value);
-  };
-
-  const handleTheaterChange = (event) => {
-    setSelectedTheater(event.target.value);
-  };
-
-  const handleDateChange = (event) => {
-    setSelectedDate(event.target.value);
-  };
-
-  document.title = "Diễn Viên";
+  document.title = "Actor";
 
   return (
     <React.Fragment>
       <Container style={{ paddingTop: 100 }}>
         <div className="page-content">
           <Container fluid>
-
             <Row>
               <Col lg={8}>
-                <div fluid className="director-header-container-cinemaCorner">
+                <div className="director-header-container-cinemaCorner">
                   <Row className="align-items-center">
                     <Col md="3" className="d-flex align-items-center">
                       <div className="title-icon-cinemaCorner"></div>
-                      <h2 className="title-cinemaCorner">DIỄN VIÊN</h2>
+                      <h2 className="title-cinemaCorner">ACTOR</h2>
                     </Col>
                     <Col md="9" className="d-flex justify-content-end">
-                      <Input type="select" className="custom-select-cinemaCorner mx-2">
+                      <Input
+                        type="select"
+                        className="custom-select-cinemaCorner mx-2"
+                      >
                         <option>Quốc Gia</option>
-                        <option>Option 1</option>
-                        <option>Option 2</option>
-                      </Input>
-                      <Input type="select" className="custom-select-cinemaCorner mx-2">
-                        <option>Xem Nhiều Nhất</option>
                         <option>Option 1</option>
                         <option>Option 2</option>
                       </Input>
@@ -72,46 +94,131 @@ const Actor = () => {
                   </Row>
                   <div className="bottom-border"></div>
                 </div>
-                {['Chris Hemsworth', 'Thor Ragnarock', 'Thor Ragnarock 3', 'Thor Ragnarock 4'].map((title, index) => (
-                  <Col key={index} className="mb-4 mt-4">
-                    <Card className="h-100">
-                      <Row className="g-0">
-                        <Col md={4}>
-                          <Link to="/dien-vien/dien-vien-details" style={{ textDecoration: "none", color: "inherit" }}>
-                            <img
-                              style={{ height: "250px", width: "250px", objectFit: "cover" }}
-                              className="rounded w-100 h-auto"
-                              src="https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcTtz0oynJ2nY-2wHZXerfJbJoGZpLIPrUSWdLfQbcWOuymbu2uWLbSyonfEeoUHbcnS1FE5k6ZfxkQe8YQ"
-                              alt="Card"
-                            />
-                          </Link>
+                {data && data.content
+                  ? data.content.map((item, index) => (
+                      <Link
+                        to="/dien-vien/dien-vien-details"
+                        style={{
+                          textDecoration: "none",
+                          color: "inherit",
+                        }}
+                        key={index}
+                      >
+                        <Col className="mb-4 mt-4">
+                          <Card className="shadow-lg p-3 mb-5 bg-white rounded">
+                            <Row className="g-0">
+                              <Col md={3}>
+                                <Image
+                                  width={140}
+                                  src={item.image}
+                                  alt={item.image}
+                                />
+                              </Col>
+                              <Col md={8}>
+                                <CardHeader>
+                                  <h1 className="title-cinemaCorner-name mb-0">
+                                    {item.name}
+                                  </h1>
+                                </CardHeader>
+                                <CardBody>
+                                  <p
+                                    className="card-text mb-2 text-muted"
+                                    style={{
+                                      fontFamily: "Arial",
+                                      fontSize: "12px",
+                                    }}
+                                  >
+                                    Biography: {item.biography}
+                                  </p>
+                                  <p
+                                    className="card-text mb-2 text-muted"
+                                    style={{
+                                      fontFamily: "Arial",
+                                      fontSize: "12px",
+                                    }}
+                                  >
+                                    Description: {item.description}
+                                  </p>
+                                </CardBody>
+                              </Col>
+                            </Row>
+                          </Card>
                         </Col>
-                        <Col md={8}>
-                          <CardHeader>
-                            <h1 className="title-cinemaCorner-name mb-0">{title}</h1>
+                      </Link>
+                    ))
+                  : null}
+                <div className="col-sm-auto mb-3">
+                  <ul className="pagination pagination-separated pagination-md justify-content-center justify-content-sm-start mb-0">
+                    <li
+                      className={
+                        data.number === 0 ? "page-item disabled" : "page-item"
+                      }
+                    >
+                      <Link
+                        to="#"
+                        className="page-link"
+                        onClick={() => {
+                          handlePagination(data.number - 1);
+                        }}
+                      >
+                        Previous
+                      </Link>
+                    </li>
 
-                          </CardHeader>
-                          <CardBody>
-                            <p className="card-text mb-2 text-muted" style={{ fontFamily: "Arial", fontSize: "12px" }}>
-                              For that very reason, I went on a quest and spoke to many different professional graphic designers and asked them what graphic design tips they live.
-                            </p>
-                            <p className="card-text">
-                              <small className="text-muted">Last updated 3 mins ago</small>
-                            </p>
-                          </CardBody>
-                        </Col>
-                      </Row>
-                    </Card>
-                  </Col>
-                ))}
+                    {[...Array(data?.totalPages)].map((_, index) => (
+                      <li key={index} className="page-item">
+                        <Link
+                          to="#"
+                          className={
+                            data.number === index
+                              ? "page-link active"
+                              : "page-link"
+                          }
+                          onClick={() => {
+                            if (data.number !== index) {
+                              // setPageIndex(index);
+                              handlePagination(index);
+                            }
+                          }}
+                        >
+                          {index + 1}
+                        </Link>
+                      </li>
+                    ))}
+                    <li
+                      className={
+                        data.number === data.totalPages - 1
+                          ? "page-item disabled"
+                          : "page-item"
+                      }
+                    >
+                      <Link
+                        to="#"
+                        className="page-link"
+                        onClick={() => {
+                          // nextPage;
+                          handlePagination(data.number + 1);
+                        }}
+                      >
+                        Next
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
               </Col>
-
 
               {/* Bên Phải */}
               <Col lg={4}>
                 <RightColumn />
-                <div className='button-dien-vien'>
-                  <Button color="secondary" outline className="waves-effect waves-light material-shadow-none" > Xem Thêm <i className="bx bx-right-arrow-alt"></i>  </Button>
+                <div className="button-dien-vien">
+                  <Button
+                    color="secondary"
+                    outline
+                    className="waves-effect waves-light material-shadow-none"
+                  >
+                    {" "}
+                    Xem Thêm <i className="bx bx-right-arrow-alt"></i>{" "}
+                  </Button>
                 </div>
               </Col>
             </Row>
@@ -122,4 +229,4 @@ const Actor = () => {
   );
 };
 
-export default Actor;
+export default HomeActor;
