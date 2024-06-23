@@ -43,7 +43,7 @@ public class ReviewController {
             @RequestParam(required = false) ReviewType type,
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
             @RequestParam(required = false, defaultValue = "15") Integer pageSize,
-            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort) {
+            @RequestParam(required = false, defaultValue = "DESC") Sort.Direction sort) {
         SearchRequest searchRequest = new SearchRequest(name, type, pageNo - 1, pageSize, sort);
 
         SelectOptionAndModelReponse<Page<Review>> reviewList = reviewService.getAllReview(searchRequest);

@@ -23,7 +23,10 @@ public class BackendAppApplication implements CommandLineRunner {
     CinemaDataInitializer cinemaDataInitializer;
     @Autowired
     ReviewDataInitializer reviewDataInitializer;
-
+    @Autowired
+    BlogDataInitializer blogDataInitializer;
+    @Autowired
+    RoomDataInitializer roomDataInitializer;
     public static void main(String[] args) {
         SpringApplication.run(BackendAppApplication.class, args);
     }
@@ -36,5 +39,7 @@ public class BackendAppApplication implements CommandLineRunner {
         celebrityDataInitializer.initCelebrities();
         cinemaDataInitializer.initCinemas();
         reviewDataInitializer.initReviewData();
+        blogDataInitializer.initBlogData();
+        roomDataInitializer.initRoomData();
     }
 }

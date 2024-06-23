@@ -33,7 +33,7 @@ public class MovieBlogController {
             @RequestParam(required = false) String name,
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
             @RequestParam(required = false, defaultValue = "15") Integer pageSize,
-            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort
+            @RequestParam(required = false, defaultValue = "DESC") Sort.Direction sort
     ) {
         SearchRequest searchRequest = new SearchRequest(name, pageNo - 1, pageSize, sort);
 

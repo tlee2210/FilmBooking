@@ -244,12 +244,11 @@ const MovieEdit = (props) => {
       Category: Yup.array().min(1, "Please select at least one Category"),
       Actor: Yup.array().min(1, "Please select at least one Actor"),
       Directory: Yup.array().min(1, "Please select at least one Director"),
-      releaseDate: Yup.date()
-        .required("Please enter a release date")
-        .min(
-          new Date(new Date().getTime() + 15 * 24 * 60 * 60 * 1000),
-          "The release date cannot be less than 15 days from the current date"
-        ),
+      releaseDate: Yup.date().required("Please enter a release date"),
+      // .min(
+      //   new Date(new Date().getTime() + 15 * 24 * 60 * 60 * 1000),
+      //   "The release date cannot be less than 15 days from the current date"
+      // ),
       endDate: Yup.date()
         .min(
           Yup.ref("releaseDate"),

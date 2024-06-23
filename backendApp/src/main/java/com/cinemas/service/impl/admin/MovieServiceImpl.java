@@ -278,7 +278,7 @@ public class MovieServiceImpl implements MovieService {
                 .collect(Collectors.toList());
         movie.setDirector(directors);
 
-        if (!movieRequest.getPrices().isEmpty()) {
+        if (movieRequest.getPrices() != null) {
             movie.getPriceMovies().clear();
 
             movieRequest.getPrices().forEach(price -> {

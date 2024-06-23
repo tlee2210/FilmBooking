@@ -196,11 +196,6 @@ const Movies = (props) => {
         enableColumnFilter: false,
       },
       {
-        header: "movie Format",
-        accessorKey: "movieFormat",
-        enableColumnFilter: false,
-      },
-      {
         header: "duration movie",
         accessorKey: "duration_movie",
         cell: (cell) => {
@@ -216,11 +211,6 @@ const Movies = (props) => {
       {
         header: "end Date movie",
         accessorKey: "endDate",
-        enableColumnFilter: false,
-      },
-      {
-        header: "price",
-        accessorKey: "price",
         enableColumnFilter: false,
       },
       {
@@ -284,6 +274,16 @@ const Movies = (props) => {
             </span>
           );
         },
+        enableColumnFilter: false,
+      },
+      {
+        header: "movie Format",
+        accessorKey: "movieFormat",
+        enableColumnFilter: false,
+      },
+      {
+        header: "price",
+        accessorKey: "price",
         enableColumnFilter: false,
       },
       {
