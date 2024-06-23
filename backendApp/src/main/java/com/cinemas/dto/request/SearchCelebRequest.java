@@ -10,10 +10,10 @@ import org.springframework.data.domain.Sort;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SearchCelebRequest extends PaginationHelper{
-    private Integer countryId;
+    private String slugCountry;
 
-    public SearchCelebRequest(Integer countryId, Integer pageNo, Integer pageSize, Sort.Direction sort) {
+    public SearchCelebRequest(String slugCountry, Integer pageNo, Integer pageSize, Sort.Direction sort) {
         super(pageNo, pageSize, sort, "id");
-        this.countryId = countryId;
+        this.slugCountry = slugCountry;
     }
 }

@@ -15,7 +15,7 @@ const loading = (
   <div
     style={{
       display: "flex",
-      justifyContent: "center", 
+      justifyContent: "center",
       alignItems: "center",
       height: "100vh",
     }}
@@ -50,7 +50,11 @@ const Index = () => {
             {homeRoutes.map((route, idx) => (
               <Route
                 path={route.path}
-                element={<LayoutHome>{route.component}</LayoutHome>}
+                element={
+                  <LayoutHome>
+                    {route.element ? route.element : route.component}
+                  </LayoutHome>
+                }
                 key={idx}
                 exact={true}
               />

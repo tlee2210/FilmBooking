@@ -19,4 +19,5 @@ export * from "./Blog/thunk";
 export * from "./Review/thunk";
 
 //home
-export * from "./home/ActorHome/thunk";
+export * from "./home/CelebrityHome/thunk";
+export * from "./home/BlogAndReviewHome/thunk";

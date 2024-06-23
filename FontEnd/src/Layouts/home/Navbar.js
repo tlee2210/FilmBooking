@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Scrollspy from "react-scrollspy";
-import { Collapse, Container, NavbarToggler, NavLink, Dropdown, dropdownOpen, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
+import {
+  Collapse,
+  Container,
+  NavbarToggler,
+  NavLink,
+  Dropdown,
+  dropdownOpen,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from "reactstrap";
 import LogoDark from "../../assets/images/logo-dark.png";
 import LogoLight from "../../assets/images/logo-light.png";
 
@@ -60,7 +70,7 @@ const Navbar = () => {
   return (
     <React.Fragment>
       <nav
-      style={{backgroundColor:"white"}}
+        style={{ backgroundColor: "white" }}
         className={
           "navbar navbar-expand-lg navbar-landing fixed-top job-navbar" +
           navClass
@@ -131,28 +141,36 @@ const Navbar = () => {
                 </NavLink>
               </li>
               <li
-                className='nav-item'
+                className="nav-item"
                 onMouseEnter={() => setDropdownOpen(true)}
                 onMouseLeave={() => setDropdownOpen(false)}
               >
                 <Dropdown isOpen={dropdownOpen} toggle={toggleDropdown}>
-                  <DropdownToggle className='fs-16 nav-link' caret style={{ backgroundColor: 'transparent', color: 'black', borderColor: 'transparent' }}>
+                  <DropdownToggle
+                    className="fs-16 nav-link"
+                    caret
+                    style={{
+                      backgroundColor: "transparent",
+                      color: "black",
+                      borderColor: "transparent",
+                    }}
+                  >
                     Cinema Corner
                   </DropdownToggle>
-                  <DropdownMenu style={{ }}>
-                    <DropdownItem tag={Link} to='/the-loai-phim'>
+                  <DropdownMenu style={{}}>
+                    <DropdownItem tag={Link} to="/the-loai-phim">
                       Thể Loại Phim
                     </DropdownItem>
-                    <DropdownItem tag={Link} to='/dien-vien'>
-                      Diễn Viên
+                    <DropdownItem tag={Link} to="/actor">
+                      Actor
                     </DropdownItem>
-                    <DropdownItem tag={Link} to='/dao-dien'>
-                      Đạo Diễn
+                    <DropdownItem tag={Link} to="/director">
+                      Director
                     </DropdownItem>
-                    <DropdownItem tag={Link} to='/binh-luan-phim'>
-                      Bình Luận Phim
+                    <DropdownItem tag={Link} to="/blog-movie">
+                      Blog Movie
                     </DropdownItem>
-                    <DropdownItem tag={Link} to='/blog-dien-anh'>
+                    <DropdownItem tag={Link} to="/blog-dien-anh">
                       Blog Điện Ảnh
                     </DropdownItem>
                   </DropdownMenu>

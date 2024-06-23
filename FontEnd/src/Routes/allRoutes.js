@@ -69,15 +69,13 @@ const Review = lazy(() => import("../pages/dashboard/Review/index"));
 const ReviewCreate = lazy(() => import("../pages/dashboard/Review/create"));
 const ReviewEdit = lazy(() => import("../pages/dashboard/Review/edit"));
 
+//home
 //Cinema Coner
 const Actor = lazy(() => import("../pages/Page/CinemaCorner/Actor"));
 const Director = lazy(() => import("../pages/Page/CinemaCorner/Director"));
 
-const ActorInfor = lazy(() =>
-  import("../pages/Page/CinemaCorner/Details/ActorInfor")
-);
-const DirectorInfor = lazy(() =>
-  import("../pages/Page/CinemaCorner/Details/DirectorInfor")
+const CelebrityInfor = lazy(() =>
+  import("../pages/Page/CinemaCorner/Details/celebrityInfor")
 );
 
 //Ticket Booking
@@ -85,15 +83,16 @@ const TicketBooking = lazy(() => import("../pages/Page/BuyTicket/index"));
 
 //Binh Luận Phim
 import BinhLuanPhim from "../pages/Page/BinhLuanPhim/index";
-import BinhLuanPhimDetails from "../pages/Page/BinhLuanPhim/details";
 
 //Rạp Phim
 import RapPhim from "../pages/Page/RapPhim/Index";
 
 //Order
 import Order from "../pages/Page/Order/index";
-import BlogDienAnh from "../pages/Page/BlogDienAnh";
-import BlogDienAnhDetails from "../pages/Page/BlogDienAnh/details";
+import BlogMovie from "../pages/Page/BlogMovie";
+import BlogMovieDetails from "../pages/Page/BlogMovie/details";
+
+import BlogDienAnhDetails from "../pages/Page/BlogMovie/details";
 
 const adminProtectedRoutes = [
   //User Profile
@@ -163,23 +162,31 @@ const publicRoutes = [
 
 const homeRoutes = [
   { path: "/", component: <Home /> },
+
   { path: "/actor", component: <Actor /> },
-  { path: "/dao-dien", component: <Director /> },
-  { path: "/dien-vien/dien-vien-details", component: <ActorInfor /> },
-  { path: "/dao-dien/dao-dien-details", component: <DirectorInfor /> },
-  { path: "/ticket-booking/phim", component: <TicketBooking /> },
-  { path: "/binh-luan-phim", component: <BinhLuanPhim /> },
+  { path: "/actor/:slug/details", component: <CelebrityInfor /> },
+
+  { path: "/director", component: <Director /> },
+  { path: "/director/:slug/details", component: <CelebrityInfor /> },
+
+  { path: "/blog-movie", component: <BlogMovie /> },
   {
-    path: "/binh-luan-phim/binh-luan-phim-details",
-    component: <BinhLuanPhimDetails />,
+    path: "/blog-movie/:slug/details",
+    component: <BlogMovieDetails />,
   },
-  { path: "/rap-phim", component: <RapPhim /> },
-  { path: "/order", component: <Order /> },
-  { path: "/blog-dien-anh", component: <BlogDienAnh /> },
+
+  //------------------------------------------
   {
     path: "/blog-dien-anh/blog-dien-anh-details",
     component: <BlogDienAnhDetails />,
   },
+
+  { path: "/ticket-booking/phim", component: <TicketBooking /> },
+
+  { path: "/binh-luan-phim", component: <BinhLuanPhim /> },
+
+  { path: "/rap-phim", component: <RapPhim /> },
+  { path: "/order", component: <Order /> },
 ];
 
 export { adminProtectedRoutes, publicRoutes, homeRoutes };

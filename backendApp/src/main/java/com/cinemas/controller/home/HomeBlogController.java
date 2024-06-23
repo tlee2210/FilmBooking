@@ -24,9 +24,9 @@ public class HomeBlogController {
     public APIResponse<Page<MovieBlog>> getAllBlog(
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
             @RequestParam(required = false, defaultValue = "15") Integer pageSize,
-            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort
+            @RequestParam(required = false, defaultValue = "DESC") Sort.Direction sort
     ) {
-        PaginationHelper paginationHelper = new PaginationHelper(pageNo, pageSize, sort, "id");
+        PaginationHelper paginationHelper = new PaginationHelper(pageNo - 1, pageSize, sort, "id");
         Page<MovieBlog> blogs = homeBlogService.getAllBlog(paginationHelper);
         APIResponse<Page<MovieBlog>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);

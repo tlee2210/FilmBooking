@@ -25,12 +25,12 @@ public class HomeCelebrityController {
 
     @GetMapping("/actor")
     public APIResponse<SelectOptionCeleb<Page<Celebrity>>> getAllActor(
-            @RequestParam(required = false) Integer countryId,
+            @RequestParam(required = false) String slugCountry,
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
             @RequestParam(required = false, defaultValue = "15") Integer pageSize,
             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort
     ) {
-        SearchCelebRequest searchCelebRequest = new SearchCelebRequest(countryId, pageNo - 1, pageSize, sort);
+        SearchCelebRequest searchCelebRequest = new SearchCelebRequest(slugCountry, pageNo - 1, pageSize, sort);
         SelectOptionCeleb<Page<Celebrity>> actors = homeCelebService.getAllActor(searchCelebRequest);
         APIResponse<SelectOptionCeleb<Page<Celebrity>>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
@@ -41,12 +41,12 @@ public class HomeCelebrityController {
 
     @GetMapping("/director")
     public APIResponse<SelectOptionCeleb<Page<Celebrity>>> getAllDirector(
-            @RequestParam(required = false) Integer countryId,
+            @RequestParam(required = false) String slugCountry,
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
             @RequestParam(required = false, defaultValue = "15") Integer pageSize,
-            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort
+            @RequestParam(required = false, defaultValue = "DESC") Sort.Direction sort
     ) {
-        SearchCelebRequest searchCelebRequest = new SearchCelebRequest(countryId, pageNo - 1, pageSize, sort);
+        SearchCelebRequest searchCelebRequest = new SearchCelebRequest(slugCountry, pageNo - 1, pageSize, sort);
         SelectOptionCeleb<Page<Celebrity>> actors = homeCelebService.getAllDirector(searchCelebRequest);
         APIResponse<SelectOptionCeleb<Page<Celebrity>>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);

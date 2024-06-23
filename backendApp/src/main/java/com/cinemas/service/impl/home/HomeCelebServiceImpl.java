@@ -44,7 +44,7 @@ public class HomeCelebServiceImpl implements HomeCelebService {
 
     @Override
     public SelectOptionCeleb<Page<Celebrity>> getAllActor(SearchCelebRequest searchCelebRequest) {
-        List<Celebrity> celebrityList = celebrityRepository.searchCeleb(RoleCeleb.ACTOR, searchCelebRequest.getCountryId());
+        List<Celebrity> celebrityList = celebrityRepository.searchCelebAndCountry(RoleCeleb.ACTOR, searchCelebRequest.getSlugCountry());
 
         celebrityList.forEach(celebrity -> {
             celebrity.setImage(fileStorageServiceImpl.getUrlFromPublicId(celebrity.getImage()));
@@ -64,7 +64,7 @@ public class HomeCelebServiceImpl implements HomeCelebService {
         List<SelectOptionReponse> optionsCountries = new ArrayList<>();
 
         for (Country country : countryList) {
-            optionsCountries.add(new SelectOptionReponse(country.getId(), country.getName()));
+            optionsCountries.add(new SelectOptionReponse(country.getSlug(), country.getName()));
         }
 
         return new SelectOptionCeleb<>(celebrities, optionsCountries);
@@ -72,7 +72,7 @@ public class HomeCelebServiceImpl implements HomeCelebService {
 
     @Override
     public SelectOptionCeleb<Page<Celebrity>> getAllDirector(SearchCelebRequest searchCelebRequest) {
-        List<Celebrity> celebrityList = celebrityRepository.searchCeleb(RoleCeleb.DIRECTOR, searchCelebRequest.getCountryId());
+        List<Celebrity> celebrityList = celebrityRepository.searchCelebAndCountry(RoleCeleb.DIRECTOR, searchCelebRequest.getSlugCountry());
 
         celebrityList.forEach(celebrity -> {
             celebrity.setImage(fileStorageServiceImpl.getUrlFromPublicId(celebrity.getImage()));
@@ -92,7 +92,7 @@ public class HomeCelebServiceImpl implements HomeCelebService {
         List<SelectOptionReponse> optionsCountries = new ArrayList<>();
 
         for (Country country : countryList) {
-            optionsCountries.add(new SelectOptionReponse(country.getId(), country.getName()));
+            optionsCountries.add(new SelectOptionReponse(country.getSlug(), country.getName()));
         }
 
         return new SelectOptionCeleb<>(celebrities, optionsCountries);
