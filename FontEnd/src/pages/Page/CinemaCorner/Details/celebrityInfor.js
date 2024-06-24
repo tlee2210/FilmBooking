@@ -8,11 +8,14 @@ import {
   Button,
   CardHeader,
 } from "reactstrap";
+import { Link } from "react-router-dom";
+
 import { createSelector } from "reselect";
 import RightColumn from "../RightColumn";
 import { useSelector, useDispatch } from "react-redux";
 import withRouter from "../../../../Components/Common/withRouter";
 import { getcelebrityDetails } from "../../../../slices/home/CelebrityHome/thunk";
+import { getMovieActiveLimitIntroduce } from "../../../../slices/home/MovieHome/thunk";
 
 const ActorInfor = (props) => {
   const dispatch = useDispatch();
@@ -25,14 +28,21 @@ const ActorInfor = (props) => {
     document.documentElement.scrollTop = 0;
   }, [dispatch, slug]);
 
+  // getMovieActiveLimitIntroduce
+  useEffect(() => {
+    dispatch(getMovieActiveLimitIntroduce());
+  }, [dispatch]);
+
   const CelebrityState = (state) => state;
   const CelebrityStateData = createSelector(CelebrityState, (state) => ({
     error: state.Message.error,
     messageError: state.Message.messageError,
     item: state.HomeCelebrity.item,
+    MovieIntroduce: state.HomeMovie.MovieIntroduce,
   }));
 
-  const { error, messageError, item } = useSelector(CelebrityStateData);
+  const { error, messageError, item, MovieIntroduce } =
+    useSelector(CelebrityStateData);
 
   document.title = item?.name || "Actor";
 
@@ -139,6 +149,57 @@ const ActorInfor = (props) => {
 
               <Col lg={4}>
                 <RightColumn />
+                <Row>
+                  <div
+                    className="text-xl inline-block font-bold uppercase"
+                    style={{
+                      borderLeft: "4px solid #007bff",
+                      fontSize: "18px",
+                      fontWeight: "bold",
+                      paddingLeft: "0.5rem",
+                      marginLeft: "40px",
+                    }}
+                  >
+                    MOVIE IS SHOWING
+                  </div>
+                  {MovieIntroduce
+                    ? MovieIntroduce?.map((movie, index) => (
+                        <Card
+                          key={index}
+                          className="quick-ticket-card-phim-dang-chieu mt-4"
+                        >
+                          <Link
+                            to="/ticket-booking/phim"
+                            style={{ textDecoration: "none", color: "inherit" }}
+                          >
+                            <CardBody className="position-relative p-0 hover-container">
+                              <img
+                                style={{
+                                  height: "280px",
+                                  width: "380px",
+                                  objectFit: "cover",
+                                  borderRadius: "10px",
+                                }}
+                                className="img-fluid hover-image"
+                                src={movie.imageLandscape}
+                                alt="Movie"
+                              />
+                              <div className="ticket-overlay">
+                                <img
+                                  src="https://www.galaxycine.vn/_next/static/media/btn-ticket.42d72c96.webp"
+                                  alt="Ticket"
+                                  className="ticket-image"
+                                />
+                              </div>
+                              <div style={{ paddingTop: 7 }}>
+                                <h1>{movie.name}</h1>
+                              </div>
+                            </CardBody>
+                          </Link>
+                        </Card>
+                      ))
+                    : null}
+                </Row>
                 <div className="button-dien-vien">
                   <Button
                     color="secondary"
