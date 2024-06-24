@@ -20,6 +20,7 @@ import withRouter from "../../../Components/Common/withRouter";
 
 import RightColumn from "../CinemaCorner/RightColumn";
 import { getHomeReviewDetails } from "../../../slices/home/BlogAndReviewHome/thunk";
+import { getMovieActiveLimitIntroduce } from "../../../slices/home/MovieHome/thunk";
 
 // Import Images
 // import avatar3 from "../../../assets/images/users/avatar-3.jpg";
@@ -31,8 +32,16 @@ const MovieCommentaryDetails = (props) => {
   const slug = props.router.params.slug;
 
   useEffect(() => {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+
     dispatch(getHomeReviewDetails(slug, props.router.navigate));
   }, [dispatch, slug]);
+
+  // getMovieActiveLimitIntroduce
+  useEffect(() => {
+    dispatch(getMovieActiveLimitIntroduce());
+  }, [dispatch]);
 
   const BlogState = (state) => state;
   const BlogStateData = createSelector(BlogState, (state) => ({
@@ -40,9 +49,11 @@ const MovieCommentaryDetails = (props) => {
     messageError: state.Message.messageError,
     item: state.BlogOrReview.item,
     otherItem: state.BlogOrReview.otherItem,
+    MovieIntroduce: state.HomeMovie.MovieIntroduce,
   }));
 
-  const { error, messageError, item, otherItem } = useSelector(BlogStateData);
+  const { error, messageError, item, otherItem, MovieIntroduce } =
+    useSelector(BlogStateData);
 
   const movies = [
     {
@@ -90,8 +101,11 @@ const MovieCommentaryDetails = (props) => {
               <Row>
                 <Col md={12}>
                   <p style={{ fontSize: 26, fontWeight: "bold" }}>
-                    {item.name}
+                    {item.name}{" "}
                   </p>
+                  <span className="badge bg-primary-subtle text-primary mb-3">
+                    <i className="ri-eye-fill"></i>: {item.views}
+                  </span>
                 </Col>
               </Row>
               <Row>
@@ -105,7 +119,7 @@ const MovieCommentaryDetails = (props) => {
                 </Col>
               </Row>
               <Row>
-                <Col>
+                <Col md={12}>
                   <div
                     className="d-flex align-items-center pb-3"
                     style={{ paddingTop: 100 }}
@@ -120,33 +134,36 @@ const MovieCommentaryDetails = (props) => {
                         paddingLeft: "0.5rem",
                       }}
                     >
-                      Bình Luận Phim Khác
+                      Movie Commentary Other
                     </div>
                   </div>
-                  <div className="d-flex gap-3 pb-5">
+                  <Row className="g-3">
                     {otherItem
                       ? otherItem?.map((movie, index) => (
-                          <div
-                            key={index}
-                            className="inline-block"
-                            style={{ width: "193px" }}
-                          >
-                            <a href={movie.slug}>
-                              <img
-                                alt={movie.thumbnail}
-                                loading="lazy"
-                                width="193"
-                                height="128"
-                                decoding="async"
-                                src={movie.thumbnail}
-                                style={{ color: "transparent" }}
-                              />
-                            </a>
-                            <div className="text-base mt-3">{movie.name}</div>
-                          </div>
+                          <Col key={index} className="col-xxl col-6">
+                            <Link
+                              key={index}
+                              to={`/movie-commentary/${movie.slug}/details`}
+                              style={{
+                                textDecoration: "none",
+                                color: "inherit",
+                              }}
+                            >
+                              <Card className="h-100">
+                                <img
+                                  className="card-img-top img-fluid"
+                                  src={movie.thumbnail}
+                                  alt={movie.thumbnail}
+                                />
+                                <CardBody>
+                                  <h4 className="card-title">{movie.name}</h4>
+                                </CardBody>
+                              </Card>
+                            </Link>
+                          </Col>
                         ))
                       : null}
-                  </div>
+                  </Row>
                 </Col>
               </Row>
             </Col>
@@ -154,6 +171,57 @@ const MovieCommentaryDetails = (props) => {
             {/* Bên Phải */}
             <Col lg={4}>
               <RightColumn />
+              <Row>
+                <div
+                  className="text-xl inline-block font-bold uppercase"
+                  style={{
+                    borderLeft: "4px solid #007bff",
+                    fontSize: "18px",
+                    fontWeight: "bold",
+                    paddingLeft: "0.5rem",
+                    marginLeft: "40px",
+                  }}
+                >
+                  MOVIE IS SHOWING
+                </div>
+                {MovieIntroduce
+                  ? MovieIntroduce?.map((movie, index) => (
+                      <Card
+                        key={index}
+                        className="quick-ticket-card-phim-dang-chieu mt-4"
+                      >
+                        <Link
+                          to="/ticket-booking/phim"
+                          style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                          <CardBody className="position-relative p-0 hover-container">
+                            <img
+                              style={{
+                                height: "280px",
+                                width: "380px",
+                                objectFit: "cover",
+                                borderRadius: "10px",
+                              }}
+                              className="img-fluid hover-image"
+                              src={movie.imageLandscape}
+                              alt="Movie"
+                            />
+                            <div className="ticket-overlay">
+                              <img
+                                src="https://www.galaxycine.vn/_next/static/media/btn-ticket.42d72c96.webp"
+                                alt="Ticket"
+                                className="ticket-image"
+                              />
+                            </div>
+                            <div style={{ paddingTop: 7 }}>
+                              <h1>{movie.name}</h1>
+                            </div>
+                          </CardBody>
+                        </Link>
+                      </Card>
+                    ))
+                  : null}
+              </Row>
               <div className="button-dien-vien">
                 <Button
                   color="secondary"

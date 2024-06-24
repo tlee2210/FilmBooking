@@ -21,3 +21,4 @@ export * from "./Review/thunk";
 //home
 export * from "./home/CelebrityHome/thunk";
 export * from "./home/BlogAndReviewHome/thunk";
+export * from "./home/MovieHome/thunk";

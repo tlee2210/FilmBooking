@@ -53,6 +53,9 @@ const HomeActor = () => {
 
     setSearchParams(params);
     dispatch(getHomeActor(country ? country : null, pageNo, pageSize));
+
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
   }, [dispatch, country, pageNo, pageSize]);
 
   const handlePagination = (page) => {

@@ -15,7 +15,7 @@ import {
 import LogoDark from "../../assets/images/logo-dark.png";
 import LogoLight from "../../assets/images/logo-light.png";
 
-import Ticket from "../../assets/images/Ticket.png";
+import Ticket from "../../assets/images/Ticket.jpg";
 import { color } from "echarts";
 
 const Navbar = () => {

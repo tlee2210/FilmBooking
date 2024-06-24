@@ -1,8 +1,10 @@
 package com.cinemas.service.impl.home;
 
+import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.SearchMovie;
 import com.cinemas.dto.request.SearchMovieHome;
+import com.cinemas.dto.response.MovieIntroduce;
 import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.SelectOptionMovie;
 import com.cinemas.dto.response.SelectOptionReponse;
@@ -38,15 +40,6 @@ public class HomeMovieSerivceImpl implements HomeMovieSerivce {
     private MovieRepository movieRepository;
 
     @Autowired
-    private CountryRepository countryRepository;
-
-    @Autowired
-    private CelebrityRepository celebrityRepository;
-
-    @Autowired
-    private MovieGenreRepository movieGenreRepository;
-
-    @Autowired
     FileStorageServiceImpl fileStorageServiceImpl;
 
     @Override
@@ -80,6 +73,22 @@ public class HomeMovieSerivceImpl implements HomeMovieSerivce {
         });
 
         return movieList;
+    }
+
+    @Override
+    public List<MovieIntroduce> getMovieActiveLimitIntroduce() {
+        List<Movie> movieList = movieRepository.getMovieForStatusIntroduce(MovieStatus.NOW_SHOWING);
+
+        List<MovieIntroduce> movieIntroduces = new ArrayList<>();
+
+        movieList.forEach(movie -> {
+            MovieIntroduce movieIntroduce = new MovieIntroduce();
+            ObjectUtils.copyFields(movie, movieIntroduce);
+            movieIntroduce.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
+            movieIntroduces.add(movieIntroduce);
+        });
+
+        return movieIntroduces;
     }
 
     @Override

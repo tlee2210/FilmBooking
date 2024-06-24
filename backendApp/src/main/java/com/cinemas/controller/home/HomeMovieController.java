@@ -2,10 +2,7 @@ package com.cinemas.controller.home;
 
 import com.cinemas.dto.request.SearchMovie;
 import com.cinemas.dto.request.SearchMovieHome;
-import com.cinemas.dto.response.APIResponse;
-import com.cinemas.dto.response.SelectOptionAndModelReponse;
-import com.cinemas.dto.response.SelectOptionMovie;
-import com.cinemas.dto.response.SelectOptionReponse;
+import com.cinemas.dto.response.*;
 import com.cinemas.entities.Movie;
 import com.cinemas.enums.MovieStatus;
 import com.cinemas.service.home.HomeMovieSerivce;
@@ -29,6 +26,15 @@ public class HomeMovieController {
     public APIResponse<List<Movie>> getMovieActive() {
         List<Movie> movieList = homeMovieSerivce.getMovieActive();
         APIResponse<List<Movie>> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setResult(movieList);
+
+        return apiResponse;
+    }
+    @GetMapping("/active/introduce")
+    public APIResponse<List<MovieIntroduce>> getMovieActiveLimitIntroduce() {
+        List<MovieIntroduce> movieList = homeMovieSerivce.getMovieActiveLimitIntroduce();
+        APIResponse<List<MovieIntroduce>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(movieList);
 

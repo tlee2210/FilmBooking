@@ -20,6 +20,9 @@ const ActorInfor = (props) => {
 
   useEffect(() => {
     dispatch(getcelebrityDetails(slug, props.router.navigate));
+
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
   }, [dispatch, slug]);
 
   const CelebrityState = (state) => state;

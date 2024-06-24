@@ -59,6 +59,9 @@ const MovieCommentary = () => {
 
     setSearchParams(params);
     dispatch(getHomeReview(type ? type : null, pageNo, pageSize));
+
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
   }, [dispatch, type, pageNo, pageSize]);
 
   const handlePagination = (page) => {
