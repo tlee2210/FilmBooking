@@ -39,9 +39,10 @@ const MovieCommentaryDetails = (props) => {
     error: state.Message.error,
     messageError: state.Message.messageError,
     item: state.BlogOrReview.item,
+    otherItem: state.BlogOrReview.otherItem,
   }));
 
-  const { error, messageError, item } = useSelector(BlogStateData);
+  const { error, messageError, item, otherItem } = useSelector(BlogStateData);
 
   const movies = [
     {
@@ -123,28 +124,28 @@ const MovieCommentaryDetails = (props) => {
                     </div>
                   </div>
                   <div className="d-flex gap-3 pb-5">
-                    {movies.map((movie, index) => (
-                      <div
-                        key={index}
-                        className="inline-block"
-                        style={{ width: "193px" }}
-                      >
-                        <a href={movie.url}>
-                          <img
-                            alt={movie.alt}
-                            loading="lazy"
-                            width="193"
-                            height="128"
-                            decoding="async"
-                            src={movie.imageUrl}
-                            style={{ color: "transparent" }}
-                          />
-                        </a>
-                        <div className="text-base mt-3">
-                          <a href={movie.url}>{movie.title}</a>
-                        </div>
-                      </div>
-                    ))}
+                    {otherItem
+                      ? otherItem?.map((movie, index) => (
+                          <div
+                            key={index}
+                            className="inline-block"
+                            style={{ width: "193px" }}
+                          >
+                            <a href={movie.slug}>
+                              <img
+                                alt={movie.thumbnail}
+                                loading="lazy"
+                                width="193"
+                                height="128"
+                                decoding="async"
+                                src={movie.thumbnail}
+                                style={{ color: "transparent" }}
+                              />
+                            </a>
+                            <div className="text-base mt-3">{movie.name}</div>
+                          </div>
+                        ))
+                      : null}
                   </div>
                 </Col>
               </Row>

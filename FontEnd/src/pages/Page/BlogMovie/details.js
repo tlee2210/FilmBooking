@@ -45,7 +45,7 @@ const BlogDetails = (props) => {
   }));
 
   const { error, messageError, item, otherItem } = useSelector(BlogStateData);
-  
+
   const movies = [
     {
       url: "/#",
@@ -122,7 +122,7 @@ const BlogDetails = (props) => {
                         paddingLeft: "0.5rem",
                       }}
                     >
-                      Bình Luận Phim Khác
+                      Blog Other
                     </div>
                   </div>
                   <div className="d-flex gap-3 pb-5">

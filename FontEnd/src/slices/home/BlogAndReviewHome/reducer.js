@@ -22,6 +22,7 @@ const HomeBlogAndReviewSlice = createSlice({
     setSelectOption(state, action) {},
     setItem(state, action) {
       state.item = action.payload.data.review;
+      state.otherItem = action.payload.data.reviewList;
     },
     setItemBlog(state, action) {
       state.item = action.payload.data.movieBlog;
