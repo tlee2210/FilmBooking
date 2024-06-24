@@ -61,6 +61,10 @@ public class HomeBlogServiceImpl implements HomeBlogService {
 
         HomeMovieBlogResponse homeMovieBlogResponse = new HomeMovieBlogResponse();
         homeMovieBlogResponse.setMovieBlog(movieBlog);
+        List<MovieBlog> blogList = movieBlogRepository.blogRelate();
+        blogList.forEach(item -> {
+            item.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(item.getThumbnail()));
+        });
         homeMovieBlogResponse.setBlogRelate(movieBlogRepository.blogRelate());
 
         return homeMovieBlogResponse;

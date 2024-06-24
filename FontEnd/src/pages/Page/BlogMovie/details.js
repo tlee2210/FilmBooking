@@ -20,6 +20,8 @@ import withRouter from "../../../Components/Common/withRouter";
 
 import RightColumn from "../CinemaCorner/RightColumn";
 import { getBlogDetails } from "../../../slices/home/BlogAndReviewHome/thunk";
+import { map } from "lodash";
+import index from "../RapPhim/Index";
 
 // Import Images
 // import avatar3 from "../../../assets/images/users/avatar-3.jpg";
@@ -39,10 +41,11 @@ const BlogDetails = (props) => {
     error: state.Message.error,
     messageError: state.Message.messageError,
     item: state.BlogOrReview.item,
+    otherItem: state.BlogOrReview.otherItem,
   }));
 
-  const { error, messageError, item } = useSelector(BlogStateData);
-
+  const { error, messageError, item, otherItem } = useSelector(BlogStateData);
+  
   const movies = [
     {
       url: "/#",
@@ -78,7 +81,7 @@ const BlogDetails = (props) => {
     },
   ];
 
-  document.title = item.name || "blog";
+  document.title = item?.name || "blog";
 
   return (
     <React.Fragment>
@@ -89,7 +92,7 @@ const BlogDetails = (props) => {
               <Row>
                 <Col md={12}>
                   <p style={{ fontSize: 26, fontWeight: "bold" }}>
-                    {item.name}
+                    {item?.name}
                   </p>
                 </Col>
               </Row>
@@ -98,13 +101,13 @@ const BlogDetails = (props) => {
                   <div
                     className="text-justify"
                     dangerouslySetInnerHTML={{
-                      __html: item.description,
+                      __html: item?.description,
                     }}
                   />
                 </Col>
               </Row>
               <Row>
-                <Col>
+                <Col md={8}>
                   <div
                     className="d-flex align-items-center pb-3"
                     style={{ paddingTop: 100 }}
@@ -123,28 +126,28 @@ const BlogDetails = (props) => {
                     </div>
                   </div>
                   <div className="d-flex gap-3 pb-5">
-                    {movies.map((movie, index) => (
-                      <div
-                        key={index}
-                        className="inline-block"
-                        style={{ width: "193px" }}
-                      >
-                        <a href={movie.url}>
-                          <img
-                            alt={movie.alt}
-                            loading="lazy"
-                            width="193"
-                            height="128"
-                            decoding="async"
-                            src={movie.imageUrl}
-                            style={{ color: "transparent" }}
-                          />
-                        </a>
-                        <div className="text-base mt-3">
-                          <a href={movie.url}>{movie.title}</a>
-                        </div>
-                      </div>
-                    ))}
+                    {otherItem
+                      ? otherItem?.map((movie, index) => (
+                          <div
+                            key={index}
+                            className="inline-block"
+                            style={{ width: "193px" }}
+                          >
+                            <a href={movie.slug}>
+                              <img
+                                alt={movie.thumbnail}
+                                loading="lazy"
+                                width="193"
+                                height="128"
+                                decoding="async"
+                                src={movie.thumbnail}
+                                style={{ color: "transparent" }}
+                              />
+                            </a>
+                            <div className="text-base mt-3">{movie.name}</div>
+                          </div>
+                        ))
+                      : null}
                   </div>
                 </Col>
               </Row>

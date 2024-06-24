@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const initialState = {
   data: [],
   selectOptions: [],
+  otherItem: [],
   item: {},
 };
 
@@ -20,7 +21,11 @@ const HomeBlogAndReviewSlice = createSlice({
     },
     setSelectOption(state, action) {},
     setItem(state, action) {
-      state.item = action.payload.data;
+      state.item = action.payload.data.review;
+    },
+    setItemBlog(state, action) {
+      state.item = action.payload.data.movieBlog;
+      state.otherItem = action.payload.data.blogRelate;
     },
     removeItem(state, action) {},
   },
@@ -32,6 +37,7 @@ export const {
   removeItem,
   setItem,
   fetchSuccessReview,
+  setItemBlog,
 } = HomeBlogAndReviewSlice.actions;
 
 export default HomeBlogAndReviewSlice.reducer;

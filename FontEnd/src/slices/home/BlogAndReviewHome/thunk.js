@@ -4,6 +4,7 @@ import {
   setSelectOption,
   removeItem,
   setItem,
+  setItemBlog,
 } from "./reducer";
 // import { Success, Error } from "../message/reducer";
 import axios from "axios";
@@ -29,7 +30,7 @@ export const getBlogDetails = (slug, history) => async (dispatch) => {
     .get(`http://localhost:8081/api/home/v1/blog/detail/${slug}`)
     .then((response) => {
       console.log(response);
-      dispatch(setItem({ data: response?.data?.result }));
+      dispatch(setItemBlog({ data: response?.data?.result }));
     })
     .catch((error) => {
       console.log(error);
