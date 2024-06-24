@@ -1,4 +1,10 @@
-import { fetchSuccess, setSelectOption, removeItem, setItem } from "./reducer";
+import {
+  fetchSuccess,
+  fetchSuccessReview,
+  setSelectOption,
+  removeItem,
+  setItem,
+} from "./reducer";
 // import { Success, Error } from "../message/reducer";
 import axios from "axios";
 
@@ -18,7 +24,7 @@ export const getHomeBlog = (pageNo, pageSize) => async (dispatch) => {
     });
 };
 
-export const getBlogAndReviewDetails = (slug, history) => async (dispatch) => {
+export const getBlogDetails = (slug, history) => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/home/v1/blog/detail/${slug}`)
     .then((response) => {
@@ -28,24 +34,39 @@ export const getBlogAndReviewDetails = (slug, history) => async (dispatch) => {
     .catch((error) => {
       console.log(error);
       // dispatch(Error(error.response?.data?.message));
-      if (err.response?.status === 404) {
+      if (error.response?.status === 404) {
         history("/");
       }
     });
 };
 
-export const getHomeReview =
-  (slugCountry, pageNo, pageSize) => async (dispatch) => {
-    await axios
-      .get(`http://localhost:8081/api/home/v1/celebrity/director`, {
-        params: { slugCountry, pageNo, pageSize },
-      })
-      .then((response) => {
-        console.log(response);
-        dispatch(fetchSuccess({ data: response?.data?.result }));
-      })
-      .catch((error) => {
-        console.log(error);
-        // dispatch(Error(error.response?.data?.message));
-      });
-  };
+export const getHomeReview = (type, pageNo, pageSize) => async (dispatch) => {
+  await axios
+    .get(`http://localhost:8081/api/home/v1/review`, {
+      params: { type, pageNo, pageSize },
+    })
+    .then((response) => {
+      console.log(response);
+      dispatch(fetchSuccessReview({ data: response?.data?.result }));
+    })
+    .catch((error) => {
+      console.log(error);
+      // dispatch(Error(error.response?.data?.message));
+    });
+};
+
+export const getHomeReviewDetails = (slug, history) => async (dispatch) => {
+  await axios
+    .get(`http://localhost:8081/api/home/v1/review/${slug}/detail`)
+    .then((response) => {
+      console.log(response);
+      dispatch(setItem({ data: response?.data?.result }));
+    })
+    .catch((error) => {
+      console.log(error);
+      // dispatch(Error(error.response?.data?.message));
+      if (error.response?.status === 404) {
+        history("/");
+      }
+    });
+};

@@ -11,6 +11,7 @@ import com.cinemas.enums.ReviewType;
 import com.cinemas.exception.AppException;
 import com.cinemas.repositories.ReviewRepository;
 import com.cinemas.service.home.HomeReviewService;
+import com.cinemas.service.impl.FileStorageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PagedListHolder;
@@ -29,9 +30,19 @@ public class HomeReviewServiceImpl implements HomeReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
 
+    @Autowired
+    FileStorageServiceImpl fileStorageServiceImpl;
+
     @Override
     public SelectOptionAndModelReponse<Page<Review>> getAllReviews(SearchReviewRequest searchReviewRequest) {
+        System.out.println("======================");
+        System.out.println(searchReviewRequest.getType());
+        System.out.println("======================");
         List<Review> reviewList = reviewRepository.findByType(searchReviewRequest.type);
+
+        reviewList.forEach(item -> {
+            item.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(item.getThumbnail()));
+        });
 
         PagedListHolder<Review> pagedListHolder = new PagedListHolder<Review>(reviewList);
         pagedListHolder.setPage(searchReviewRequest.getPageNo());
@@ -52,7 +63,16 @@ public class HomeReviewServiceImpl implements HomeReviewService {
     }
 
     @Override
+<<<<<<< Updated upstream
     public HomeReviewResponse getReviewDetail(String slug) {
+=======
+    public List<Review> geHomeRivew() {
+        return null;
+    }
+
+    @Override
+    public Review getReviewDetail(String slug) {
+>>>>>>> Stashed changes
         Review review = reviewRepository.findBySlug(slug);
 
         if (review == null) throw new AppException(NOT_FOUND);

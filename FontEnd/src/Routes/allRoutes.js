@@ -82,7 +82,8 @@ const CelebrityInfor = lazy(() =>
 const TicketBooking = lazy(() => import("../pages/Page/BuyTicket/index"));
 
 //Binh Luận Phim
-import BinhLuanPhim from "../pages/Page/BinhLuanPhim/index";
+import MovieCommentary from "../pages/Page/MovieCommentary/index";
+import MovieCommentaryDetails from "../pages/Page/MovieCommentary/details";
 
 //Rạp Phim
 import RapPhim from "../pages/Page/RapPhim/Index";
@@ -91,8 +92,6 @@ import RapPhim from "../pages/Page/RapPhim/Index";
 import Order from "../pages/Page/Order/index";
 import BlogMovie from "../pages/Page/BlogMovie";
 import BlogMovieDetails from "../pages/Page/BlogMovie/details";
-
-import BlogDienAnhDetails from "../pages/Page/BlogMovie/details";
 
 const adminProtectedRoutes = [
   //User Profile
@@ -174,16 +173,15 @@ const homeRoutes = [
     path: "/blog-movie/:slug/details",
     component: <BlogMovieDetails />,
   },
-
-  //------------------------------------------
+  { path: "/movie-commentary", component: <MovieCommentary /> },
   {
-    path: "/blog-dien-anh/blog-dien-anh-details",
-    component: <BlogDienAnhDetails />,
+    path: "/movie-commentary/:slug/details",
+    component: <MovieCommentaryDetails />,
   },
 
-  { path: "/ticket-booking/phim", component: <TicketBooking /> },
+  //------------------------------------------
 
-  { path: "/binh-luan-phim", component: <BinhLuanPhim /> },
+  { path: "/ticket-booking/phim", component: <TicketBooking /> },
 
   { path: "/rap-phim", component: <RapPhim /> },
   { path: "/order", component: <Order /> },

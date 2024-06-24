@@ -29,6 +29,22 @@ public class HomeReviewController {
             @RequestParam(required = false, defaultValue = "15") Integer pageSize,
             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort
     ) {
+        SearchReviewRequest searchReviewRequest = new SearchReviewRequest(type, pageNo - 1, pageSize, sort);
+        SelectOptionAndModelReponse<Page<Review>> reviews = homeReviewService.getAllReviews(searchReviewRequest);
+        APIResponse<SelectOptionAndModelReponse<Page<Review>>> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setResult(reviews);
+
+        return apiResponse;
+    }
+
+    @GetMapping("/home")
+    public APIResponse<SelectOptionAndModelReponse<Page<Review>>> gethomeReview(
+            @RequestParam(required = false) ReviewType type,
+            @RequestParam(required = false, defaultValue = "1") Integer pageNo,
+            @RequestParam(required = false, defaultValue = "15") Integer pageSize,
+            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort
+    ) {
         SearchReviewRequest searchReviewRequest = new SearchReviewRequest(type, pageNo, pageSize, sort);
         SelectOptionAndModelReponse<Page<Review>> reviews = homeReviewService.getAllReviews(searchReviewRequest);
         APIResponse<SelectOptionAndModelReponse<Page<Review>>> apiResponse = new APIResponse<>();

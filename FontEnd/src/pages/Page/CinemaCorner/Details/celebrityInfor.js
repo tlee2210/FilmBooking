@@ -52,6 +52,7 @@ const ActorInfor = (props) => {
                             <h2>{item.name}</h2>
                             {/* <p>{item.biography}</p> */}
                             <div
+                              id="renderHtml"
                               dangerouslySetInnerHTML={{
                                 __html: item.biography,
                               }}
@@ -118,6 +119,7 @@ const ActorInfor = (props) => {
                           </div>
                           <Row>
                             <div
+                              id="renderHtml"
                               dangerouslySetInnerHTML={{
                                 __html: item.description,
                               }}

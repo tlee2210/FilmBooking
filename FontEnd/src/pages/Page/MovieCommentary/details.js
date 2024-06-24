@@ -19,19 +19,19 @@ import "../CinemaCorner/css/CinemaCorner.css";
 import withRouter from "../../../Components/Common/withRouter";
 
 import RightColumn from "../CinemaCorner/RightColumn";
-import { getBlogAndReviewDetails } from "../../../slices/home/BlogAndReviewHome/thunk";
+import { getHomeReviewDetails } from "../../../slices/home/BlogAndReviewHome/thunk";
 
 // Import Images
 // import avatar3 from "../../../assets/images/users/avatar-3.jpg";
 // import avatar4 from "../../../assets/images/users/avatar-4.jpg";
 
-const BlogDetails = (props) => {
+const MovieCommentaryDetails = (props) => {
   const dispatch = useDispatch();
 
   const slug = props.router.params.slug;
 
   useEffect(() => {
-    dispatch(getBlogAndReviewDetails(slug, props.router.navigate));
+    dispatch(getHomeReviewDetails(slug, props.router.navigate));
   }, [dispatch, slug]);
 
   const BlogState = (state) => state;
@@ -78,7 +78,7 @@ const BlogDetails = (props) => {
     },
   ];
 
-  document.title = "Diễn Viên";
+  document.title = item.name || "movie-commentary";
 
   return (
     <React.Fragment>
@@ -96,6 +96,7 @@ const BlogDetails = (props) => {
               <Row>
                 <Col md={12}>
                   <div
+                    id="renderHtml"
                     dangerouslySetInnerHTML={{
                       __html: item.description,
                     }}
@@ -170,4 +171,4 @@ const BlogDetails = (props) => {
   );
 };
 
-export default withRouter(BlogDetails);
+export default withRouter(MovieCommentaryDetails);

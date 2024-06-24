@@ -158,9 +158,9 @@ const Navbar = () => {
                     Cinema Corner
                   </DropdownToggle>
                   <DropdownMenu style={{}}>
-                    <DropdownItem tag={Link} to="/the-loai-phim">
+                    {/* <DropdownItem tag={Link} to="/the-loai-phim">
                       Thể Loại Phim
-                    </DropdownItem>
+                    </DropdownItem> */}
                     <DropdownItem tag={Link} to="/actor">
                       Actor
                     </DropdownItem>
@@ -170,8 +170,8 @@ const Navbar = () => {
                     <DropdownItem tag={Link} to="/blog-movie">
                       Blog Movie
                     </DropdownItem>
-                    <DropdownItem tag={Link} to="/blog-dien-anh">
-                      Blog Điện Ảnh
+                    <DropdownItem tag={Link} to="/movie-commentary">
+                      Movie Commentary
                     </DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
