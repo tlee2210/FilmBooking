@@ -3,6 +3,7 @@ package com.cinemas.controller.home;
 import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.SearchReviewRequest;
 import com.cinemas.dto.response.APIResponse;
+import com.cinemas.dto.response.HomeReviewResponse;
 import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.entities.MovieBlog;
 import com.cinemas.entities.Review;
@@ -38,10 +39,10 @@ public class HomeReviewController {
     }
 
     @GetMapping("/{slug}/detail")
-    public APIResponse<Review> getDetailReview(@PathVariable String slug) {
-        Review review = homeReviewService.getReviewDetail(slug);
+    public APIResponse<HomeReviewResponse> getDetailReview(@PathVariable String slug) {
+        HomeReviewResponse review = homeReviewService.getReviewDetail(slug);
 
-        APIResponse<Review> apiResponse = new APIResponse();
+        APIResponse<HomeReviewResponse> apiResponse = new APIResponse();
         apiResponse.setCode(200);
         apiResponse.setResult(review);
 

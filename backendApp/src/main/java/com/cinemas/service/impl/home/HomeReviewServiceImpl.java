@@ -2,6 +2,7 @@ package com.cinemas.service.impl.home;
 
 import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.SearchReviewRequest;
+import com.cinemas.dto.response.HomeReviewResponse;
 import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Review;
@@ -51,11 +52,15 @@ public class HomeReviewServiceImpl implements HomeReviewService {
     }
 
     @Override
-    public Review getReviewDetail(String slug) {
+    public HomeReviewResponse getReviewDetail(String slug) {
         Review review = reviewRepository.findBySlug(slug);
 
         if (review == null) throw new AppException(NOT_FOUND);
 
-        return review;
+        HomeReviewResponse homeReviewResponse = new HomeReviewResponse();
+        homeReviewResponse.setReview(review);
+        homeReviewResponse.setReviewList(reviewRepository.reviewRelate(review.getType()));
+
+        return homeReviewResponse;
     }
 }

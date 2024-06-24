@@ -23,4 +23,7 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
     @Query("SELECT r FROM Review r WHERE (:name is null or r.name like %:name%) " +
             "AND (:role is null or r.type = :role)")
     List<Review> searchByName(String name, ReviewType role);
+
+    @Query("SELECT r FROM Review r WHERE r.type = :type ORDER BY r.id DESC LIMIT 4")
+    List<Review> reviewRelate(ReviewType type);
 }
