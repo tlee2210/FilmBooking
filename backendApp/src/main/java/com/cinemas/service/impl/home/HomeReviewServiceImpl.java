@@ -63,16 +63,13 @@ public class HomeReviewServiceImpl implements HomeReviewService {
     }
 
     @Override
-<<<<<<< Updated upstream
-    public HomeReviewResponse getReviewDetail(String slug) {
-=======
     public List<Review> geHomeRivew() {
         return null;
     }
 
     @Override
-    public Review getReviewDetail(String slug) {
->>>>>>> Stashed changes
+    public HomeReviewResponse getReviewDetail(String slug) {
+
         Review review = reviewRepository.findBySlug(slug);
 
         if (review == null) throw new AppException(NOT_FOUND);
