@@ -3,6 +3,7 @@ package com.cinemas.controller.home;
 import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.SearchCelebRequest;
 import com.cinemas.dto.response.APIResponse;
+import com.cinemas.dto.response.HomeMovieBlogResponse;
 import com.cinemas.dto.response.SelectOptionCeleb;
 import com.cinemas.entities.Celebrity;
 import com.cinemas.entities.MovieBlog;
@@ -36,8 +37,8 @@ public class HomeBlogController {
     }
 
     @GetMapping("/detail/{slug}")
-    public APIResponse<MovieBlog> getDetailMovieBlog(@PathVariable String slug) {
-        APIResponse<MovieBlog> apiResponse = new APIResponse();
+    public APIResponse<HomeMovieBlogResponse> getDetailMovieBlog(@PathVariable String slug) {
+        APIResponse<HomeMovieBlogResponse> apiResponse = new APIResponse();
 
         apiResponse.setCode(200);
         apiResponse.setResult(homeBlogService.getBlogDetail(slug));

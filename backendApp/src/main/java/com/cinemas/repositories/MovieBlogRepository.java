@@ -17,4 +17,7 @@ public interface MovieBlogRepository extends JpaRepository<MovieBlog, Integer> {
 
     @Query("select b FROM MovieBlog b where (:name is null or b.name like %:name%)")
     List<MovieBlog> searchByName(String name);
+
+    @Query("SELECT m FROM MovieBlog m ORDER BY m.id DESC LIMIT 4")
+    List<MovieBlog> blogRelate();
 }

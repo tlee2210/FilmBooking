@@ -1,6 +1,7 @@
 package com.cinemas.service.impl.home;
 
 import com.cinemas.dto.request.PaginationHelper;
+import com.cinemas.dto.response.HomeMovieBlogResponse;
 import com.cinemas.entities.Movie;
 import com.cinemas.entities.MovieBlog;
 import com.cinemas.exception.AppException;
@@ -51,12 +52,17 @@ public class HomeBlogServiceImpl implements HomeBlogService {
     }
 
     @Override
-    public MovieBlog getBlogDetail(String slug) {
+    public HomeMovieBlogResponse getBlogDetail(String slug) {
         MovieBlog movieBlog = movieBlogRepository.findBySlug(slug);
 
         if (movieBlog == null) throw new AppException(NOT_FOUND);
 
         movieBlog.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(movieBlog.getThumbnail()));
-        return movieBlog;
+
+        HomeMovieBlogResponse homeMovieBlogResponse = new HomeMovieBlogResponse();
+        homeMovieBlogResponse.setMovieBlog(movieBlog);
+        homeMovieBlogResponse.setBlogRelate(movieBlogRepository.blogRelate());
+
+        return homeMovieBlogResponse;
     }
 }
