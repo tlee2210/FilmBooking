@@ -50,7 +50,8 @@ public class SecurityConfiguration {
                                 "/api/home/v1/blog/**",
                                 "/api/admin/v1/file-upload",
                                 "/api/home/v1/review/**",
-                                "/api/home/v1/cinema/**").permitAll()
+                                "/api/home/v1/cinema/**",
+                                "/api/home/v1/home/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/admin").hasAnyAuthority(RoleType.ADMIN.name())
                         .requestMatchers("/api/user").hasAnyAuthority(RoleType.USER.name())

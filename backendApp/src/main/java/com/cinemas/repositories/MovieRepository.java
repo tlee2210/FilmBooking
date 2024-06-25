@@ -39,4 +39,6 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
     @Query("SELECT m FROM Movie m WHERE m.endDate > CURRENT_DATE")
     List<Movie>findAllMovieSetTime();
 
+    @Query("SELECT m FROM Movie m WHERE m.status = :status ORDER BY m.id DESC LIMIT 8")
+    List<Movie> getMovieHomePage(MovieStatus status);
 }
