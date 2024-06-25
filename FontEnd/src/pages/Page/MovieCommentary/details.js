@@ -191,7 +191,7 @@ const MovieCommentaryDetails = (props) => {
                         className="quick-ticket-card-phim-dang-chieu mt-4"
                       >
                         <Link
-                          to="/ticket-booking/phim"
+                          to={`/booking/${movie.slug}`}
                           style={{ textDecoration: "none", color: "inherit" }}
                         >
                           <CardBody className="position-relative p-0 hover-container">

@@ -79,7 +79,7 @@ const CelebrityInfor = lazy(() =>
 );
 
 //Ticket Booking
-const TicketBooking = lazy(() => import("../pages/Page/BuyTicket/index"));
+const Booking = lazy(() => import("../pages/Page/BuyTicket/index"));
 
 //Binh Luận Phim
 import MovieCommentary from "../pages/Page/MovieCommentary/index";
@@ -179,9 +179,9 @@ const homeRoutes = [
     component: <MovieCommentaryDetails />,
   },
 
-  //------------------------------------------
+  { path: "/booking/:slug", component: <Booking /> },
 
-  { path: "/ticket-booking/phim", component: <TicketBooking /> },
+  //------------------------------------------
 
   { path: "/rap-phim", component: <RapPhim /> },
   { path: "/order", component: <Order /> },

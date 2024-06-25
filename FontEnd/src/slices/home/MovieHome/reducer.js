@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const initialState = {
   MovieIntroduce: [],
   item: {},
+  MovieDetails: [],
 };
 
 const HomeMovieSlice = createSlice({
@@ -15,9 +16,13 @@ const HomeMovieSlice = createSlice({
     setItem(state, action) {
       state.item = action.payload.data;
     },
+    setMovieDetails(state, action) {
+      state.MovieDetails = action.payload;
+    },
   },
 });
 
-export const { fetchSuccess, setItem } = HomeMovieSlice.actions;
+export const { fetchSuccess, setItem, setMovieDetails } =
+  HomeMovieSlice.actions;
 
 export default HomeMovieSlice.reducer;

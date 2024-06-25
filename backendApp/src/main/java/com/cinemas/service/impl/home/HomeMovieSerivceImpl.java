@@ -109,6 +109,7 @@ public class HomeMovieSerivceImpl implements HomeMovieSerivce {
         if (movie == null) throw new AppException(NOT_FOUND);
 
         movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
+        movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
 
         return movie;
     }
