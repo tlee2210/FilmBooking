@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import './css/MoviesDropdown.css';
 import Scrollspy from "react-scrollspy";
 import {
   Collapse,
@@ -16,7 +17,6 @@ import LogoDark from "../../assets/images/logo-dark.png";
 import LogoLight from "../../assets/images/logo-light.png";
 
 import Ticket from "../../assets/images/Ticket.jpg";
-import { color } from "echarts";
 
 const Navbar = () => {
   const [isOpenMenu, setisOpenMenu] = useState(false);
@@ -68,6 +68,21 @@ const Navbar = () => {
       });
     };
   }, [activeLink]);
+
+  const moviesNowShowing = [
+    { img: "https://cdn.galaxycine.vn/media/2024/5/6/inside-out-2-3_1714970461256.jpg", name: "Những Mảnh Ghép Cảm Xúc 2", link: "/phim-dang-chieu" },
+    { img: "https://cdn.galaxycine.vn/media/2024/6/4/mua-he-dep-nhat-2_1717486022304.jpg", name: "Mùa Hè Đẹp Nhất", link: "/phim-dang-chieu" },
+    { img: "https://cdn.galaxycine.vn/media/2024/6/4/mua-he-dep-nhat-2_1717486022304.jpg", name: "Mùa Hè Đẹp Nhất", link: "/phim-dang-chieu" },
+    { img: "https://cdn.galaxycine.vn/media/2024/6/4/mua-he-dep-nhat-2_1717486022304.jpg", name: "Mùa Hè Đẹp Nhất", link: "/phim-dang-chieu" },
+    { img: "https://cdn.galaxycine.vn/media/2024/5/6/inside-out-2-3_1714970461256.jpg", name: "Những Mảnh Ghép Cảm Xúc 2", link: "/phim-dang-chieu" },
+  ];
+  const moviesComingSoon = [
+    { img: "https://cdn.galaxycine.vn/media/2024/6/4/mua-he-dep-nhat-2_1717486022304.jpg", name: "Mùa Hè Đẹp Nhất", link: "/phim-sap-chieu" },
+    { img: "https://cdn.galaxycine.vn/media/2024/5/6/inside-out-2-3_1714970461256.jpg", name: "Những Mảnh Ghép Cảm Xúc 2", link: "/phim-sap-chieu" },
+    { img: "https://cdn.galaxycine.vn/media/2024/5/6/inside-out-2-3_1714970461256.jpg", name: "Những Mảnh Ghép Cảm Xúc 2", link: "/phim-sap-chieu" },
+    { img: "https://cdn.galaxycine.vn/media/2024/5/6/inside-out-2-3_1714970461256.jpg", name: "Những Mảnh Ghép Cảm Xúc 2", link: "/phim-sap-chieu" },
+  ];
+
 
   return (
     <React.Fragment>
@@ -138,9 +153,11 @@ const Navbar = () => {
                 </NavLink>
               </li>
 
+
+
               {/* Movies */}
               <li
-                className="nav-item"
+                className="nav-item dropdown-nav-movies"
                 onMouseEnter={() => setMoviesDropdownOpen(true)}
                 onMouseLeave={() => setMoviesDropdownOpen(false)}
               >
@@ -154,20 +171,40 @@ const Navbar = () => {
                       borderColor: "transparent",
                     }}
                   >
-                   Movies
+                    Movies
                   </DropdownToggle>
-                  <DropdownMenu style={{}}>
-                    <DropdownItem tag={Link} to="/phim-dang-chieu">
-                      Phim Đang Chiếu
-                    </DropdownItem>
-                    <DropdownItem tag={Link} to="/phim-sap-chieu">
-                     Phim Sắp Chiếu
-                    </DropdownItem>
+                  <DropdownMenu className="movies-dropdown-menu">
+                    <DropdownItem className="header-movies-dropdown" header>Phim Đang Chiếu</DropdownItem>
+                    <div className="movies-grid">
+                      {moviesNowShowing.map((movie, index) => (
+                        <DropdownItem key={index} tag={Link} to={movie.link} className="movie-item">
+                          <div className="movie-thumbnail">
+                            <img src={movie.img} alt={movie.name} />
+                            <div className="movie-overlay">
+                              <button className="ticket-button">Mua vé</button>
+                            </div>
+                          </div>
+                          <div className="movie-name">{movie.name}</div>
+                        </DropdownItem>
+                      ))}
+                    </div>
+                    <DropdownItem className="header-movies-dropdown" header>Phim Sắp Chiếu</DropdownItem>
+                    <div className="movies-grid">
+                      {moviesComingSoon.map((movie, index) => (
+                        <DropdownItem key={index} tag={Link} to={movie.link} className="movie-item">
+                          <div className="movie-thumbnail">
+                            <img src={movie.img} alt={movie.name} />
+                            <div className="movie-overlay">
+                              <button className="ticket-button">Mua vé</button>
+                            </div>
+                          </div>
+                          <div className="movie-name">{movie.name}</div>
+                        </DropdownItem>
+                      ))}
+                    </div>
                   </DropdownMenu>
                 </Dropdown>
               </li>
-
-
 
 
               {/* CinemaCorner */}

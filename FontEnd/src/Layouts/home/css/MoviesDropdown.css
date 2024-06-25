@@ -1,0 +1,97 @@
+.movies-dropdown-menu {
+    width: 600px; 
+    padding: 10px;
+    max-height: 650px; 
+    overflow-y: auto; 
+  }
+  
+  .movies-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; 
+    justify-content: flex-start;
+  }
+  
+  .movie-item {
+    position: relative;
+    text-align: center;
+    width: 130px; 
+  }
+  
+  .movie-thumbnail {
+    position: relative;
+    width: 100px;
+    height: 150px;
+    overflow: hidden;
+    margin: 0 auto; 
+  }
+  
+  .movie-thumbnail img {
+    width: 100%;
+    height: 100%;
+    transition: filter 0.3s;
+  }
+  
+  .movie-thumbnail .movie-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .movie-thumbnail:hover img {
+    filter: blur(3px);
+  }
+  
+  .movie-thumbnail:hover .movie-overlay {
+    opacity: 1;
+  }
+  
+  .ticket-button {
+    background-color: orange;
+    border: none;
+    padding: 5px 10px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .movie-name {
+    margin-top: 5px;
+    font-size: 14px;
+    color: black;
+    width: 100%; 
+    white-space: normal;
+    text-align: center; 
+  }
+  
+  .dropdown-nav-movies {
+    width: auto;
+  }
+  
+  .header-movies-dropdown {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    padding-left: 10px;
+    text-transform: uppercase
+  }
+  
+  .header-movies-dropdown::before {
+    content: '';
+    display: inline-block;
+    width: 5px;
+    height: 20px;
+    background-color: #0056b3;
+    margin-right: 10px;
+    
+  }
