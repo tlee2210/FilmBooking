@@ -313,7 +313,7 @@ const BlogMovie = () => {
                 </Row>
                 <div className="button-dien-vien">
                   <Button
-                    color="secondary"
+                    color="danger"
                     outline
                     className="waves-effect waves-light material-shadow-none"
                   >

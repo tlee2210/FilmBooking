@@ -312,7 +312,7 @@ const Index = () => {
                                 <div className="times-rapphim">
                                   {data.find((m) => m.title === selectedMovie).showtimes.map((time, idx) => (
                                     <button key={idx} className="time-rapphim">
-                                      {time}
+                                      <span style={{fontSize:17}}>{time}</span>
                                     </button>
                                   ))}
                                 </div>
