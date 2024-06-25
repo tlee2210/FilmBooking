@@ -124,6 +124,7 @@ const BlogMovie = () => {
     return description;
   };
 
+
   return (
     <React.Fragment>
       <Container style={{ paddingTop: 100 }}>

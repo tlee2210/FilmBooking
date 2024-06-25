@@ -107,51 +107,37 @@ const checkOut = () => {
                             <CardBody className="checkout-tab">
                                 <Form action="#">
                                     <div className="step-arrow-nav">
-                                        <Nav
-                                            className="nav-pills nav-justified custom-nav"
-                                            role="tablist"
-                                        >
-                                            <NavItem role="presentation">
-                                                <NavLink
-                                                    href="#"
-                                                    className={classnames({ active: activeTab === 1, done: activeTab >= 1 }, "p-3 fs-15")}
-                                                    onClick={() => { passedSteps.includes(1) && toggleTab(1); }}
-                                                >
-                                                    <i className="ri-user-2-line fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle me-2"></i>
-                                                    Chọn Phim / Rạp / Suất / Ghế
-                                                </NavLink>
-                                            </NavItem>
-                                            <NavItem role="presentation">
-                                                <NavLink
-                                                    href="#"
-                                                    className={classnames({ active: activeTab === 2, done: activeTab >= 2 }, "p-3 fs-15")}
-                                                    onClick={() => { passedSteps.includes(2) && toggleTab(2); }}
-                                                >
-                                                    <i className="ri-truck-line fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle me-2"> </i>
-                                                    Chọn Thức Ăn
-                                                </NavLink>
-                                            </NavItem>
-                                            <NavItem role="presentation">
-                                                <NavLink
-                                                    href="#"
-                                                    className={classnames({ active: activeTab === 3, done: activeTab >= 3 }, "p-3 fs-15")}
-                                                    onClick={() => { passedSteps.includes(3) && toggleTab(3); }}
-                                                >
-                                                    <i className="ri-bank-card-line fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle me-2"> </i>
-                                                    Thanh Toán
-                                                </NavLink>
-                                            </NavItem>
-                                            <NavItem role="presentation">
-                                                <NavLink
-                                                    href="#"
-                                                    className={classnames({ active: activeTab === 4, done: activeTab >= 4 }, "p-3 fs-15")}
-                                                    onClick={() => { passedSteps.includes(4) && toggleTab(4); }}
-                                                >
-                                                    <i className="ri-checkbox-circle-line fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle me-2"></i>
-                                                    Xác Nhận
-                                                </NavLink>
-                                            </NavItem>
-                                        </Nav>
+                                        <div className="nav-pills nav-justified custom-nav" role="tablist">
+                                            <div
+                                                className={`step-item -order-1 ${activeTab >= 1 ? 'done' : ''} ${activeTab === 1 ? 'active' : ''}`}
+
+                                            >
+                                                <span>Chọn phim / Rạp / Suất</span>
+                                            </div>
+                                            <div
+                                                className={`step-item -order-2 ${activeTab >= 2 ? 'done' : ''} ${activeTab === 2 ? 'active' : ''}`}
+
+                                            >
+                                                <span>Chọn ghế</span>
+                                            </div>
+                                            <div
+                                                className={`step-item -order-3 ${activeTab >= 3 ? 'done' : ''} ${activeTab === 3 ? 'active' : ''}`}
+
+                                            >
+                                                <span>Chọn thức ăn</span>
+                                            </div>
+                                            <div
+                                                className={`step-item -order-4 ${activeTab >= 4 ? 'done' : ''} ${activeTab === 4 ? 'active' : ''}`}
+
+                                            >
+                                                <span>Thanh toán</span>
+                                            </div>
+                                            <div
+                                                className={`step-item -order-5 ${activeTab >= 5 ? 'done' : ''} ${activeTab === 5 ? 'active' : ''}`}
+                                            >
+                                                <span>Xác nhận</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </Form>
                             </CardBody>
@@ -366,7 +352,7 @@ const checkOut = () => {
                                             </TabPane>
 
                                             <TabPane tabId={4} id="pills-finish">
-                                                <div className="text-center py-5" style={{backgroundColor:'white'}}>
+                                                <div className="text-center py-5" style={{ backgroundColor: 'white' }}>
                                                     <div className="mb-4">
                                                         <i className="bx bxs-check-circle" style={{ fontSize: "120px", color: 'green' }}></i>
                                                     </div>
@@ -391,40 +377,63 @@ const checkOut = () => {
                                     </Col>
                                     <Col xl={4}>
                                         <Card>
-                                            <CardBody>
+                                            <CardBody className='card-body-order'>
                                                 <div className="image-description">
                                                     <div className="image-info">
-                                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMkk96j-MG-Z72sqHopPg92OTAVspYk5VwJQ&s" alt="Rạp" width="120" height="180" />
+                                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMkk96j-MG-Z72sqHopPg92OTAVspYk5VwJQ&s" alt="Rạp" />
                                                     </div>
-                                                    <div className="movie-title">
-                                                        <p><strong>Tên Phim:</strong> <span>Tên phim đã chọn</span> </p>
+                                                    <div>
+                                                        <div className="movie-title">
+                                                            Những Mảnh Ghép Cảm Xúc 2
+                                                        </div>
+                                                        <div className="movie-info">
+                                                            <p>2D Lồng Tiếng </p>
+                                                        </div>
                                                     </div>
+                                                </div>
+                                                <div className="detailed-info">
                                                     <div className="movie-info">
-                                                        <p><strong>Rạp đã chọn:</strong> Tên rạp</p>
-                                                        <p><strong>Suất chiếu đã chọn:</strong> Thời gian suất chiếu</p>
-                                                        <hr />
-                                                        <p className="total">Tổng Cộng</p>
+                                                        <p><strong>Rạp:</strong> Galaxy Nha Trang Center - RAP 1</p>
+                                                        <p><strong>Suất chiếu:</strong> 12:00 - Thứ Tư, 26/06/2024</p>
                                                     </div>
+                                                    <hr  style={{border:'1px dashed black'}}/>
+                                                    <div className="price-info">
+                                                        <p>1x Người Lớn - Member</p>
+                                                        <p>60.000 đ</p>
+                                                    </div>
+                                                    <div className="price-info">
+                                                        <p>Ghế: J8</p>
+                                                    </div>
+                                                    <div className="price-info">
+                                                        <p>1x iCombo 1 Big Extra STD</p>
+                                                        <p>99.000 đ</p>
+                                                    </div>
+                                                    <hr  style={{border:'1px dashed black'}}/>
+                                                    <p className="total">Tổng Cộng: 159.000 đ</p>
                                                 </div>
                                             </CardBody>
                                         </Card>
-                                        <div className="d-flex align-items-start gap-3 mt-3">
+                                        <div className="align-items-center mt-4">
                                             <button
                                                 type="button"
-                                                className="btn btn-secondary btn-label left me-auto prevtab"
+                                                style={{ fontWeight: '100', color: 'orange', fontSize: 17, paddingLeft: 100,backgroundColor:'#e9e9e9' }}
+                                                className="btn-container-order btn-label center me-auto prevtab"
                                                 onClick={handlePrevTab}
                                                 disabled={activeTab === 1}
                                             >
-                                                <i className="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>
-                                                Quay Lại
+                                                <span
+                                                    style={{ fontWeight: '100', color: 'orange', fontSize: 17, marginLeft: -51, marginRight: '28px' }}
+                                                >Quay Lại</span>
                                             </button>
                                             <button
                                                 type="button"
-                                                className="btn btn-primary btn-label right ms-auto nexttab"
+                                                style={{ fontWeight: '100', color: 'white', fontSize: 17, border: '2px solid orange', backgroundColor: 'orange', width: '55%', height: '45px' }}
+                                                className="btn-container-order btn-label right ms-auto nexttab"
                                                 onClick={handleNextTab}
                                             >
-                                                <i className="ri-truck-line label-icon align-middle fs-16 ms-2"></i>
-                                                Tiếp Tục
+                                                <span
+                                                    style={{ fontWeight: '100', color: 'white', fontSize: 17, paddingLeft: 29 }}
+                                                >Tiếp Tục</span>
                                             </button>
                                         </div>
                                     </Col>
@@ -436,10 +445,10 @@ const checkOut = () => {
             </div>
             {/* Modal */}
             <Modal isOpen={modal} toggle={() => setModal(!modal)}>
-                <ModalHeader toggle={() => setModal(!modal)}>
+                <ModalHeader className='modal-header-order' toggle={() => setModal(!modal)}>
                     XÁC NHẬN ĐẶT VÉ
                 </ModalHeader>
-                <ModalBody>
+                <ModalBody className='modal-body-order'>
                     <div className="ticket-info-order">
                         <div className="ticket-section-order">
                             <strong>PHIM</strong><br />
@@ -465,7 +474,7 @@ const checkOut = () => {
                         <input type="checkbox" /> TÔI XÁC NHẬN CÁC THÔNG TIN ĐẶT VÉ ĐÃ CHÍNH XÁC
                     </div>
                 </ModalBody>
-                <ModalFooter>
+                <ModalFooter className='modal-footer-order'>
                     <Button color='danger' onClick={handleConfirmation}>Thanh Toán</Button>
                 </ModalFooter>
             </Modal>
