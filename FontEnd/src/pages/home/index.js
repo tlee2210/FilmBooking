@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Flatpickr from "react-flatpickr";
 import { Link } from "react-router-dom";
 import {
@@ -15,6 +15,8 @@ import {
   TabContent,
   TabPane,
   Button,
+  Modal,
+  ModalBody,
 } from "reactstrap";
 import classnames from "classnames";
 import img1 from "../../assets/images/galaxy/img-1.png";
@@ -52,6 +54,16 @@ const homepage = () => {
     { title: 'Title 2', items: ["item2", "item2", "item2"] },
     { title: 'Title 3', items: ["item3", "item3", "item3"] }
   ];
+
+  const [modal, setModal] = useState(false);
+
+  const toggleModal = () => {
+    setModal(!modal);
+  };
+  useEffect(() => {
+    // Scroll to the top of the page when the component mounts
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <React.Fragment>
       <section className="section job-hero-section pb-0" id="hero">
@@ -152,17 +164,21 @@ const homepage = () => {
               </Row>
             </Form>
           </div>
+        </Container>
+
+        <Container className="mt-5 pb-5">
+          {/* Phim */}
           <Card style={{ marginTop: "80px" }} className="bg-light">
             <CardHeader style={{ paddingBottom: 30 }}>
               <Nav className="nav-tabs-custom rounded card-header-tabs border-bottom-0 d-flex align-items-center" role="tablist">
                 <div className="text-xl inline-block font-bold uppercase d-flex align-items-center" style={{ borderLeft: "4px solid #007bff", fontSize: "23px", fontWeight: "bold", textTransform: "uppercase", paddingLeft: "0.5rem", marginRight: "1rem" }}>
-                  Phim
+                  PHIM
                 </div>
                 <NavItem>
                   <NavLink
                     className={classnames({
-                      active: activeTab1 === "1",
-                      "text-secondary-emphasis": activeTab1 === "1",
+                      active: activeTab === "1",
+                      "text-secondary-emphasis": activeTab === "1",
 
 
                     })}
@@ -180,8 +196,8 @@ const homepage = () => {
                   <NavLink
                     to="#"
                     className={classnames({
-                      active: activeTab1 === "2",
-                      "text-secondary-emphasis": activeTab1 === "2",
+                      active: activeTab === "2",
+                      "text-secondary-emphasis": activeTab === "2",
 
 
                     })}
@@ -191,7 +207,7 @@ const homepage = () => {
                     type="button"
                   >
                     <i className="far fa-user"></i>
-                   Sắp Chiếu
+                    Phim Sắp Chiếu
                   </NavLink>
                 </NavItem>
               </Nav>
@@ -241,11 +257,24 @@ const homepage = () => {
                                     outline
                                     className="waves-effect waves-light material-shadow-none text-light align-items-center"
                                     style={{ width: "134px" }}
+                                    onClick={toggleModal}
                                   >
-                                    <span className="icon-off">
+                                    <span className="icon-off" >
                                       <i className=" ri-play-circle-line align-bottom me-1"></i>
                                       <span>Trailer</span>
                                     </span>
+                                    <Modal isOpen={modal} toggle={toggleModal} size="lg">
+                                      <iframe
+                                        width="100%"
+                                        height="500px"
+                                        src="https://www.youtube.com/embed/49xWJJvpjzI"
+                                        title="YouTube video"
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                        style={{ padding: 2 }}
+                                      ></iframe>
+                                    </Modal>
                                   </Button>
                                 </h5>
                               </div>
@@ -267,6 +296,17 @@ const homepage = () => {
                         </Card>
                       </Col>
                     ))}
+                    <Col>
+                      <div style={{ paddingLeft: 450 }}>
+                        <Link
+                          to="/phim-dang-chieu"
+                          className="btn btn-outline-danger waves-effect waves-light material-shadow-none"
+                          style={{ textDecoration: 'none' }}
+                        >
+                          Xem Thêm <i className="bx bx-right-arrow-alt"></i>
+                        </Link>
+                      </div>
+                    </Col>
                   </Masonry>
                 </TabPane>
                 <TabPane tabId="2">
@@ -336,6 +376,17 @@ const homepage = () => {
                         </Card>
                       </Col>
                     ))}
+                    <Col>
+                      <div style={{ paddingLeft: 450 }}>
+                        <Link
+                          to="/phim-sap-chieu"
+                          className="btn btn-outline-danger waves-effect waves-light material-shadow-none"
+                          style={{ textDecoration: 'none' }}
+                        >
+                          Xem Thêm <i className="bx bx-right-arrow-alt"></i>
+                        </Link>
+                      </div>
+                    </Col>
                   </Masonry>
                 </TabPane>
               </TabContent>
@@ -451,6 +502,17 @@ const homepage = () => {
                       ))}
                     </Col>
                   </Row>
+                  <Col>
+                    <div style={{ paddingLeft: 450 }}>
+                      <Link
+                        to="/movie-commentary"
+                        className="btn btn-outline-danger waves-effect waves-light material-shadow-none"
+                        style={{ textDecoration: 'none' }}
+                      >
+                        Xem Thêm <i className="bx bx-right-arrow-alt"></i>
+                      </Link>
+                    </div>
+                  </Col>
                 </TabPane>
 
                 <TabPane tabId="4">
@@ -476,6 +538,7 @@ const homepage = () => {
                         </Link>
                       </div>
                     </Col>
+
                     <Col md={6}>
                       {data2.map((item, index) => (
                         <Row key={index} className="mb-3">
@@ -512,6 +575,17 @@ const homepage = () => {
                       ))}
                     </Col>
                   </Row>
+                  <Col>
+                    <div style={{ paddingLeft: 450 }}>
+                      <Link
+                        to="/blog-movie"
+                        className="btn btn-outline-danger waves-effect waves-light material-shadow-none"
+                        style={{ textDecoration: 'none' }}
+                      >
+                        Xem Thêm <i className="bx bx-right-arrow-alt"></i>
+                      </Link>
+                    </div>
+                  </Col>
                 </TabPane>
               </TabContent>
             </CardBody>

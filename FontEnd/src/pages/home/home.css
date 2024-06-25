@@ -24,3 +24,9 @@
   .hover-link-home:hover {
     color: blue;
   }
+
+
+   .modal-content-home {
+    border: none !important;
+   
+  }
