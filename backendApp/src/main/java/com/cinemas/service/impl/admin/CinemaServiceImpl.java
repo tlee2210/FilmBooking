@@ -49,6 +49,7 @@ public class CinemaServiceImpl implements CinemaService {
         List<Cinema> cinemaList = cinemaRespository.searchCinema(PaginationHelper.getSearchname(), PaginationHelper.getStatus(), PaginationHelper.getCity());
 
         cinemaList.forEach(cinema -> {
+            cinema.setDescription(cinema.getDescription());
             cinema.getImages().forEach(images -> {
                 images.setUrl(fileStorageServiceImpl.getUrlFromPublicId(images.getUrl()));
             });
@@ -70,6 +71,7 @@ public class CinemaServiceImpl implements CinemaService {
         cityList.forEach(item -> {
             options.add(new SelectOptionReponse(item, item));
         });
+
 
         return new SelectOptionAndModelReponse<>(options, cinemas);
     }

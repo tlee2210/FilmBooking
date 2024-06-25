@@ -1,5 +1,6 @@
 package com.cinemas.repositories;
 
+import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Cinema;
 import com.cinemas.enums.StatusCinema;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -27,5 +28,11 @@ public interface CinemaRespository extends JpaRepository<Cinema, Integer> {
             @Param("name") String name,
             @Param("status") StatusCinema status,
             @Param("city") String city
+    );
+
+    @Query("SELECT new com.cinemas.dto.response.SelectOptionReponse(c.slug, c.name)  FROM Cinema AS c " +
+            "WHERE (:city is null  or c.city = :city)")
+    List<SelectOptionReponse<?>> selectCinema(
+           String city
     );
 }
