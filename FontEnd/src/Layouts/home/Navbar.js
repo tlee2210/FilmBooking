@@ -22,9 +22,11 @@ const Navbar = () => {
   const [isOpenMenu, setisOpenMenu] = useState(false);
   const [navClass, setnavClass] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [moviesDropdownOpen, setMoviesDropdownOpen] = useState(false);
 
   const toggle = () => setisOpenMenu(!isOpenMenu);
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+  const toggleMoviesDropdown = () => setMoviesDropdownOpen((prevState) => !prevState);
 
   useEffect(() => {
     window.addEventListener("scroll", scrollNavigation, true);
@@ -135,11 +137,40 @@ const Navbar = () => {
                   <img src={Ticket} height={36} width={112} />
                 </NavLink>
               </li>
-              <li className="nav-item">
-                <NavLink className="fs-16" href="#Movies">
-                  Movies
-                </NavLink>
+
+              {/* Movies */}
+              <li
+                className="nav-item"
+                onMouseEnter={() => setMoviesDropdownOpen(true)}
+                onMouseLeave={() => setMoviesDropdownOpen(false)}
+              >
+                <Dropdown isOpen={moviesDropdownOpen} toggle={toggleMoviesDropdown}>
+                  <DropdownToggle
+                    className="fs-16 nav-link"
+                    caret
+                    style={{
+                      backgroundColor: "transparent",
+                      color: "black",
+                      borderColor: "transparent",
+                    }}
+                  >
+                   Movies
+                  </DropdownToggle>
+                  <DropdownMenu style={{}}>
+                    <DropdownItem tag={Link} to="/phim-dang-chieu">
+                      Phim Đang Chiếu
+                    </DropdownItem>
+                    <DropdownItem tag={Link} to="/phim-sap-chieu">
+                     Phim Sắp Chiếu
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
               </li>
+
+
+
+
+              {/* CinemaCorner */}
               <li
                 className="nav-item"
                 onMouseEnter={() => setDropdownOpen(true)}
