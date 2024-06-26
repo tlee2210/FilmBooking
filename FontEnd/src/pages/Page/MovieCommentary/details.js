@@ -152,8 +152,8 @@ const MovieCommentaryDetails = (props) => {
                               <Card className="h-100">
                                 <img
                                   className="card-img-top img-fluid"
-                                  src={movie.thumbnail}
-                                  alt={movie.thumbnail}
+                                  src={movie.imagePortrait}
+                                  alt={movie.imagePortrait}
                                 />
                                 <CardBody>
                                   <h4 className="card-title">{movie.name}</h4>
@@ -203,7 +203,7 @@ const MovieCommentaryDetails = (props) => {
                                 borderRadius: "10px",
                               }}
                               className="img-fluid hover-image"
-                              src={movie.imageLandscape}
+                              src={movie.imagePortrait}
                               alt="Movie"
                             />
                             <div className="ticket-overlay">
@@ -223,14 +223,13 @@ const MovieCommentaryDetails = (props) => {
                   : null}
               </Row>
               <div className="button-dien-vien">
-                <Button
-                  color="secondary"
-                  outline
-                  className="waves-effect waves-light material-shadow-none"
+                <Link
+                  to="/movie"
+                  className="btn btn-outline-danger waves-effect waves-light material-shadow-none"
+                  style={{ textDecoration: "none" }}
                 >
-                  {" "}
-                  Xem Thêm <i className="bx bx-right-arrow-alt"></i>{" "}
-                </Button>
+                  See More <i className="bx bx-right-arrow-alt"></i>
+                </Link>
               </div>
             </Col>
           </Row>

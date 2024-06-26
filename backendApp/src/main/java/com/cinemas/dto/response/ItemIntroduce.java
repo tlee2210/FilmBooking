@@ -15,4 +15,12 @@ public class ItemIntroduce {
     private String name;
     private String slug;
     private String imagePortrait;
+    private String trailer;
+
+    public ItemIntroduce(Integer id, String name, String slug, String imagePortrait) {
+        this.id = id;
+        this.name = name;
+        this.slug = slug;
+        this.imagePortrait = imagePortrait;
+    }
 }

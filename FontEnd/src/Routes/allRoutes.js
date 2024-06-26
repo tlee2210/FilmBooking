@@ -94,8 +94,10 @@ import BlogMovie from "../pages/Page/BlogMovie";
 import BlogMovieDetails from "../pages/Page/BlogMovie/details";
 
 //Phim Dang Chieu / Phim Sap Chieu
-import PhimDangChieu from "../pages/Page/PhimDangChieu/phimdangchieu"
-import PhimSapChieu from "../pages/Page/PhimDangChieu/phimsapchieu"
+import PhimDangChieu from "../pages/Page/Movie/phimdangchieu";
+import PhimSapChieu from "../pages/Page/Movie/phimsapchieu";
+import MovieList from "../pages/Page/Movie/index";
+
 const adminProtectedRoutes = [
   //User Profile
   { path: "/dashboard/profile", component: <UserProfile /> },
@@ -183,7 +185,7 @@ const homeRoutes = [
   },
 
   { path: "/booking/:slug", component: <Booking /> },
-
+  { path: "/movie", component: <MovieList /> },
   //------------------------------------------
 
   { path: "/rap-phim", component: <RapPhim /> },

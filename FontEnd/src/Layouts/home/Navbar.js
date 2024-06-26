@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import './css/MoviesDropdown.css';
+import "./css/MoviesDropdown.css";
 import Scrollspy from "react-scrollspy";
+import { createSelector } from "reselect";
 import {
   Collapse,
   Container,
@@ -12,13 +13,32 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
+  Row,
+  Col,
 } from "reactstrap";
 import LogoDark from "../../assets/images/logo-dark.png";
 import LogoLight from "../../assets/images/logo-light.png";
 
 import Ticket from "../../assets/images/Ticket.jpg";
+import { getNavbar } from "../../slices/home/MovieHome/thunk";
+import { useSelector, useDispatch } from "react-redux";
+
+// getNavbar
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getNavbar());
+  }, [dispatch]);
+
+  const MovieState = (state) => state;
+  const MovieStateData = createSelector(MovieState, (state) => ({
+    error: state.Message.error,
+    messageError: state.Message.messageError,
+    navbarData: state.HomeMovie.navbarData,
+  }));
+  const { error, messageError, navbarData } = useSelector(MovieStateData);
+  console.log(navbarData);
   const [isOpenMenu, setisOpenMenu] = useState(false);
   const [navClass, setnavClass] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -26,7 +46,8 @@ const Navbar = () => {
 
   const toggle = () => setisOpenMenu(!isOpenMenu);
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
-  const toggleMoviesDropdown = () => setMoviesDropdownOpen((prevState) => !prevState);
+  const toggleMoviesDropdown = () =>
+    setMoviesDropdownOpen((prevState) => !prevState);
 
   useEffect(() => {
     window.addEventListener("scroll", scrollNavigation, true);
@@ -69,20 +90,28 @@ const Navbar = () => {
     };
   }, [activeLink]);
 
-  const moviesNowShowing = [
-    { img: "https://cdn.galaxycine.vn/media/2024/5/6/inside-out-2-3_1714970461256.jpg", name: "Những Mảnh Ghép Cảm Xúc 2", link: "/phim-dang-chieu" },
-    { img: "https://cdn.galaxycine.vn/media/2024/6/4/mua-he-dep-nhat-2_1717486022304.jpg", name: "Mùa Hè Đẹp Nhất", link: "/phim-dang-chieu" },
-    { img: "https://cdn.galaxycine.vn/media/2024/6/4/mua-he-dep-nhat-2_1717486022304.jpg", name: "Mùa Hè Đẹp Nhất", link: "/phim-dang-chieu" },
-    { img: "https://cdn.galaxycine.vn/media/2024/6/4/mua-he-dep-nhat-2_1717486022304.jpg", name: "Mùa Hè Đẹp Nhất", link: "/phim-dang-chieu" },
-    { img: "https://cdn.galaxycine.vn/media/2024/5/6/inside-out-2-3_1714970461256.jpg", name: "Những Mảnh Ghép Cảm Xúc 2", link: "/phim-dang-chieu" },
-  ];
   const moviesComingSoon = [
-    { img: "https://cdn.galaxycine.vn/media/2024/6/4/mua-he-dep-nhat-2_1717486022304.jpg", name: "Mùa Hè Đẹp Nhất", link: "/phim-sap-chieu" },
-    { img: "https://cdn.galaxycine.vn/media/2024/5/6/inside-out-2-3_1714970461256.jpg", name: "Những Mảnh Ghép Cảm Xúc 2", link: "/phim-sap-chieu" },
-    { img: "https://cdn.galaxycine.vn/media/2024/5/6/inside-out-2-3_1714970461256.jpg", name: "Những Mảnh Ghép Cảm Xúc 2", link: "/phim-sap-chieu" },
-    { img: "https://cdn.galaxycine.vn/media/2024/5/6/inside-out-2-3_1714970461256.jpg", name: "Những Mảnh Ghép Cảm Xúc 2", link: "/phim-sap-chieu" },
+    {
+      img: "https://cdn.galaxycine.vn/media/2024/6/4/mua-he-dep-nhat-2_1717486022304.jpg",
+      name: "Mùa Hè Đẹp Nhất",
+      link: "/phim-sap-chieu",
+    },
+    {
+      img: "https://cdn.galaxycine.vn/media/2024/5/6/inside-out-2-3_1714970461256.jpg",
+      name: "Những Mảnh Ghép Cảm Xúc 2",
+      link: "/phim-sap-chieu",
+    },
+    {
+      img: "https://cdn.galaxycine.vn/media/2024/5/6/inside-out-2-3_1714970461256.jpg",
+      name: "Những Mảnh Ghép Cảm Xúc 2",
+      link: "/phim-sap-chieu",
+    },
+    {
+      img: "https://cdn.galaxycine.vn/media/2024/5/6/inside-out-2-3_1714970461256.jpg",
+      name: "Những Mảnh Ghép Cảm Xúc 2",
+      link: "/phim-sap-chieu",
+    },
   ];
-
 
   return (
     <React.Fragment>
@@ -153,15 +182,16 @@ const Navbar = () => {
                 </NavLink>
               </li>
 
-
-
               {/* Movies */}
               <li
                 className="nav-item dropdown-nav-movies"
                 onMouseEnter={() => setMoviesDropdownOpen(true)}
                 onMouseLeave={() => setMoviesDropdownOpen(false)}
               >
-                <Dropdown isOpen={moviesDropdownOpen} toggle={toggleMoviesDropdown}>
+                <Dropdown
+                  isOpen={moviesDropdownOpen}
+                  toggle={toggleMoviesDropdown}
+                >
                   <DropdownToggle
                     className="fs-16 nav-link"
                     caret
@@ -174,38 +204,67 @@ const Navbar = () => {
                     Movies
                   </DropdownToggle>
                   <DropdownMenu className="movies-dropdown-menu">
-                    <DropdownItem className="header-movies-dropdown" header>Phim Đang Chiếu</DropdownItem>
-                    <div className="movies-grid">
-                      {moviesNowShowing.map((movie, index) => (
-                        <DropdownItem key={index} tag={Link} to={movie.link} className="movie-item">
-                          <div className="movie-thumbnail">
-                            <img src={movie.img} alt={movie.name} />
-                            <div className="movie-overlay">
-                              <button className="ticket-button">Mua vé</button>
-                            </div>
-                          </div>
-                          <div className="movie-name">{movie.name}</div>
-                        </DropdownItem>
-                      ))}
-                    </div>
-                    <DropdownItem className="header-movies-dropdown" header>Phim Sắp Chiếu</DropdownItem>
-                    <div className="movies-grid">
-                      {moviesComingSoon.map((movie, index) => (
-                        <DropdownItem key={index} tag={Link} to={movie.link} className="movie-item">
-                          <div className="movie-thumbnail">
-                            <img src={movie.img} alt={movie.name} />
-                            <div className="movie-overlay">
-                              <button className="ticket-button">Mua vé</button>
-                            </div>
-                          </div>
-                          <div className="movie-name">{movie.name}</div>
-                        </DropdownItem>
-                      ))}
-                    </div>
+                    <DropdownItem className="header-movies-dropdown" header>
+                      Movies Showing Now
+                    </DropdownItem>
+                    <Row>
+                      {navbarData && navbarData?.movieShowingList
+                        ? navbarData?.movieShowingList?.map((movie, index) => (
+                            <Col md={3} key={index}>
+                              <DropdownItem
+                                tag={Link}
+                                to={`/booking/${movie.slug}`}
+                                className="movie-item"
+                              >
+                                <div className="movie-thumbnail">
+                                  <img
+                                    src={movie.imagePortrait}
+                                    alt={movie.name}
+                                  />
+                                  <div className="movie-overlay">
+                                    <button className="ticket-button">
+                                      buy ticket
+                                    </button>
+                                  </div>
+                                </div>
+                                <div className="movie-name">{movie.name}</div>
+                              </DropdownItem>
+                            </Col>
+                          ))
+                        : null}
+                    </Row>
+                    <DropdownItem className="header-movies-dropdown" header>
+                      Movie coming soon
+                    </DropdownItem>
+                    <Row>
+                      {navbarData && navbarData?.movieSoonList
+                        ? navbarData?.movieSoonList?.map((movie, index) => (
+                            <Col md={3} key={index}>
+                              <DropdownItem
+                                tag={Link}
+                                to={`/booking/${movie.slug}`}
+                                className="movie-item"
+                              >
+                                <div className="movie-thumbnail">
+                                  <img
+                                    src={movie.imagePortrait}
+                                    alt={movie.name}
+                                  />
+                                  <div className="movie-overlay">
+                                    <button className="ticket-button">
+                                      buy ticket
+                                    </button>
+                                  </div>
+                                </div>
+                                <div className="movie-name">{movie.name}</div>
+                              </DropdownItem>
+                            </Col>
+                          ))
+                        : null}
+                    </Row>
                   </DropdownMenu>
                 </Dropdown>
               </li>
-
 
               {/* CinemaCorner */}
               <li

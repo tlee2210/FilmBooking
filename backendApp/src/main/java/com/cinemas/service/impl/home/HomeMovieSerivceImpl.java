@@ -1,6 +1,8 @@
 package com.cinemas.service.impl.home;
 
 import com.cinemas.Utils.ObjectUtils;
+import com.cinemas.dto.response.APIResponse;
+import com.cinemas.dto.response.HomeResponse;
 import com.cinemas.dto.response.ItemIntroduce;
 import com.cinemas.entities.Movie;
 import com.cinemas.enums.MovieStatus;
@@ -25,39 +27,6 @@ public class HomeMovieSerivceImpl implements HomeMovieSerivce {
     FileStorageServiceImpl fileStorageServiceImpl;
 
     @Override
-    public List<Movie> getMovieActive() {
-        List<Movie> movieList = movieRepository.getLimitMovie(MovieStatus.NOW_SHOWING, 8);
-
-        movieList.forEach(movie -> {
-            movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
-        });
-
-        return movieList;
-    }
-
-    @Override
-    public List<Movie> getMovieSoon() {
-        List<Movie> movieList = movieRepository.getLimitMovie(MovieStatus.COMING_SOON, 8);
-
-        movieList.forEach(movie -> {
-            movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
-        });
-
-        return movieList;
-    }
-
-    @Override
-    public List<Movie> getMovieActiveNoLimit() {
-        List<Movie> movieList = movieRepository.getMovieForStatus(MovieStatus.NOW_SHOWING);
-
-        movieList.forEach(movie -> {
-            movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
-        });
-
-        return movieList;
-    }
-
-    @Override
     public List<ItemIntroduce> getMovieActiveLimitIntroduce() {
         List<Movie> movieList = movieRepository.getMovieForStatusIntroduce(MovieStatus.NOW_SHOWING);
 
@@ -66,7 +35,7 @@ public class HomeMovieSerivceImpl implements HomeMovieSerivce {
         movieList.forEach(movie -> {
             ItemIntroduce movieIntroduce = new ItemIntroduce();
             ObjectUtils.copyFields(movie, movieIntroduce);
-            movieIntroduce.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
+            movieIntroduce.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
             movieIntroduces.add(movieIntroduce);
         });
 
@@ -74,14 +43,21 @@ public class HomeMovieSerivceImpl implements HomeMovieSerivce {
     }
 
     @Override
-    public List<Movie> getMovieSoonNoLimit() {
-        List<Movie> movieList = movieRepository.getMovieForStatus(MovieStatus.COMING_SOON);
+    public HomeResponse getAllMovie() {
+        List<ItemIntroduce> movieComingSoom = movieRepository.getMovieForStatus(MovieStatus.COMING_SOON);
+        List<ItemIntroduce> movieNowShow = movieRepository.getMovieForStatus(MovieStatus.NOW_SHOWING);
 
-        movieList.forEach(movie -> {
-            movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
+        movieComingSoom.forEach(movie -> {
+            movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
         });
+        movieNowShow.forEach(movie -> {
+            movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
+        });
+        HomeResponse homeResponse = new HomeResponse();
+        homeResponse.setMovieShowingList(movieNowShow);
 
-        return movieList;
+        homeResponse.setMovieSoonList(movieComingSoom);
+        return homeResponse;
     }
 
     @Override
@@ -94,14 +70,5 @@ public class HomeMovieSerivceImpl implements HomeMovieSerivce {
         movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
 
         return movie;
-    }
-
-    @Override
-    public List<Movie> getListMovieSoon() {
-        List<Movie> movies = movieRepository.getLimitMovie(MovieStatus.COMING_SOON,3);
-        movies.forEach(movie -> {
-            movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
-        });
-        return movies;
     }
 }

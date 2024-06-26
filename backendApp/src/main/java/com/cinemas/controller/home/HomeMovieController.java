@@ -17,29 +17,10 @@ public class HomeMovieController {
     @Autowired
     private HomeMovieSerivce homeMovieSerivce;
 
-    @GetMapping("/active")
-    public APIResponse<List<Movie>> getMovieActive() {
-        List<Movie> movieList = homeMovieSerivce.getMovieActive();
-        APIResponse<List<Movie>> apiResponse = new APIResponse<>();
-        apiResponse.setCode(200);
-        apiResponse.setResult(movieList);
-
-        return apiResponse;
-    }
     @GetMapping("/active/introduce")
     public APIResponse<List<ItemIntroduce>> getMovieActiveLimitIntroduce() {
         List<ItemIntroduce> movieList = homeMovieSerivce.getMovieActiveLimitIntroduce();
         APIResponse<List<ItemIntroduce>> apiResponse = new APIResponse<>();
-        apiResponse.setCode(200);
-        apiResponse.setResult(movieList);
-
-        return apiResponse;
-    }
-
-    @GetMapping("/soon")
-    public APIResponse<List<Movie>> getMovieSoon() {
-        List<Movie> movieList = homeMovieSerivce.getMovieSoon();
-        APIResponse<List<Movie>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(movieList);
 
@@ -56,32 +37,13 @@ public class HomeMovieController {
         return apiResponse;
     }
 
-    @GetMapping("/coming-soon")
-    public APIResponse<List<Movie>> getRandomMovie() {
-        APIResponse<List<Movie>> apiResponse = new APIResponse();
 
+    @GetMapping()
+    public APIResponse<HomeResponse> getAllMovie() {
+        HomeResponse HomeResponse = homeMovieSerivce.getAllMovie();
+        APIResponse<HomeResponse> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
-        apiResponse.setResult(homeMovieSerivce.getListMovieSoon());
-
-        return apiResponse;
-    }
-
-    @GetMapping("/full-active")
-    public APIResponse<List<Movie>> getMovieActiveNoLimit() {
-        List<Movie> movieList = homeMovieSerivce.getMovieActiveNoLimit();
-        APIResponse<List<Movie>> apiResponse = new APIResponse<>();
-        apiResponse.setCode(200);
-        apiResponse.setResult(movieList);
-
-        return apiResponse;
-    }
-
-    @GetMapping("/full-soon")
-    public APIResponse<List<Movie>> getMovieSoonNoLimit() {
-        List<Movie> movieList = homeMovieSerivce.getMovieSoonNoLimit();
-        APIResponse<List<Movie>> apiResponse = new APIResponse<>();
-        apiResponse.setCode(200);
-        apiResponse.setResult(movieList);
+        apiResponse.setResult(HomeResponse);
 
         return apiResponse;
     }

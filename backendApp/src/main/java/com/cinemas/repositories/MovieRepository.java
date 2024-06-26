@@ -30,8 +30,8 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
     @Query(value = "SELECT m FROM Movie m WHERE m.status = :status ORDER BY RAND() LIMIT :num")
     List<Movie> getLimitMovie(MovieStatus status, Integer num);
 
-    @Query(value = "SELECT m FROM Movie m WHERE m.status = :status")
-    List<Movie> getMovieForStatus(MovieStatus status);
+    @Query("SELECT new com.cinemas.dto.response.ItemIntroduce(m.id, m.name, m.slug, m.imagePortrait, m.trailer) FROM Movie m WHERE m.status = :status")
+    List<ItemIntroduce> getMovieForStatus(MovieStatus status);
 
     @Query(value = "SELECT m FROM Movie m WHERE m.status = :status ORDER BY RAND() LIMIT 3")
     List<Movie> getMovieForStatusIntroduce(MovieStatus status);

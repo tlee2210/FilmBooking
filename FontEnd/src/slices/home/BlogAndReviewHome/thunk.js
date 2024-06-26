@@ -28,7 +28,7 @@ export const getBlogDetails = (slug, history) => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/home/v1/blog/detail/${slug}`)
     .then((response) => {
-      // console.log(response);
+      console.log(response);
       dispatch(setItemBlog({ data: response?.data?.result }));
     })
     .catch((error) => {

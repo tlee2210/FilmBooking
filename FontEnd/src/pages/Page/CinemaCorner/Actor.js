@@ -301,7 +301,7 @@ const HomeActor = () => {
                                   borderRadius: "10px",
                                 }}
                                 className="img-fluid hover-image"
-                                src={movie.imageLandscape}
+                                src={movie.imagePortrait}
                                 alt="Movie"
                               />
                               <div className="ticket-overlay">
@@ -321,13 +321,13 @@ const HomeActor = () => {
                     : null}
                 </Row>
                 <div className="button-dien-vien">
-                  <Button
-                    color="danger"
-                    outline
-                    className="waves-effect waves-light material-shadow-none"
+                  <Link
+                    to="/movie"
+                    className="btn btn-outline-danger waves-effect waves-light material-shadow-none"
+                    style={{ textDecoration: "none" }}
                   >
-                    Xem Thêm <i className="bx bx-right-arrow-alt"></i>
-                  </Button>
+                    See More <i className="bx bx-right-arrow-alt"></i>
+                  </Link>
                 </div>
               </Col>
             </Row>
