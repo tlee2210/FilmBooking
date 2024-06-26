@@ -66,7 +66,7 @@ public class HomeMovieSerivceImpl implements HomeMovieSerivce {
         movieList.forEach(movie -> {
             ItemIntroduce movieIntroduce = new ItemIntroduce();
             ObjectUtils.copyFields(movie, movieIntroduce);
-            movieIntroduce.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
+            movieIntroduce.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
             movieIntroduces.add(movieIntroduce);
         });
 

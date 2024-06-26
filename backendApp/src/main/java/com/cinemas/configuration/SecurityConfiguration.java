@@ -42,16 +42,17 @@ public class SecurityConfiguration {
                                 "/api/admin/v1/movie-genre/**",
                                 "/api/admin/v1/user/**",
                                 "/api/admin/v1/room/**",
-                                "/api/home/v1/movie/**",
                                 "/api/admin/v1/show-time/**",
                                 "/api/admin/v1/review/**",
-                                "/api/home/v1/celebrity/**",
                                 "/api/admin/v1/movie-blog/**",
-                                "/api/home/v1/blog/**",
                                 "/api/admin/v1/file-upload",
+                                "/api/home/v1/movie/**",
+                                "/api/home/v1/celebrity/**",
+                                "/api/home/v1/blog/**",
                                 "/api/home/v1/review/**",
                                 "/api/home/v1/booking/**",
-                                "/api/home/v1/home/**").permitAll()
+                                "/api/home/v1/home/**",
+                                "/api/home/v1/cinema/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/admin").hasAnyAuthority(RoleType.ADMIN.name())
                         .requestMatchers("/api/user").hasAnyAuthority(RoleType.USER.name())

@@ -14,5 +14,5 @@ public class ItemIntroduce {
     private Integer id;
     private String name;
     private String slug;
-    private String imageLandscape;
+    private String imagePortrait;
 }

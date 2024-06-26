@@ -41,27 +41,27 @@ public class HomeServiceImpl implements HomeService {
 
         List<ItemIntroduce> movieShowings = movieRepository.getMovieHomePage(MovieStatus.NOW_SHOWING, 8);
         movieShowings.forEach(movie -> {
-            movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
+            movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
         });
         homeResponse.setMovieShowingList(movieShowings);
 
 
         List<ItemIntroduce> movieSoons = movieRepository.getMovieHomePage(MovieStatus.COMING_SOON, 8);
         movieSoons.forEach(movie -> {
-            movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
+            movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
         });
         homeResponse.setMovieSoonList(movieSoons);
 
         List<ItemIntroduce> reviews = reviewRepository.reviewRelate(ReviewType.review);
         reviews.forEach(review -> {
-            review.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(review.getImageLandscape()));
+            review.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(review.getImagePortrait()));
         });
 
         homeResponse.setReviewList(reviews);
 
         List<ItemIntroduce> movieBlogs = movieBlogRepository.blogRelate();
         movieBlogs.forEach(blog -> {
-            blog.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(blog.getImageLandscape()));
+            blog.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(blog.getImagePortrait()));
         });
         homeResponse.setMovieBlogList(movieBlogs);
         return homeResponse;
@@ -73,14 +73,14 @@ public class HomeServiceImpl implements HomeService {
 
         List<ItemIntroduce> movieShowings = movieRepository.getMovieHomePage(MovieStatus.NOW_SHOWING, 4);
         movieShowings.forEach(movie -> {
-            movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
+            movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
         });
         homeResponse.setMovieShowingList(movieShowings);
 
 
         List<ItemIntroduce> movieSoons = movieRepository.getMovieHomePage(MovieStatus.COMING_SOON, 4);
         movieSoons.forEach(movie -> {
-            movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
+            movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
         });
         homeResponse.setMovieSoonList(movieSoons);
 
