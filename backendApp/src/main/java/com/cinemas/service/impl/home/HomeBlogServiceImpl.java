@@ -62,11 +62,12 @@ public class HomeBlogServiceImpl implements HomeBlogService {
 
         HomeMovieBlogResponse homeMovieBlogResponse = new HomeMovieBlogResponse();
         homeMovieBlogResponse.setMovieBlog(movieBlog);
-        List<ItemIntroduce> blogList = movieBlogRepository.blogRelate();
-        blogList.forEach(item -> {
-            item.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(item.getImageLandscape()));
-        });
         homeMovieBlogResponse.setBlogRelate(movieBlogRepository.blogRelate());
+
+        homeMovieBlogResponse.getBlogRelate().forEach(item -> {
+            String url = fileStorageServiceImpl.getUrlFromPublicId(item.getImageLandscape());
+            item.setImageLandscape(url);
+        });
 
         return homeMovieBlogResponse;
     }

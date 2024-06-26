@@ -77,11 +77,11 @@ public class HomeReviewServiceImpl implements HomeReviewService {
 
         HomeReviewResponse homeReviewResponse = new HomeReviewResponse();
         homeReviewResponse.setReview(review);
-        List<ItemIntroduce> reviewList = reviewRepository.reviewRelate(review.getType());
-        reviewList.forEach(item -> {
+        homeReviewResponse.setReviewList(reviewRepository.reviewRelate(review.getType()));
+
+        homeReviewResponse.getReviewList().forEach(item -> {
             item.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(item.getImageLandscape()));
         });
-        homeReviewResponse.setReviewList(reviewList);
 
         return homeReviewResponse;
     }
