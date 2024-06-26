@@ -93,9 +93,6 @@ import Order from "../pages/Page/Order/index";
 import BlogMovie from "../pages/Page/BlogMovie";
 import BlogMovieDetails from "../pages/Page/BlogMovie/details";
 
-//Phim Dang Chieu / Phim Sap Chieu
-import PhimDangChieu from "../pages/Page/Movie/phimdangchieu";
-import PhimSapChieu from "../pages/Page/Movie/phimsapchieu";
 import MovieList from "../pages/Page/Movie/index";
 
 const adminProtectedRoutes = [
@@ -190,8 +187,6 @@ const homeRoutes = [
 
   { path: "/rap-phim", component: <RapPhim /> },
   { path: "/order", component: <Order /> },
-  { path: "/phim-dang-chieu", component: <PhimDangChieu /> },
-  { path: "/phim-sap-chieu", component: <PhimSapChieu /> },
 ];
 
 export { adminProtectedRoutes, publicRoutes, homeRoutes };
