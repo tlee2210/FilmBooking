@@ -1,6 +1,7 @@
 package com.cinemas.service.impl.home;
 
 import com.cinemas.dto.response.HomeResponse;
+import com.cinemas.dto.response.MovieIntroduce;
 import com.cinemas.entities.Movie;
 import com.cinemas.entities.MovieBlog;
 import com.cinemas.entities.Review;
@@ -15,6 +16,7 @@ import com.cinemas.service.impl.FileStorageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -35,21 +37,19 @@ public class HomeServiceImpl implements HomeService {
     public HomeResponse getHomeInfo() {
         HomeResponse homeResponse = new HomeResponse();
 
-        List<Movie> movieShowings = movieRepository.getMovieHomePage(MovieStatus.NOW_SHOWING);
-        movieShowings.forEach(movie -> {
-            movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
-            movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
-        });
+        List<MovieIntroduce> movieShowings = movieRepository.getMovieHomePage(MovieStatus.NOW_SHOWING);
         homeResponse.setMovieShowingList(movieShowings);
+        //        movieShowings.forEach(movie -> {
+//            movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
+//        });
 
-        List<Movie> movieSoons = movieRepository.getMovieHomePage(MovieStatus.COMING_SOON);
+        List<MovieIntroduce> movieSoons = movieRepository.getMovieHomePage(MovieStatus.COMING_SOON);
         movieSoons.forEach(movie -> {
             movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
-            movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
         });
-        homeResponse.setMovieSoonList(movieSoons);
 
         List<Review> reviews = reviewRepository.reviewRelate(ReviewType.review);
+
         reviews.forEach(review -> {
             review.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(review.getThumbnail()));
 

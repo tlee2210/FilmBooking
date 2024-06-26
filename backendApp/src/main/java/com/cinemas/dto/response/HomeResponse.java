@@ -11,8 +11,8 @@ import java.util.List;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class HomeResponse {
-    List<Movie> movieShowingList;
-    List<Movie> movieSoonList;
+    List<MovieIntroduce> movieShowingList;
+    List<MovieIntroduce> movieSoonList;
     List<MovieBlog> movieBlogList;
     List<Review> reviewList;
 }
