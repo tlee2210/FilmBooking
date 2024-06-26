@@ -191,7 +191,7 @@ const HomeActor = () => {
                                       __html: item.biography,
                                     }}
                                   />
-                                  Description:{" "}
+                                  {/* Description:{" "}
                                   <div
                                     className="card-text text-muted"
                                     style={{
@@ -201,7 +201,7 @@ const HomeActor = () => {
                                     dangerouslySetInnerHTML={{
                                       __html: item.description,
                                     }}
-                                  />
+                                  /> */}
                                 </CardBody>
                               </Col>
                             </Row>
