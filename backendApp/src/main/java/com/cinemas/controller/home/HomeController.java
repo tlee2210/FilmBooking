@@ -24,4 +24,13 @@ public class HomeController {
         apiResponse.setResult(info);
         return apiResponse;
     }
+
+    @GetMapping("/navbar")
+    private APIResponse<HomeResponse> getNavbarPage(){
+        HomeResponse info = homeService.getNavbarInfo();
+        APIResponse<HomeResponse> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setResult(info);
+        return apiResponse;
+    }
 }

@@ -3,6 +3,7 @@ package com.cinemas.service.impl.home;
 import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.SearchReviewRequest;
 import com.cinemas.dto.response.HomeReviewResponse;
+import com.cinemas.dto.response.ItemIntroduce;
 import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Review;
@@ -76,9 +77,9 @@ public class HomeReviewServiceImpl implements HomeReviewService {
 
         HomeReviewResponse homeReviewResponse = new HomeReviewResponse();
         homeReviewResponse.setReview(review);
-        List<Review> reviewList = reviewRepository.reviewRelate(review.getType());
+        List<ItemIntroduce> reviewList = reviewRepository.reviewRelate(review.getType());
         reviewList.forEach(item -> {
-            item.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(item.getThumbnail()));
+            item.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(item.getImageLandscape()));
         });
         homeReviewResponse.setReviewList(reviewList);
 

@@ -11,5 +11,5 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class HomeMovieBlogResponse {
     private MovieBlog movieBlog;
-    private List<MovieBlog> blogRelate;
+    private List<ItemIntroduce> blogRelate;
 }

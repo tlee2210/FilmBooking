@@ -1,5 +1,6 @@
 package com.cinemas.repositories;
 
+import com.cinemas.dto.response.ItemIntroduce;
 import com.cinemas.entities.Review;
 import com.cinemas.entities.WaterCorn;
 import com.cinemas.enums.ReviewType;
@@ -24,6 +25,6 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
             "AND (:role is null or r.type = :role)")
     List<Review> searchByName(String name, ReviewType role);
 
-    @Query("SELECT r FROM Review r WHERE r.type = :type ORDER BY r.id DESC LIMIT 4")
-    List<Review> reviewRelate(ReviewType type);
+    @Query("SELECT new com.cinemas.dto.response.ItemIntroduce(r.id, r.name, r.slug, r.thumbnail) FROM Review r WHERE r.type = :type ORDER BY r.id DESC LIMIT 4")
+    List<ItemIntroduce> reviewRelate(ReviewType type);
 }

@@ -1,15 +1,10 @@
 package com.cinemas.controller.home;
 
-import com.cinemas.dto.request.SearchMovie;
-import com.cinemas.dto.request.SearchMovieHome;
 import com.cinemas.dto.response.*;
 import com.cinemas.entities.Movie;
-import com.cinemas.enums.MovieStatus;
 import com.cinemas.service.home.HomeMovieSerivce;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -32,9 +27,9 @@ public class HomeMovieController {
         return apiResponse;
     }
     @GetMapping("/active/introduce")
-    public APIResponse<List<MovieIntroduce>> getMovieActiveLimitIntroduce() {
-        List<MovieIntroduce> movieList = homeMovieSerivce.getMovieActiveLimitIntroduce();
-        APIResponse<List<MovieIntroduce>> apiResponse = new APIResponse<>();
+    public APIResponse<List<ItemIntroduce>> getMovieActiveLimitIntroduce() {
+        List<ItemIntroduce> movieList = homeMovieSerivce.getMovieActiveLimitIntroduce();
+        APIResponse<List<ItemIntroduce>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(movieList);
 

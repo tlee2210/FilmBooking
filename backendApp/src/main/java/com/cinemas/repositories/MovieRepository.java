@@ -1,13 +1,10 @@
 package com.cinemas.repositories;
 
-import com.cinemas.dto.response.MovieIntroduce;
+import com.cinemas.dto.response.ItemIntroduce;
 import com.cinemas.entities.Movie;
 import com.cinemas.enums.MovieStatus;
-import com.cinemas.service.impl.FileStorageServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -42,6 +39,6 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
     @Query("SELECT m FROM Movie m WHERE m.endDate > CURRENT_DATE")
     List<Movie>findAllMovieSetTime();
 
-    @Query("SELECT new com.cinemas.dto.response.MovieIntroduce(m.id, m.name, m.slug, FileStorageServiceImpl.getUrlFromPublicId(m.imageLandscape)) FROM Movie m WHERE m.status = :status ORDER BY m.id DESC LIMIT 8")
-    List<MovieIntroduce> getMovieHomePage(MovieStatus status);
+    @Query("SELECT new com.cinemas.dto.response.ItemIntroduce(m.id, m.name, m.slug, m.imageLandscape) FROM Movie m WHERE m.status = :status ORDER BY m.id DESC LIMIT :num")
+    List<ItemIntroduce> getMovieHomePage(MovieStatus status, int num);
 }

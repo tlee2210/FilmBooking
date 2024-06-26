@@ -1,5 +1,6 @@
 package com.cinemas.repositories;
 
+import com.cinemas.dto.response.ItemIntroduce;
 import com.cinemas.entities.Celebrity;
 import com.cinemas.entities.MovieBlog;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,6 +19,6 @@ public interface MovieBlogRepository extends JpaRepository<MovieBlog, Integer> {
     @Query("select b FROM MovieBlog b where (:name is null or b.name like %:name%)")
     List<MovieBlog> searchByName(String name);
 
-    @Query("SELECT m FROM MovieBlog m ORDER BY m.id DESC LIMIT 4")
-    List<MovieBlog> blogRelate();
+    @Query("SELECT new com.cinemas.dto.response.ItemIntroduce(m.id, m.name, m.slug, m.thumbnail) FROM MovieBlog m ORDER BY m.id DESC LIMIT 4")
+    List<ItemIntroduce> blogRelate();
 }

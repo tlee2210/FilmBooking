@@ -10,5 +10,5 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class HomeReviewResponse {
     private Review review;
-    private List<Review> reviewList;
+    private List<ItemIntroduce> reviewList;
 }

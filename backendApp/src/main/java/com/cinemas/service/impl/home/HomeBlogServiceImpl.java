@@ -2,6 +2,7 @@ package com.cinemas.service.impl.home;
 
 import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.response.HomeMovieBlogResponse;
+import com.cinemas.dto.response.ItemIntroduce;
 import com.cinemas.entities.Movie;
 import com.cinemas.entities.MovieBlog;
 import com.cinemas.exception.AppException;
@@ -61,9 +62,9 @@ public class HomeBlogServiceImpl implements HomeBlogService {
 
         HomeMovieBlogResponse homeMovieBlogResponse = new HomeMovieBlogResponse();
         homeMovieBlogResponse.setMovieBlog(movieBlog);
-        List<MovieBlog> blogList = movieBlogRepository.blogRelate();
+        List<ItemIntroduce> blogList = movieBlogRepository.blogRelate();
         blogList.forEach(item -> {
-            item.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(item.getThumbnail()));
+            item.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(item.getImageLandscape()));
         });
         homeMovieBlogResponse.setBlogRelate(movieBlogRepository.blogRelate());
 
