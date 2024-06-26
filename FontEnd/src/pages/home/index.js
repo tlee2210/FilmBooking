@@ -55,6 +55,10 @@ const homepage = () => {
   const { error, messageError, HomeData } = useSelector(HomeStateData);
   // console.log("HomeData: ", HomeData);
 
+  const [selectedMovie, setSelectedMovie] = useState('');
+  const [selectedTheater, setSelectedTheater] = useState('');
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedTime, setSelectedTime] = useState('');
   const [activeTab, setActiveTab] = useState("1");
 
   const tabChange = (tab) => {
@@ -126,60 +130,92 @@ const homepage = () => {
             }}
           >
             <Form action="#" className="job-panel-filter shadow">
-              <Row className="g-md-0 g-2 rounded-1">
-                <Col className="col-md-3 border">
-                  <div>
-                    <select className="form-control" data-choices>
-                      <option value="">Choose Movie</option>
-                      <option value="Full Time">Full Time</option>
-                      <option value="Part Time">Part Time</option>
-                      <option value="Freelance">Freelance</option>
-                      <option value="Intership">Intership</option>
+              <Row className="g-md-0 g-2">
+                <Col className="col-md-3 ">
+                  <div className="circle">1</div>
+                  <div className="custom-select-wrapper">
+                    <select
+                      className="form-control custom-select"
+                      style={{ paddingLeft: 35 }}
+                      value={selectedMovie}
+                      onChange={(e) => setSelectedMovie(e.target.value)}
+                      data-choices
+                    >
+                      <option value="">Chọn Phim</option>
+                      <option value="ke_trom_mat_trang_4">Kẻ Trộm Mặt Trăng 4</option>
+                      <option value="mua_he_dep_nhat">Mùa Hè Đẹp Nhất</option>
+                      <option value="nhung_manh_ghep_cam_xuc_2">Những Mảnh Ghép Cảm Xúc 2</option>
+                      <option value="cuu_long_thanh_trai_vay_thanh">Cửu Long Thành Trại: Vây Thành</option>
+                      <option value="chuyen_ma_giang_duong_nam_3">Chuyện Ma Giảng Đường - Năm 3</option>
+                      <option value="cung_em_o_ngay_the_gioi_ket_thuc">Cùng Em Ở Ngày Thế Giới Kết Thúc</option>
+                      <option value="gia_tai_cua_ngoai">Gia Tài Của Ngoại</option>
+                      <option value="tru_bat_gioi_dai_nao_the_gioi_moi">Trư Bát Giới: Đại Náo Thế Giới Mới</option>
                     </select>
                   </div>
                 </Col>
-                <Col className="col-md-3 border">
-                  <div>
-                    <select className="form-control" data-choices>
-                      <option value="">Choose Theater</option>
-                      <option value="Full Time">Full Time</option>
-                      <option value="Part Time">Part Time</option>
-                      <option value="Freelance">Freelance</option>
-                      <option value="Intership">Intership</option>
+                <Col className="col-md-3 ">
+                  <div className="circle">2</div>
+                  <div className="custom-select-wrapper">
+                    <select
+                      className="form-control custom-select"
+                      style={{ paddingLeft: 35 }}
+                      value={selectedTheater}
+                      onChange={(e) => setSelectedTheater(e.target.value)}
+                      data-choices
+                      disabled={!selectedMovie}
+                    >
+                      <option value="">Chọn Rạp</option>
+                      <option value="theater1">Theater 1</option>
+                      <option value="theater2">Theater 2</option>
+                      <option value="theater3">Theater 3</option>
                     </select>
                   </div>
                 </Col>
-                <Col className="col-md-2 border">
-                  <div>
-                    <select className="form-control" data-choices>
-                      <option value="">Choose Date</option>
-                      <option value="Full Time">Full Time</option>
-                      <option value="Part Time">Part Time</option>
-                      <option value="Freelance">Freelance</option>
-                      <option value="Intership">Intership</option>
+                <Col className="col-md-2 ">
+                  <div className="circle">3</div>
+                  <div className="custom-select-wrapper">
+                    <select
+                      className="form-control custom-select"
+                      style={{ paddingLeft: 35 }}
+                      value={selectedDate}
+                      onChange={(e) => setSelectedDate(e.target.value)}
+                      data-choices
+                      disabled={!selectedTheater}
+                    >
+                      <option value="">Chọn Ngày</option>
+                      <option value="date1">Ngày 1</option>
+                      <option value="date2">Ngày 2</option>
+                      <option value="date3">Ngày 3</option>
                     </select>
                   </div>
                 </Col>
-                <Col className="col-md-2 border">
-                  <div>
-                    <select className="form-control" data-choices>
-                      <option value="">Choose Time</option>
-                      <option value="Full Time">Full Time</option>
-                      <option value="Part Time">Part Time</option>
-                      <option value="Freelance">Freelance</option>
-                      <option value="Intership">Intership</option>
+                <Col className="col-md-2 ">
+                  <div className="circle">4</div>
+                  <div className="custom-select-wrapper">
+                    <select
+                      className="form-control custom-select"
+                      style={{ paddingLeft: 35 }}
+                      value={selectedTime}
+                      onChange={(e) => setSelectedTime(e.target.value)}
+                      data-choices
+                      disabled={!selectedDate}
+                    >
+                      <option value="">Chọn Giờ</option>
+                      <option value="time1">Time 1</option>
+                      <option value="time2">Time 2</option>
+                      <option value="time3">Time 3</option>
                     </select>
                   </div>
                 </Col>
                 <Col className="col-md-2">
                   <div className="h-100">
-                    <button
-                      className="btn submit-btn w-100 h-100 bg-warning"
+                    <Button
+                      className={`btn submit-btn w-100 h-100 ${selectedTime ? 'bg-danger' : ''}`}
                       type="submit"
+                      disabled={!selectedTime}
                     >
-                      <i className="ri-search-2-line align-bottom me-1"></i> Buy
-                      Tickets Quickly
-                    </button>
+                      <i className="ri-search-2-line align-bottom me-1"></i> Mua Vé Nhanh
+                    </Button>
                   </div>
                 </Col>
               </Row>
@@ -262,47 +298,47 @@ const homepage = () => {
                   <Row className="mb-3">
                     {HomeData && HomeData.movieBlogList
                       ? HomeData.movieBlogList.map((item, index) => (
-                          <Col md={6} key={index}>
-                            <Link
-                              to="#"
-                              className="hover-link-home d-flex align-items-center"
-                              style={{
-                                fontSize: 21,
-                                fontWeight: "bold",
-                                width: "100%",
-                                marginBottom: 10,
-                              }}
-                            >
-                              <div className="d-flex align-items-center mb-2 hover-img-home">
-                                <img
-                                  src={item.imagePortrait}
-                                  alt={item.name}
+                        <Col md={6} key={index}>
+                          <Link
+                            to="#"
+                            className="hover-link-home d-flex align-items-center"
+                            style={{
+                              fontSize: 21,
+                              fontWeight: "bold",
+                              width: "100%",
+                              marginBottom: 10,
+                            }}
+                          >
+                            <div className="d-flex align-items-center mb-2 hover-img-home">
+                              <img
+                                src={item.imagePortrait}
+                                alt={item.name}
+                                style={{
+                                  marginRight: "15px",
+                                  width: "195px",
+                                  height: "130px",
+                                  objectFit: "cover",
+                                  flexShrink: 0,
+                                }}
+                              />
+                              <div>
+                                <d
+                                  to="#"
+                                  className="hover-link-home d-flex align-items-center"
                                   style={{
-                                    marginRight: "15px",
-                                    width: "195px",
-                                    height: "130px",
-                                    objectFit: "cover",
-                                    flexShrink: 0,
+                                    fontSize: 21,
+                                    fontWeight: "bold",
+                                    width: "100%",
+                                    marginBottom: 10,
                                   }}
-                                />
-                                <div>
-                                  <d
-                                    to="#"
-                                    className="hover-link-home d-flex align-items-center"
-                                    style={{
-                                      fontSize: 21,
-                                      fontWeight: "bold",
-                                      width: "100%",
-                                      marginBottom: 10,
-                                    }}
-                                  >
-                                    {item.name}
-                                  </d>
-                                </div>
+                                >
+                                  {item.name}
+                                </d>
                               </div>
-                            </Link>
-                          </Col>
-                        ))
+                            </div>
+                          </Link>
+                        </Col>
+                      ))
                       : null}
                   </Row>
                   <Col>
@@ -322,35 +358,35 @@ const homepage = () => {
                   <Row className="mb-3">
                     {HomeData && HomeData.reviewList
                       ? HomeData.reviewList.map((item, index) => (
-                          <Col md={6} key={index}>
-                            <div className="d-flex align-items-center mb-2 hover-img-home">
-                              <img
-                                src={item.imagePortrait}
-                                alt={item.name}
+                        <Col md={6} key={index}>
+                          <div className="d-flex align-items-center mb-2 hover-img-home">
+                            <img
+                              src={item.imagePortrait}
+                              alt={item.name}
+                              style={{
+                                marginRight: "15px",
+                                width: "195px",
+                                height: "130px",
+                                objectFit: "cover",
+                                flexShrink: 0,
+                              }}
+                            />
+                            <div>
+                              <div
+                                className="hover-link-home d-flex align-items-center"
                                 style={{
-                                  marginRight: "15px",
-                                  width: "195px",
-                                  height: "130px",
-                                  objectFit: "cover",
-                                  flexShrink: 0,
+                                  fontSize: 21,
+                                  fontWeight: "bold",
+                                  width: "100%",
+                                  marginBottom: 10,
                                 }}
-                              />
-                              <div>
-                                <div
-                                  className="hover-link-home d-flex align-items-center"
-                                  style={{
-                                    fontSize: 21,
-                                    fontWeight: "bold",
-                                    width: "100%",
-                                    marginBottom: 10,
-                                  }}
-                                >
-                                  {item.name}
-                                </div>
+                              >
+                                {item.name}
                               </div>
                             </div>
-                          </Col>
-                        ))
+                          </div>
+                        </Col>
+                      ))
                       : null}
                   </Row>
                   <Col>
