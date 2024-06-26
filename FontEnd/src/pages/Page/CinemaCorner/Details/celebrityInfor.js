@@ -17,6 +17,8 @@ import withRouter from "../../../../Components/Common/withRouter";
 import { getcelebrityDetails } from "../../../../slices/home/CelebrityHome/thunk";
 import { getMovieActiveLimitIntroduce } from "../../../../slices/home/MovieHome/thunk";
 
+import buttonTicket from '../../../../assets/images/buttonTicket/btn-ticket.png';
+
 const ActorInfor = (props) => {
   const dispatch = useDispatch();
   const slug = props.router.params.slug;
@@ -186,7 +188,7 @@ const ActorInfor = (props) => {
                               />
                               <div className="ticket-overlay">
                                 <img
-                                  src="https://www.galaxycine.vn/_next/static/media/btn-ticket.42d72c96.webp"
+                                  src={buttonTicket}
                                   alt="Ticket"
                                   className="ticket-image"
                                 />

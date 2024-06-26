@@ -35,6 +35,8 @@ import {
 } from "../../../slices/home/MovieHome/thunk";
 import { createSelector } from "reselect";
 
+import buttonTicket from '../../../assets/images/buttonTicket/btn-ticket.png';
+
 const Booking = (props) => {
   const dispatch = useDispatch();
 
@@ -867,7 +869,7 @@ const Booking = (props) => {
                           />
                           <div className="ticket-overlay">
                             <img
-                              src="https://www.galaxycine.vn/_next/static/media/btn-ticket.42d72c96.webp"
+                              src={buttonTicket}
                               alt="Ticket"
                               className="ticket-image"
                             />

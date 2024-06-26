@@ -52,12 +52,24 @@
 }
 
 .ticket-button {
-  background-color: orange;
+  width: 85px;
+  background-color: transparent;
   border: none;
-  padding: 5px 10px;
-  color: white;
-  font-size: 14px;
+  padding: 0;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.ticket-button img {
+  display: block;
+  height: auto;
+}
+
+.ticket-button:hover {
+  transform: scale(1.1);
 }
 
 .movie-name {

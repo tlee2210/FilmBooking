@@ -22,6 +22,8 @@ import { createSelector } from "reselect";
 import { getHomeBlog } from "../../../slices/home/BlogAndReviewHome/thunk";
 import { getMovieActiveLimitIntroduce } from "../../../slices/home/MovieHome/thunk";
 
+import buttonTicket from '../../../assets/images/buttonTicket/btn-ticket.png';
+
 const BlogMovie = () => {
   document.title = "Blog Movie";
   const dispatch = useDispatch();
@@ -296,7 +298,7 @@ const BlogMovie = () => {
                               />
                               <div className="ticket-overlay">
                                 <img
-                                  src="https://www.galaxycine.vn/_next/static/media/btn-ticket.42d72c96.webp"
+                                  src={buttonTicket}
                                   alt="Ticket"
                                   className="ticket-image"
                                 />

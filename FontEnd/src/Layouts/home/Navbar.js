@@ -23,6 +23,8 @@ import Ticket from "../../assets/images/Ticket.jpg";
 import { getNavbar } from "../../slices/home/MovieHome/thunk";
 import { useSelector, useDispatch } from "react-redux";
 
+import buttonTicket from '../../assets/images/buttonTicket/btn-ticket.png';
+
 // getNavbar
 
 const Navbar = () => {
@@ -178,7 +180,7 @@ const Navbar = () => {
                     marginTop: "-5px",
                   }}
                 >
-                  <img src={Ticket} height={36} width={112} />
+                  <img src={buttonTicket} height={36} width={112} />
                 </NavLink>
               </li>
 
@@ -210,27 +212,27 @@ const Navbar = () => {
                     <Row>
                       {navbarData && navbarData?.movieShowingList
                         ? navbarData?.movieShowingList?.map((movie, index) => (
-                            <Col md={3} key={index}>
-                              <DropdownItem
-                                tag={Link}
-                                to={`/booking/${movie.slug}`}
-                                className="movie-item"
-                              >
-                                <div className="movie-thumbnail">
-                                  <img
-                                    src={movie.imagePortrait}
-                                    alt={movie.name}
-                                  />
-                                  <div className="movie-overlay">
-                                    <button className="ticket-button">
-                                      buy ticket
-                                    </button>
-                                  </div>
+                          <Col md={3} key={index}>
+                            <DropdownItem
+                              tag={Link}
+                              to={`/booking/${movie.slug}`}
+                              className="movie-item"
+                            >
+                              <div className="movie-thumbnail">
+                                <img
+                                  src={movie.imagePortrait}
+                                  alt={movie.name}
+                                />
+                                <div className="movie-overlay">
+                                  <button className="ticket-button">
+                                   <img style={{filter:'blur(0px)'}} src={buttonTicket}/>
+                                  </button>
                                 </div>
-                                <div className="movie-name">{movie.name}</div>
-                              </DropdownItem>
-                            </Col>
-                          ))
+                              </div>
+                              <div className="movie-name">{movie.name}</div>
+                            </DropdownItem>
+                          </Col>
+                        ))
                         : null}
                     </Row>
                     <DropdownItem className="header-movies-dropdown" header>
@@ -239,27 +241,27 @@ const Navbar = () => {
                     <Row>
                       {navbarData && navbarData?.movieSoonList
                         ? navbarData?.movieSoonList?.map((movie, index) => (
-                            <Col md={3} key={index}>
-                              <DropdownItem
-                                tag={Link}
-                                to={`/booking/${movie.slug}`}
-                                className="movie-item"
-                              >
-                                <div className="movie-thumbnail">
-                                  <img
-                                    src={movie.imagePortrait}
-                                    alt={movie.name}
-                                  />
-                                  <div className="movie-overlay">
-                                    <button className="ticket-button">
-                                      buy ticket
-                                    </button>
-                                  </div>
+                          <Col md={3} key={index}>
+                            <DropdownItem
+                              tag={Link}
+                              to={`/booking/${movie.slug}`}
+                              className="movie-item"
+                            >
+                              <div className="movie-thumbnail">
+                                <img
+                                  src={movie.imagePortrait}
+                                  alt={movie.name}
+                                />
+                                <div className="movie-overlay">
+                                  <button class="ticket-button">
+                                  <img style={{filter:'blur(0px)'}} src={buttonTicket}/>
+                                  </button>
                                 </div>
-                                <div className="movie-name">{movie.name}</div>
-                              </DropdownItem>
-                            </Col>
-                          ))
+                              </div>
+                              <div className="movie-name">{movie.name}</div>
+                            </DropdownItem>
+                          </Col>
+                        ))
                         : null}
                     </Row>
                   </DropdownMenu>
