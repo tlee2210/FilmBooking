@@ -35,7 +35,7 @@ const MovieList = ({ HomeData }) => {
     if (typeof url !== "string") {
       return "";
     }
-    
+
     const videoId = url?.split("v=")[1];
     if (videoId) {
       const ampersandPosition = videoId.indexOf("&");
@@ -114,7 +114,7 @@ const MovieList = ({ HomeData }) => {
                           <Card className="gallery-box">
                             <div className="gallery-container">
                               <img
-                                className="gallery-img img-fluid mx-auto"
+                                className="gallery-img img-fluid mx-auto rounded-3"
                                 src={item.imagePortrait}
                                 alt={item.name}
                               />
@@ -122,7 +122,7 @@ const MovieList = ({ HomeData }) => {
                                 <h5 className="overlay-caption">
                                   <Link
                                     className="image-popup"
-                                    to={`/booking/${item.slug}`}
+                                    to={`/book-tickets/${item.slug}`}
                                     title={item.name}
                                   >
                                     <div className="mb-3">
@@ -155,7 +155,7 @@ const MovieList = ({ HomeData }) => {
                             </div>
                             <Link
                               className="image-popup"
-                              to={`/booking/${item.slug}`}
+                              to={`/book-tickets/${item.slug}`}
                               title={item.name}
                             >
                               <div className="box-content">
@@ -195,7 +195,7 @@ const MovieList = ({ HomeData }) => {
                                 <h5 className="overlay-caption">
                                   <Link
                                     className="image-popup"
-                                    to={`/booking/${item.slug}`}
+                                    to={`/book-tickets/${item.slug}`}
                                     title={item.name}
                                   >
                                     <div className="mb-3">
@@ -228,7 +228,7 @@ const MovieList = ({ HomeData }) => {
                             </div>
                             <Link
                               className="image-popup"
-                              to={`/booking/${item.slug}`}
+                              to={`/book-tickets/${item.slug}`}
                               title={item.name}
                             >
                               <div className="box-content">

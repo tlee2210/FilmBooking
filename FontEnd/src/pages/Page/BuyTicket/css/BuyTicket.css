@@ -1,136 +1,166 @@
 /* styles.css */
 .dat-ve-wrapper {
-    background-color: #f8f9fa;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+  background-color: #f8f9fa;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
 }
 
 .banner-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
+.time-item {
+  display: flex;
+  gap: 20px;
+  cursor: "pointer";
+  font-size: "12px";
+  width: "auto";
+}
+.btn-showTime {
+  width: 110;
+  background-color: white;
+  color: black;
+  border: 1px solid rgb(189, 192, 194);
+}
+.btn-showTime:hover {
+  background-color: #c0c1df;
+}
+.max-width {
+  max-width: 126px;
+  min-width: 126px;
+}
+
+.table-showTime {
+  height: 120px !important;
+  font-size: 15px;
+}
+
+.border-Bottom {
+  border-bottom: 1px solid rgba(21, 23, 24, 0.1);
 }
 
 .banner-wrapper-buy-ticket {
-    position: relative;
-    width: 50%;
-    height: 100%;
-    margin: 0 auto;
-    overflow: hidden;
-    background-color: black;
-    /* Màu nền đen */
+  position: relative;
+  width: 50%;
+  height: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  background-color: black;
+  /* Màu nền đen */
 }
 
 .banner-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.8));
-
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.8),
+    rgba(0, 0, 0, 0.1),
+    rgba(0, 0, 0, 0.8)
+  );
 }
 
 .banner-thumbnail {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-fit: fill;
-    cursor: pointer;
-    z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-fit: fill;
+  cursor: pointer;
+  z-index: 0;
 }
 
 .play-button {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: none;
-    border: none;
-    font-size: 3rem;
-    color: white;
-    cursor: pointer;
-    z-index: 2;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: none;
+  border: none;
+  font-size: 3rem;
+  color: white;
+  cursor: pointer;
+  z-index: 2;
 }
 
 .details-column {
-    border-right: 1px solid #dee2e6;
+  border-right: 1px solid #dee2e6;
 }
 
 .date-picker-column {
-    padding-left: 20px;
+  padding-left: 20px;
 }
 
 h2,
 h3 {
-    color: #343a40;
+  color: #343a40;
 }
 
 .video-container-buy-ticket {
-    position: relative;
-    padding-bottom: 56.25%;
-    /* 16:9 */
-    height: 0;
-    overflow: hidden;
-    max-width: 100%;
-    background: #000;
+  position: relative;
+  padding-bottom: 56.25%;
+  /* 16:9 */
+  height: 0;
+  overflow: hidden;
+  max-width: 100%;
+  background: #000;
 }
 
 .video-container-buy-ticket iframe,
 .video-container-buy-ticket object,
 .video-container-buy-ticket embed {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .overlay-side {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 25%;
-    background: rgb(0 0 0);
-    z-index: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 25%;
+  background: rgb(0 0 0);
+  z-index: 0;
 }
 
 .overlay-left {
-    left: 0;
+  left: 0;
 }
 
 .overlay-right {
-    right: 0;
+  right: 0;
 }
 
 .nav-link-lich-chieu-phim:hover {
-    background-color: #405189;
-    /* Change background color on hover */
-    color: #fbfbfb;
-    /* Change text color on hover */
+  background-color: #405189;
+  /* Change background color on hover */
+  color: #fbfbfb;
+  /* Change text color on hover */
 }
 
-
 .title-ticketFilm {
-    font-size: 28px;
-    font-weight: bold;
+  font-size: 28px;
+  font-weight: bold;
 }
 
 .custom-button-ticketFilm {
-
-    background-color: transparent;
-    border: 1px solid rgb(172, 168, 168);
-    color: #000000;
-    padding: 5px 10px;
-    font-size: 13px;
-    cursor: pointer;
-    margin-right: 5px; /* Adjust the margin to your preference */
-    border-radius: 8px;
+  background-color: transparent;
+  border: 1px solid rgb(172, 168, 168);
+  color: #000000;
+  padding: 5px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  margin-right: 5px; /* Adjust the margin to your preference */
+  border-radius: 8px;
 }
 
 .custom-button-ticketFilm:hover {
-    border: 1px solid rgb(180, 156, 21);
+  border: 1px solid rgb(180, 156, 21);
 }
-

@@ -40,7 +40,7 @@ const Navbar = () => {
     navbarData: state.HomeMovie.navbarData,
   }));
   const { error, messageError, navbarData } = useSelector(MovieStateData);
-  console.log(navbarData);
+  
   const [isOpenMenu, setisOpenMenu] = useState(false);
   const [navClass, setnavClass] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -215,7 +215,7 @@ const Navbar = () => {
                           <Col md={3} key={index}>
                             <DropdownItem
                               tag={Link}
-                              to={`/booking/${movie.slug}`}
+                              to={`/book-tickets/${movie.slug}`}
                               className="movie-item"
                             >
                               <div className="movie-thumbnail">
@@ -244,7 +244,7 @@ const Navbar = () => {
                           <Col md={3} key={index}>
                             <DropdownItem
                               tag={Link}
-                              to={`/booking/${movie.slug}`}
+                              to={`/book-tickets/${movie.slug}`}
                               className="movie-item"
                             >
                               <div className="movie-thumbnail">
@@ -253,7 +253,7 @@ const Navbar = () => {
                                   alt={movie.name}
                                 />
                                 <div className="movie-overlay">
-                                  <button class="ticket-button">
+                                  <button className="ticket-button">
                                   <img style={{filter:'blur(0px)'}} src={buttonTicket}/>
                                   </button>
                                 </div>

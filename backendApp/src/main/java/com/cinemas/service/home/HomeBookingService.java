@@ -1,5 +1,7 @@
 package com.cinemas.service.home;
 
+import com.cinemas.dto.response.bookTicketsResponse;
+
 public interface HomeBookingService {
-    Object getTimeForMovie(String slug, String city);
+    bookTicketsResponse getTimeForMovie(String slug, String city, String cinema);
 }

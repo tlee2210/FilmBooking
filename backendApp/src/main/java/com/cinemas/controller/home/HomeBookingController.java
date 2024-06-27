@@ -1,6 +1,7 @@
 package com.cinemas.controller.home;
 
 import com.cinemas.dto.response.APIResponse;
+import com.cinemas.dto.response.bookTicketsResponse;
 import com.cinemas.service.home.HomeBookingService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,12 @@ public class HomeBookingController {
     @GetMapping
     public APIResponse<?> getTimeForMovie(
             @RequestParam(required = false) String slug,
-            @RequestParam(required = false) String city
-            ) {
-        APIResponse<Object> apiResponse = new APIResponse<>();
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String cinema
+    ) {
+        APIResponse<bookTicketsResponse> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
-        apiResponse.setResult(homeBookingService.getTimeForMovie(slug,city));
+        apiResponse.setResult(homeBookingService.getTimeForMovie(slug, city, cinema));
 
         return apiResponse;
     }

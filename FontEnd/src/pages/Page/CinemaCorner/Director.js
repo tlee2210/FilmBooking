@@ -296,7 +296,7 @@ const Director = () => {
                           className="quick-ticket-card-phim-dang-chieu mt-4"
                         >
                           <Link
-                            to={`/booking/${movie.slug}`}
+                            to={`/book-tickets/${movie.slug}`}
                             style={{ textDecoration: "none", color: "inherit" }}
                           >
                             <CardBody className="position-relative p-0 hover-container">

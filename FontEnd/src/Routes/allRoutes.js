@@ -180,8 +180,8 @@ const homeRoutes = [
     path: "/movie-commentary/:slug/details",
     component: <MovieCommentaryDetails />,
   },
-
-  { path: "/booking/:slug", component: <Booking /> },
+  // book-tickets
+  { path: "/book-tickets/:slug", component: <Booking /> },
   { path: "/movie", component: <MovieList /> },
   //------------------------------------------
 

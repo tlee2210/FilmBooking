@@ -29,19 +29,19 @@ public class Showtimes {
     @Column
     private LocalTime time;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id", referencedColumnName = "id")
+    @JsonIgnore
     Movie movie;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id", referencedColumnName = "id")
+    @JsonIgnore
     Room room;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cinema_id", referencedColumnName = "id")
+    @JsonIgnore
     Cinema cinema;
 
     public Showtimes(LocalDate date, LocalTime time, Movie movie, Room room, Cinema cinema) {

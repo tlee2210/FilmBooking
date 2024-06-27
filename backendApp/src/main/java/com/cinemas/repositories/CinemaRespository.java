@@ -33,7 +33,7 @@ public interface CinemaRespository extends JpaRepository<Cinema, Integer> {
     @Query("SELECT new com.cinemas.dto.response.SelectOptionReponse(c.slug, c.name)  FROM Cinema AS c " +
             "WHERE (:city is null  or c.city = :city)")
     List<SelectOptionReponse<?>> selectCinema(
-           String city
+            String city
     );
 
     @Query("SELECT new com.cinemas.dto.response.SelectOptionReponse(c.slug, c.name)  FROM Cinema AS c ")

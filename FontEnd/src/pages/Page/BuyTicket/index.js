@@ -28,6 +28,7 @@ import "swiper/bundle";
 import "swiper/css";
 import { useDispatch, useSelector } from "react-redux";
 import withRouter from "../../../Components/Common/withRouter";
+import { getBooking } from "../../../slices/home/booking/thunk";
 // getMovieDetailsBook
 import {
   getMovieDetailsBook,
@@ -35,18 +36,31 @@ import {
 } from "../../../slices/home/MovieHome/thunk";
 import { createSelector } from "reselect";
 
-import buttonTicket from '../../../assets/images/buttonTicket/btn-ticket.png';
+import buttonTicket from "../../../assets/images/buttonTicket/btn-ticket.png";
 
 const Booking = (props) => {
   const dispatch = useDispatch();
 
   const slug = props.router.params.slug;
+  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedCinema, setSelectedCinema] = useState("");
+
   //   console.log(slug);
 
   useEffect(() => {
     dispatch(getMovieDetailsBook(slug));
     // dispatch(getMovieDetailsBook(slug, props.router.navigate));
   }, [slug]);
+
+  useEffect(() => {
+    dispatch(
+      getBooking(
+        slug,
+        selectedCity ? selectedCity : null,
+        selectedCinema ? selectedCinema : null
+      )
+    );
+  }, [slug, selectedCity, selectedCinema]);
 
   useEffect(() => {
     dispatch(getMovieActiveLimitIntroduce());
@@ -58,35 +72,30 @@ const Booking = (props) => {
     messageError: state.Message.messageError,
     MovieDetails: state.HomeMovie.MovieDetails,
     MovieIntroduce: state.HomeMovie.MovieIntroduce,
+    citySelect: state.HomeBooking.citySelect,
+    cinemaSelect: state.HomeBooking.cinemaSelect,
+    bookingShowTime: state.HomeBooking.bookingShowTime,
   }));
 
-  const { error, messageError, MovieDetails, MovieIntroduce } =
-    useSelector(MovieStateData);
+  const {
+    error,
+    messageError,
+    MovieDetails,
+    MovieIntroduce,
+    citySelect,
+    cinemaSelect,
+    bookingShowTime,
+  } = useSelector(MovieStateData);
+
   document.title = MovieDetails?.name || "Movie";
 
-  const [animationNavTab, setanimationNavTab] = useState("1");
+  const [animationNavTab, setanimationNavTab] = useState(0);
+
   const animationNavToggle = (tab) => {
     if (animationNavTab !== tab) {
       setanimationNavTab(tab);
     }
   };
-
-  const theaters = [
-    {
-      id: 1,
-      name: "Galaxy Nguyễn Du",
-      showtimes: ["09:00", "12:00", "15:00", "17:00"],
-    },
-    { id: 2, name: "CGV", showtimes: ["10:00", "13:00", "16:00"] },
-    { id: 3, name: "Start", showtimes: ["11:00", "14:00", "17:00"] },
-    { id: 4, name: "CGV", showtimes: ["10:00", "13:00", "16:00"] },
-    { id: 5, name: "CGV", showtimes: ["10:00", "13:00", "16:00"] },
-    { id: 6, name: "CGV", showtimes: ["10:00", "13:00", "16:00"] },
-    { id: 7, name: "CGV", showtimes: ["10:00", "13:00", "16:00"] },
-    { id: 8, name: "CGV", showtimes: ["10:00", "13:00", "16:00"] },
-    { id: 9, name: "CGV", showtimes: ["10:00", "13:00", "16:00"] },
-    { id: 10, name: "CGV", showtimes: ["10:00", "13:00", "16:00"] },
-  ];
 
   const [modal, setModal] = useState(false);
 
@@ -104,6 +113,14 @@ const Booking = (props) => {
           : videoId;
       return `https://www.youtube.com/embed/${cleanVideoId}?autoplay=1`;
     }
+  };
+
+  const handleSelectCityChange = (event) => {
+    setSelectedCinema("");
+    setSelectedCity(event.target.value);
+  };
+  const handleSelectCinemaChange = (event) => {
+    setSelectedCinema(event.target.value);
   };
 
   return (
@@ -349,114 +366,75 @@ const Booking = (props) => {
                               <Row style={{ width: "100%" }}>
                                 <Col md="8">
                                   <Swiper spaceBetween={10} slidesPerView={3.5}>
-                                    <SwiperSlide>
-                                      <NavLink
-                                        style={{
-                                          cursor: "pointer",
-                                          fontSize: "14px",
-                                          padding: "5px",
-                                          textAlign: "center",
-                                        }}
-                                        className={classnames(
-                                          "nav-link-lich-chieu-phim",
-                                          { active: animationNavTab === "1" }
-                                        )}
-                                        onClick={() => {
-                                          animationNavToggle("1");
-                                        }}
-                                      >
-                                        Ngày 27/5
-                                      </NavLink>
-                                    </SwiperSlide>
-                                    <SwiperSlide>
-                                      <NavLink
-                                        style={{
-                                          cursor: "pointer",
-                                          fontSize: "14px",
-                                          padding: "5px",
-                                          textAlign: "center",
-                                        }}
-                                        className={classnames(
-                                          "nav-link-lich-chieu-phim",
-                                          { active: animationNavTab === "2" }
-                                        )}
-                                        onClick={() => {
-                                          animationNavToggle("2");
-                                        }}
-                                      >
-                                        Ngày 28/5
-                                      </NavLink>
-                                    </SwiperSlide>
-                                    <SwiperSlide>
-                                      <NavLink
-                                        style={{
-                                          cursor: "pointer",
-                                          fontSize: "14px",
-                                          padding: "5px",
-                                          textAlign: "center",
-                                        }}
-                                        className={classnames(
-                                          "nav-link-lich-chieu-phim",
-                                          { active: animationNavTab === "3" }
-                                        )}
-                                        onClick={() => {
-                                          animationNavToggle("3");
-                                        }}
-                                      >
-                                        Ngày 29/5
-                                      </NavLink>
-                                    </SwiperSlide>
-                                    <SwiperSlide>
-                                      <NavLink
-                                        style={{
-                                          cursor: "pointer",
-                                          fontSize: "14px",
-                                          padding: "5px",
-                                          textAlign: "center",
-                                        }}
-                                        className={classnames(
-                                          "nav-link-lich-chieu-phim",
-                                          { active: animationNavTab === "4" }
-                                        )}
-                                        onClick={() => {
-                                          animationNavToggle("4");
-                                        }}
-                                      >
-                                        Ngày 30/5
-                                      </NavLink>
-                                    </SwiperSlide>
+                                    {bookingShowTime
+                                      ? bookingShowTime.map((item, index) => (
+                                          <SwiperSlide key={index}>
+                                            <NavLink
+                                              style={{
+                                                cursor: "pointer",
+                                                fontSize: "14px",
+                                                padding: "5px",
+                                                textAlign: "center",
+                                              }}
+                                              className={classnames(
+                                                "nav-link-lich-chieu-phim",
+                                                {
+                                                  active:
+                                                    animationNavTab === index,
+                                                }
+                                              )}
+                                              onClick={() => {
+                                                animationNavToggle(index);
+                                              }}
+                                            >
+                                              Day: {item.day}
+                                            </NavLink>
+                                          </SwiperSlide>
+                                        ))
+                                      : null}
                                   </Swiper>
                                 </Col>
                                 <Col
                                   md="4"
                                   className="d-flex align-items-center"
-                                  style={{ paddingLeft: 80 }}
+                                  style={{ paddingLeft: 50 }}
                                 >
                                   <Input
                                     type="select"
                                     className="custom-select-cinemaCorner mx-2"
-                                    style={{
-                                      cursor: "pointer",
-                                      fontSize: "12px",
-                                      width: "auto",
-                                    }}
+                                    value={selectedCity}
+                                    onChange={handleSelectCityChange}
                                   >
-                                    <option>Toàn Quốc</option>
-                                    <option>Option 1</option>
-                                    <option>Option 2</option>
+                                    <option value="">City</option>
+                                    {citySelect
+                                      ? citySelect.map((item, index) => (
+                                          <option
+                                            key={index}
+                                            value={item.value}
+                                          >
+                                            {item.label}
+                                          </option>
+                                        ))
+                                      : null}
                                   </Input>
                                   <Input
                                     type="select"
                                     className="custom-select-cinemaCorner mx-2"
-                                    style={{
-                                      cursor: "pointer",
-                                      fontSize: "12px",
-                                      width: "auto",
-                                    }}
+                                    value={selectedCinema}
+                                    style={{ minWidth: 180, maxWidth: 180 }}
+                                    onChange={handleSelectCinemaChange}
                                   >
-                                    <option>Tất Cả Rạp</option>
-                                    <option>Option 1</option>
-                                    <option>Option 2</option>
+                                    <option value="">Cinema</option>
+                                    {cinemaSelect
+                                      ? cinemaSelect.map((item, index) => (
+                                          <option
+                                            key={index}
+                                            value={item.value}
+                                          >
+                                            {item.label}
+                                          </option>
+                                        ))
+                                      : null}
                                   </Input>
                                 </Col>
                               </Row>
@@ -468,353 +446,73 @@ const Booking = (props) => {
                               activeTab={animationNavTab}
                               className="text-muted "
                             >
-                              {/* Tab ID 1 */}
-                              <TabPane tabId="1" id="animation-home">
-                                <Row>
-                                  <Col>
-                                    <Card>
-                                      <CardBody style={{ padding: 0 }}>
-                                        <div className="live-preview">
-                                          <div className="table-responsive">
-                                            <Table className="table-striped table-nowrap align-middle mb-0">
-                                              <tbody>
-                                                {theaters.map((theater) => (
-                                                  <tr
-                                                    key={theater.id}
-                                                    style={{ height: 120 }}
-                                                    className="fw-bolder"
-                                                  >
-                                                    <td
-                                                      style={{ fontSize: 17 }}
-                                                    >
-                                                      {theater.name}
-                                                    </td>
-                                                    <td>
-                                                      <div
-                                                        style={{
-                                                          display: "flex",
-                                                          gap: "20px",
-                                                          cursor: "pointer",
-                                                          fontSize: "12px",
-                                                          width: "auto",
-                                                        }}
-                                                      >
-                                                        {theater.showtimes.map(
-                                                          (showtime) => (
-                                                            <Button
-                                                              style={{
-                                                                width: 110,
-                                                                backgroundColor:
-                                                                  "white",
-                                                                color: "black",
-                                                                border:
-                                                                  "1px solid rgb(189, 192, 194)",
-                                                              }}
-                                                              key={showtime}
-                                                              color="primary"
-                                                              onMouseEnter={(
-                                                                e
-                                                              ) => {
-                                                                e.target.style.backgroundColor =
-                                                                  "#c0c1df";
-                                                              }}
-                                                              onMouseLeave={(
-                                                                e
-                                                              ) => {
-                                                                e.target.style.backgroundColor =
-                                                                  "white";
-                                                              }}
-                                                              onClick={() =>
-                                                                setSelectedShowtime(
-                                                                  showtime
-                                                                )
-                                                              }
+                              {bookingShowTime
+                                ? bookingShowTime.map((item, index) => (
+                                    <TabPane
+                                      tabId={index}
+                                      key={index}
+                                      id="animation-home"
+                                    >
+                                      <Row>
+                                        <Col>
+                                          <Card>
+                                            <CardBody style={{ padding: 0 }}>
+                                              <div className="live-preview">
+                                                <div className="table-responsive table-striped table-nowrap align-middle mb-0">
+                                                  {/* <Row className="table-striped table-nowrap align-middle mb-0"> */}
+                                                  {item &&
+                                                  item?.cinemaTimeMovies
+                                                    ? item.cinemaTimeMovies.map(
+                                                        (cinema, index) => (
+                                                          <Row
+                                                            className="border-Bottom d-flex"
+                                                            key={index}
+                                                          >
+                                                            <Col
+                                                              md={3}
+                                                              className="fw-bolder table-showTime"
                                                             >
-                                                              {showtime}
-                                                            </Button>
-                                                          )
-                                                        )}
-                                                      </div>
-                                                    </td>
-                                                  </tr>
-                                                ))}
-                                              </tbody>
-                                            </Table>
-                                          </div>
-                                        </div>
-                                      </CardBody>
-                                    </Card>
-                                  </Col>
-                                </Row>
-                              </TabPane>
-
-                              {/* Tab ID 2 */}
-                              <TabPane tabId="2" id="animation-profile">
-                                <Row>
-                                  <Col>
-                                    <Card>
-                                      <CardBody style={{ padding: 0 }}>
-                                        <div className="live-preview">
-                                          <div className="table-responsive">
-                                            <Table className="table-striped table-nowrap align-middle mb-0">
-                                              <tbody>
-                                                {theaters.map((theater) => (
-                                                  <tr
-                                                    key={theater.id}
-                                                    style={{ height: 120 }}
-                                                    className="fw-bolder"
-                                                  >
-                                                    <td
-                                                      style={{ fontSize: 17 }}
-                                                    >
-                                                      {theater.name}
-                                                    </td>
-                                                    <td>
-                                                      <div
-                                                        style={{
-                                                          display: "flex",
-                                                          gap: "20px",
-                                                          cursor: "pointer",
-                                                          fontSize: "12px",
-                                                          width: "auto",
-                                                        }}
-                                                      >
-                                                        {theater.showtimes.map(
-                                                          (showtime) => (
-                                                            <Button
-                                                              style={{
-                                                                width: 110,
-                                                                backgroundColor:
-                                                                  "white",
-                                                                color: "black",
-                                                                border:
-                                                                  "1px solid rgb(189, 192, 194)",
-                                                              }}
-                                                              key={showtime}
-                                                              color="primary"
-                                                              onMouseEnter={(
-                                                                e
-                                                              ) => {
-                                                                e.target.style.backgroundColor =
-                                                                  "#c0c1df";
-                                                              }}
-                                                              onMouseLeave={(
-                                                                e
-                                                              ) => {
-                                                                e.target.style.backgroundColor =
-                                                                  "white";
-                                                              }}
-                                                              onClick={() =>
-                                                                setSelectedShowtime(
-                                                                  showtime
-                                                                )
-                                                              }
-                                                            >
-                                                              {showtime}
-                                                            </Button>
-                                                          )
-                                                        )}
-                                                      </div>
-                                                    </td>
-                                                  </tr>
-                                                ))}
-                                              </tbody>
-                                            </Table>
-                                          </div>
-                                        </div>
-                                        <div className="d-none code-view">
-                                          <pre
-                                            className="language-markup"
-                                            style={{ height: "275px" }}
-                                          >
-                                            <code>
-                                              <StrippedRow />
-                                            </code>
-                                          </pre>
-                                        </div>
-                                      </CardBody>
-                                    </Card>
-                                  </Col>
-                                </Row>
-                              </TabPane>
-
-                              <TabPane tabId="3" id="animation-messages">
-                                <Row>
-                                  <Col>
-                                    <Card>
-                                      <CardBody style={{ padding: 0 }}>
-                                        <div className="live-preview">
-                                          <div className="table-responsive">
-                                            <Table className="table-striped table-nowrap align-middle mb-0">
-                                              <tbody>
-                                                {theaters.map((theater) => (
-                                                  <tr
-                                                    key={theater.id}
-                                                    style={{ height: 120 }}
-                                                    className="fw-bolder"
-                                                  >
-                                                    <td
-                                                      style={{ fontSize: 17 }}
-                                                    >
-                                                      {theater.name}
-                                                    </td>
-                                                    <td>
-                                                      <div
-                                                        style={{
-                                                          display: "flex",
-                                                          gap: "20px",
-                                                          cursor: "pointer",
-                                                          fontSize: "12px",
-                                                          width: "auto",
-                                                        }}
-                                                      >
-                                                        {theater.showtimes.map(
-                                                          (showtime) => (
-                                                            <Button
-                                                              style={{
-                                                                width: 110,
-                                                                backgroundColor:
-                                                                  "white",
-                                                                color: "black",
-                                                                border:
-                                                                  "1px solid rgb(189, 192, 194)",
-                                                              }}
-                                                              key={showtime}
-                                                              color="primary"
-                                                              onMouseEnter={(
-                                                                e
-                                                              ) => {
-                                                                e.target.style.backgroundColor =
-                                                                  "#c0c1df";
-                                                              }}
-                                                              onMouseLeave={(
-                                                                e
-                                                              ) => {
-                                                                e.target.style.backgroundColor =
-                                                                  "white";
-                                                              }}
-                                                              onClick={() =>
-                                                                setSelectedShowtime(
-                                                                  showtime
-                                                                )
-                                                              }
-                                                            >
-                                                              {showtime}
-                                                            </Button>
-                                                          )
-                                                        )}
-                                                      </div>
-                                                    </td>
-                                                  </tr>
-                                                ))}
-                                              </tbody>
-                                            </Table>
-                                          </div>
-                                        </div>
-                                        <div className="d-none code-view">
-                                          <pre
-                                            className="language-markup"
-                                            style={{ height: "275px" }}
-                                          >
-                                            <code>
-                                              <StrippedRow />
-                                            </code>
-                                          </pre>
-                                        </div>
-                                      </CardBody>
-                                    </Card>
-                                  </Col>
-                                </Row>
-                              </TabPane>
-
-                              <TabPane tabId="4" id="animation-settings">
-                                <Row>
-                                  <Col>
-                                    <Card>
-                                      <CardBody style={{ padding: 0 }}>
-                                        <div className="live-preview">
-                                          <div className="table-responsive">
-                                            <Table className="table-striped table-nowrap align-middle mb-0">
-                                              <tbody>
-                                                {theaters.map((theater) => (
-                                                  <tr
-                                                    key={theater.id}
-                                                    style={{ height: 120 }}
-                                                    className="fw-bolder"
-                                                  >
-                                                    <td
-                                                      style={{ fontSize: 17 }}
-                                                    >
-                                                      {theater.name}
-                                                    </td>
-                                                    <td>
-                                                      <div
-                                                        style={{
-                                                          display: "flex",
-                                                          gap: "20px",
-                                                          cursor: "pointer",
-                                                          fontSize: "12px",
-                                                          width: "auto",
-                                                        }}
-                                                      >
-                                                        {theater.showtimes.map(
-                                                          (showtime) => (
-                                                            <Button
-                                                              style={{
-                                                                width: 110,
-                                                                backgroundColor:
-                                                                  "white",
-                                                                color: "black",
-                                                                border:
-                                                                  "1px solid rgb(189, 192, 194)",
-                                                              }}
-                                                              key={showtime}
-                                                              color="primary"
-                                                              onMouseEnter={(
-                                                                e
-                                                              ) => {
-                                                                e.target.style.backgroundColor =
-                                                                  "#c0c1df";
-                                                              }}
-                                                              onMouseLeave={(
-                                                                e
-                                                              ) => {
-                                                                e.target.style.backgroundColor =
-                                                                  "white";
-                                                              }}
-                                                              onClick={() =>
-                                                                setSelectedShowtime(
-                                                                  showtime
-                                                                )
-                                                              }
-                                                            >
-                                                              {showtime}
-                                                            </Button>
-                                                          )
-                                                        )}
-                                                      </div>
-                                                    </td>
-                                                  </tr>
-                                                ))}
-                                              </tbody>
-                                            </Table>
-                                          </div>
-                                        </div>
-                                        <div className="d-none code-view">
-                                          <pre
-                                            className="language-markup"
-                                            style={{ height: "275px" }}
-                                          >
-                                            <code>
-                                              <StrippedRow />
-                                            </code>
-                                          </pre>
-                                        </div>
-                                      </CardBody>
-                                    </Card>
-                                  </Col>
-                                </Row>
-                              </TabPane>
+                                                              <div className="max-width mb-4 mt-3">
+                                                                {cinema.name}
+                                                              </div>
+                                                              <div className="time-item">
+                                                                {cinema
+                                                                  ? cinema.times.map(
+                                                                      (
+                                                                        showtime,
+                                                                        index
+                                                                      ) => (
+                                                                        <Col
+                                                                          md={5}
+                                                                          key={
+                                                                            index
+                                                                          }
+                                                                        >
+                                                                          <Button className="btn-showTime">
+                                                                            {
+                                                                              showtime
+                                                                            }
+                                                                          </Button>
+                                                                        </Col>
+                                                                      )
+                                                                    )
+                                                                  : null}
+                                                              </div>
+                                                            </Col>
+                                                          </Row>
+                                                        )
+                                                      )
+                                                    : null}
+                                                  {/* </Row> */}
+                                                </div>
+                                              </div>
+                                            </CardBody>
+                                          </Card>
+                                        </Col>
+                                      </Row>
+                                    </TabPane>
+                                  ))
+                                : null}
                             </TabContent>
                           </CardBody>
                         </Card>
@@ -852,7 +550,7 @@ const Booking = (props) => {
                       className="quick-ticket-card-phim-dang-chieu mt-4"
                     >
                       <Link
-                        to={`/booking/${movie.slug}`}
+                        to={`/book-tickets/${movie.slug}`}
                         style={{ textDecoration: "none", color: "inherit" }}
                       >
                         <CardBody className="position-relative p-0 hover-container">

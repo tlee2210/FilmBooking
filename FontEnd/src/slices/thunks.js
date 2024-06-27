@@ -22,3 +22,4 @@ export * from "./Review/thunk";
 export * from "./home/CelebrityHome/thunk";
 export * from "./home/BlogAndReviewHome/thunk";
 export * from "./home/MovieHome/thunk";
+export * from "./home/booking/thunk";

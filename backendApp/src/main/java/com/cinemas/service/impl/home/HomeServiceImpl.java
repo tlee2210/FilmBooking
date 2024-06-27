@@ -84,6 +84,7 @@ public class HomeServiceImpl implements HomeService {
         });
         homeResponse.setMovieSoonList(movieSoons);
 
+
         homeResponse.setSelectOptionList(cinemaRespository.selectCinema());
         return homeResponse;
     }

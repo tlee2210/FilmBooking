@@ -1,15 +1,13 @@
 package com.cinemas.repositories;
 
-import com.cinemas.entities.Cinema;
+import com.cinemas.dto.response.CinemaTimeMovie;
+import com.cinemas.dto.response.bookingShowTimeResponse;
 import com.cinemas.entities.Movie;
-import com.cinemas.entities.Room;
 import com.cinemas.entities.Showtimes;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -41,4 +39,25 @@ public interface ShowTimeResponsitory extends JpaRepository<Showtimes, Integer> 
 
     @Query("SELECT s.date FROM Showtimes s WHERE s.cinema.slug = :slug AND s.date >= CURDATE() GROUP BY s.date")
     List<LocalDate> getDates(String slug);
+
+    @Query("SELECT DISTINCT NEW com.cinemas.dto.response.bookingShowTimeResponse(s.date) FROM Showtimes s WHERE " +
+            "(:cinema_Slug IS NULL OR s.cinema.slug = :cinema_Slug)" +
+            "AND s.movie.slug = :slug_movie " +
+            "AND s.date >= CURRENT_DATE")
+    List<bookingShowTimeResponse> findDayByMovie_Slug(String slug_movie, String cinema_Slug);
+
+    @Query("SELECT DISTINCT NEW com.cinemas.dto.response.CinemaTimeMovie(s.cinema.name) " +
+            "FROM Showtimes s " +
+            "WHERE (:slug IS NULL OR s.movie.slug = :slug) " +
+            "AND s.date = :day " +
+            "AND (s.date <> CURRENT_DATE OR s.time >= :time)")
+    List<CinemaTimeMovie> findByDayAndMovie_Slug(LocalDate day, String slug, LocalTime time);
+
+    @Query("SELECT s.time FROM Showtimes s " +
+            "WHERE (:slug IS NULL OR s.movie.slug <= :slug) " +
+            "AND s.cinema.name = :name " +
+            "AND s.date = :day AND " +
+            "(s.date <> CURRENT_DATE OR s.time >= :time)")
+    List<LocalTime> findMovieTimes(LocalDate day, String slug, LocalTime time, String name);
+
 }

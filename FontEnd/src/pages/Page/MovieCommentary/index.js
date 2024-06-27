@@ -21,7 +21,7 @@ import { getMovieActiveLimitIntroduce } from "../../../slices/home/MovieHome/thu
 import RightColumn from "../CinemaCorner/RightColumn";
 import { getHomeReview } from "../../../slices/home/BlogAndReviewHome/thunk";
 
-import buttonTicket from '../../../assets/images/buttonTicket/btn-ticket.png';
+import buttonTicket from "../../../assets/images/buttonTicket/btn-ticket.png";
 
 // Import Images
 // import avatar3 from "../../../assets/images/users/avatar-3.jpg";
@@ -334,7 +334,7 @@ const MovieCommentary = () => {
                           className="quick-ticket-card-phim-dang-chieu mt-4"
                         >
                           <Link
-                            to={`/booking/${movie.slug}`}
+                            to={`/book-tickets/${movie.slug}`}
                             style={{ textDecoration: "none", color: "inherit" }}
                           >
                             <CardBody className="position-relative p-0 hover-container">
