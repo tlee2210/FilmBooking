@@ -9,15 +9,15 @@ import {
   CardHeader,
 } from "reactstrap";
 import { Link } from "react-router-dom";
-
 import { createSelector } from "reselect";
-import RightColumn from "../RightColumn";
 import { useSelector, useDispatch } from "react-redux";
 import withRouter from "../../../../Components/Common/withRouter";
 import { getcelebrityDetails } from "../../../../slices/home/CelebrityHome/thunk";
 import { getMovieActiveLimitIntroduce } from "../../../../slices/home/MovieHome/thunk";
+import MovieIsShowing from "../../BuyTicket/MovieIsShowing";
+import RightColumn from "../RightColumn";
 
-import buttonTicket from '../../../../assets/images/buttonTicket/btn-ticket.png';
+import buttonTicket from "../../../../assets/images/buttonTicket/btn-ticket.png";
 
 const ActorInfor = (props) => {
   const dispatch = useDispatch();
@@ -148,69 +148,9 @@ const ActorInfor = (props) => {
                   </CardBody>
                 </Card>
               </Col>
-
               <Col lg={4}>
                 <RightColumn />
-                <Row>
-                  <div
-                    className="text-xl inline-block font-bold uppercase"
-                    style={{
-                      borderLeft: "4px solid #007bff",
-                      fontSize: "18px",
-                      fontWeight: "bold",
-                      paddingLeft: "0.5rem",
-                      marginLeft: "40px",
-                    }}
-                  >
-                    MOVIE IS SHOWING
-                  </div>
-                  {MovieIntroduce
-                    ? MovieIntroduce?.map((movie, index) => (
-                        <Card
-                          key={index}
-                          className="quick-ticket-card-phim-dang-chieu mt-4"
-                        >
-                          <Link
-                            to={`/book-tickets/${movie.slug}`}
-                            style={{ textDecoration: "none", color: "inherit" }}
-                          >
-                            <CardBody className="position-relative p-0 hover-container">
-                              <img
-                                style={{
-                                  height: "280px",
-                                  width: "380px",
-                                  objectFit: "cover",
-                                  borderRadius: "10px",
-                                }}
-                                className="img-fluid hover-image"
-                                src={movie.imagePortrait}
-                                alt="Movie"
-                              />
-                              <div className="ticket-overlay">
-                                <img
-                                  src={buttonTicket}
-                                  alt="Ticket"
-                                  className="ticket-image"
-                                />
-                              </div>
-                              <div style={{ paddingTop: 7 }}>
-                                <h1>{movie.name}</h1>
-                              </div>
-                            </CardBody>
-                          </Link>
-                        </Card>
-                      ))
-                    : null}
-                </Row>
-                <div className="button-dien-vien">
-                  <Link
-                    to="/movie"
-                    className="btn btn-outline-danger waves-effect waves-light material-shadow-none"
-                    style={{ textDecoration: "none" }}
-                  >
-                    See More <i className="bx bx-right-arrow-alt"></i>
-                  </Link>
-                </div>
+                <MovieIsShowing MovieIntroduce={MovieIntroduce} />
               </Col>
             </Row>
           </Container>

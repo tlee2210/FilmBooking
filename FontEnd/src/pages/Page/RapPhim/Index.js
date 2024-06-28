@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import {
   Card,
   CardBody,
@@ -14,6 +14,7 @@ import {
   TabPane,
 } from "reactstrap";
 import classnames from "classnames";
+import { Link, useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -21,24 +22,42 @@ import "swiper/css/navigation";
 import "swiper/css/scrollbar";
 import "swiper/css/effect-fade";
 import "swiper/css/effect-flip";
-import {
-  Pagination,
-  Autoplay,
-  EffectCoverflow,
-} from "swiper/modules";
-import img1 from "../../../assets/images/sliderRapFlim/1.png";
-import img2 from "../../../assets/images/sliderRapFlim/2.jpg";
-import img3 from "../../../assets/images/sliderRapFlim/3.jpg";
-import img4 from "../../../assets/images/sliderRapFlim/4.jpg";
-import img5 from "../../../assets/images/sliderRapFlim/5.jpg";
-import img6 from "../../../assets/images/sliderRapFlim/6.jpg";
+import { useDispatch, useSelector } from "react-redux";
+import { GoogleApiWrapper, Map, Marker } from "google-maps-react";
+
+import { Pagination, Autoplay, EffectCoverflow } from "swiper/modules";
 import "./css/RapPhim.css";
-import GoogleMap from "./GoogleMap";
+// import GoogleMap from "./GoogleMap";
+import withRouter from "../../../Components/Common/withRouter";
+import { getCinemaHome } from "../../../slices/home/CinemaHome/thunk";
+import { createSelector } from "reselect";
 
-const Index = () => {
-  document.title = "Rạp Phim";
+const mapStyles = {
+  width: "100%",
+  height: "100%",
+};
 
-  const [activeTab, setActiveTab] = useState("1");
+const HomeCinema = (props) => {
+  const dispatch = useDispatch();
+
+  const slug = props.router.params.slug;
+  // console.log(slug);
+
+  const CinemaState = (state) => state;
+  const CinemaStateData = createSelector(CinemaState, (state) => ({
+    error: state.Message.error,
+    messageError: state.Message.messageError,
+    cinemaData: state.HomeCinema.cinemaData,
+  }));
+  const { error, messageError, cinemaData } = useSelector(CinemaStateData);
+
+  useEffect(() => {
+    dispatch(getCinemaHome(slug, props.router.navigate));
+  }, [slug]);
+
+  document.title = cinemaData.name || "Cinema";
+
+  const [activeTab, setActiveTab] = useState(0);
   const [selectedMovie, setSelectedMovie] = useState(null);
 
   const tabChange = (tab) => {
@@ -69,7 +88,15 @@ const Index = () => {
     {
       title: "Furiosa: Câu Chuyện Từ Max Điên",
       img: "https://cdn.galaxycine.vn/media/2024/5/24/furiosa-500_1716547292998.jpg",
-      showtimes: ["10:00", "12:30", "13:30", "15:45", "17:15", "19:45", "21:00"],
+      showtimes: [
+        "10:00",
+        "12:30",
+        "13:30",
+        "15:45",
+        "17:15",
+        "19:45",
+        "21:00",
+      ],
     },
     {
       title: "Lật Mặt 7: Một Điều Ước 1",
@@ -79,17 +106,38 @@ const Index = () => {
     {
       title: "Lật Mặt 7: Một Điều Ước 2",
       img: "https://cdn.galaxycine.vn/media/2024/4/26/lm7-500_1714101585009.jpg",
-      showtimes: ["10:00", "12:30", "13:30", "15:45", "17:15", "19:45", "21:00"],
+      showtimes: [
+        "10:00",
+        "12:30",
+        "13:30",
+        "15:45",
+        "17:15",
+        "19:45",
+        "21:00",
+      ],
     },
     {
       title: "Lật Mặt 7: Một Điều Ước 3",
       img: "https://cdn.galaxycine.vn/media/2024/4/26/lm7-500_1714101585009.jpg",
-      showtimes: ["10:00", "12:30", "13:30", "15:45", "17:15", "19:45", "21:00"],
+      showtimes: [
+        "10:00",
+        "12:30",
+        "13:30",
+        "15:45",
+        "17:15",
+        "19:45",
+        "21:00",
+      ],
     },
   ];
 
   const handleMovieClick = (movie) => {
-    setSelectedMovie(movie);
+    console.log("movie: ", movie);
+    if (selectedMovie === movie) {
+      setSelectedMovie(null);
+    } else {
+      setSelectedMovie(movie);
+    }
   };
 
   return (
@@ -123,24 +171,18 @@ const Index = () => {
                 modules={[EffectCoverflow, Pagination, Autoplay]}
                 className="mySwiper swiper effect-coverflow-swiper rounded pb-5"
               >
-                <SwiperSlide>
-                  <img src={img1} alt="" className="img-fluid swiper-rap-phim" />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <img src={img2} alt="" className="img-fluid swiper-rap-phim" />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <img src={img3} alt="" className="img-fluid swiper-rap-phim" />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <img src={img4} alt="" className="img-fluid swiper-rap-phim" />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <img src={img5} alt="" className="img-fluid swiper-rap-phim" />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <img src={img6} alt="" className="img-fluid swiper-rap-phim" />
-                </SwiperSlide>
+                {/* cinemaData */}
+                {cinemaData && cinemaData?.images
+                  ? cinemaData.images.map((item, index) => (
+                      <SwiperSlide key={index}>
+                        <img
+                          src={item.url}
+                          alt={item.uid}
+                          className="img-fluid swiper-rap-phim"
+                        />
+                      </SwiperSlide>
+                    ))
+                  : null}
                 <div className="swiper-pagination swiper-pagination-dark"></div>
               </Swiper>
             </CardBody>
@@ -148,11 +190,12 @@ const Index = () => {
               <Row>
                 <Col md="9">
                   <h1 style={{ fontSize: 25, fontWeight: "bold" }}>
-                    Galaxy Tân Bình
+                    {cinemaData?.name}
                   </h1>
                   <p>
-                    Địa Chỉ: 391 Nam Kỳ Khởi Nghĩa, Quận 3 , Thành Phố Hồ Chí Minh <br />
-                    Hotline: 1900123
+                    Address: {cinemaData?.address}
+                    <br />
+                    Hotline: {cinemaData?.phone}
                   </p>
                 </Col>
                 <Col md="3" className="d-flex">
@@ -191,142 +234,120 @@ const Index = () => {
         </Row>
         <Container>
           <Row>
-            <div className="movies-section-ActorInfor" style={{ paddingTop: 70 }}>
+            <div
+              className="movies-section-ActorInfor"
+              style={{ paddingTop: 70 }}
+            >
               <Row>
                 <Card style={{ marginTop: "5px" }} className="bg-light">
                   <CardHeader>
                     <div className="d-flex align-items-center pb-3-rapphim">
                       <div className="text-xl inline-block font-bold uppercase title-rapphim">
-                        PHIM
+                        MOVIE
                       </div>
                     </div>
-                    <Nav className="nav-tabs-custom-rapphim card-header-tabs-rapphim border-bottom-0-rapphim" role="tablist">
-                      <NavItem className="nav-item-rapphim">
-                        <NavLink
-                          className={classnames("nav-link-rapphim", {
-                            "active-rapphim": activeTab === "1",
-                          })}
-                          onClick={() => {
-                            tabChange("1");
-                          }}
-                        >
-                          Hôm Nay 25/06
-                        </NavLink>
-                      </NavItem>
-                      <NavItem className="nav-item-rapphim">
-                        <NavLink
-                          className={classnames("nav-link-rapphim", {
-                            "active-rapphim": activeTab === "2",
-                          })}
-                          onClick={() => {
-                            tabChange("2");
-                          }}
-                          type="button"
-                        >
-                          Thứ Tư 26/06
-                        </NavLink>
-                      </NavItem>
-                      <NavItem className="nav-item-rapphim">
-                        <NavLink
-                          className={classnames("nav-link-rapphim", {
-                            "active-rapphim": activeTab === "3",
-                          })}
-                          onClick={() => {
-                            tabChange("3");
-                          }}
-                          type="button"
-                        >
-                          Thứ Năm 27/06
-                        </NavLink>
-                      </NavItem>
-                      <NavItem className="nav-item-rapphim">
-                        <NavLink
-                          className={classnames("nav-link-rapphim", {
-                            "active-rapphim": activeTab === "4",
-                          })}
-                          onClick={() => {
-                            tabChange("4");
-                          }}
-                          type="button"
-                        >
-                          Thứ Sáu 28/06
-                        </NavLink>
-                      </NavItem>
-                      <NavItem className="nav-item-rapphim">
-                        <NavLink
-                          className={classnames("nav-link-rapphim", {
-                            "active-rapphim": activeTab === "5",
-                          })}
-                          onClick={() => {
-                            tabChange("5");
-                          }}
-                          type="button"
-                        >
-                          Thứ Bảy 29/06
-                        </NavLink>
-                      </NavItem>
-                      <NavItem className="nav-item-rapphim">
-                        <NavLink
-                          className={classnames("nav-link-rapphim", {
-                            "active-rapphim": activeTab === "6",
-                          })}
-                          onClick={() => {
-                            tabChange("6");
-                          }}
-                          type="button"
-                        >
-                          Chủ Nhật 07/07
-                        </NavLink>
-                      </NavItem>
+                    <Nav
+                      className="nav-tabs-custom-rapphim card-header-tabs-rapphim border-bottom-0-rapphim"
+                      role="tablist"
+                    >
+                      {cinemaData && cinemaData.days
+                        ? cinemaData?.days.map((day, index) => (
+                            <NavItem key={index} className="nav-item-rapphim">
+                              <NavLink
+                                className={classnames("nav-link-rapphim", {
+                                  "active-rapphim": activeTab === index,
+                                })}
+                                onClick={() => {
+                                  tabChange(index);
+                                }}
+                                type="button"
+                              >
+                                {day?.date}
+                              </NavLink>
+                            </NavItem>
+                          ))
+                        : null}
                     </Nav>
                   </CardHeader>
 
                   <CardBody>
                     <TabContent activeTab={activeTab}>
-                      <TabPane tabId="1">
-                        <div className="movie-selection-rapphim">
-                          <div className="movies-rapphim">
-                            {data.map((movie, index) => (
-                              <div
-                                key={index}
-                                className={`movie-rapphim ${selectedMovie === movie.title ? 'selected-rapphim' : ''}`}
-                                onClick={() => handleMovieClick(movie.title)}
-                              >
-                                <img src={movie.img} alt={movie.title} />
-                                <div className="title-phim-rapphim">{movie.title}</div>
-                                {selectedMovie === movie.title && (
-                                  <div className="selection-overlay-rapphim">
-                                    <i style={{ fontSize: 70 }} className="ri-checkbox-circle-fill"></i>
+                      {cinemaData && Array.isArray(cinemaData.days)
+                        ? cinemaData.days.map((day, index) => (
+                            <TabPane tabId={index} key={index}>
+                              <div className="movie-selection-rapphim">
+                                <div className="movies-rapphim">
+                                  {Array.isArray(day.movieList) &&
+                                    day.movieList.map((movie, movieIndex) => (
+                                      <div
+                                        key={movieIndex}
+                                        className={`movie-rapphim ${
+                                          selectedMovie === movie.name
+                                            ? "selected-rapphim"
+                                            : ""
+                                        }`}
+                                        onClick={() =>
+                                          handleMovieClick(movie.name)
+                                        }
+                                      >
+                                        <img
+                                          src={movie.imagePortrait}
+                                          alt={movie.name}
+                                        />
+                                        <div className="title-phim-rapphim">
+                                          {movie.name}
+                                        </div>
+                                        {selectedMovie === movie.name && (
+                                          <div className="selection-overlay-rapphim">
+                                            <i
+                                              style={{ fontSize: 70 }}
+                                              className="ri-checkbox-circle-fill"
+                                            ></i>
+                                          </div>
+                                        )}
+                                      </div>
+                                    ))}
+                                </div>
+                                {selectedMovie && cinemaData && (
+                                  <div className="showtimes-container-rapphim">
+                                    <div className="showtimes-rapphim">
+                                      <h3>Suất chiếu</h3>
+                                      <div className="title-phu-de">
+                                        2D Phụ Đề
+                                      </div>
+                                      <div className="times-rapphim">
+                                        {cinemaData.days.map(
+                                          (day, dayIndex) => {
+                                            const movie = day.movieList.find(
+                                              (m) => m.name === selectedMovie
+                                            );
+                                            return (
+                                              movie &&
+                                              movie.times.map(
+                                                (time, timeIndex) => (
+                                                  <button
+                                                    key={`${dayIndex}-${timeIndex}`}
+                                                    className="time-rapphim"
+                                                  >
+                                                    <span
+                                                      style={{ fontSize: 17 }}
+                                                    >
+                                                      {time}
+                                                    </span>
+                                                  </button>
+                                                )
+                                              )
+                                            );
+                                          }
+                                        )}
+                                      </div>
+                                    </div>
                                   </div>
                                 )}
                               </div>
-                            ))}
-                          </div>
-                          {selectedMovie && (
-                            <div className="showtimes-container-rapphim">
-                              <div className="showtimes-rapphim">
-                                <h3>Suất chiếu</h3>
-                                <div className="title-phu-de">
-                                  2D Phụ Đề
-                                </div>
-                                <div className="times-rapphim">
-                                  {data.find((m) => m.title === selectedMovie).showtimes.map((time, idx) => (
-                                    <button key={idx} className="time-rapphim">
-                                      <span style={{fontSize:17}}>{time}</span>
-                                    </button>
-                                  ))}
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </TabPane>
-
-
-                      {/* Tab pane 2 */}
-                      <TabPane tabId="2">
-
-                      </TabPane>
+                            </TabPane>
+                          ))
+                        : null}
                     </TabContent>
                   </CardBody>
                 </Card>
@@ -335,12 +356,91 @@ const Index = () => {
           </Row>
           <Row>
             {/* Thông tin chi tiết */}
-            <div className="movies-section-ActorInfor" style={{ paddingTop: 30 }}>
+            <div
+              className="movies-section-ActorInfor"
+              style={{ paddingTop: 30 }}
+            >
               {/* Google Map */}
               <Row className="mb-4">
-                <Col>
-                  <GoogleMap />
-                </Col>
+                <div className="page-content">
+                  <Container fluid>
+                    <Card>
+                      <CardBody>
+                        <Row className="mb-4">
+                          <Col>
+                            <div className="d-flex align-items-center pb-3">
+                              <div
+                                className="text-xl inline-block font-bold uppercase"
+                                style={{
+                                  borderLeft: "4px solid #007bff",
+                                  fontSize: "23px",
+                                  paddingLeft: "0.5rem",
+                                }}
+                              >
+                                CINEMA DETAILS
+                              </div>
+                            </div>
+                          </Col>
+                        </Row>
+
+                        {/* Address and Phone */}
+                        <Row className="mb-3">
+                          <Col>
+                            <div
+                              style={{
+                                fontSize: "18px",
+                                marginBottom: "10px",
+                              }}
+                            >
+                              <strong>Address: </strong> {cinemaData?.address}
+                              <br />
+                              <strong>Phone: </strong> {cinemaData?.phone}
+                            </div>
+                          </Col>
+                        </Row>
+                        <div
+                          id="gmaps-markers"
+                          className="gmaps"
+                          style={{ position: "relative" }}
+                        >
+                          {/* {cinemaData?.lat } */}
+                          <Map
+                            google={props.google}
+                            zoom={10}
+                            style={mapStyles}
+                            initialCenter={{
+                              lat: cinemaData?.lat,
+                              lng: cinemaData?.lng,
+                            }}
+                          >
+                            {cinemaData && cinemaData.lat && cinemaData.lng ? (
+                              <Marker
+                                position={{
+                                  lat:
+                                    cinemaData && cinemaData?.lat
+                                      ? cinemaData?.lat
+                                      : 48.0,
+                                  lng:
+                                    cinemaData && cinemaData?.lng
+                                      ? cinemaData?.lng
+                                      : -122.0,
+                                }}
+                              />
+                            ) : null}
+                          </Map>
+                        </div>
+                        <Row className="mt-4" style={{ fontSize: "17px" }}>
+                          <div
+                            id="renderHtml"
+                            dangerouslySetInnerHTML={{
+                              __html: cinemaData?.description,
+                            }}
+                          />
+                        </Row>
+                      </CardBody>
+                    </Card>
+                  </Container>
+                </div>
               </Row>
               {/* Description */}
             </div>
@@ -350,5 +450,14 @@ const Index = () => {
     </React.Fragment>
   );
 };
+const LoadingContainer = () => <div>Loading...</div>;
 
-export default Index;
+const WrappedComponent = GoogleApiWrapper({
+  apiKey: "AIzaSyDFP-fyihmScYjgRGuxmgMoX5Mj1Nvv7bY",
+  LoadingContainer: LoadingContainer,
+  v: "3",
+})(HomeCinema);
+
+export default withRouter(WrappedComponent);
+
+// export default withRouter(HomeCinema);

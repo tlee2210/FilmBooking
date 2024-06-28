@@ -23,6 +23,7 @@ public class HomeBookingController {
             @RequestParam(required = false) String city,
             @RequestParam(required = false) String cinema
     ) {
+
         APIResponse<bookTicketsResponse> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(homeBookingService.getTimeForMovie(slug, city, cinema));

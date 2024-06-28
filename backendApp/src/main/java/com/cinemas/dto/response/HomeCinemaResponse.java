@@ -43,5 +43,5 @@ public class HomeCinemaResponse {
 
     private List<CinemaImages> images;
 
-    private List<HomeShowtimeResponse> showtimes;
+    private List<HomeShowtimeResponse> days;
 }

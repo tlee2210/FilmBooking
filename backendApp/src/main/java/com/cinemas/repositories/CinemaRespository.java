@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface CinemaRespository extends JpaRepository<Cinema, Integer> {
+    @Query("SELECT c FROM Cinema c WHERE c.slug = :slug")
     Cinema findCinemaBySlug(String slug);
 
     Cinema findCinemaByName(String name);

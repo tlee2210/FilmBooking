@@ -30,13 +30,12 @@ import { useDispatch, useSelector } from "react-redux";
 import withRouter from "../../../Components/Common/withRouter";
 import { getBooking } from "../../../slices/home/booking/thunk";
 // getMovieDetailsBook
+import MovieIsShowing from "../BuyTicket/MovieIsShowing";
 import {
   getMovieDetailsBook,
   getMovieActiveLimitIntroduce,
 } from "../../../slices/home/MovieHome/thunk";
 import { createSelector } from "reselect";
-
-import buttonTicket from "../../../assets/images/buttonTicket/btn-ticket.png";
 
 const Booking = (props) => {
   const dispatch = useDispatch();
@@ -530,70 +529,7 @@ const Booking = (props) => {
 
             {/* Bên Phải */}
             <Col lg={4}>
-              {/* PHIM ĐANG CHIẾU */}
-              <Card className="quick-ticket-card-phim-dang-chieu">
-                <div className="d-flex align-items-center pb-3">
-                  <div
-                    className="text-xl inline-block font-bold uppercase"
-                    style={{
-                      borderLeft: "4px solid #007bff",
-                      fontSize: "18px",
-                      fontWeight: "bold",
-                      textTransform: "uppercase",
-                      paddingLeft: "0.5rem",
-                    }}
-                  >
-                    MOVIE IS SHOWING
-                  </div>
-                </div>
-              </Card>
-
-              {MovieIntroduce
-                ? MovieIntroduce?.map((movie, index) => (
-                    <Card
-                      key={index}
-                      className="quick-ticket-card-phim-dang-chieu mt-4"
-                    >
-                      <Link
-                        to={`/book-tickets/${movie.slug}`}
-                        style={{ textDecoration: "none", color: "inherit" }}
-                      >
-                        <CardBody className="position-relative p-0 hover-container">
-                          <img
-                            style={{
-                              height: "280px",
-                              width: "380px",
-                              objectFit: "cover",
-                              borderRadius: "10px",
-                            }}
-                            className="img-fluid hover-image"
-                            src={movie.imagePortrait}
-                            alt="Movie"
-                          />
-                          <div className="ticket-overlay">
-                            <img
-                              src={buttonTicket}
-                              alt="Ticket"
-                              className="ticket-image"
-                            />
-                          </div>
-                          <div style={{ paddingTop: 7 }}>
-                            <h1>{movie.name}</h1>
-                          </div>
-                        </CardBody>
-                      </Link>
-                    </Card>
-                  ))
-                : null}
-              <div className="button-dien-vien">
-                <Link
-                  to="/movie"
-                  className="btn btn-outline-danger waves-effect waves-light material-shadow-none"
-                  style={{ textDecoration: "none" }}
-                >
-                  See More <i className="bx bx-right-arrow-alt"></i>
-                </Link>
-              </div>
+              <MovieIsShowing MovieIntroduce={MovieIntroduce} />
             </Col>
           </Row>
         </Row>

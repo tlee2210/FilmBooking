@@ -40,52 +40,28 @@ public class HomeCinemaServiceImpl implements HomeCinemaService {
         HomeCinemaResponse homeCinemaResponse = new HomeCinemaResponse();
         ObjectUtils.copyFields(cinema, homeCinemaResponse);
 
+<<<<<<< Updated upstream
         List<LocalDate> dates = showTimeResponsitory.getDates(slug, null);
         List<MovieAndShowtimeResponse> movieWithShowtimeResponses = new ArrayList<>();
         LocalDate dateNow = LocalDate.now();
+=======
+>>>>>>> Stashed changes
         LocalTime timeNow = LocalTime.now().plusMinutes(15);
 
-        dates.forEach(date -> {
-            List<Movie> movies = showTimeResponsitory.getMovies(slug, date);
-            movies.forEach(movie -> {
-                MovieAndShowtimeResponse movieWithShowtime = new MovieAndShowtimeResponse();
-                ObjectUtils.copyFields(movie, movieWithShowtime);
+        homeCinemaResponse.setDays(showTimeResponsitory.getDates(slug, timeNow));
 
-                List<Showtimes> showtimes;
-                if (date.isEqual(dateNow)) {
-                    showtimes = showTimeResponsitory.getShowtime(slug, date, timeNow, movie.getId());
-                } else if (date.isAfter(dateNow)) {
-                    showtimes = showTimeResponsitory.getShowtime2(slug, date, movie.getId());
-                }
-                else{
-                    showtimes = null;
-                }
+        homeCinemaResponse.getDays().forEach(item -> {
+            item.setMovieList(showTimeResponsitory.findMovieOfDay(slug, timeNow, item.getDate()));
+        });
 
-                List<LocalTime> localTimeList = new ArrayList<>();
-                showtimes.forEach(show -> localTimeList.add(show.getTime()));
-                movieWithShowtime.setTimes(localTimeList);
+        homeCinemaResponse.getDays().forEach(day -> {
+            day.getMovieList().forEach(movie -> {
+                movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
 
-                movieWithShowtime.setDates(date);
-                movieWithShowtimeResponses.add(movieWithShowtime);
+                movie.setTimes(showTimeResponsitory.findMovieTimesForNameCinema(day.getDate(), movie.getName(), timeNow, slug));
             });
         });
 
-        List<HomeShowtimeResponse> homeShowtimeResponseList = new ArrayList<>();
-        dates.forEach(date -> {
-            HomeShowtimeResponse homeShowtimeResponse = new HomeShowtimeResponse();
-            homeShowtimeResponse.setDate(date);
-
-            List<MovieAndShowtimeResponse> movieList = new ArrayList<>();
-            movieWithShowtimeResponses.forEach(movieWithShowtimeResponse -> {
-                if(movieWithShowtimeResponse.getDates().equals(date)){
-                    movieList.add(movieWithShowtimeResponse);
-                }
-            });
-            homeShowtimeResponse.setMovieList(movieList);
-            homeShowtimeResponseList.add(homeShowtimeResponse);
-        });
-
-        homeCinemaResponse.setShowtimes(homeShowtimeResponseList);
         return homeCinemaResponse;
     }
 }

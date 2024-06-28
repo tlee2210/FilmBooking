@@ -1,6 +1,8 @@
 package com.cinemas.repositories;
 
 import com.cinemas.dto.response.CinemaTimeMovie;
+import com.cinemas.dto.response.HomeShowtimeResponse;
+import com.cinemas.dto.response.MovieAndShowtimeResponse;
 import com.cinemas.dto.response.bookingShowTimeResponse;
 import com.cinemas.entities.Cinema;
 import com.cinemas.entities.Movie;
@@ -38,8 +40,15 @@ public interface ShowTimeResponsitory extends JpaRepository<Showtimes, Integer> 
     @Query("SELECT m FROM Showtimes s JOIN Movie m ON m.id = s.movie.id WHERE s.cinema.slug = :slug AND s.date = :date GROUP BY s.movie.id")
     List<Movie> getMovies(String slug, LocalDate date);
 
+<<<<<<< Updated upstream
     @Query("SELECT s.date FROM Showtimes s WHERE s.cinema.slug = :slugCinema AND (:slugMovie IS NULL OR s.movie.slug = :slugMovie) AND s.date >= CURDATE() GROUP BY s.date")
     List<LocalDate> getDates(String slugCinema, String slugMovie);
+=======
+    @Query("SELECT DISTINCT new com.cinemas.dto.response.HomeShowtimeResponse(s.date) FROM Showtimes s " +
+            "WHERE s.cinema.slug = :slug " +
+            "AND (s.date <> CURRENT_DATE OR s.time >= :timeNow)")
+    List<HomeShowtimeResponse> getDates(String slug, LocalTime timeNow);
+>>>>>>> Stashed changes
 
     @Query("SELECT DISTINCT NEW com.cinemas.dto.response.bookingShowTimeResponse(s.date) FROM Showtimes s WHERE " +
             "(:cinema_Slug IS NULL OR s.cinema.slug = :cinema_Slug)" +
@@ -61,6 +70,7 @@ public interface ShowTimeResponsitory extends JpaRepository<Showtimes, Integer> 
             "AND s.date = :day AND " +
             "(s.date <> CURRENT_DATE OR s.time >= :time)")
     List<LocalTime> findMovieTimes(LocalDate day, String slug, LocalTime time, String name);
+<<<<<<< Updated upstream
 
     @Query("SELECT s.cinema FROM Showtimes s WHERE s.movie.slug = :slug GROUP BY s.cinema")
     List<Cinema> findCinemasByMovieSlug(String slug);
@@ -71,4 +81,16 @@ public interface ShowTimeResponsitory extends JpaRepository<Showtimes, Integer> 
             "AND s.date = :date AND " +
             "(s.date <> CURRENT_DATE OR s.time >= :time) GROUP BY s.time")
     List<LocalTime> getTimes(String slugMovie, String slugCinema, LocalDate date, LocalTime time);
+=======
+    @Query("SELECT DISTINCT new com.cinemas.dto.response.MovieAndShowtimeResponse(s.movie.name, s.movie.imagePortrait) FROM Showtimes s " +
+            "WHERE s.cinema.slug = :slug " +
+            "AND s.date = :date AND s.time >= :timeNow")
+    List<MovieAndShowtimeResponse> findMovieOfDay(String slug, LocalTime timeNow, LocalDate date);
+    @Query("SELECT s.time FROM Showtimes s " +
+            "WHERE s.movie.name = :name " +
+            "AND s.cinema.slug = :slug " +
+            "AND s.date = :date AND " +
+            "s.time >= :timeNow")
+    List<LocalTime> findMovieTimesForNameCinema(LocalDate date, String name, LocalTime timeNow, String slug);
+>>>>>>> Stashed changes
 }

@@ -86,7 +86,7 @@ import MovieCommentary from "../pages/Page/MovieCommentary/index";
 import MovieCommentaryDetails from "../pages/Page/MovieCommentary/details";
 
 //Rạp Phim
-import RapPhim from "../pages/Page/RapPhim/Index";
+import CinemaHome from "../pages/Page/RapPhim/Index";
 
 //Order
 import Order from "../pages/Page/Order/index";
@@ -183,9 +183,10 @@ const homeRoutes = [
   // book-tickets
   { path: "/book-tickets/:slug", component: <Booking /> },
   { path: "/movie", component: <MovieList /> },
+
+  { path: "/cinema/:slug", component: <CinemaHome /> },
   //------------------------------------------
 
-  { path: "/rap-phim", component: <RapPhim /> },
   { path: "/order", component: <Order /> },
 ];
 

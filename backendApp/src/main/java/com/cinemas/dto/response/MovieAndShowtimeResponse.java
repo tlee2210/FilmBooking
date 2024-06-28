@@ -10,13 +10,14 @@ import java.util.List;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MovieAndShowtimeResponse {
-    private String imagePortrait;
-
     private String name;
 
-    private String slug;
+    private String imagePortrait;
 
     private List<LocalTime> times;
 
-    private LocalDate dates;
+    public MovieAndShowtimeResponse(String name, String imagePortrait) {
+        this.name = name;
+        this.imagePortrait = imagePortrait;
+    }
 }
