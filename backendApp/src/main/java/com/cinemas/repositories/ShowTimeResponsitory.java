@@ -49,9 +49,10 @@ public interface ShowTimeResponsitory extends JpaRepository<Showtimes, Integer> 
     @Query("SELECT DISTINCT NEW com.cinemas.dto.response.CinemaTimeMovie(s.cinema.name) " +
             "FROM Showtimes s " +
             "WHERE (:slug IS NULL OR s.movie.slug = :slug) " +
+            "AND (:cinema_Slug IS NULL OR s.cinema.slug = :cinema_Slug) " +
             "AND s.date = :day " +
             "AND (s.date <> CURRENT_DATE OR s.time >= :time)")
-    List<CinemaTimeMovie> findByDayAndMovie_Slug(LocalDate day, String slug, LocalTime time);
+    List<CinemaTimeMovie> findByDayAndMovie_Slug(LocalDate day, String slug, LocalTime time, String cinema_Slug);
 
     @Query("SELECT s.time FROM Showtimes s " +
             "WHERE (:slug IS NULL OR s.movie.slug <= :slug) " +

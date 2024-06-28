@@ -32,7 +32,13 @@ public class HomeBookingServiceImpl implements HomeBookingService {
         LocalTime currentTimePlus15 = LocalTime.now().plusMinutes(15);
 
         showtimes.forEach(item -> {
-            item.setCinemaTimeMovies(showTimeResponsitory.findByDayAndMovie_Slug(item.getDay(), slug, currentTimePlus15));
+            System.out.println("==============================");
+            System.out.println("==============================");
+            System.out.println("item: " + item);
+            System.out.println("==============================");
+            System.out.println("==============================");
+
+            item.setCinemaTimeMovies(showTimeResponsitory.findByDayAndMovie_Slug(item.getDay(), slug, currentTimePlus15, cinema));
         });
 
         showtimes.forEach(item -> {
@@ -46,7 +52,6 @@ public class HomeBookingServiceImpl implements HomeBookingService {
         cityList.forEach(item -> {
             options.add(new SelectOptionReponse(item, item));
         });
-
 
 
         bookTicketsResponse bookTicketsResponse = new bookTicketsResponse();

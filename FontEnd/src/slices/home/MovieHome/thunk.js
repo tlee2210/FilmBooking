@@ -52,7 +52,7 @@ export const getAllMovie = () => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/home/v1/movie`)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(fetchHomeData({ data: response?.data?.result }));
     })
     .catch((error) => {
@@ -64,7 +64,7 @@ export const getNavbar = () => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/home/v1/home/navbar`)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(fetchNavbarData({ data: response?.data?.result }));
     })
     .catch((error) => {

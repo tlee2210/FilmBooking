@@ -351,7 +351,7 @@ const Booking = (props) => {
                           paddingLeft: "0.5rem",
                         }}
                       >
-                        Lịch Chiếu
+                        Show Times
                       </div>
                     </div>
                     <Row>
@@ -364,7 +364,7 @@ const Booking = (props) => {
                               style={{ width: "80%" }}
                             >
                               <Row style={{ width: "100%" }}>
-                                <Col md="8">
+                                <Col md="7">
                                   <Swiper spaceBetween={10} slidesPerView={3.5}>
                                     {bookingShowTime
                                       ? bookingShowTime.map((item, index) => (
@@ -387,7 +387,7 @@ const Booking = (props) => {
                                                 animationNavToggle(index);
                                               }}
                                             >
-                                              Day: {item.day}
+                                              {item.day}
                                             </NavLink>
                                           </SwiperSlide>
                                         ))
@@ -401,6 +401,11 @@ const Booking = (props) => {
                                 >
                                   <Input
                                     type="select"
+                                    style={{
+                                      minWidth: 150,
+                                      maxWidth: 150,
+                                      paddingLeft: 50,
+                                    }}
                                     className="custom-select-cinemaCorner mx-2"
                                     value={selectedCity}
                                     onChange={handleSelectCityChange}
