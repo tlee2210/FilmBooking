@@ -403,7 +403,6 @@ const Booking = (props) => {
                                     style={{
                                       minWidth: 150,
                                       maxWidth: 150,
-                                      paddingLeft: 50,
                                     }}
                                     className="custom-select-cinemaCorner mx-2"
                                     value={selectedCity}

@@ -48,7 +48,7 @@ public class HomeBuyTicketServiceImpl implements HomeBuyTicketService {
         });
         buyTicketFast.setCinemaList(cinemaList);
 
-        buyTicketFast.setDateList(showTimeResponsitory.getDates(slugcinema, slugmovie));
+        buyTicketFast.setDateList(showTimeResponsitory.findDates(slugcinema, slugmovie));
 
         buyTicketFast.setTimeList(showTimeResponsitory.getTimes(slugmovie, slugcinema, date, LocalTime.now().plusMinutes(15)));
 
