@@ -40,7 +40,7 @@ public class HomeCinemaServiceImpl implements HomeCinemaService {
         HomeCinemaResponse homeCinemaResponse = new HomeCinemaResponse();
         ObjectUtils.copyFields(cinema, homeCinemaResponse);
 
-        List<LocalDate> dates = showTimeResponsitory.getDates(slug);
+        List<LocalDate> dates = showTimeResponsitory.getDates(slug, null);
         List<MovieAndShowtimeResponse> movieWithShowtimeResponses = new ArrayList<>();
         LocalDate dateNow = LocalDate.now();
         LocalTime timeNow = LocalTime.now().plusMinutes(15);

@@ -41,4 +41,7 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
 
     @Query("SELECT new com.cinemas.dto.response.ItemIntroduce(m.id, m.name, m.slug, m.imagePortrait, m.trailer) FROM Movie m WHERE m.status = :status ORDER BY m.id DESC LIMIT :num")
     List<ItemIntroduce> getMovieHomePage(MovieStatus status, int num);
+
+    @Query("SELECT m FROM Movie m WHERE (:slugMovie is null or m.slug = :slugMovie) AND m.status = com.cinemas.enums.MovieStatus.NOW_SHOWING")
+    List<Movie> getListBySlug(String slugMovie);
 }

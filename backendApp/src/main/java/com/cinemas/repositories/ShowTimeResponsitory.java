@@ -2,6 +2,7 @@ package com.cinemas.repositories;
 
 import com.cinemas.dto.response.CinemaTimeMovie;
 import com.cinemas.dto.response.bookingShowTimeResponse;
+import com.cinemas.entities.Cinema;
 import com.cinemas.entities.Movie;
 import com.cinemas.entities.Showtimes;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -37,8 +38,8 @@ public interface ShowTimeResponsitory extends JpaRepository<Showtimes, Integer> 
     @Query("SELECT m FROM Showtimes s JOIN Movie m ON m.id = s.movie.id WHERE s.cinema.slug = :slug AND s.date = :date GROUP BY s.movie.id")
     List<Movie> getMovies(String slug, LocalDate date);
 
-    @Query("SELECT s.date FROM Showtimes s WHERE s.cinema.slug = :slug AND s.date >= CURDATE() GROUP BY s.date")
-    List<LocalDate> getDates(String slug);
+    @Query("SELECT s.date FROM Showtimes s WHERE s.cinema.slug = :slugCinema AND (:slugMovie IS NULL OR s.movie.slug = :slugMovie) AND s.date >= CURDATE() GROUP BY s.date")
+    List<LocalDate> getDates(String slugCinema, String slugMovie);
 
     @Query("SELECT DISTINCT NEW com.cinemas.dto.response.bookingShowTimeResponse(s.date) FROM Showtimes s WHERE " +
             "(:cinema_Slug IS NULL OR s.cinema.slug = :cinema_Slug)" +
@@ -61,4 +62,13 @@ public interface ShowTimeResponsitory extends JpaRepository<Showtimes, Integer> 
             "(s.date <> CURRENT_DATE OR s.time >= :time)")
     List<LocalTime> findMovieTimes(LocalDate day, String slug, LocalTime time, String name);
 
+    @Query("SELECT s.cinema FROM Showtimes s WHERE s.movie.slug = :slug GROUP BY s.cinema")
+    List<Cinema> findCinemasByMovieSlug(String slug);
+
+    @Query("SELECT s.time FROM Showtimes s " +
+            "WHERE (:slugMovie IS NULL OR s.movie.slug = :slugMovie) " +
+            "AND (:slugCinema IS NULL OR s.cinema.slug = :slugCinema)" +
+            "AND s.date = :date AND " +
+            "(s.date <> CURRENT_DATE OR s.time >= :time) GROUP BY s.time")
+    List<LocalTime> getTimes(String slugMovie, String slugCinema, LocalDate date, LocalTime time);
 }
