@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 import "../Booking/css/order.css";
 import {
   Container,
@@ -25,9 +26,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "reselect";
 import { message } from "antd";
 import { getBookingTime } from "../../../slices/home/booking/thunk";
+import withRouter from "../../../Components/Common/withRouter";
 
 const Booking = (props) => {
   const dispatch = useDispatch();
+  const history = useNavigate();
+
   const [activeTab, setactiveTab] = useState(1);
   const [passedSteps, setPassedSteps] = useState([1]);
   const [modal, setModal] = useState(false);
@@ -44,10 +48,15 @@ const Booking = (props) => {
     data: state.HomeBooking.bookingitem,
   }));
   const { error, messageError, data } = useSelector(BookingStateData);
+  useEffect(() => {
+    if (!data) {
+      props.router.navigate("/");
+    }
+  }, [data]);
   // price
   const handleChooseSeat = (seat, isDouble) => {
     const price = isDouble ? data?.price * 2 * 1.05 : data?.price;
-    console.log(price);
+    // console.log(price);
 
     setSelectedSeats((prevSeats) => {
       if (prevSeats?.includes(seat)) {
@@ -63,7 +72,8 @@ const Booking = (props) => {
     });
   };
   const handleChangeShowtime = (id) => {
-    dispatch(getBookingTime(id));
+    setSelectedSeats([]);
+    dispatch(getBookingTime(id, props.router.navigate));
   };
 
   const renderSeats = (numRows, numCols, totalColumns, isDouble = false) => {
@@ -514,4 +524,4 @@ const Booking = (props) => {
   );
 };
 
-export default Booking;
+export default withRouter(Booking);
