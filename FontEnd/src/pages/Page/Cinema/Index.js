@@ -30,6 +30,7 @@ import "./css/RapPhim.css";
 // import GoogleMap from "./GoogleMap";
 import withRouter from "../../../Components/Common/withRouter";
 import { getCinemaHome } from "../../../slices/home/CinemaHome/thunk";
+import { getBookingTime } from "../../../slices/home/booking/thunk";
 import { createSelector } from "reselect";
 
 const mapStyles = {
@@ -59,84 +60,37 @@ const HomeCinema = (props) => {
 
   const [activeTab, setActiveTab] = useState(0);
   const [selectedMovie, setSelectedMovie] = useState(null);
+  const [movieTime, setMovieTime] = useState(null);
+  const [movieIndexRender, setMovieIndexRender] = useState(null);
 
   const tabChange = (tab) => {
     if (activeTab !== tab) setActiveTab(tab);
+    setSelectedMovie(null);
+  };
+  const handleBooking = (idRoom) => {
+    // console.log(idRoom);
+    dispatch(getBookingTime(idRoom));
+    // setMovieTime(time);
   };
 
-  const data = [
-    {
-      title: "Garfield: Mèo Béo Siêu Quậy",
-      img: "https://cdn.galaxycine.vn/media/2024/5/28/mv-500_1716879166318.jpg",
-      showtimes: ["10:00", "12:30", "13:30", "15:45"],
-    },
-    {
-      title: "Móng Vuốt",
-      img: "https://cdn.galaxycine.vn/media/2024/5/27/garfield-1_1716798361490.jpg",
-      showtimes: ["10:00", "12:30", "13:30", "15:45", "17:15", "19:45"],
-    },
-    {
-      title: "Ngôi Đền Kỳ Quái 4",
-      img: "https://cdn.galaxycine.vn/media/2024/5/27/pee-nak-4-1_1716796582162.jpg",
-      showtimes: ["10:00", "12:30"],
-    },
-    {
-      title: "Phim Điện Ảnh Doraemon: Nobita Và Bản Giao Hưởng Địa Cầu",
-      img: "https://cdn.galaxycine.vn/media/2024/5/21/doraemon-movie-43-nobitas-earth-symphony-1-1_1716273120350.jpg",
-      showtimes: ["10:00", "12:30", "13:30"],
-    },
-    {
-      title: "Furiosa: Câu Chuyện Từ Max Điên",
-      img: "https://cdn.galaxycine.vn/media/2024/5/24/furiosa-500_1716547292998.jpg",
-      showtimes: [
-        "10:00",
-        "12:30",
-        "13:30",
-        "15:45",
-        "17:15",
-        "19:45",
-        "21:00",
-      ],
-    },
-    {
-      title: "Lật Mặt 7: Một Điều Ước 1",
-      img: "https://cdn.galaxycine.vn/media/2024/4/26/lm7-500_1714101585009.jpg",
-      showtimes: ["10:00", "12:30", "17:15", "19:45", "21:00"],
-    },
-    {
-      title: "Lật Mặt 7: Một Điều Ước 2",
-      img: "https://cdn.galaxycine.vn/media/2024/4/26/lm7-500_1714101585009.jpg",
-      showtimes: [
-        "10:00",
-        "12:30",
-        "13:30",
-        "15:45",
-        "17:15",
-        "19:45",
-        "21:00",
-      ],
-    },
-    {
-      title: "Lật Mặt 7: Một Điều Ước 3",
-      img: "https://cdn.galaxycine.vn/media/2024/4/26/lm7-500_1714101585009.jpg",
-      showtimes: [
-        "10:00",
-        "12:30",
-        "13:30",
-        "15:45",
-        "17:15",
-        "19:45",
-        "21:00",
-      ],
-    },
-  ];
-
-  const handleMovieClick = (movie) => {
-    console.log("movie: ", movie);
-    if (selectedMovie === movie) {
-      setSelectedMovie(null);
+  const handleMovieClick = (movie, movieIndex, index) => {
+    if (selectedMovie === movie.name) {
+      setSelectedMovie("");
+      setMovieTime("");
+      setMovieIndexRender("");
     } else {
-      setSelectedMovie(movie);
+      setMovieIndexRender(5);
+
+      if (movieIndex <= 5) {
+        setMovieIndexRender(5);
+      } else if (cinemaData.days[index].movieList.length - 1 > 11) {
+        setMovieIndexRender(cinemaData.days[index].movieList.length - 1);
+      } else {
+        setMovieIndexRender(cinemaData.days[index].movieList.length - 1);
+      }
+
+      setMovieTime(movie);
+      setSelectedMovie(movie.name);
     }
   };
 
@@ -276,74 +230,78 @@ const HomeCinema = (props) => {
                         ? cinemaData.days.map((day, index) => (
                             <TabPane tabId={index} key={index}>
                               <div className="movie-selection-rapphim">
-                                <div className="movies-rapphim">
+                                <Row className="movies-rapphim">
                                   {Array.isArray(day.movieList) &&
                                     day.movieList.map((movie, movieIndex) => (
-                                      <div
-                                        key={movieIndex}
-                                        className={`movie-rapphim ${
-                                          selectedMovie === movie.name
-                                            ? "selected-rapphim"
-                                            : ""
-                                        }`}
-                                        onClick={() =>
-                                          handleMovieClick(movie.name)
-                                        }
-                                      >
-                                        <img
-                                          src={movie.imagePortrait}
-                                          alt={movie.name}
-                                        />
-                                        <div className="title-phim-rapphim">
-                                          {movie.name}
-                                        </div>
-                                        {selectedMovie === movie.name && (
-                                          <div className="selection-overlay-rapphim">
-                                            <i
-                                              style={{ fontSize: 70 }}
-                                              className="ri-checkbox-circle-fill"
-                                            ></i>
-                                          </div>
-                                        )}
-                                      </div>
-                                    ))}
-                                </div>
-                                {selectedMovie && cinemaData && (
-                                  <div className="showtimes-container-rapphim">
-                                    <div className="showtimes-rapphim">
-                                      <h3>Suất chiếu</h3>
-                                      <div className="title-phu-de">
-                                        2D Phụ Đề
-                                      </div>
-                                      <div className="times-rapphim">
-                                        {cinemaData.days.map(
-                                          (day, dayIndex) => {
-                                            const movie = day.movieList.find(
-                                              (m) => m.name === selectedMovie
-                                            );
-                                            return (
-                                              movie &&
-                                              movie.times.map(
-                                                (time, timeIndex) => (
-                                                  <button
-                                                    key={`${dayIndex}-${timeIndex}`}
-                                                    className="time-rapphim"
-                                                  >
-                                                    <span
-                                                      style={{ fontSize: 17 }}
-                                                    >
-                                                      {time}
-                                                    </span>
-                                                  </button>
-                                                )
-                                              )
-                                            );
+                                      <React.Fragment key={movieIndex}>
+                                        <Col
+                                          md={3}
+                                          className={`movie-rapphim ${
+                                            selectedMovie === movie.name
+                                              ? "selected-rapphim"
+                                              : ""
+                                          }`}
+                                          onClick={() =>
+                                            handleMovieClick(
+                                              movie,
+                                              movieIndex,
+                                              index
+                                            )
                                           }
-                                        )}
-                                      </div>
-                                    </div>
-                                  </div>
-                                )}
+                                        >
+                                          <img
+                                            src={movie.imagePortrait}
+                                            alt={movie.name}
+                                          />
+                                          <div className="title-phim-rapphim">
+                                            {movie.name}
+                                          </div>
+                                          {selectedMovie === movie.name && (
+                                            <div className="selection-overlay-rapphim">
+                                              <i
+                                                style={{ fontSize: 70 }}
+                                                className="ri-checkbox-circle-fill"
+                                              ></i>
+                                            </div>
+                                          )}
+                                        </Col>
+                                        {selectedMovie &&
+                                          movieTime &&
+                                          movieIndex === movieIndexRender && (
+                                            <Col
+                                              md={12}
+                                              className="showtimes-rapphim"
+                                            >
+                                              <div className="title-phu-de">
+                                                <h3>Show Times</h3>
+                                              </div>
+                                              <div className="times-rapphim">
+                                                {movieTime.times.map(
+                                                  (time, dayIndex) => (
+                                                    <button
+                                                      key={dayIndex}
+                                                      className="time-rapphim"
+                                                      onClick={() =>
+                                                        handleBooking(
+                                                          time.idRoom
+                                                        )
+                                                      }
+                                                    >
+                                                      <span
+                                                        style={{ fontSize: 17 }}
+                                                      >
+                                                        {time.time}
+                                                      </span>
+                                                    </button>
+                                                  )
+                                                )}
+                                              </div>
+                                            </Col>
+                                            // </Row>
+                                          )}
+                                      </React.Fragment>
+                                    ))}
+                                </Row>
                               </div>
                             </TabPane>
                           ))
@@ -429,7 +387,7 @@ const HomeCinema = (props) => {
                             ) : null}
                           </Map>
                         </div>
-                        <Row className="mt-4" style={{ fontSize: "17px" }}>
+                        <Row className="mt-4" style={{ fontSize: "16px" }}>
                           <div
                             id="renderHtml"
                             dangerouslySetInnerHTML={{
@@ -459,5 +417,3 @@ const WrappedComponent = GoogleApiWrapper({
 })(HomeCinema);
 
 export default withRouter(WrappedComponent);
-
-// export default withRouter(HomeCinema);

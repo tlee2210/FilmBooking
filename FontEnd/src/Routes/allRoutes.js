@@ -86,10 +86,10 @@ import MovieCommentary from "../pages/Page/MovieCommentary/index";
 import MovieCommentaryDetails from "../pages/Page/MovieCommentary/details";
 
 //Rạp Phim
-import CinemaHome from "../pages/Page/RapPhim/Index";
+import CinemaHome from "../pages/Page/Cinema/Index";
+import BookingTime from "../pages/Page/Order/index";
 
 //Order
-import Order from "../pages/Page/Order/index";
 import BlogMovie from "../pages/Page/BlogMovie";
 import BlogMovieDetails from "../pages/Page/BlogMovie/details";
 
@@ -185,9 +185,9 @@ const homeRoutes = [
   { path: "/movie", component: <MovieList /> },
 
   { path: "/cinema/:slug", component: <CinemaHome /> },
-  //------------------------------------------
+  { path: "/booking", component: <BookingTime /> },
 
-  { path: "/order", component: <Order /> },
+  //------------------------------------------
 ];
 
 export { adminProtectedRoutes, publicRoutes, homeRoutes };

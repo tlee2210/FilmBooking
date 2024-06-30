@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class CinemaTimeMovie {
     private String name;
-    private List<LocalTime> times;
+    private List<HomeTimeAndRoomResponse> times;
 
     public CinemaTimeMovie(String name) {
         this.name = name;

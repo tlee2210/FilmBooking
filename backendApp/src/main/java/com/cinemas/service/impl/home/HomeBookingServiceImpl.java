@@ -24,19 +24,19 @@ public class HomeBookingServiceImpl implements HomeBookingService {
 
     @Override
     public bookTicketsResponse getTimeForMovie(String slug, String city, String cinema) {
-        System.out.println("===========");
-        System.out.println(cinema);
-        System.out.println("===========");
+//        System.out.println("===========");
+//        System.out.println(cinema);
+//        System.out.println("===========");
         List<String> cityList = cinemaRespository.findByCity();
         List<bookingShowTimeResponse> showtimes = showTimeResponsitory.findDayByMovie_Slug(slug, cinema);
         LocalTime currentTimePlus15 = LocalTime.now().plusMinutes(15);
 
         showtimes.forEach(item -> {
-            System.out.println("==============================");
-            System.out.println("==============================");
-            System.out.println("item: " + item);
-            System.out.println("==============================");
-            System.out.println("==============================");
+//            System.out.println("==============================");
+//            System.out.println("==============================");
+//            System.out.println("item: " + item);
+//            System.out.println("==============================");
+//            System.out.println("==============================");
 
             item.setCinemaTimeMovies(showTimeResponsitory.findByDayAndMovie_Slug(item.getDay(), slug, currentTimePlus15, cinema));
         });

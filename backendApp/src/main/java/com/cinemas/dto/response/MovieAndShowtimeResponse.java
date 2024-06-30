@@ -14,7 +14,7 @@ public class MovieAndShowtimeResponse {
 
     private String imagePortrait;
 
-    private List<LocalTime> times;
+    private List<HomeTimeAndRoomResponse> times;
 
     public MovieAndShowtimeResponse(String name, String imagePortrait) {
         this.name = name;

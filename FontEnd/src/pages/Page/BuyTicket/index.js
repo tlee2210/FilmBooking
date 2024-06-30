@@ -493,8 +493,11 @@ const Booking = (props) => {
                                                                         >
                                                                           <Button className="btn-showTime">
                                                                             {
-                                                                              showtime
+                                                                              showtime.time
                                                                             }
+                                                                            {/* {
+                                                                              showtime.idRoom
+                                                                            } */}
                                                                           </Button>
                                                                         </Col>
                                                                       )
