@@ -21,8 +21,8 @@ public interface ShowTimeResponsitory extends JpaRepository<Showtimes, Integer> 
 
     //    @Query("SELECT t FROM Showtimes t WHERE (:slug IS NULL OR t.cinema.slug = :slug) " +
 //            "AND (:startDay IS NULL OR :endDay IS NULL OR t.date BETWEEN :startDay AND :endDay)")
-    @Query("SELECT t FROM Showtimes t WHERE" + "(:startDay IS NULL OR t.date >= :startDay)" + "AND (:endDay IS NULL OR t.date <= :endDay)" + "AND (:slug IS NULL OR t.cinema.slug = :slug)")
-    List<Showtimes> searchAllByCinemaAndDate(String slug, LocalDate startDay, LocalDate endDay);
+    @Query("SELECT new com.cinemas.dto.response.ShowTimeTableResponse(t.id, t.date, t.time, t.cinema.name, t.movie.name, t.room.name) FROM Showtimes t WHERE (:startDay IS NULL OR t.date >= :startDay) AND (:endDay IS NULL OR t.date <= :endDay) AND (:slug IS NULL OR t.cinema.slug = :slug)")
+    List<ShowTimeTableResponse> searchAllByCinemaAndDate(String slug, LocalDate startDay, LocalDate endDay);
 
     @Query(value = "SELECT s FROM Showtimes s WHERE s.cinema.slug = :slug AND s.movie.id = :id AND s.date = :date AND s.time > :time GROUP BY s.time")
     List<Showtimes> getShowtime(String slug, LocalDate date, LocalTime time, Integer id);
@@ -59,4 +59,7 @@ public interface ShowTimeResponsitory extends JpaRepository<Showtimes, Integer> 
 
     @Query("SELECT new com.cinemas.dto.response.HomeTimeAndRoomResponse(s.id,s.time ) FROM Showtimes s WHERE s.movie.name = :name AND s.cinema.slug = :slug AND s.date = :date AND (s.date <> CURRENT_DATE OR s.time >= :timeNow)")
     List<HomeTimeAndRoomResponse> findMovieTimesForNameCinema(LocalDate date, String name, LocalTime timeNow, String slug);
+
+    @Query("SELECT new com.cinemas.dto.response.ShowTimeTableResponse(s.id, s.date, s.time, s.cinema.name, s.movie.name ,s.room.name, s.movie.imagePortrait, s.movie.price) FROM Showtimes s WHERE s.id = :id")
+    ShowTimeTableResponse getBookingTime(Integer id);
 }

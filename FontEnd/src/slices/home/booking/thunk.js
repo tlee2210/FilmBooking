@@ -16,14 +16,14 @@ export const getBooking = (slug, city, cinema) => async (dispatch) => {
 };
 
 export const getBookingTime = (id) => async (dispatch) => {
-  console.log(id);
-  // await axios
-  //   .get(`http://localhost:8081/api/admin/v1/booking/${id}/movies`)
-  //   .then((response) => {
-  //     console.log(response);
-  //     dispatch(setBookingMovies(response?.data?.result));
-  //   })
-  //   .catch((error) => {
-  //     console.error(error);
-  //   });
+  // console.log(id);
+  await axios
+    .get(`http://localhost:8081/api/home/v1/booking/${id}`)
+    .then((response) => {
+      console.log(response);
+      // dispatch(setBookingMovies(response?.data?.result));
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 };

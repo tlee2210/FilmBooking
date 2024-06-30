@@ -1,14 +1,13 @@
 package com.cinemas.controller.home;
 
 import com.cinemas.dto.response.APIResponse;
+import com.cinemas.dto.response.ShowTimeTableResponse;
 import com.cinemas.dto.response.bookTicketsResponse;
+import com.cinemas.entities.Showtimes;
 import com.cinemas.service.home.HomeBookingService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/home/v1/booking")
@@ -28,6 +27,13 @@ public class HomeBookingController {
         apiResponse.setCode(200);
         apiResponse.setResult(homeBookingService.getTimeForMovie(slug, city, cinema));
 
+        return apiResponse;
+    }
+    @GetMapping("/{id}")
+    public APIResponse<ShowTimeTableResponse> getBookingTime(@PathVariable Integer id){
+        APIResponse<ShowTimeTableResponse> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setResult(homeBookingService.getBookingTime(id));
         return apiResponse;
     }
 }

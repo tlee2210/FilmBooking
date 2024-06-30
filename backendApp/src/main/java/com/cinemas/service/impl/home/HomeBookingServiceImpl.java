@@ -1,13 +1,14 @@
 package com.cinemas.service.impl.home;
 
 import com.cinemas.dto.response.SelectOptionReponse;
+import com.cinemas.dto.response.ShowTimeTableResponse;
 import com.cinemas.dto.response.bookTicketsResponse;
 import com.cinemas.dto.response.bookingShowTimeResponse;
-import com.cinemas.entities.Cinema;
 import com.cinemas.entities.Showtimes;
 import com.cinemas.repositories.CinemaRespository;
 import com.cinemas.repositories.ShowTimeResponsitory;
 import com.cinemas.service.home.HomeBookingService;
+import com.cinemas.service.impl.FileStorageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,22 +22,16 @@ public class HomeBookingServiceImpl implements HomeBookingService {
     private CinemaRespository cinemaRespository;
     @Autowired
     private ShowTimeResponsitory showTimeResponsitory;
+    @Autowired
+    FileStorageServiceImpl fileStorageServiceImpl;
 
     @Override
     public bookTicketsResponse getTimeForMovie(String slug, String city, String cinema) {
-//        System.out.println("===========");
-//        System.out.println(cinema);
-//        System.out.println("===========");
         List<String> cityList = cinemaRespository.findByCity();
         List<bookingShowTimeResponse> showtimes = showTimeResponsitory.findDayByMovie_Slug(slug, cinema);
         LocalTime currentTimePlus15 = LocalTime.now().plusMinutes(15);
 
         showtimes.forEach(item -> {
-//            System.out.println("==============================");
-//            System.out.println("==============================");
-//            System.out.println("item: " + item);
-//            System.out.println("==============================");
-//            System.out.println("==============================");
 
             item.setCinemaTimeMovies(showTimeResponsitory.findByDayAndMovie_Slug(item.getDay(), slug, currentTimePlus15, cinema));
         });
@@ -61,6 +56,13 @@ public class HomeBookingServiceImpl implements HomeBookingService {
         bookTicketsResponse.setBookingShowTimeResponses(showtimes);
 
         return bookTicketsResponse;
+    }
+
+    @Override
+    public ShowTimeTableResponse getBookingTime(Integer id) {
+        ShowTimeTableResponse response = showTimeResponsitory.getBookingTime(id);
+        response.setImage(fileStorageServiceImpl.getUrlFromPublicId(response.getImage()));
+        return response;
     }
 
 }

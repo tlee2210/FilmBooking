@@ -46,21 +46,10 @@ public class ShowTimeServiceImpl implements ShowTimeService {
 
     @Override
     public SelectOptionAndModelReponse<Page<ShowTimeTableResponse>> getAllShowTime(searchShowTimeRequest paginationHelper) {
-//        List<Showtimes> showtimesList = showTimeResponsitory.findAll();
-        List<Showtimes> showtimesList = showTimeResponsitory.searchAllByCinemaAndDate(paginationHelper.getCinema(), paginationHelper.getStartDay(), paginationHelper.getEndDay());
-        List<ShowTimeTableResponse> showTimeTableResponses = new ArrayList<>();
-        showtimesList.forEach(showtimes -> {
-            ShowTimeTableResponse showTimeTableResponse = new ShowTimeTableResponse();
 
-            ObjectUtils.copyFields(showtimes, showTimeTableResponse);
-            showTimeTableResponse.setCinemaName(showtimes.getCinema().getName());
-            showTimeTableResponse.setMovieName(showtimes.getMovie().getName());
-            showTimeTableResponse.setRoomName(showtimes.getRoom().getName());
+        List<ShowTimeTableResponse> showtimesList = showTimeResponsitory.searchAllByCinemaAndDate(paginationHelper.getCinema(), paginationHelper.getStartDay(), paginationHelper.getEndDay());
 
-            showTimeTableResponses.add(showTimeTableResponse);
-        });
-
-        PagedListHolder<ShowTimeTableResponse> pagedListHolder = new PagedListHolder<ShowTimeTableResponse>(showTimeTableResponses);
+        PagedListHolder<ShowTimeTableResponse> pagedListHolder = new PagedListHolder<ShowTimeTableResponse>(showtimesList);
         pagedListHolder.setPage(paginationHelper.getPageNo());
         pagedListHolder.setPageSize(paginationHelper.getPageSize());
 
@@ -69,7 +58,7 @@ public class ShowTimeServiceImpl implements ShowTimeService {
 
         PropertyComparator.sort(pageList, new MutableSortDefinition(paginationHelper.getSortByColumn(), true, ascending));
 
-        Page<ShowTimeTableResponse> showtimesPage = new PageImpl<>(pageList, new PaginationHelper().getPageable(paginationHelper), showTimeTableResponses.size());
+        Page<ShowTimeTableResponse> showtimesPage = new PageImpl<>(pageList, new PaginationHelper().getPageable(paginationHelper), showtimesList.size());
 
         List<Cinema> cinemaList = cinemaRespository.findAll();
 
