@@ -2,11 +2,13 @@ package com.cinemas.repositories;
 
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Cinema;
+import com.cinemas.entities.PriceMovie;
 import com.cinemas.enums.StatusCinema;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface CinemaRespository extends JpaRepository<Cinema, Integer> {

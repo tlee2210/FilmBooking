@@ -3,6 +3,7 @@ package com.cinemas.repositories;
 import com.cinemas.dto.response.*;
 import com.cinemas.entities.Cinema;
 import com.cinemas.entities.Movie;
+import com.cinemas.entities.PriceMovie;
 import com.cinemas.entities.Showtimes;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -62,4 +63,6 @@ public interface ShowTimeResponsitory extends JpaRepository<Showtimes, Integer> 
 
     @Query("SELECT new com.cinemas.dto.response.ShowTimeTableResponse(s.id, s.date, s.time, s.cinema.name, s.movie.name ,s.room.name, s.movie.imagePortrait, s.movie.price) FROM Showtimes s WHERE s.id = :id")
     ShowTimeTableResponse getBookingTime(Integer id);
+
+
 }

@@ -5,7 +5,9 @@ import com.cinemas.dto.response.ShowTimeTableResponse;
 import com.cinemas.dto.response.bookTicketsResponse;
 import com.cinemas.dto.response.bookingShowTimeResponse;
 import com.cinemas.entities.Showtimes;
+import com.cinemas.entities.PriceMovie;
 import com.cinemas.repositories.CinemaRespository;
+import com.cinemas.repositories.PriceMovieResponsetory;
 import com.cinemas.repositories.ShowTimeResponsitory;
 import com.cinemas.service.home.HomeBookingService;
 import com.cinemas.service.impl.FileStorageServiceImpl;
@@ -20,10 +22,14 @@ import java.util.List;
 public class HomeBookingServiceImpl implements HomeBookingService {
     @Autowired
     private CinemaRespository cinemaRespository;
+
     @Autowired
     private ShowTimeResponsitory showTimeResponsitory;
+
     @Autowired
     FileStorageServiceImpl fileStorageServiceImpl;
+    @Autowired
+    PriceMovieResponsetory priceMovieResponsetory;
 
     @Override
     public bookTicketsResponse getTimeForMovie(String slug, String city, String cinema) {
@@ -62,6 +68,11 @@ public class HomeBookingServiceImpl implements HomeBookingService {
     public ShowTimeTableResponse getBookingTime(Integer id) {
         ShowTimeTableResponse response = showTimeResponsitory.getBookingTime(id);
         response.setImage(fileStorageServiceImpl.getUrlFromPublicId(response.getImage()));
+        PriceMovie priceMovie = priceMovieResponsetory.findPriceMovie(response.getMovieName(), response.getDate());
+
+        if(priceMovie != null){
+            response.setPrice(priceMovie.getPrice());
+        }
         return response;
     }
 
