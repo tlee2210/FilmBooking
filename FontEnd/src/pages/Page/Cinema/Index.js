@@ -74,7 +74,6 @@ const HomeCinema = (props) => {
     setSelectedMovie(null);
   };
   const handleBooking = (idRoom) => {
-    // console.log(idRoom);
     dispatch(getBookingTime(idRoom, props.router.navigate));
   };
 
@@ -100,15 +99,11 @@ const HomeCinema = (props) => {
   };
   const handleSelectCityChange = (event) => {
     setSelectedCinema("");
-    // console.log(event.target.value);
     setSelectedCity(event.target.value);
   };
 
   const handleSelectCinemaChange = (event) => {
-    // console.log(event.target.value);
-    // setSelectedCinema(event.target.value);
     if (event.target.value !== slug && event.target.value !== "") {
-      // history(`cinema/${event.target.value}`);
       props.router.navigate(`/cinema/${event.target.value}`);
     }
   };
