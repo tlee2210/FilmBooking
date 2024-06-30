@@ -16,6 +16,7 @@ import java.util.List;
 public class SelectOptionAndModelReponse<T> {
 
     private List<SelectOptionReponse> selectOptionReponse;
+    private List<SelectOptionReponse> selectOptionYear;
     private List<SelectOptionReponse> selectOptionStatus;
     private List<SelectOptionReponse> selectOptionCountry;
     private T Model;
@@ -29,5 +30,13 @@ public class SelectOptionAndModelReponse<T> {
     public SelectOptionAndModelReponse(List<SelectOptionReponse> selectOptionReponse, T model) {
         this.selectOptionReponse = selectOptionReponse;
         Model = model;
+    }
+
+    public SelectOptionAndModelReponse(T model, List<SelectOptionReponse> selectOptionReponse, List<SelectOptionReponse> selectOptionYear, List<SelectOptionReponse> selectOptionStatus, List<SelectOptionReponse> selectOptionCountry) {
+        Model = model;
+        this.selectOptionCountry = selectOptionCountry;
+        this.selectOptionStatus = selectOptionStatus;
+        this.selectOptionReponse = selectOptionReponse;
+        this.selectOptionYear = selectOptionYear;
     }
 }

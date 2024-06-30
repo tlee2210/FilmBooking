@@ -37,4 +37,8 @@ public class Review {
 
     @Column
     private String thumbnail;
+
+    @ManyToOne
+    @JoinColumn(name = "movie_id")
+    private Movie movie;
 }

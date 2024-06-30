@@ -106,4 +106,8 @@ public class Movie {
 
     @Column
     private LocalDate endDate;
+
+    @Transient
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+    private List<Review> reviews;
 }
