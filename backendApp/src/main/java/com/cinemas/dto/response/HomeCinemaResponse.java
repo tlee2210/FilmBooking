@@ -44,4 +44,8 @@ public class HomeCinemaResponse {
     private List<CinemaImages> images;
 
     private List<HomeShowtimeResponse> days;
+
+    List<SelectOptionReponse> cityList;
+
+    List<SelectOptionReponse<?>> cinema;
 }

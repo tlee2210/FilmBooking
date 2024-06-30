@@ -4,6 +4,7 @@ import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.response.HomeCinemaResponse;
 import com.cinemas.dto.response.HomeShowtimeResponse;
 import com.cinemas.dto.response.MovieAndShowtimeResponse;
+import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Cinema;
 import com.cinemas.entities.Movie;
 import com.cinemas.entities.Showtimes;
@@ -31,7 +32,7 @@ public class HomeCinemaServiceImpl implements HomeCinemaService {
     FileStorageServiceImpl fileStorageServiceImpl;
 
     @Override
-    public HomeCinemaResponse getCinemaBySlug(String slug) {
+    public HomeCinemaResponse getCinemaBySlug(String slug, String city, String _cinema) {
         Cinema cinema = cinemaRespository.findCinemaBySlug(slug);
 
         cinema.getImages().forEach(cinemaImages ->
@@ -55,6 +56,16 @@ public class HomeCinemaServiceImpl implements HomeCinemaService {
                 movie.setTimes(showTimeResponsitory.findMovieTimesForNameCinema(day.getDate(), movie.getName(), timeNow, slug));
             });
         });
+
+        List<String> cityList = cinemaRespository.findByCity();
+
+        List<SelectOptionReponse> options = new ArrayList<>();
+        cityList.forEach(item -> {
+            options.add(new SelectOptionReponse(item, item));
+        });
+
+        homeCinemaResponse.setCityList(options);
+        homeCinemaResponse.setCinema(cinemaRespository.selectCinema(city));
 
         return homeCinemaResponse;
     }
