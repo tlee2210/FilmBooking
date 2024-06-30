@@ -105,10 +105,22 @@ public class HomeFilmServiceImpl implements HomeFilmService {
 
         for (Celebrity actor : actors) {
             actor.setImage(fileStorageServiceImpl.getUrlFromPublicId(actor.getImage()));
+            actor.setId(null);
+            actor.setDateOfBirth(null);
+            actor.setBiography(null);
+            actor.setDescription(null);
+            actor.setRole(null);
+            actor.setCountry(null);
         }
 
         for (Celebrity director : directors) {
             director.setImage(fileStorageServiceImpl.getUrlFromPublicId(director.getImage()));
+            director.setId(null);
+            director.setDateOfBirth(null);
+            director.setBiography(null);
+            director.setDescription(null);
+            director.setRole(null);
+            director.setCountry(null);
         }
 
         movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
