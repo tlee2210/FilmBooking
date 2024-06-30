@@ -79,14 +79,14 @@ const HomeCinema = (props) => {
       setMovieTime("");
       setMovieIndexRender("");
     } else {
-      setMovieIndexRender(5);
+      const totalMovies = cinemaData.days[index].movieList.length;
 
       if (movieIndex <= 5) {
-        setMovieIndexRender(5);
-      } else if (cinemaData.days[index].movieList.length - 1 > 11) {
-        setMovieIndexRender(cinemaData.days[index].movieList.length - 1);
+        setMovieIndexRender(totalMovies - 1 < 5 ? totalMovies - 1 : 5);
+      } else if (movieIndex < totalMovies - 1 && totalMovies - 1 <= 11) {
+        setMovieIndexRender(totalMovies - 1);
       } else {
-        setMovieIndexRender(cinemaData.days[index].movieList.length - 1);
+        setMovieIndexRender(movieIndex + movie.times.length - 1);
       }
 
       setMovieTime(movie);
