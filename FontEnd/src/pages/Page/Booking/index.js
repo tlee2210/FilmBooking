@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
 import "../Booking/css/order.css";
 import {
@@ -16,17 +16,142 @@ import {
   ModalBody,
   ModalFooter,
   Button,
+  Badge,
 } from "reactstrap";
 
 import classnames from "classnames";
 import { shoppingCart } from "../../../Components/Common/ecommerce";
+import { useSelector, useDispatch } from "react-redux";
+import { createSelector } from "reselect";
+import { message } from "antd";
+import { getBookingTime } from "../../../slices/home/booking/thunk";
 
-const checkOut = () => {
+const Booking = (props) => {
+  const dispatch = useDispatch();
   const [activeTab, setactiveTab] = useState(1);
   const [passedSteps, setPassedSteps] = useState([1]);
   const [modal, setModal] = useState(false);
   const [deletemodal, setDeleteModal] = useState(false);
   const [productList, setproductList] = useState(shoppingCart);
+
+  const [selectedSeats, setSelectedSeats] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  const BookingState = (state) => state;
+  const BookingStateData = createSelector(BookingState, (state) => ({
+    error: state.Message.error,
+    messageError: state.Message.messageError,
+    data: state.HomeBooking.bookingitem,
+  }));
+  const { error, messageError, data } = useSelector(BookingStateData);
+  // price
+  const handleChooseSeat = (seat, isDouble) => {
+    const price = isDouble ? data?.price * 2 * 1.05 : data?.price;
+    console.log(price);
+
+    setSelectedSeats((prevSeats) => {
+      if (prevSeats?.includes(seat)) {
+        setTotalPrice(totalPrice - price);
+        return prevSeats?.filter((s) => s !== seat);
+      } else if (prevSeats.length < 8) {
+        setTotalPrice(totalPrice + price);
+        return [...prevSeats, seat];
+      } else {
+        message.error("Maximum number of 8 seats exceeded!");
+        return prevSeats;
+      }
+    });
+  };
+  const handleChangeShowtime = (id) => {
+    dispatch(getBookingTime(id));
+  };
+
+  const renderSeats = (numRows, numCols, totalColumns, isDouble = false) => {
+    const rows = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      .split("")
+      .slice(0, numRows + (isDouble ? data?.room.seatRows : 0))
+      .reverse();
+    const seatsPerPart = Math.ceil(numCols / totalColumns);
+    // console.log(seatsPerPart);
+    return (
+      <div className="seating-grid">
+        {rows.slice(0, numRows).map((row) => (
+          <div className="seat-row" key={row}>
+            {[...Array(numCols).keys()].map((i) => {
+              const seatNumber = isDouble
+                ? `${row}${i * 2 + 1}-${i * 2 + 2}`
+                : `${row}${i + 1}`;
+              const applyMargin =
+                totalColumns !== 1 && i !== 0 && (i + 1) % seatsPerPart === 0;
+              const isSelected = selectedSeats?.includes(seatNumber);
+              return (
+                <div
+                  key={seatNumber}
+                  onClick={() => {
+                    handleChooseSeat(seatNumber, isDouble);
+                  }}
+                  // className={
+                  //   isDouble ? "" : applyMargin ? "margin-right-seat" : null
+                  // }
+                  className={classnames({
+                    "double-seat": isDouble,
+                    seat: !isDouble,
+                    "margin-right-seat": applyMargin,
+                    "selected-seat": isSelected,
+                  })}
+                >
+                  <div>{seatNumber}</div>
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  // const renderSeats = (numRows, numCols, totalColumns, isDouble = false) => {
+  //   const rows = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  //     .split("")
+  //     .slice(0, numRows + (isDouble ? data?.room.seatRows : 0))
+  //     .reverse();
+  //   const seatsPerPart = Math.ceil(numCols / totalColumns);
+
+  //   return (
+  //     <div className="seating-grid">
+  //       {rows.slice(0, numRows).map((row) => (
+  //         <div className="seat-row" key={row}>
+  //           {[...Array(numCols).keys()].map((i) => {
+  //             const seatNumber = isDouble
+  //               ? `${row}${i * 2 + 1}-${row}${i * 2 + 2}` // Adjust seat numbering for double seats
+  //               : `${row}${i + 1}`;
+  //             const applyMargin =
+  //               totalColumns !== 1 && i !== 0 && (i + 1) % seatsPerPart === 0;
+  //             const isSelected = selectedSeats?.includes(seatNumber);
+
+  //             return (
+  //               <div
+  //                 key={seatNumber}
+  //                 onClick={() => {
+  //                   handleChooseSeat(seatNumber);
+  //                 }}
+  //                 className={classnames({
+  //                   "double-seat": isDouble,
+  //                   seat: !isDouble,
+  //                   "margin-right-seat": applyMargin,
+  //                   "selected-seat": isSelected,
+  //                 })}
+  //               >
+  //                 <div>{seatNumber}</div>
+  //               </div>
+  //             );
+  //           })}
+  //         </div>
+  //       ))}
+  //     </div>
+  //   );
+  // };
+
   function toggleTab(tab) {
     if (tab >= 1 && tab <= 4) {
       setactiveTab(tab);
@@ -97,7 +222,7 @@ const checkOut = () => {
     alert(`Mã khuyến mãi ${promoCode} đã được áp dụng!`);
   };
 
-  document.title = "Order";
+  document.title = `booking ${data?.movieName}` || "Booking";
 
   return (
     <React.Fragment>
@@ -117,36 +242,9 @@ const checkOut = () => {
                           activeTab >= 1 ? "done" : ""
                         } ${activeTab === 1 ? "active" : ""}`}
                       >
-                        <span>Chọn phim / Rạp / Suất</span>
+                        <span>Cinema interest</span>
                       </div>
-                      <div
-                        className={`step-item -order-2 ${
-                          activeTab >= 2 ? "done" : ""
-                        } ${activeTab === 2 ? "active" : ""}`}
-                      >
-                        <span>Chọn ghế</span>
-                      </div>
-                      <div
-                        className={`step-item -order-3 ${
-                          activeTab >= 3 ? "done" : ""
-                        } ${activeTab === 3 ? "active" : ""}`}
-                      >
-                        <span>Chọn thức ăn</span>
-                      </div>
-                      <div
-                        className={`step-item -order-4 ${
-                          activeTab >= 4 ? "done" : ""
-                        } ${activeTab === 4 ? "active" : ""}`}
-                      >
-                        <span>Thanh toán</span>
-                      </div>
-                      <div
-                        className={`step-item -order-5 ${
-                          activeTab >= 5 ? "done" : ""
-                        } ${activeTab === 5 ? "active" : ""}`}
-                      >
-                        <span>Xác nhận</span>
-                      </div>
+                      {/* tablist here */}
                     </div>
                   </div>
                 </Form>
@@ -172,19 +270,28 @@ const checkOut = () => {
                             style={{ backgroundColor: "white", padding: 20 }}
                           >
                             <span className="showtime-title-order">
-                              Đổi Suất Chiếu
+                              Change show time
                             </span>
                             <div className="btn-group-order" role="group">
-                              <button className="btn btn-outline-primary">
-                                13:15
-                              </button>
-                              <button className="btn btn-primary">15:15</button>
-                              <button className="btn btn-outline-primary">
-                                17:15
-                              </button>
-                              <button className="btn btn-outline-primary">
-                                18:30
-                              </button>
+                              {data && data?.showtimes
+                                ? data?.showtimes?.map((item, index) => (
+                                    <button
+                                      key={index}
+                                      // className="btn btn-outline-primary"
+                                      className={classnames({
+                                        "btn btn-primary":
+                                          item?.idRoom == data.id,
+                                        "btn btn-outline-primary":
+                                          item?.idRoom != data.id,
+                                      })}
+                                      onClick={() => {
+                                        handleChangeShowtime(item?.idRoom);
+                                      }}
+                                    >
+                                      {item.time}
+                                    </button>
+                                  ))
+                                : null}
                             </div>
                           </div>
                           <div
@@ -192,15 +299,27 @@ const checkOut = () => {
                             style={{ backgroundColor: "white", padding: 20 }}
                           >
                             <div>
-                              <table>
-                                <tbody>ghế</tbody>
-                              </table>
+                              {data?.room?.doubleSeatColumns > 0 &&
+                                data?.room?.doubleSeatRows > 0 &&
+                                renderSeats(
+                                  parseInt(data?.room?.doubleSeatColumns, 10),
+                                  parseInt(data?.room?.doubleSeatRows, 10),
+                                  parseInt(data?.room?.totalColumn, 10),
+                                  true
+                                )}
+                              {data?.room?.seatRows > 0 &&
+                                data?.room?.seatColumns > 0 &&
+                                renderSeats(
+                                  parseInt(data?.room?.seatRows, 10),
+                                  parseInt(data?.room?.seatColumns, 10),
+                                  parseInt(data?.room?.totalColumn, 10)
+                                )}
                             </div>
                             <div className="screen-title-order">
-                              <span className="span-order">màn hình</span>
+                              <strong className="span-order">Screen</strong>
                               <hr className="hr-order" />
                             </div>
-                            <div className="seat-legend">
+                            {/* <div className="seat-legend">
                               <div className="left-seats">
                                 <div className="seat-status">
                                   <div className="seat ghe-da-ban"></div>
@@ -225,233 +344,12 @@ const checkOut = () => {
                                   <span>ghế đôi</span>
                                 </div>
                               </div>
-                            </div>
+                            </div> */}
                           </div>
                         </div>
                       </TabPane>
 
-                      <TabPane tabId={2}>
-                        {productList.map((cartItem, key) => (
-                          <React.Fragment key={cartItem.id}>
-                            <Card className="product mb-3">
-                              <CardBody>
-                                <Row className="gy-3">
-                                  <div className="col-sm-auto">
-                                    <div className="avatar-lg bg-light rounded p-1">
-                                      <img
-                                        src={cartItem.img}
-                                        alt=""
-                                        className="img-fluid d-block"
-                                      />
-                                    </div>
-                                  </div>
-                                  <div className="col-sm">
-                                    <h5 className="fs-14 text-truncate">
-                                      <Link
-                                        to="/ecommerce-product-detail"
-                                        className="text-body"
-                                      >
-                                        {cartItem.name}
-                                      </Link>
-                                    </h5>
-                                    <ul className="list-inline text-muted">
-                                      <li className="list-inline-item">
-                                        Color :{" "}
-                                        <span className="fw-medium">
-                                          {cartItem.color}
-                                        </span>
-                                      </li>
-                                      <li className="list-inline-item">
-                                        Size :{" "}
-                                        <span className="fw-medium">
-                                          {cartItem.size}
-                                        </span>
-                                      </li>
-                                    </ul>
-
-                                    <div className="input-step">
-                                      <button
-                                        type="button"
-                                        className="minus material-shadow"
-                                        onClick={() => {
-                                          countDown(
-                                            cartItem.id,
-                                            cartItem.data_attr,
-                                            cartItem.price
-                                          );
-                                        }}
-                                      >
-                                        –
-                                      </button>
-                                      <Input
-                                        type="text"
-                                        className="product-quantity"
-                                        value={cartItem.data_attr}
-                                        name="demo_vertical"
-                                        readOnly
-                                      />
-                                      <button
-                                        type="button"
-                                        className="plus material-shadow"
-                                        onClick={() => {
-                                          countUP(
-                                            cartItem.id,
-                                            cartItem.data_attr,
-                                            cartItem.price
-                                          );
-                                        }}
-                                      >
-                                        +
-                                      </button>
-                                    </div>
-                                  </div>
-                                  <div className="col-sm-auto">
-                                    <div className="text-lg-end">
-                                      <p className="text-muted mb-1">
-                                        Item Price:
-                                      </p>
-                                      <h5 className="fs-14">
-                                        $
-                                        <span
-                                          id="ticket_price"
-                                          className="product-price"
-                                        >
-                                          {cartItem.price}
-                                        </span>
-                                      </h5>
-                                    </div>
-                                  </div>
-                                </Row>
-                              </CardBody>
-                            </Card>
-                          </React.Fragment>
-                        ))}
-                      </TabPane>
-
-                      <TabPane tabId={3}>
-                        <Row className="gy-3">
-                          <div className="container-order">
-                            <h2 style={{ fontSize: 20, fontWeight: "bold" }}>
-                              Khuyến mãi
-                            </h2>
-                            <div
-                              className="promo-code-order"
-                              style={{ width: 400 }}
-                            >
-                              <input
-                                type="text"
-                                value={promoCode}
-                                onChange={handlePromoCodeChange}
-                                placeholder="Mã khuyến mãi"
-                              />
-                              <button
-                                className="button-order"
-                                onClick={applyPromoCode}
-                              >
-                                Áp Dụng
-                              </button>
-                            </div>
-                          </div>
-                          <div className="container-order">
-                            <h2 style={{ fontSize: 20, fontWeight: "bold" }}>
-                              Phương thức thanh toán
-                            </h2>
-                            <div className="payment-methods-order">
-                              <label>
-                                <input
-                                  type="radio"
-                                  name="payment"
-                                  value="payoo"
-                                  checked={selectedPayment === "payoo"}
-                                  onChange={handlePaymentChange}
-                                />
-                                <img
-                                  src="payoo-logo.png"
-                                  alt="Payoo"
-                                  width="20"
-                                />{" "}
-                                HSBC/Payoo - ATM/VISA/MASTER/JCB/QRCode
-                              </label>
-                              <label>
-                                <input
-                                  type="radio"
-                                  name="payment"
-                                  value="shopeepay"
-                                  checked={selectedPayment === "shopeepay"}
-                                  onChange={handlePaymentChange}
-                                />
-                                <img
-                                  src="shopeepay-logo.png"
-                                  alt="ShopeePay"
-                                  width="20"
-                                />{" "}
-                                Ví ShopeePay - Nhập mã: SPPCINE06 Giảm 20K cho
-                                đơn từ 100K
-                              </label>
-                              <label>
-                                <input
-                                  type="radio"
-                                  name="payment"
-                                  value="momo"
-                                  checked={selectedPayment === "momo"}
-                                  onChange={handlePaymentChange}
-                                />
-                                <img
-                                  src="momo-logo.png"
-                                  alt="MoMo"
-                                  width="20"
-                                />{" "}
-                                Ví Điện Tử MoMo
-                              </label>
-                              <label>
-                                <input
-                                  type="radio"
-                                  name="payment"
-                                  value="zalopay"
-                                  checked={selectedPayment === "zalopay"}
-                                  onChange={handlePaymentChange}
-                                />
-                                <img
-                                  src="zalopay-logo.png"
-                                  alt="ZaloPay"
-                                  width="20"
-                                />{" "}
-                                ZaloPay - Bạn mới Zalopay nhập mã GLX50 - Giảm
-                                50k cho đơn từ 200k
-                              </label>
-                            </div>
-                          </div>
-                        </Row>
-                      </TabPane>
-
-                      <TabPane tabId={4} id="pills-finish">
-                        <div
-                          className="text-center py-5"
-                          style={{ backgroundColor: "white" }}
-                        >
-                          <div className="mb-4">
-                            <i
-                              className="bx bxs-check-circle"
-                              style={{ fontSize: "120px", color: "green" }}
-                            ></i>
-                          </div>
-                          <h5>Thank you ! Your Order is Completed !</h5>
-                          <p className="text-muted">
-                            You will receive an order confirmation email with
-                            details of your order.
-                          </p>
-
-                          <h3 className="fw-semibold">
-                            Order ID:{" "}
-                            <a
-                              href="apps-ecommerce-order-details"
-                              className="text-decoration-underline"
-                            >
-                              VZ2451
-                            </a>
-                          </h3>
-                        </div>
-                      </TabPane>
+                      {/* TabPane here */}
                     </TabContent>
                   </Col>
                   <Col xl={4}>
@@ -459,45 +357,52 @@ const checkOut = () => {
                       <CardBody className="card-body-order">
                         <div className="image-description">
                           <div className="image-info">
-                            <img
-                              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMkk96j-MG-Z72sqHopPg92OTAVspYk5VwJQ&s"
-                              alt="Rạp"
-                            />
+                            <img src={data?.image} alt={data?.movieName} />
                           </div>
                           <div>
-                            <div className="movie-title">
-                              Những Mảnh Ghép Cảm Xúc 2
-                            </div>
-                            <div className="movie-info">
+                            <div className="movie-title">{data?.movieName}</div>
+                            {/* <div className="movie-info">
                               <p>2D Lồng Tiếng </p>
-                            </div>
+                            </div> */}
                           </div>
                         </div>
                         <div className="detailed-info">
                           <div className="movie-info">
                             <p>
-                              <strong>Rạp:</strong> Galaxy Nha Trang Center -
-                              RAP 1
+                              <strong>Cinema: </strong>
+                              {data?.cinemaName} - {data?.roomName}
                             </p>
                             <p>
-                              <strong>Suất chiếu:</strong> 12:00 - Thứ Tư,
-                              26/06/2024
+                              <strong>Show Time:</strong> {data?.time} -{" "}
+                              {data?.date}
                             </p>
                           </div>
                           <hr style={{ border: "1px dashed black" }} />
-                          <div className="price-info">
+                          {/* <div className="price-info">
                             <p>1x Người Lớn - Member</p>
                             <p>60.000 đ</p>
-                          </div>
+                          </div> */}
                           <div className="price-info">
-                            <p>Ghế: J8</p>
+                            <Row>
+                              <p>Selected seats:</p>
+                              {selectedSeats.length > 0 ? (
+                                selectedSeats.map((seat, index) => (
+                                  // <p key={index}>{seat}</p>
+                                  <Col key={index} md={3}>
+                                    <Badge color="success">{seat} </Badge>
+                                  </Col>
+                                ))
+                              ) : (
+                                <p>No seats have been selected yet.</p>
+                              )}
+                            </Row>
                           </div>
                           <div className="price-info">
                             <p>1x iCombo 1 Big Extra STD</p>
                             <p>99.000 đ</p>
                           </div>
                           <hr style={{ border: "1px dashed black" }} />
-                          <p className="total">Tổng Cộng: 159.000 đ</p>
+                          <p className="total">Total: {totalPrice}</p>
                         </div>
                       </CardBody>
                     </Card>
@@ -609,4 +514,4 @@ const checkOut = () => {
   );
 };
 
-export default checkOut;
+export default Booking;

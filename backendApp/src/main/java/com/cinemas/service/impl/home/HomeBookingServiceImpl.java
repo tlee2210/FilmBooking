@@ -73,6 +73,10 @@ public class HomeBookingServiceImpl implements HomeBookingService {
         if(priceMovie != null){
             response.setPrice(priceMovie.getPrice());
         }
+        LocalTime timeNow = LocalTime.now().plusMinutes(15);
+
+        response.setShowtimes(showTimeResponsitory.findshowtimes(response.getDate(), timeNow, response.getMovieName(), response.getCinemaName()));
+
         return response;
     }
 

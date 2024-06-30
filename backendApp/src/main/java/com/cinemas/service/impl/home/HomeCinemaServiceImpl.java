@@ -33,9 +33,6 @@ public class HomeCinemaServiceImpl implements HomeCinemaService {
 
     @Override
     public HomeCinemaResponse getCinemaBySlug(String slug, String city) {
-        System.out.println("===========================");
-        System.out.println("city: " + city);
-        System.out.println("===========================");
         Cinema cinema = cinemaRespository.findCinemaBySlug(slug);
 
         cinema.getImages().forEach(cinemaImages ->

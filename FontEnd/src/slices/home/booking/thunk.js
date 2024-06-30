@@ -1,4 +1,4 @@
-import { selectBooking } from "./reducer";
+import { selectBooking, setBooking } from "./reducer";
 import axios from "axios";
 
 export const getBooking = (slug, city, cinema) => async (dispatch) => {
@@ -15,13 +15,18 @@ export const getBooking = (slug, city, cinema) => async (dispatch) => {
     });
 };
 
-export const getBookingTime = (id) => async (dispatch) => {
+export const getBookingTime = (id, history) => async (dispatch) => {
   // console.log(id);
   await axios
     .get(`http://localhost:8081/api/home/v1/booking/${id}`)
     .then((response) => {
       console.log(response);
-      // dispatch(setBookingMovies(response?.data?.result));
+      localStorage.setItem(
+        "bookingData",
+        JSON.stringify(response?.data?.result)
+      );
+      dispatch(setBooking(response?.data?.result));
+      history("/booking");
     })
     .catch((error) => {
       console.error(error);

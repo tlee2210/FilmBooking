@@ -93,7 +93,7 @@ export const UpdateRoom = (formData, history) => async (dispatch) => {
     .then((response) => {
       // console.log(response);
       dispatch(Success(response.data?.message));
-      history("/dashboard/movie");
+      history("/dashboard/room");
     })
     .catch((err) => {
       console.error(err);

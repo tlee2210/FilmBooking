@@ -48,6 +48,7 @@ public class Room {
     Cinema cinema;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Showtimes> showtimes = new ArrayList<>();
 
 }

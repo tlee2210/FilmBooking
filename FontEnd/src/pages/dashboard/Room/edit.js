@@ -416,6 +416,10 @@ const EditRoom = (props) => {
                     parseInt(validation.values.columns, 10),
                     parseInt(validation.values.totalColumn, 10)
                   )}
+                <div className="screen-title-order">
+                  <span className="span-order">Screen</span>
+                  <hr className="hr-order" />
+                </div>
                 <div className="border-2 border-orange-10 mt-3"></div>
               </CardBody>
             </Card>

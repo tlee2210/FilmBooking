@@ -4,6 +4,7 @@ export const initialState = {
   citySelect: [],
   cinemaSelect: [],
   bookingShowTime: [],
+  bookingitem: JSON.parse(localStorage.getItem("bookingData")) || null,
 };
 
 const BookingSlice = createSlice({
@@ -15,9 +16,12 @@ const BookingSlice = createSlice({
       state.cinemaSelect = action.payload.cinema;
       state.bookingShowTime = action.payload.bookingShowTimeResponses;
     },
+    setBooking: (state, action) => {
+      state.bookingitem = action.payload;
+    },
   },
 });
 
-export const { selectBooking } = BookingSlice.actions;
+export const { selectBooking, setBooking } = BookingSlice.actions;
 
 export default BookingSlice.reducer;

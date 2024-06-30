@@ -75,7 +75,7 @@ const HomeCinema = (props) => {
   };
   const handleBooking = (idRoom) => {
     // console.log(idRoom);
-    dispatch(getBookingTime(idRoom));
+    dispatch(getBookingTime(idRoom, props.router.navigate));
   };
 
   const handleMovieClick = (movie, movieIndex, index) => {

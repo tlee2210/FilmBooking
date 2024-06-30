@@ -1,474 +1,437 @@
 .showtime-buttons-order {
-    display: flex;
-    align-items: center;
-
-
+  display: flex;
+  align-items: center;
+}
+.selected-seat {
+  background-color: rgb(249, 88, 7);
+  color: white;
 }
 
 .showtime-title-order {
-    margin-right: 80px;
-    font-size: 20px;
-    font-weight: bold;
-
+  margin-right: 80px;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .btn-group-order {
-    display: flex;
-    gap: 20px;
-
+  display: flex;
+  gap: 20px;
 }
 
-
 .screen-title-order {
-    position: relative;
-    text-align: center;
-    margin-top: 10px;
+  position: relative;
+  text-align: center;
+  margin-top: 10px;
 }
 
 .screen-title-order .span-order {
-    position: relative;
-    background-color: white;
-    font-size: 12px;
+  position: relative;
+  background-color: white;
+  font-size: 12px;
 }
 
 .screen-title-order .hr-order {
-    margin-top: 0px;
-    border: 0;
-    border-top: 3px solid rgb(249, 88, 7);
+  margin-top: 0px;
+  border: 0;
+  border-top: 3px solid rgb(249, 88, 7);
 }
 
-
-
-
 .seat-legend {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
 }
 
 .left-seats,
 .right-seats {
-    display: flex;
+  display: flex;
 }
 
 .seat-status {
-    display: flex;
-    align-items: center;
-    margin-right: 10px;
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
 }
 
-
-
 .ghe-da-ban {
-    background-color: gray;
+  background-color: gray;
 }
 
 .ghe-dang-chon {
-    background-color: orange;
+  background-color: orange;
 }
 
 .ghe-vip {
-    background-color: white;
-    border: 1px solid gold;
+  background-color: white;
+  border: 1px solid gold;
 }
 
 .ghe-don {
-    background-color: white;
-    border: 1px solid blue;
+  background-color: white;
+  border: 1px solid blue;
 }
 
 .ghe-doi {
-    background-color: white;
-    border: 1px solid green;
-    width: 40px;
+  background-color: white;
+  border: 1px solid green;
+  width: 40px;
 }
 
-
-
 .image-description {
-    margin-top: 3px;
-    
+  margin-top: 3px;
 }
 
 .image-description img {
-    width: 120px;
-    height: 180px;
+  width: 120px;
+  height: 180px;
 }
 
 .image-description hr {
-    border-top: 1px solid black;
-    width: 80%;
-    margin: 10px auto;
+  border-top: 1px solid black;
+  width: 80%;
+  margin: 10px auto;
 }
 
 .image-description p {
-    margin-bottom: 5px;
-    /* Khoảng cách giữa các dòng */
+  margin-bottom: 5px;
+  /* Khoảng cách giữa các dòng */
 }
 
 .image-description p.total {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .image-description .movie-title {
-    font-weight: bold;
+  font-weight: bold;
 }
-
-
-
 
 .container-order {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
 }
 
-
-
 .promo-code-order {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .promo-code-order input {
-    width: calc(100% - 100px);
-    padding: 10px;
-    margin-right: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  width: calc(100% - 100px);
+  padding: 10px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .promo-code-order .button-order {
-    padding: 10px;
-    background-color: #ff6600;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+  padding: 10px;
+  background-color: #ff6600;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .payment-methods-order {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .payment-methods-order {
-    display: block;
-    margin-bottom: 10px;
-    cursor: pointer;
+  display: block;
+  margin-bottom: 10px;
+  cursor: pointer;
 }
 
 .payment-methods-order {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .payment-methods-order {
-    vertical-align: middle;
-    margin-right: 10px;
+  vertical-align: middle;
+  margin-right: 10px;
 }
-
-
-
-
-
 
 /* General modal styles */
 .modal-header-order {
-    background-color: #f8f9fa;
-    border-bottom: none;
-    color: #333;
-    font-size: 1.2em;
-    font-weight: bold;
-    text-align: center;
+  background-color: #f8f9fa;
+  border-bottom: none;
+  color: #333;
+  font-size: 1.2em;
+  font-weight: bold;
+  text-align: center;
 }
 
 .modal-body-order {
-    color: #333;
-    font-size: 1em;
-    padding: 20px;
-    background-color: #ffffff;
+  color: #333;
+  font-size: 1em;
+  padding: 20px;
+  background-color: #ffffff;
 }
 
 .modal-footer-order {
-    border-top: none;
-    display: flex;
-    justify-content: center;
-    padding: 20px;
-    background-color: #f8f9fa;
+  border-top: none;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  background-color: #f8f9fa;
 }
 
 /* Ticket information styles */
 .ticket-info-order {
-    font-family: Arial, sans-serif;
-    margin-bottom: 20px;
+  font-family: Arial, sans-serif;
+  margin-bottom: 20px;
 }
 
 .ticket-section-order {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid #eee;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #eee;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
 }
 
 .ticket-section-order strong {
-    font-size: 1em;
-    color: #333;
+  font-size: 1em;
+  color: #333;
 }
 
 .price-tag-order {
-    font-size: 1.2em;
-    color: #007bff;
-    font-weight: bold;
+  font-size: 1.2em;
+  color: #007bff;
+  font-weight: bold;
 }
 
 .total-section-order {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: #fff;
-    border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  border-radius: 5px;
 }
 
 /* Confirmation checkbox styles */
 .confirmation-checkbox-order {
-    margin-top: 15px;
-    display: flex;
-    align-items: center;
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
 }
 
 .confirmation-checkbox-order input {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 /* Button styles */
 button.primary {
-    background-color: #ff7900;
-    border-color: #ff7900;
-    color: white;
-    font-weight: bold;
-    padding: 10px 20px;
-    border-radius: 5px;
+  background-color: #ff7900;
+  border-color: #ff7900;
+  color: white;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 5px;
 }
 
 button.secondary {
-    background-color: #6c757d;
-    border-color: #6c757d;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
 }
 
 button:focus {
-    outline: none;
+  outline: none;
 }
-
 
 .modal-header .close {
-    font-size: 1.5em;
-    color: #333;
+  font-size: 1.5em;
+  color: #333;
 }
 
-
-
-
 .step-arrow-nav {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .custom-nav {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 800px;
-    border-bottom: 2px solid #ddd;
-    position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 800px;
+  border-bottom: 2px solid #ddd;
+  position: relative;
 }
 
 .step-item {
-    flex-grow: 1;
-    text-align: center;
-    padding: 10px 0;
-    cursor: pointer;
-    position: relative;
+  flex-grow: 1;
+  text-align: center;
+  padding: 10px 0;
+  cursor: pointer;
+  position: relative;
 }
 
 .step-item span {
-    display: block;
-    color: #aaa;
-    font-size: 18px;
-    transition: color 0.3s;
-    font-weight: bold;
-
+  display: block;
+  color: #aaa;
+  font-size: 18px;
+  transition: color 0.3s;
+  font-weight: bold;
 }
 
 .step-item.done span {
-    color: #034ea2;
+  color: #034ea2;
 }
 
 .step-item.active span {
-    color: #034ea2;
-   font-weight: bold;
+  color: #034ea2;
+  font-weight: bold;
 }
 
 .custom-nav::before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background-color: #034ea2;
-    transition: width 0.3s;
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #034ea2;
+  transition: width 0.3s;
 }
 
 .custom-nav .step-item.done::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: #034ea2;
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #034ea2;
 }
 
 .custom-nav .step-item.done:not(:last-child)::after {
-    background-color: #034ea2;
-    width: 100%;
-    left: 0;
+  background-color: #034ea2;
+  width: 100%;
+  left: 0;
 }
 
 .step-item.-order-1 {
-    order: 1;
+  order: 1;
 }
 
 .step-item.-order-2 {
-    order: 2;
+  order: 2;
 }
 
 .step-item.-order-3 {
-    order: 3;
+  order: 3;
 }
 
 .step-item.-order-4 {
-    order: 4;
+  order: 4;
 }
 
 .step-item.-order-5 {
-    order: 5;
+  order: 5;
 }
-
 
 .btn-container-order {
-    padding: 10px 20px;
-    font-size: 17px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    font-weight: 100;
+  padding: 10px 20px;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: 100;
 }
 .btn-quaylai {
-    background-color: transparent;
-    color: orange;
-    border: none;
-    padding-left: 100px;
+  background-color: transparent;
+  color: orange;
+  border: none;
+  padding-left: 100px;
 }
 .btn-tieptuc {
-    background-color: orange;
-    color: white;
-    border: 2px solid orange;
+  background-color: orange;
+  color: white;
+  border: 2px solid orange;
 }
-
-
 
 .card-body-order {
-    font-family: Arial, sans-serif;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 360px;
-    margin: auto;
-    border-top: 4px solid #ff6600;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 360px;
+  margin: auto;
+  border-top: 4px solid #ff6600;
 }
-
 
 .image-description {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
 }
 
-
 .image-info img {
-    border-radius: 8px;
-    margin-right: 15px;
-    width: 150px;
-    height: auto;
+  border-radius: 8px;
+  margin-right: 15px;
+  width: 150px;
+  height: auto;
 }
 
 .movie-info {
-    font-size: 14px;
-    color: #666;
+  font-size: 14px;
+  color: #666;
 }
-
 
 .movie-info p {
-    margin: 5px 0;
+  margin: 5px 0;
 }
-
 
 .total {
-    font-weight: bold;
-    color: #ff6600;
-    font-size: 16px;
-    margin-top: 10px;
-    text-align: right;
+  font-weight: bold;
+  color: #ff6600;
+  font-size: 16px;
+  margin-top: 10px;
+  text-align: right;
 }
-
 
 .movie-info strong {
-    color: #333;
+  color: #333;
 }
-
 
 .movie-info hr {
-    border: none;
-    border-top: 1px solid #ddd;
-    margin: 15px 0;
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 15px 0;
 }
-
 
 .movie-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
 }
-
 
 .detailed-info {
-    border-top: 1px dashed #ddd;
-    margin-top: 10px;
-    padding-top: 10px;
-    width: 100%;
+  border-top: 1px dashed #ddd;
+  margin-top: 10px;
+  padding-top: 10px;
+  width: 100%;
 }
-
 
 .detailed-info p {
-    margin: 5px 0;
+  margin: 5px 0;
 }
 
-
 .price-info {
-    display: flex;
-    justify-content: space-between;
-    margin: 5px 0;
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
 }
