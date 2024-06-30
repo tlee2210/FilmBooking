@@ -19,12 +19,12 @@ public class HomeCinemaController {
     @Autowired
     private HomeCinemaService homeCinemaService;
 
-    @GetMapping()
+    @GetMapping("/{slug}")
     public APIResponse<HomeCinemaResponse> getCinema(
-            @RequestParam(required = false) String slug,
-            @RequestParam(required = false) String city,
-            @RequestParam(required = false) String _cinema) {
-        HomeCinemaResponse cinema = homeCinemaService.getCinemaBySlug(slug, city, _cinema);
+            @PathVariable String slug,
+            @RequestParam(required = false) String city
+    ) {
+        HomeCinemaResponse cinema = homeCinemaService.getCinemaBySlug(slug, city);
         APIResponse<HomeCinemaResponse> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(cinema);

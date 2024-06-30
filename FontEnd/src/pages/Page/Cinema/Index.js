@@ -84,7 +84,7 @@ const HomeCinema = (props) => {
       if (movieIndex <= 5) {
         setMovieIndexRender(totalMovies - 1 < 5 ? totalMovies - 1 : 5);
       } else if (movieIndex < totalMovies - 1 && totalMovies - 1 <= 11) {
-        setMovieIndexRender(totalMovies - 1);
+        setMovieIndexRender(totalMovies - 1 < 11 ? totalMovies - 1 : 11);
       } else {
         setMovieIndexRender(movieIndex + movie.times.length - 1);
       }
@@ -163,9 +163,14 @@ const HomeCinema = (props) => {
                       width: "auto",
                     }}
                   >
-                    <option>Tất Cả Tỉnh</option>
-                    <option>Tân Bình</option>
-                    <option>Option 2</option>
+                    <option value="">Tất Cả Tỉnh</option>
+                    {cinemaData && cinemaData.cityList
+                      ? cinemaData?.cityList.map((item, index) => (
+                          <option key={index} value={item.value}>
+                            {item.label}
+                          </option>
+                        ))
+                      : null}
                   </Input>
                   <Input
                     type="select"

@@ -32,7 +32,10 @@ public class HomeCinemaServiceImpl implements HomeCinemaService {
     FileStorageServiceImpl fileStorageServiceImpl;
 
     @Override
-    public HomeCinemaResponse getCinemaBySlug(String slug, String city, String _cinema) {
+    public HomeCinemaResponse getCinemaBySlug(String slug, String city) {
+        System.out.println("===========================");
+        System.out.println("city: " + city);
+        System.out.println("===========================");
         Cinema cinema = cinemaRespository.findCinemaBySlug(slug);
 
         cinema.getImages().forEach(cinemaImages ->
@@ -40,7 +43,7 @@ public class HomeCinemaServiceImpl implements HomeCinemaService {
 
         HomeCinemaResponse homeCinemaResponse = new HomeCinemaResponse();
         ObjectUtils.copyFields(cinema, homeCinemaResponse);
-        
+
         LocalTime timeNow = LocalTime.now().plusMinutes(15);
 
         homeCinemaResponse.setDays(showTimeResponsitory.getDates(slug, timeNow));
