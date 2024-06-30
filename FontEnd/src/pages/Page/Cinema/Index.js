@@ -40,9 +40,16 @@ const mapStyles = {
 
 const HomeCinema = (props) => {
   const dispatch = useDispatch();
-
+  const history = useNavigate();
   const slug = props.router.params.slug;
   // console.log(slug);
+
+  const [activeTab, setActiveTab] = useState(0);
+  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [movieTime, setMovieTime] = useState(null);
+  const [movieIndexRender, setMovieIndexRender] = useState(null);
+  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedCinema, setSelectedCinema] = useState("");
 
   const CinemaState = (state) => state;
   const CinemaStateData = createSelector(CinemaState, (state) => ({
@@ -53,15 +60,14 @@ const HomeCinema = (props) => {
   const { error, messageError, cinemaData } = useSelector(CinemaStateData);
 
   useEffect(() => {
-    dispatch(getCinemaHome(slug, props.router.navigate));
-  }, [slug]);
-
-  document.title = cinemaData.name || "Cinema";
-
-  const [activeTab, setActiveTab] = useState(0);
-  const [selectedMovie, setSelectedMovie] = useState(null);
-  const [movieTime, setMovieTime] = useState(null);
-  const [movieIndexRender, setMovieIndexRender] = useState(null);
+    dispatch(
+      getCinemaHome(
+        slug,
+        selectedCity ? selectedCity : null,
+        props.router.navigate
+      )
+    );
+  }, [slug, selectedCity]);
 
   const tabChange = (tab) => {
     if (activeTab !== tab) setActiveTab(tab);
@@ -70,7 +76,6 @@ const HomeCinema = (props) => {
   const handleBooking = (idRoom) => {
     // console.log(idRoom);
     dispatch(getBookingTime(idRoom));
-    // setMovieTime(time);
   };
 
   const handleMovieClick = (movie, movieIndex, index) => {
@@ -93,6 +98,22 @@ const HomeCinema = (props) => {
       setSelectedMovie(movie.name);
     }
   };
+  const handleSelectCityChange = (event) => {
+    setSelectedCinema("");
+    // console.log(event.target.value);
+    setSelectedCity(event.target.value);
+  };
+
+  const handleSelectCinemaChange = (event) => {
+    // console.log(event.target.value);
+    // setSelectedCinema(event.target.value);
+    if (event.target.value !== slug && event.target.value !== "") {
+      // history(`cinema/${event.target.value}`);
+      props.router.navigate(`/cinema/${event.target.value}`);
+    }
+  };
+
+  document.title = cinemaData.name || "Cinema";
 
   return (
     <React.Fragment>
@@ -162,8 +183,9 @@ const HomeCinema = (props) => {
                       fontSize: "15px",
                       width: "auto",
                     }}
+                    onChange={handleSelectCityChange}
                   >
-                    <option value="">Tất Cả Tỉnh</option>
+                    <option value="">All City</option>
                     {cinemaData && cinemaData.cityList
                       ? cinemaData?.cityList.map((item, index) => (
                           <option key={index} value={item.value}>
@@ -181,10 +203,17 @@ const HomeCinema = (props) => {
                       fontSize: "15px",
                       width: "auto",
                     }}
+                    onChange={handleSelectCinemaChange}
+                    value={selectedCinema}
                   >
-                    <option>Rạp Phim</option>
-                    <option>Option 1</option>
-                    <option>Option 2</option>
+                    <option value={""}>Cinema</option>
+                    {cinemaData && cinemaData.cinema
+                      ? cinemaData?.cinema.map((item, index) => (
+                          <option key={index} value={item.value}>
+                            {item.label}
+                          </option>
+                        ))
+                      : null}
                   </Input>
                 </Col>
               </Row>
