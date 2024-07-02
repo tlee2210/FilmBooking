@@ -1,12 +1,12 @@
 package com.cinemas.repositories;
 
 import com.cinemas.dto.response.ItemIntroduce;
+import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Movie;
 import com.cinemas.enums.MovieStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
-import java.time.LocalDate;
+import com.cinemas.enums.*;
 import java.util.List;
 
 public interface MovieRepository extends JpaRepository<Movie, Integer> {
@@ -22,7 +22,7 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
 
     Movie findByName(String name);
 
-//    @Query("SELECT m FROM Movie m INNER JOIN Celebrity ON m = Celebrity.m WHERE m.slug = ?1")
+    //    @Query("SELECT m FROM Movie m INNER JOIN Celebrity ON m = Celebrity.m WHERE m.slug = ?1")
     Movie findBySlug(String slug);
 
     @Query("SELECT m FROM Movie m WHERE m.name = ?1 AND m.id != ?2")
@@ -38,7 +38,7 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
     List<Movie> getMovieForStatusIntroduce(MovieStatus status);
 
     @Query("SELECT m FROM Movie m WHERE m.endDate > CURRENT_DATE")
-    List<Movie>findAllMovieSetTime();
+    List<Movie> findAllMovieSetTime();
 
     @Query("SELECT new com.cinemas.dto.response.ItemIntroduce(m.id, m.name, m.slug, m.imagePortrait, m.trailer) FROM Movie m WHERE m.status = :status ORDER BY m.id DESC LIMIT :num")
     List<ItemIntroduce> getMovieHomePage(MovieStatus status, int num);
@@ -54,4 +54,7 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
 
     @Query("SELECT YEAR(m.releaseDate) FROM Movie m GROUP BY YEAR(m.releaseDate)")
     List<Integer> getYears();
+
+    @Query("SELECT  new com.cinemas.dto.response.SelectOptionReponse(m.id, m.name) FROM Movie m WHERE m.status = com.cinemas.enums.MovieStatus.NOW_SHOWING or m.status = com.cinemas.enums.MovieStatus.COMING_SOON")
+    List<SelectOptionReponse> SelectOptionNameAndid();
 }

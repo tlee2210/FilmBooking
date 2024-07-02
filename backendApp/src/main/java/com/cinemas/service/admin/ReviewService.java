@@ -4,6 +4,7 @@ import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.ReviewRequest;
 import com.cinemas.dto.request.SearchRequest;
 import com.cinemas.dto.request.SearchReviewRequest;
+import com.cinemas.dto.response.ReviewResponse;
 import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Review;
@@ -15,13 +16,14 @@ import java.util.List;
 
 public interface ReviewService {
     SelectOptionAndModelReponse<Page<Review>> getAllReview(SearchRequest paginationHelper);
+
     boolean addReview(ReviewRequest review) throws IOException;
 
     Integer deleteReview(String slug) throws IOException;
 
-    SelectOptionAndModelReponse<Review> getEditReview(String slug);
+    SelectOptionAndModelReponse<ReviewResponse> getEditReview(String slug);
 
     boolean updateReview(ReviewRequest review) throws IOException;
 
-    List<SelectOptionReponse> getCreate();
+    SelectOptionAndModelReponse getCreate();
 }

@@ -26,6 +26,8 @@ public class ReviewRequest {
 
     private ReviewType type;
 
+    private Integer movieId;
+
     private List<String> url;
 
     @NotEmpty

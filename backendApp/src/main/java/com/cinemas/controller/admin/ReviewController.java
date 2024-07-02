@@ -5,6 +5,7 @@ import com.cinemas.dto.request.ReviewRequest;
 import com.cinemas.dto.request.SearchRequest;
 import com.cinemas.dto.request.SearchReviewRequest;
 import com.cinemas.dto.response.APIResponse;
+import com.cinemas.dto.response.ReviewResponse;
 import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Review;
@@ -55,9 +56,9 @@ public class ReviewController {
     }
 
     @GetMapping("/create")
-    public APIResponse<List<SelectOptionReponse>> getReview() {
+    public APIResponse<SelectOptionAndModelReponse> getReview() {
 
-        APIResponse<List<SelectOptionReponse>> apiResponse = new APIResponse<>();
+        APIResponse<SelectOptionAndModelReponse> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(reviewService.getCreate());
 
@@ -72,9 +73,6 @@ public class ReviewController {
      */
     @PostMapping("/create")
     public APIResponse<String> createReview(@ModelAttribute ReviewRequest reviewRequest) throws IOException {
-        System.out.println("=======================================");
-        System.out.println(reviewRequest);
-        System.out.println("=======================================");
         boolean checkCreate = reviewService.addReview(reviewRequest);
         if (checkCreate) {
             APIResponse<String> apiResponse = new APIResponse();
@@ -116,10 +114,10 @@ public class ReviewController {
      * @return
      */
     @GetMapping("/{slug}/edit")
-    public APIResponse<SelectOptionAndModelReponse<Review>> getEditWaterCorn(@PathVariable String slug) {
-        SelectOptionAndModelReponse<Review> modelReponse = reviewService.getEditReview(slug);
+    public APIResponse<SelectOptionAndModelReponse<ReviewResponse>> getEditWaterCorn(@PathVariable String slug) {
+        SelectOptionAndModelReponse<ReviewResponse> modelReponse = reviewService.getEditReview(slug);
 
-        APIResponse<SelectOptionAndModelReponse<Review>> apiResponse = new APIResponse();
+        APIResponse<SelectOptionAndModelReponse<ReviewResponse>> apiResponse = new APIResponse();
         apiResponse.setCode(200);
         apiResponse.setResult(modelReponse);
 

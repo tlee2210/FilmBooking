@@ -26,7 +26,7 @@ export const getCreateReview = () => async (dispatch) => {
     .get(`http://localhost:8081/api/admin/v1/review/create`)
     .then((response) => {
       // console.log(response);
-      dispatch(setSelectOption(response.data?.result));
+      dispatch(setSelectOption({ data: response.data?.result }));
     })
     .catch((err) => {
       console.error(err);
@@ -70,7 +70,7 @@ export const editReview = (slug, history) => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/admin/v1/review/${slug}/edit`)
     .then((response) => {
-      // console.log(response);
+      console.log(response);
       dispatch(
         setItem({
           data: response.data?.result,

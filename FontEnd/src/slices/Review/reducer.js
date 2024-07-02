@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const initialState = {
   data: [],
   SelectOption: [],
+  SelectMovie: [],
   item: {},
 };
 
@@ -16,11 +17,13 @@ const ReviewSlice = createSlice({
       state.SelectOption = action.payload.data.selectOptionReponse;
     },
     setSelectOption(state, action) {
-      state.SelectOption = action.payload;
+      state.SelectOption = action.payload.data.selectOptionStatus;
+      state.SelectMovie = action.payload.data.model;
     },
     setItem(state, action) {
       state.item = action.payload.data.model;
-      state.SelectOption = action.payload.data.selectOptionReponse;
+      state.SelectOption = action.payload.data.selectOptionStatus;
+      state.SelectMovie = action.payload.data.selectOptionReponse;
     },
     removeItem(state, action) {
       // console.log(action.payload);

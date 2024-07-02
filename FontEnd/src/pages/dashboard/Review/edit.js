@@ -61,8 +61,9 @@ const BlogEdit = (props) => {
     messageError: state.Message.messageError,
     item: state.Review.item,
     SelectOption: state.Review.SelectOption,
+    SelectMovie: state.Review.SelectMovie,
   }));
-  const { error, messageError, item, SelectOption } =
+  const { error, messageError, item, SelectOption, SelectMovie } =
     useSelector(blogCreatepageData);
 
   useEffect(() => {
@@ -98,6 +99,7 @@ const BlogEdit = (props) => {
     initialValues: {
       name: item.name || "",
       type: item.type || "",
+      movie: item.movieid || "",
       description: item.description || "",
       file: item.thumbnail
         ? [{ uid: item.thumbnail, url: item.thumbnail }]
@@ -105,6 +107,7 @@ const BlogEdit = (props) => {
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Please Enter name"),
+      movie: Yup.string().required("Please Enter movie"),
       type: Yup.string().required("Please Enter type"),
       description: Yup.string().required("Please Enter description"),
       file: Yup.array()
@@ -124,6 +127,7 @@ const BlogEdit = (props) => {
       const formData = new FormData();
       formData.append("id", item.id);
       formData.append("name", values.name);
+      formData.append("movieId", values.movie);
       formData.append("type", values.type);
       formData.append("description", values.description);
 
@@ -301,7 +305,7 @@ const BlogEdit = (props) => {
                             ) : null}
                           </div>
                         </Col>
-                        <Col md={12}>
+                        <Col md={6}>
                           <div className="mb-3">
                             <Label className="form-label" htmlFor="name">
                               Type
@@ -309,13 +313,10 @@ const BlogEdit = (props) => {
                             <Select
                               name="type"
                               options={SelectOption}
-                              isClearable={true}
                               placeholder="Select type"
                               classNamePrefix="select"
                               onChange={(option) => {
-                                const status = option ? option.value : null;
-                                validation.setFieldValue("type", status);
-                                validation.setFieldTouched("type", true);
+                                validation.setFieldValue("type", option.value);
                               }}
                               onBlur={() =>
                                 validation.setFieldTouched("type", true)
@@ -323,11 +324,51 @@ const BlogEdit = (props) => {
                               value={SelectOption?.find(
                                 (opt) => opt.value === validation.values.type
                               )}
+                              className={
+                                validation.errors.movie &&
+                                validation.touched.movie
+                                  ? "is-invalid"
+                                  : ""
+                              }
                             />
-                            {validation.errors.name &&
-                            validation.touched.name ? (
+                            {validation.errors.type &&
+                            validation.touched.type ? (
                               <FormFeedback type="invalid">
-                                {validation.errors.name}
+                                {validation.errors.type}
+                              </FormFeedback>
+                            ) : null}
+                          </div>
+                        </Col>
+                        <Col md={6}>
+                          <div className="mb-3">
+                            <Label className="form-label" htmlFor="name">
+                              Movie Name
+                            </Label>
+                            <Select
+                              name="movie"
+                              options={SelectMovie}
+                              placeholder="Select Movie"
+                              classNamePrefix="select"
+                              onChange={(option) => {
+                                validation.setFieldValue("movie", option.value);
+                              }}
+                              onBlur={() =>
+                                validation.setFieldTouched("movie", true)
+                              }
+                              value={SelectMovie?.find(
+                                (opt) => opt.value === validation.values.movie
+                              )}
+                              className={
+                                validation.errors.movie &&
+                                validation.touched.movie
+                                  ? "is-invalid"
+                                  : ""
+                              }
+                            />
+                            {validation.errors.movie &&
+                            validation.touched.movie ? (
+                              <FormFeedback type="invalid">
+                                {validation.errors.movie}
                               </FormFeedback>
                             ) : null}
                           </div>

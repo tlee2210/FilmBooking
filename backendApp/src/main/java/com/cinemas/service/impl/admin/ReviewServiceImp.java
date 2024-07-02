@@ -4,18 +4,14 @@ import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.ReviewRequest;
 import com.cinemas.dto.request.SearchRequest;
-import com.cinemas.dto.request.SearchReviewRequest;
+import com.cinemas.dto.response.ReviewResponse;
 import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
-import com.cinemas.entities.Celebrity;
 import com.cinemas.entities.Review;
-import com.cinemas.entities.WaterCorn;
 import com.cinemas.entities.imageDescription;
 import com.cinemas.enums.ReviewType;
 import com.cinemas.exception.AppException;
-import com.cinemas.repositories.CelebrityRepository;
-import com.cinemas.repositories.ReviewRepository;
-import com.cinemas.repositories.imageDescriptionRespository;
+import com.cinemas.repositories.*;
 import com.cinemas.service.admin.ReviewService;
 import com.cinemas.service.impl.FileStorageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +34,9 @@ import static com.cinemas.exception.ErrorCode.NOT_FOUND;
 public class ReviewServiceImp implements ReviewService {
     @Autowired
     ReviewRepository reviewRepository;
+
+    @Autowired
+    MovieRepository movieRepository;
 
     @Autowired
     FileStorageServiceImpl fileStorageServiceImpl;
@@ -80,6 +79,7 @@ public class ReviewServiceImp implements ReviewService {
         Review addReview = new Review();
 
         ObjectUtils.copyFields(review, addReview);
+        addReview.setMovie(movieRepository.getById(review.getMovieId()));
 
         addReview.setSlug(review.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
         addReview.setThumbnail(fileStorageServiceImpl.uploadFile(review.getFile(), "review"));
@@ -107,6 +107,8 @@ public class ReviewServiceImp implements ReviewService {
 
         if (review == null) throw new AppException(NOT_FOUND);
 
+        review.setMovie(null);
+
         List<imageDescription> imageDescriptionList = imageDescriptionRespository.findBySlug_name(slug);
         imageDescriptionList.forEach(item -> {
             try {
@@ -123,10 +125,18 @@ public class ReviewServiceImp implements ReviewService {
     }
 
     @Override
-    public SelectOptionAndModelReponse<Review> getEditReview(String slug) {
+    public SelectOptionAndModelReponse<ReviewResponse> getEditReview(String slug) {
         Review review = reviewRepository.findBySlug(slug);
 
         if (review == null) throw new AppException(NOT_FOUND);
+        SelectOptionAndModelReponse<ReviewResponse> optionAndModelReponse = new SelectOptionAndModelReponse();
+        ReviewResponse reviewResponse = new ReviewResponse();
+
+        ObjectUtils.copyFields(review, reviewResponse);
+
+        reviewResponse.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(review.getThumbnail()));
+        reviewResponse.setMovieid(review.getMovie().getId());
+        optionAndModelReponse.setModel(reviewResponse);
 
         review.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(review.getThumbnail()));
         List<SelectOptionReponse> selectOptionReponses = new ArrayList<>();
@@ -135,7 +145,11 @@ public class ReviewServiceImp implements ReviewService {
             selectOptionReponses.add(new SelectOptionReponse(reviewType.name(), reviewType.name()));
         }
 
-        return new SelectOptionAndModelReponse<>(selectOptionReponses, review);
+        optionAndModelReponse.setSelectOptionStatus(selectOptionReponses);
+
+        optionAndModelReponse.setSelectOptionReponse(movieRepository.SelectOptionNameAndid());
+
+        return optionAndModelReponse;
     }
 
     @Override
@@ -157,6 +171,9 @@ public class ReviewServiceImp implements ReviewService {
         ObjectUtils.copyFields(review, wat);
         wat.setSlug(review.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
         wat.setType(review.getType());
+
+        wat.setMovie(movieRepository.getById(review.getMovieId()));
+
         List<imageDescription> imageDescriptionList = imageDescriptionRespository.findBySlug_name(slugOld);
 
         if (review.getUrl() != null) {
@@ -189,13 +206,17 @@ public class ReviewServiceImp implements ReviewService {
     }
 
     @Override
-    public List<SelectOptionReponse> getCreate() {
-        List<SelectOptionReponse> selectOptionReponses = new ArrayList<>();
+    public SelectOptionAndModelReponse getCreate() {
+        SelectOptionAndModelReponse optionAndModelReponse = new SelectOptionAndModelReponse();
 
+        List<SelectOptionReponse> selectOptionReponses = new ArrayList<>();
+//        movieGenreRepository
         for (ReviewType reviewType : ReviewType.values()) {
             selectOptionReponses.add(new SelectOptionReponse(reviewType.name(), reviewType.name()));
         }
+        optionAndModelReponse.setSelectOptionStatus(selectOptionReponses);
+        optionAndModelReponse.setModel(movieRepository.SelectOptionNameAndid());
 
-        return selectOptionReponses;
+        return optionAndModelReponse;
     }
 }
