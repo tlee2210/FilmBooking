@@ -43,8 +43,13 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
     @Query("SELECT m FROM Movie m WHERE (:slugMovie is null or m.slug = :slugMovie) AND m.status = com.cinemas.enums.MovieStatus.NOW_SHOWING")
     List<Movie> getListBySlug(String slugMovie);
 
-    @Query("SELECT m FROM Movie m LEFT JOIN m.categories mg WHERE (:genreId is null or mg.id = :genreId)" + "AND (:countryId is null or m.country.id = :countryId)" + "AND (:year is null or YEAR(m.releaseDate) = :year)" + "AND (:status is null or m.status = :status)")
-    List<Movie> searchFilm(Integer genreId, Integer countryId, String year, MovieStatus status);
+    @Query("SELECT DISTINCT new com.cinemas.dto.response.ItemIntroduce(m.id, m.name, m.slug, m.imageLandscape, m.description) " +
+            "FROM Movie m LEFT JOIN m.categories mg " +
+            "WHERE (:category is null or mg.slug = :category)" +
+            "AND (:country is null or m.country.slug = :country)" +
+            "AND (:year is null or YEAR(m.releaseDate) = :year)" +
+            "AND (:status is null or m.status = :status) order by m.id DESC ")
+    List<ItemIntroduce> searchFilm(String category, String country, String year, MovieStatus status);
 
     @Query("SELECT YEAR(m.releaseDate) FROM Movie m GROUP BY YEAR(m.releaseDate)")
     List<Integer> getYears();

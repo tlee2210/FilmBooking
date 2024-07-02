@@ -14,6 +14,7 @@ public class ItemIntroduce {
     private Integer id;
     private String name;
     private String slug;
+    private String description;
     private String imagePortrait;
     private String trailer;
 
@@ -22,5 +23,13 @@ public class ItemIntroduce {
         this.name = name;
         this.slug = slug;
         this.imagePortrait = imagePortrait;
+    }
+
+    public ItemIntroduce(Integer id, String name, String slug, String imagePortrait, String description) {
+        this.id = id;
+        this.name = name;
+        this.slug = slug;
+        this.imagePortrait = imagePortrait;
+        this.description = description;
     }
 }

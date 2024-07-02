@@ -7,7 +7,7 @@ export const getHomeWaterCorn = () => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/home/v1/watercorn`)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(fetchSuccess(response?.data?.result));
     })
     .catch((error) => {

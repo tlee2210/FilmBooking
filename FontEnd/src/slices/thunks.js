@@ -25,3 +25,4 @@ export * from "./home/MovieHome/thunk";
 export * from "./home/booking/thunk";
 export * from "./home/CinemaHome/thunk";
 export * from "./home/Watercorn/thunk";
+export * from "./home/Movie-GenreHome/thunk";

@@ -27,6 +27,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.cinemas.enums.MovieStatus.*;
 import static com.cinemas.exception.ErrorCode.NOT_FOUND;
 
 @Component
@@ -50,41 +51,44 @@ public class HomeFilmServiceImpl implements HomeFilmService {
     private imageDescriptionRespository imageDescriptionRespository;
 
     @Override
-    public SelectOptionAndModelReponse<Page<Movie>> getAllFilms(SearchFilmRequest searchFilmRequest) {
-        List<Movie> movieList = movieRepository.searchFilm(searchFilmRequest.getGenreId(), searchFilmRequest.getCountryId(), searchFilmRequest.getYear(), searchFilmRequest.getStatus());
+    public SelectOptionAndModelReponse<Page<ItemIntroduce>> getAllFilms(SearchFilmRequest searchFilmRequest) {
+
+        List<ItemIntroduce> movieList = movieRepository.searchFilm(searchFilmRequest.getCategory(), searchFilmRequest.getCountry(), searchFilmRequest.getYear(), searchFilmRequest.getStatus());
 
         movieList.forEach(movie -> {
             movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
         });
 
-        PagedListHolder<Movie> pagedListHolder = new PagedListHolder<Movie>(movieList);
+        PagedListHolder<ItemIntroduce> pagedListHolder = new PagedListHolder<ItemIntroduce>(movieList);
         pagedListHolder.setPage(searchFilmRequest.getPageNo());
         pagedListHolder.setPageSize(searchFilmRequest.getPageSize());
 
-        List<Movie> pageList = pagedListHolder.getPageList();
+        List<ItemIntroduce> pageList = pagedListHolder.getPageList();
         boolean ascending = searchFilmRequest.getSort().isAscending();
         PropertyComparator.sort(pageList, new MutableSortDefinition(searchFilmRequest.getSortByColumn(), true, ascending));
 
-        Page<Movie> movies = new PageImpl<>(pageList, new PaginationHelper().getPageable(searchFilmRequest), movieList.size());
+        Page<ItemIntroduce> movies = new PageImpl<>(pageList, new PaginationHelper().getPageable(searchFilmRequest), movieList.size());
 
         List<SelectOptionReponse> optionsStatus = new ArrayList<>();
+        optionsStatus.add(new SelectOptionReponse<>(NOW_SHOWING.name(), NOW_SHOWING.getValue()));
+        optionsStatus.add(new SelectOptionReponse<>(COMING_SOON.name(), COMING_SOON.getValue()));
 
-        for (MovieStatus movieStatus : MovieStatus.values()) {
-            optionsStatus.add(new SelectOptionReponse(movieStatus.name(), movieStatus.getValue()));
-        }
+//        for (MovieStatus movieStatus : values()) {
+//            optionsStatus.add(new SelectOptionReponse(movieStatus.name(), movieStatus.getValue()));
+//        }
 
         List<Country> countryList = countryRepository.findAll();
         List<SelectOptionReponse> optionsCountries = new ArrayList<>();
 
         for (Country country : countryList) {
-            optionsCountries.add(new SelectOptionReponse(country.getId(), country.getName()));
+            optionsCountries.add(new SelectOptionReponse(country.getSlug(), country.getName()));
         }
 
         List<SelectOptionReponse> optionsCategory = new ArrayList<>();
         List<MovieGenre> categories = movieGenreRepository.findAll();
 
         for (MovieGenre category : categories) {
-            optionsCategory.add(new SelectOptionReponse(category.getId(), category.getName()));
+            optionsCategory.add(new SelectOptionReponse(category.getSlug(), category.getName()));
         }
 
         List<SelectOptionReponse> optionsYear = new ArrayList<>();
@@ -93,6 +97,7 @@ public class HomeFilmServiceImpl implements HomeFilmService {
         for (Integer date : dates) {
             optionsYear.add(new SelectOptionReponse(date, Integer.toString(date)));
         }
+
         return new SelectOptionAndModelReponse<>(movies, optionsCategory, optionsYear, optionsStatus, optionsCountries);
     }
 

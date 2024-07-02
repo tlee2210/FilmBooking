@@ -55,6 +55,7 @@ public class CinemaServiceImpl implements CinemaService {
             });
         });
 
+
         PagedListHolder<Cinema> pagedListHolder = new PagedListHolder<Cinema>(cinemaList);
         pagedListHolder.setPage(PaginationHelper.getPageNo());
         pagedListHolder.setPageSize(PaginationHelper.getPageSize());

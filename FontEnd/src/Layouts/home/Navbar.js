@@ -271,9 +271,9 @@ const Navbar = () => {
                   >
                     Cinema Corner
                   </DropdownToggle>
-                  <DropdownMenu style={{}}>
-                    <DropdownItem tag={Link} to="/the-loai-phim">
-                      Thể Loại Phim
+                  <DropdownMenu>
+                    <DropdownItem tag={Link} to="/movie-genre">
+                      Movie Genre
                     </DropdownItem>
                     <DropdownItem tag={Link} to="/actor">
                       Actor
@@ -320,7 +320,7 @@ const Navbar = () => {
                       borderColor: "transparent",
                     }}
                   >
-                    Cinema
+                    Cinemas
                   </DropdownToggle>
                   <DropdownMenu
                     style={{

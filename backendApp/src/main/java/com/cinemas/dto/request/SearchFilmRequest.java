@@ -11,16 +11,16 @@ import org.springframework.data.domain.Sort;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchFilmRequest extends PaginationHelper{
-    private Integer genreId;
-    private Integer countryId;
+public class SearchFilmRequest extends PaginationHelper {
+    private String category;
+    private String country;
     private String year;
     private MovieStatus status;
 
-    public SearchFilmRequest(Integer genreId, Integer countryId, String year, MovieStatus status, Integer pageNo, Integer pageSize, Sort.Direction sort) {
+    public SearchFilmRequest(String category, String country, String year, MovieStatus status, Integer pageNo, Integer pageSize, Sort.Direction sort) {
         super(pageNo, pageSize, sort, "id");
-        this.genreId = genreId;
-        this.countryId = countryId;
+        this.category = category;
+        this.country = country;
         this.year = year;
         this.status = status;
     }

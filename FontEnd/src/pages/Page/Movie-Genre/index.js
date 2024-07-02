@@ -16,19 +16,17 @@ import "../CinemaCorner/css/CinemaCorner.css";
 import MovieIsShowing from "../BuyTicket/MovieIsShowing";
 import { Image } from "antd";
 import { useSelector, useDispatch } from "react-redux";
-import withRouter from "../../../Components/Common/withRouter";
 import { createSelector } from "reselect";
 import { getHomeBlog } from "../../../slices/home/BlogAndReviewHome/thunk";
+import { getHomeMovieGenre } from "../../../slices/home/Movie-GenreHome/thunk";
 import { getMovieActiveLimitIntroduce } from "../../../slices/home/MovieHome/thunk";
 import RightColumn from "../CinemaCorner/RightColumn";
 
-import buttonTicket from "../../../assets/images/buttonTicket/btn-ticket.png";
-
-const BlogMovie = () => {
-  document.title = "Blog Movie";
+const index = () => {
+  document.title = "Movie Genre";
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [selectedOption, setSelectedOption] = useState("");
+  //   const [selectedOption, setSelectedOption] = useState("");
 
   const [pageNo, setPageNo] = useState(
     parseInt(searchParams.get("pageNo"), 10) || 1
@@ -36,38 +34,80 @@ const BlogMovie = () => {
   const [pageSize, setPageSize] = useState(
     parseInt(searchParams.get("pageSize"), 10) || 10
   );
+  const [category, setCategory] = useState(searchParams.get("category") || "");
+  const [country, setcountry] = useState(searchParams.get("country") || "");
+  const [status, setStatus] = useState(searchParams.get("status") || "");
+  const [years, setYears] = useState(searchParams.get("years") || "");
 
   useEffect(() => {
     dispatch(getMovieActiveLimitIntroduce());
   }, [dispatch]);
 
-  const BlogState = (state) => state;
-  const BlogStateData = createSelector(BlogState, (state) => ({
+  const MovieGenreState = (state) => state;
+  const MovieGenreStateData = createSelector(MovieGenreState, (state) => ({
     error: state.Message.error,
     messageError: state.Message.messageError,
-    data: state.BlogOrReview.data,
-    selectOptions: state.HomeCelebrity.selectOptions,
     MovieIntroduce: state.HomeMovie.MovieIntroduce,
+    data: state.HomeMovieGenre.data,
+    selectOptionGenre: state.HomeMovieGenre.selectOptionGenre,
+    selectOptionCountry: state.HomeMovieGenre.selectOptionCountry,
+    selectOptionStatus: state.HomeMovieGenre.selectOptionStatus,
+    selectOptionYear: state.HomeMovieGenre.selectOptionYear,
   }));
 
-  const { error, messageError, data, selectOptions, MovieIntroduce } =
-    useSelector(BlogStateData);
+  const {
+    error,
+    messageError,
+    data,
+    MovieIntroduce,
+    selectOptionGenre,
+    selectOptionCountry,
+    selectOptionStatus,
+    selectOptionYear,
+  } = useSelector(MovieGenreStateData);
 
   useEffect(() => {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+
     let params = {};
+
+    if (category && category !== null && category !== undefined) {
+      params.category = category;
+    }
+
+    if (country && country !== null && country !== undefined) {
+      params.country = country;
+    }
+    if (status && status !== null && status !== undefined) {
+      params.status = status;
+    }
+    if (years && years !== null && years !== undefined) {
+      params.years = years;
+    }
 
     params.pageNo = pageNo;
     params.pageSize = pageSize;
 
     setSearchParams(params);
-    dispatch(getHomeBlog(pageNo, pageSize));
-  }, [dispatch, pageNo, pageSize]);
+
+    dispatch(
+      getHomeMovieGenre(
+        category ? category : null,
+        country ? country : null,
+        status ? status : null,
+        years ? years : null,
+        pageNo,
+        pageSize
+      )
+    );
+  }, [dispatch, pageNo, pageSize, category, status, country, years]);
 
   const handlePagination = (page) => {
     const newPageNo = page + 1;
     setPageNo(newPageNo);
     setSearchParams({ page: newPageNo, pageSize });
-    dispatch(getHomeBlog(pageNo, pageSize));
+    dispatch(getHomeMovieGenre(pageNo, pageSize));
   };
 
   const getPagination = (totalPages, currentPage) => {
@@ -110,18 +150,60 @@ const BlogMovie = () => {
     : [];
 
   const handleSelectChange = (event) => {
-    const selectedCountry = event.target.value;
-    setSelectedOption(event.target.value);
-    // console.log(selectedCountry);
+    setCategory(event.target.value);
     setPageNo(1);
-    setSearchParams({ country: selectedCountry, pageNo: 1, pageSize });
-    // dispatch(getHomeActor(country, 1, pageSize));
+    setSearchParams({
+      category: event.target.value,
+      country,
+      status,
+      years,
+      pageNo: 1,
+      pageSize,
+    });
+  };
+
+  const handleSelectChangeCountry = (event) => {
+    setcountry(event.target.value);
+    setPageNo(1);
+    setSearchParams({
+      category,
+      country: event.target.value,
+      status,
+      years,
+
+      pageNo: 1,
+      pageSize,
+    });
+  };
+  const handleSelectChangeStatus = (event) => {
+    setStatus(event.target.value);
+    setPageNo(1);
+    setSearchParams({
+      category,
+      country,
+      status: event.target.value,
+      years,
+      pageNo: 1,
+      pageSize,
+    });
+  };
+  const handleSelectChangeYears = (event) => {
+    setYears(event.target.value);
+    setPageNo(1);
+    setSearchParams({
+      category,
+      country,
+      status,
+      years: event.target.value,
+      pageNo: 1,
+      pageSize,
+    });
   };
 
   const getFirstSentence = (description) => {
-    const firstPeriodIndex = description.indexOf(".");
+    const firstPeriodIndex = description?.indexOf(".");
     if (firstPeriodIndex !== -1) {
-      return description.substring(0, firstPeriodIndex + 1);
+      return description?.substring(0, firstPeriodIndex + 1);
     }
     return description;
   };
@@ -133,10 +215,85 @@ const BlogMovie = () => {
           <Row>
             <Col lg={8} className="shadow-lg p-3 bg-white rounded">
               <div className="director-header-container-cinemaCorner">
-                <Row className="align-items-center">
-                  <Col md="3" className="d-flex align-items-center">
+                <Row>
+                  <Col md="12" className="d-flex align-items-center">
                     <div className="title-icon-cinemaCorner"></div>
-                    <h2 className="title-cinemaCorner">Blog Movie</h2>
+                    <h2 className="title-cinemaCorner">Movie Genre</h2>
+                  </Col>
+                  <Col md="10" className="d-flex" style={{ paddingTop: 15 }}>
+                    <Input
+                      type="select"
+                      className="custom-select-cinemaCorner mx-2"
+                      value={category}
+                      onChange={handleSelectChange}
+                      style={{
+                        cursor: "pointer",
+                        fontSize: "14px",
+                        width: "150px",
+                      }}
+                    >
+                      <option value="">All Genren</option>
+                      {selectOptionGenre.map((item, index) => (
+                        <option key={index} value={item.value}>
+                          {item.label}
+                        </option>
+                      ))}
+                    </Input>
+                    <Input
+                      type="select"
+                      className="custom-select-cinemaCorner mx-2"
+                      value={country}
+                      onChange={handleSelectChangeCountry}
+                      style={{
+                        cursor: "pointer",
+                        fontSize: "14px",
+                        width: "150px",
+                      }}
+                    >
+                      <option value="">Country</option>
+                      {/* selectOptionCountry */}
+                      {selectOptionCountry.map((item, index) => (
+                        <option key={index} value={item.value}>
+                          {item.label}
+                        </option>
+                      ))}
+                    </Input>
+                    <Input
+                      type="select"
+                      className="custom-select-cinemaCorner mx-2"
+                      onChange={handleSelectChangeStatus}
+                      value={status}
+                      style={{
+                        cursor: "pointer",
+                        fontSize: "14px",
+                        width: "150px",
+                      }}
+                    >
+                      <option value="">Status</option>
+                      {selectOptionStatus.map((item, index) => (
+                        <option key={index} value={item.value}>
+                          {item.label}
+                        </option>
+                      ))}
+                    </Input>
+                    <Input
+                      type="select"
+                      className="custom-select-cinemaCorner mx-2"
+                      onChange={handleSelectChangeYears}
+                      value={years}
+                      style={{
+                        cursor: "pointer",
+                        fontSize: "14px",
+                        width: "150px",
+                      }}
+                    >
+                      <option value="">years</option>
+                      {selectOptionYear.map((item, index) => (
+                        <option key={index} value={item.value}>
+                          {item.label}
+                        </option>
+                      ))}
+                    </Input>
                   </Col>
                 </Row>
                 <div className="bottom-border"></div>
@@ -145,7 +302,7 @@ const BlogMovie = () => {
                 ? data.content.map((item, index) => (
                     <Link
                       key={index}
-                      to={`/blog-movie/${item.slug}/details`}
+                      to={`/movie/${item.slug}/details`}
                       style={{ textDecoration: "none", color: "inherit" }}
                     >
                       <Col key={index} className="mb-4 mt-4">
@@ -165,7 +322,7 @@ const BlogMovie = () => {
                                   objectFit: "cover",
                                 }}
                                 className="rounded w-100 h-auto"
-                                src={item.thumbnail}
+                                src={item.imagePortrait}
                                 alt={item.name}
                               />
                             </Col>
@@ -174,9 +331,6 @@ const BlogMovie = () => {
                                 <h1 className="title-cinemaCorner-name mb-0">
                                   {item.name}
                                 </h1>
-                                <span className="badge bg-primary-subtle text-primary">
-                                  View: {item.view}
-                                </span>
                               </CardHeader>
                               <CardBody>
                                 <p
@@ -267,4 +421,4 @@ const BlogMovie = () => {
   );
 };
 
-export default BlogMovie;
+export default index;

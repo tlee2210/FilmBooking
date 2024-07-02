@@ -20,9 +20,6 @@ const Error500 = lazy(() =>
 
 // User Profile
 const UserProfile = lazy(() => import("../pages/Authentication/user-profile"));
-
-const Home = lazy(() => import("../pages/home/index"));
-
 const Starter = lazy(() => import("../pages/dashboard/Starter"));
 
 const Celebrity = lazy(() => import("../pages/dashboard/Celebrity/index"));
@@ -86,8 +83,8 @@ import MovieCommentary from "../pages/Page/MovieCommentary/index";
 import MovieCommentaryDetails from "../pages/Page/MovieCommentary/details";
 
 //The Loai Phim
-import TheLoaiPhim from '../pages/Page/TheLoaiPhim/index';
-import TheLoaiPhimDetails from '../pages/Page/TheLoaiPhim/Details';
+import HomeMovieGenre from "../pages/Page/Movie-Genre/index";
+import HomeMovieGenreDetails from "../pages/Page/Movie-Genre/Details";
 
 //Rạp Phim
 import CinemaHome from "../pages/Page/Cinema/Index";
@@ -98,6 +95,7 @@ import BlogMovie from "../pages/Page/BlogMovie";
 import BlogMovieDetails from "../pages/Page/BlogMovie/details";
 
 import MovieList from "../pages/Page/Movie/index";
+const Home = lazy(() => import("../pages/home/index"));
 
 const adminProtectedRoutes = [
   //User Profile
@@ -168,33 +166,38 @@ const publicRoutes = [
 const homeRoutes = [
   { path: "/", component: <Home /> },
 
+  // actor page
   { path: "/actor", component: <Actor /> },
   { path: "/actor/:slug/details", component: <CelebrityInfor /> },
 
+  // director page
   { path: "/director", component: <Director /> },
   { path: "/director/:slug/details", component: <CelebrityInfor /> },
 
+  // blog page
   { path: "/blog-movie", component: <BlogMovie /> },
   {
     path: "/blog-movie/:slug/details",
     component: <BlogMovieDetails />,
   },
+  // movie commentary page
   { path: "/movie-commentary", component: <MovieCommentary /> },
   {
     path: "/movie-commentary/:slug/details",
     component: <MovieCommentaryDetails />,
   },
-  { path: "/the-loai-phim", component: <TheLoaiPhim /> },
-  { path: "/the-loai-phim/details", component: <TheLoaiPhimDetails /> },
 
-  // book-tickets
   { path: "/book-tickets/:slug", component: <BookTickets /> },
   { path: "/movie-showing", component: <MovieList /> },
 
   { path: "/cinema/:slug", component: <CinemaHome /> },
   { path: "/booking", component: <Booking /> },
 
+  { path: "/movie-genre", component: <HomeMovieGenre /> },
+
+  { path: "/movie/:slug/details", component: <HomeMovieGenreDetails /> },
   //------------------------------------------
+  // { path: "*", component: <Navigate to="/" /> },
 ];
 
 export { adminProtectedRoutes, publicRoutes, homeRoutes };
