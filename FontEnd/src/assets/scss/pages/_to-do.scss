@@ -43,32 +43,56 @@
 .seat {
   width: 30px;
   height: 30px;
-  margin: 2px;
-  background-color: #ccc;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  user-select: none;
-  border: 1px solid #007bff;
-  border-radius: 4px;
-}
-.margin-right-seat {
-  margin-right: 60px;
-}
-
-.double-seat {
-  width: 64px; /* Gấp đôi chiều rộng của một ghế thường */
-  height: 30px;
-  margin: 2px;
-  //   background-color: #999;
-  background-color: #ccc;
+  margin: 4px;
+  background-color: #e7e7e7;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   user-select: none;
   border: 1px solid #a6c8ec;
+  border-radius: 4px;
+}
+.margin-right-seat {
+  margin-right: 60px;
+}
+.btn-next {
+  // fontWeight: "100",
+  // color: "white",
+  // fontSize: 17,
+  // paddingLeft: 29,
+  font-weight: 100;
+  color: white;
+  font-size: 17px;
+  padding-left: 29px;
+}
+.btn-back {
+  font-weight: 100;
+  color: orange;
+  font-size: 17px;
+  // margin-left: -51px;
+  margin-right: 28px;
+}
+
+.btn-back-from {
+  font-weight: 100;
+  color: orange;
+  font-size: 17px;
+  padding-left: 100px;
+  background-color: #e9e9e9;
+}
+
+.double-seat {
+  width: 64px; /* Gấp đôi chiều rộng của một ghế thường */
+  height: 30px;
+  margin: 4px;
+  background-color: #e7e7e7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid #007bff;
   border-radius: 4px;
 }
 
