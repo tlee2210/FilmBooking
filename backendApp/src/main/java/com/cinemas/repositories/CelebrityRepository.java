@@ -26,7 +26,7 @@ public interface CelebrityRepository extends JpaRepository<Celebrity, Integer> {
     //    @Query("SELECT c FROM Celebrity c JOIN FETCH c.country WHERE c.name LIKE %?1%")
     @Query("SELECT c FROM Celebrity AS c JOIN FETCH c.country " +
             "WHERE (:name is null or c.name LIKE %:name%) " +
-            "AND (:role is null or c.role = :role)")
+            "AND (:role is null or c.role = :role)" + "ORDER BY c.id DESC")
     List<Celebrity> searchCelebrity(@Param("name") String name, @Param("role") RoleCeleb role);
 
     @Query("SELECT c FROM Celebrity c WHERE c.role = ?1")

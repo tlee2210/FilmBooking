@@ -16,7 +16,7 @@ public interface MovieBlogRepository extends JpaRepository<MovieBlog, Integer> {
     @Query("SELECT b FROM MovieBlog b WHERE b.name = ?1 AND b.id != ?2")
     MovieBlog findByNameWithId(String name, int id);
 
-    @Query("select b FROM MovieBlog b where (:name is null or b.name like %:name%)")
+    @Query("select b FROM MovieBlog b where (:name is null or b.name like %:name%)" + "ORDER BY b.id DESC")
     List<MovieBlog> searchByName(String name);
 
     @Query("SELECT new com.cinemas.dto.response.ItemIntroduce(m.id, m.name, m.slug, m.thumbnail) FROM MovieBlog m ORDER BY m.id DESC LIMIT 4")

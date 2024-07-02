@@ -217,7 +217,7 @@ const TableContainer = ({
             <span className="fw-semibold ms-1">
               {/* {paginateData.numberOfElements} */}
               <select
-                className="custom-select"
+                // className="custom-select"
                 value={paginateData.size}
                 id="inputGroupSelect01"
                 onChange={(e) => {

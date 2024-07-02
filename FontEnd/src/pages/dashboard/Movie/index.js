@@ -184,6 +184,16 @@ const Movies = (props) => {
         enableColumnFilter: false,
       },
       {
+        header: "release Date movie",
+        accessorKey: "releaseDate",
+        enableColumnFilter: false,
+      },
+      {
+        header: "end Date movie",
+        accessorKey: "endDate",
+        enableColumnFilter: false,
+      },
+      {
         header: "country",
         accessorKey: "country",
         cell: (cell) => {
@@ -201,16 +211,6 @@ const Movies = (props) => {
         cell: (cell) => {
           return <span>{cell.getValue()} minutes</span>;
         },
-        enableColumnFilter: false,
-      },
-      {
-        header: "release Date movie",
-        accessorKey: "releaseDate",
-        enableColumnFilter: false,
-      },
-      {
-        header: "end Date movie",
-        accessorKey: "endDate",
         enableColumnFilter: false,
       },
       {
@@ -234,53 +234,53 @@ const Movies = (props) => {
         },
         enableColumnFilter: false,
       },
-      {
-        header: "director",
-        accessorKey: "director",
-        cell: (cell) => {
-          return (
-            <span>
-              {cell.getValue()?.map((item) => {
-                return (
-                  <span
-                    key={item.id}
-                    className="badge bg-primary-subtle text-primary me-1"
-                  >
-                    {item.name}
-                  </span>
-                );
-              })}
-            </span>
-          );
-        },
-        enableColumnFilter: false,
-      },
-      {
-        header: "actor",
-        accessorKey: "actor",
-        cell: (cell) => {
-          return (
-            <span>
-              {cell.getValue()?.map((item) => {
-                return (
-                  <span
-                    key={item.id}
-                    className="badge bg-info-subtle text-info me-2"
-                  >
-                    {item.name}
-                  </span>
-                );
-              })}
-            </span>
-          );
-        },
-        enableColumnFilter: false,
-      },
-      {
-        header: "price",
-        accessorKey: "price",
-        enableColumnFilter: false,
-      },
+      // {
+      //   header: "director",
+      //   accessorKey: "director",
+      //   cell: (cell) => {
+      //     return (
+      //       <span>
+      //         {cell.getValue()?.map((item) => {
+      //           return (
+      //             <span
+      //               key={item.id}
+      //               className="badge bg-primary-subtle text-primary me-1"
+      //             >
+      //               {item.name}
+      //             </span>
+      //           );
+      //         })}
+      //       </span>
+      //     );
+      //   },
+      //   enableColumnFilter: false,
+      // },
+      // {
+      //   header: "actor",
+      //   accessorKey: "actor",
+      //   cell: (cell) => {
+      //     return (
+      //       <span>
+      //         {cell.getValue()?.map((item) => {
+      //           return (
+      //             <span
+      //               key={item.id}
+      //               className="badge bg-info-subtle text-info me-2"
+      //             >
+      //               {item.name}
+      //             </span>
+      //           );
+      //         })}
+      //       </span>
+      //     );
+      //   },
+      //   enableColumnFilter: false,
+      // },
+      // {
+      //   header: "price",
+      //   accessorKey: "price",
+      //   enableColumnFilter: false,
+      // },
       {
         header: "status",
         accessorKey: "status",

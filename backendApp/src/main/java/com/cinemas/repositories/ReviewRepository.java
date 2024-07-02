@@ -22,7 +22,7 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
     Review findByName(String name);
 
     @Query("SELECT r FROM Review r WHERE (:name is null or r.name like %:name%) " +
-            "AND (:role is null or r.type = :role)")
+            "AND (:role is null or r.type = :role)" +"ORDER BY r.id DESC")
     List<Review> searchByName(String name, ReviewType role);
 
     @Query("SELECT new com.cinemas.dto.response.ItemIntroduce(r.id, r.name, r.slug, r.thumbnail) FROM Review r WHERE r.type = :type ORDER BY r.id DESC LIMIT 4")

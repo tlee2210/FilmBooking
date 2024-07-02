@@ -14,7 +14,7 @@ public interface RoomRepository extends JpaRepository<Room, Integer> {
     Room findByNameAndIdAndCinemaId(String name, Integer id, Integer idRoom);
 
     @Query("SELECT r FROM Room r WHERE  (:name is null or r.name LIKE %:name%)" +
-            "AND (:cinemaId is null or r.cinema.id = :cinemaId)")
+            "AND (:cinemaId is null or r.cinema.id = :cinemaId)" +"ORDER BY r.id DESC")
     List<Room> searchByNameAndAndCinemaId(String name, Integer cinemaId);
 
     @Query("SELECT r from Room r where r.cinema.id = ?1")

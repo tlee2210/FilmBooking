@@ -17,7 +17,7 @@ import {
 } from "reactstrap";
 import classnames from "classnames";
 
-const MovieList = ({ HomeData }) => {
+const MovieList = ({ HomeData, SeeMore = false }) => {
   const [activeTab, setActiveTab] = useState("1");
   const [modal, setModal] = useState(false);
   const [url, setUrl] = useState("");
@@ -246,6 +246,19 @@ const MovieList = ({ HomeData }) => {
                 </Masonry>
               </TabPane>
             </TabContent>
+            {SeeMore && (
+              <Col>
+                <div style={{ paddingLeft: 450 }}>
+                  <Link
+                    to="/movie-showing"
+                    className="btn btn-outline-danger waves-effect waves-light material-shadow-none"
+                    style={{ textDecoration: "none" }}
+                  >
+                    See More <i className="bx bx-right-arrow-alt"></i>
+                  </Link>
+                </div>
+              </Col>
+            )}
           </CardBody>
         </Card>
       </Container>

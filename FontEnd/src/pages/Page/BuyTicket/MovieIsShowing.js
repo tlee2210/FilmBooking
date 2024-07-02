@@ -83,7 +83,7 @@ const MovieIsShowing = ({ MovieIntroduce }) => {
       </Row>
       <div className="button-dien-vien">
         <Link
-          to="/movie"
+          to="/movie-showing"
           className="btn btn-outline-danger waves-effect waves-light material-shadow-none"
           style={{ textDecoration: "none" }}
         >

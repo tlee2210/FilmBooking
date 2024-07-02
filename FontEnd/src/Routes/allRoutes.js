@@ -189,7 +189,7 @@ const homeRoutes = [
 
   // book-tickets
   { path: "/book-tickets/:slug", component: <BookTickets /> },
-  { path: "/movie", component: <MovieList /> },
+  { path: "/movie-showing", component: <MovieList /> },
 
   { path: "/cinema/:slug", component: <CinemaHome /> },
   { path: "/booking", component: <Booking /> },

@@ -26,7 +26,7 @@ public interface CinemaRespository extends JpaRepository<Cinema, Integer> {
     @Query("SELECT c FROM Cinema AS c " +
             "WHERE (:name is null or c.name LIKE %:name%) " +
             "AND (:status is null or c.status = :status) " +
-            "AND (:city is null  or c.city = :city)")
+            "AND (:city is null  or c.city = :city)" + "ORDER BY c.id DESC")
     List<Cinema> searchCinema(
             @Param("name") String name,
             @Param("status") StatusCinema status,

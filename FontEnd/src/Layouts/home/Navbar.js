@@ -23,7 +23,7 @@ import Ticket from "../../assets/images/Ticket.jpg";
 import { getNavbar } from "../../slices/home/MovieHome/thunk";
 import { useSelector, useDispatch } from "react-redux";
 
-import buttonTicket from '../../assets/images/buttonTicket/btn-ticket.png';
+import buttonTicket from "../../assets/images/buttonTicket/btn-ticket.png";
 
 // getNavbar
 
@@ -93,29 +93,6 @@ const Navbar = () => {
       });
     };
   }, [activeLink]);
-
-  const moviesComingSoon = [
-    {
-      img: "https://cdn.galaxycine.vn/media/2024/6/4/mua-he-dep-nhat-2_1717486022304.jpg",
-      name: "Mùa Hè Đẹp Nhất",
-      link: "/phim-sap-chieu",
-    },
-    {
-      img: "https://cdn.galaxycine.vn/media/2024/5/6/inside-out-2-3_1714970461256.jpg",
-      name: "Những Mảnh Ghép Cảm Xúc 2",
-      link: "/phim-sap-chieu",
-    },
-    {
-      img: "https://cdn.galaxycine.vn/media/2024/5/6/inside-out-2-3_1714970461256.jpg",
-      name: "Những Mảnh Ghép Cảm Xúc 2",
-      link: "/phim-sap-chieu",
-    },
-    {
-      img: "https://cdn.galaxycine.vn/media/2024/5/6/inside-out-2-3_1714970461256.jpg",
-      name: "Những Mảnh Ghép Cảm Xúc 2",
-      link: "/phim-sap-chieu",
-    },
-  ];
 
   return (
     <React.Fragment>
@@ -214,27 +191,30 @@ const Navbar = () => {
                     <Row>
                       {navbarData && navbarData?.movieShowingList
                         ? navbarData?.movieShowingList?.map((movie, index) => (
-                          <Col md={3} key={index}>
-                            <DropdownItem
-                              tag={Link}
-                              to={`/book-tickets/${movie.slug}`}
-                              className="movie-item"
-                            >
-                              <div className="movie-thumbnail">
-                                <img
-                                  src={movie.imagePortrait}
-                                  alt={movie.name}
-                                />
-                                <div className="movie-overlay">
-                                  <button className="ticket-button">
-                                    <img style={{ filter: 'blur(0px)' }} src={buttonTicket} />
-                                  </button>
+                            <Col md={3} key={index}>
+                              <DropdownItem
+                                tag={Link}
+                                to={`/book-tickets/${movie.slug}`}
+                                className="movie-item"
+                              >
+                                <div className="movie-thumbnail">
+                                  <img
+                                    src={movie.imagePortrait}
+                                    alt={movie.name}
+                                  />
+                                  <div className="movie-overlay">
+                                    <button className="ticket-button">
+                                      <img
+                                        style={{ filter: "blur(0px)" }}
+                                        src={buttonTicket}
+                                      />
+                                    </button>
+                                  </div>
                                 </div>
-                              </div>
-                              <div className="movie-name">{movie.name}</div>
-                            </DropdownItem>
-                          </Col>
-                        ))
+                                <div className="movie-name">{movie.name}</div>
+                              </DropdownItem>
+                            </Col>
+                          ))
                         : null}
                     </Row>
                     <DropdownItem className="header-movies-dropdown" header>
@@ -243,27 +223,30 @@ const Navbar = () => {
                     <Row>
                       {navbarData && navbarData?.movieSoonList
                         ? navbarData?.movieSoonList?.map((movie, index) => (
-                          <Col md={3} key={index}>
-                            <DropdownItem
-                              tag={Link}
-                              to={`/book-tickets/${movie.slug}`}
-                              className="movie-item"
-                            >
-                              <div className="movie-thumbnail">
-                                <img
-                                  src={movie.imagePortrait}
-                                  alt={movie.name}
-                                />
-                                <div className="movie-overlay">
-                                  <button className="ticket-button">
-                                    <img style={{ filter: 'blur(0px)' }} src={buttonTicket} />
-                                  </button>
+                            <Col md={3} key={index}>
+                              <DropdownItem
+                                tag={Link}
+                                to={`/book-tickets/${movie.slug}`}
+                                className="movie-item"
+                              >
+                                <div className="movie-thumbnail">
+                                  <img
+                                    src={movie.imagePortrait}
+                                    alt={movie.name}
+                                  />
+                                  <div className="movie-overlay">
+                                    <button className="ticket-button">
+                                      <img
+                                        style={{ filter: "blur(0px)" }}
+                                        src={buttonTicket}
+                                      />
+                                    </button>
+                                  </div>
                                 </div>
-                              </div>
-                              <div className="movie-name">{movie.name}</div>
-                            </DropdownItem>
-                          </Col>
-                        ))
+                                <div className="movie-name">{movie.name}</div>
+                              </DropdownItem>
+                            </Col>
+                          ))
                         : null}
                     </Row>
                   </DropdownMenu>
@@ -307,11 +290,11 @@ const Navbar = () => {
                   </DropdownMenu>
                 </Dropdown>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <NavLink className="fs-16" href="/rap-phim">
                   Cinema
                 </NavLink>
-              </li>
+              </li> */}
               <li className="nav-item">
                 <NavLink className="fs-16" href="#Events">
                   Events
@@ -324,7 +307,10 @@ const Navbar = () => {
                 onMouseEnter={() => setdropdownRapPhim(true)}
                 onMouseLeave={() => setdropdownRapPhim(false)}
               >
-                <Dropdown isOpen={dropdownRapPhim} toggle={toggleDropdownRapPhim}>
+                <Dropdown
+                  isOpen={dropdownRapPhim}
+                  toggle={toggleDropdownRapPhim}
+                >
                   <DropdownToggle
                     className="fs-16 nav-link"
                     caret
@@ -334,37 +320,29 @@ const Navbar = () => {
                       borderColor: "transparent",
                     }}
                   >
-                    Rạp Phim
+                    Cinema
                   </DropdownToggle>
-                  <DropdownMenu style={{ textAlign: "center", paddingLeft: 20, paddingRight: 20, maxHeight: "200px", overflowY: "auto" ,marginLeft:-73}}>
-                    <DropdownItem tag={Link} to="/cinema/galaxy-nguyendu">
-                      Galaxy Nguyễn Du
-                    </DropdownItem>
-                    <DropdownItem tag={Link} to="/galaxy-sala">
-                      Galaxy Sala
-                    </DropdownItem>
-                    <DropdownItem tag={Link} to="/galaxy-tanbinh">
-                      Galaxy Tân Bình
-                    </DropdownItem>
-                    <DropdownItem tag={Link} to="/galaxy-kdv">
-                      Galaxy Kinh Dương Vương
-                    </DropdownItem>
-                    <DropdownItem tag={Link} to="/galaxy-quangtrung">
-                      Galaxy Quang Trung
-                    </DropdownItem>
-                    <DropdownItem tag={Link} to="/galaxy-bentre">
-                      Galaxy Bến Tre
-                    </DropdownItem>
-                    <DropdownItem tag={Link} to="/galaxy-mipeclongbien">
-                      Galaxy Mipec Long Biên
-                    </DropdownItem>
-                    <DropdownItem tag={Link} to="/galaxy-danang">
-                      Galaxy Đà Nẵng
-                    </DropdownItem>
-                    <DropdownItem tag={Link} to="/galaxy-camau">
-                      Galaxy Cà Mau
-                    </DropdownItem>
-
+                  <DropdownMenu
+                    style={{
+                      textAlign: "center",
+                      paddingLeft: 20,
+                      paddingRight: 20,
+                      maxHeight: "200px",
+                      overflowY: "auto",
+                      marginLeft: -73,
+                    }}
+                  >
+                    {navbarData
+                      ? navbarData?.selectOptionList?.map((item, index) => (
+                          <DropdownItem
+                            key={index}
+                            tag={Link}
+                            to={`/cinema/${item?.value}`}
+                          >
+                            {item?.label}
+                          </DropdownItem>
+                        ))
+                      : null}
                   </DropdownMenu>
                 </Dropdown>
               </li>

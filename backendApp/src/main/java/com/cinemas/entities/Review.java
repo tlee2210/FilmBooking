@@ -1,6 +1,7 @@
 package com.cinemas.entities;
 
 import com.cinemas.enums.ReviewType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -40,5 +41,6 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "movie_id")
+    @JsonIgnore
     private Movie movie;
 }

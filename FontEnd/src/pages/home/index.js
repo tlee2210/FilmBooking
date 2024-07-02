@@ -223,19 +223,7 @@ const homepage = () => {
             </Form>
           </div>
 
-          {HomeData && <MovieList HomeData={HomeData} />}
-
-          <Col>
-            <div style={{ paddingLeft: 450 }}>
-              <Link
-                to="/movie"
-                className="btn btn-outline-danger waves-effect waves-light material-shadow-none"
-                style={{ textDecoration: "none" }}
-              >
-                See More <i className="bx bx-right-arrow-alt"></i>
-              </Link>
-            </div>
-          </Col>
+          {HomeData && <MovieList HomeData={HomeData} SeeMore={true} />}
         </Container>
 
         {/* Góc Điển Ảnh */}

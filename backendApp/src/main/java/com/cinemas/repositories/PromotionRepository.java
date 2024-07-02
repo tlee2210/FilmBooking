@@ -15,7 +15,7 @@ public interface PromotionRepository extends JpaRepository<Promotion, Integer> {
     @Query("SELECT p FROM Promotion p WHERE p.name = ?1 AND p.id != ?2")
     Promotion findByNameWithId(String name, int id);
 
-    @Query("select p FROM Promotion p where (:name is null or p.name like %:name%)")
+    @Query("select p FROM Promotion p where (:name is null or p.name like %:name%)" +"ORDER BY p.id DESC")
     List<Promotion> searchByName(String name);
 
     @Query("SELECT new com.cinemas.dto.response.ItemIntroduce(p.id, p.name, p.slug, p.image) FROM Promotion p ORDER BY p.id DESC LIMIT 4")

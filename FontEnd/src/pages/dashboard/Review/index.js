@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Container,
   Row,
@@ -10,6 +10,7 @@ import {
   Button,
   Form,
   Input,
+  Badge,
 } from "reactstrap";
 
 import TableContainer from "../../../Components/Common/TableContainerReactTable";
@@ -157,11 +158,6 @@ const BlogIndex = (props) => {
         enableColumnFilter: false,
       },
       {
-        header: "Type",
-        accessorKey: "type",
-        enableColumnFilter: false,
-      },
-      {
         header: "view",
         accessorKey: "views",
         enableColumnFilter: false,
@@ -186,6 +182,27 @@ const BlogIndex = (props) => {
                 <span className="badge bg-danger-subtle text-danger badge-border">
                   {value} View
                 </span>
+              )}
+            </React.Fragment>
+          );
+        },
+      },
+      {
+        header: "Type",
+        accessorKey: "type",
+        enableColumnFilter: false,
+        cell: (cell) => {
+          const value = cell.getValue();
+          return (
+            <React.Fragment>
+              {value == "preview" ? (
+                <Badge color="success" pill>
+                  {value}
+                </Badge>
+              ) : (
+                <Badge color="info" pill>
+                  {value}
+                </Badge>
               )}
             </React.Fragment>
           );
