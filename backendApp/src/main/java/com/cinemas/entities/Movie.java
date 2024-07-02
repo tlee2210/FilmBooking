@@ -61,9 +61,6 @@ public class Movie {
     private String rules;
 
     @Column(nullable = false)
-    private String movieFormat;
-
-    @Column(nullable = false)
     private Float price;
 
     @Enumerated(EnumType.STRING)

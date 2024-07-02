@@ -15,4 +15,5 @@ public class showTimeItemRequet {
     private Integer roomId;
     private LocalDate days;
     private LocalTime times;
+    private String movieFormat;
 }

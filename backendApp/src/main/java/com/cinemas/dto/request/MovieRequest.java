@@ -44,8 +44,6 @@ public class MovieRequest {
 
     private String rules;
 
-    private String movieFormat;
-
     private Float price;
 
     private List<PriceRequest> prices;

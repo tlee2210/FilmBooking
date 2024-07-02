@@ -87,6 +87,7 @@ public class ShowTimeServiceImpl implements ShowTimeService {
         showTimeItemRequet.setMovieId(showtimes.getMovie().getId());
         showTimeItemRequet.setCinemaId(showtimes.getCinema().getId());
         showTimeItemRequet.setRoomId(showtimes.getRoom().getId());
+        showTimeItemRequet.setMovieFormat(showtimes.getMovieFormat());
 
         return showTimeItemRequet;
     }
@@ -108,6 +109,7 @@ public class ShowTimeServiceImpl implements ShowTimeService {
             showtimes.setCinema(cinema);
             showtimes.setRoom(room);
             showtimes.setMovie(movie);
+            showtimes.setMovieFormat(showTimeItemRequet.getMovieFormat());
 
             showTimeResponsitory.save(showtimes);
 
@@ -168,7 +170,7 @@ public class ShowTimeServiceImpl implements ShowTimeService {
                     List<Showtimes> overlappingShowtimesList = showTimeResponsitory.findOverlappingShowtimes(room.getId(), day, time, endTime);
 
                     if (overlappingShowtimesList.isEmpty()) {
-                        showtimesList.add(new Showtimes(day, time, movie, room, cinema));
+                        showtimesList.add(new Showtimes(day, time, movie, room, cinema, showTimeRequest.getMovieFormat()));
                     } else {
                         throw new AppException(CREATE_FAILED, "Showtime conflict detected for room " + room.getName() + " on " + day + " at " + time);
                     }

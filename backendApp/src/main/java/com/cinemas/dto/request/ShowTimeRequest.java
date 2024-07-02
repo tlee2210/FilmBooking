@@ -28,4 +28,6 @@ public class ShowTimeRequest {
 
 //    @NotEmpty(message = "VALIDATION")
     private List<LocalTime> times;
+
+    private String movieFormat;
 }

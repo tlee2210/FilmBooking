@@ -29,6 +29,9 @@ public class Showtimes {
     @Column
     private LocalTime time;
 
+    @Column(nullable = false)
+    private String movieFormat;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id", referencedColumnName = "id")
     @JsonIgnore
@@ -44,11 +47,12 @@ public class Showtimes {
     @JsonIgnore
     Cinema cinema;
 
-    public Showtimes(LocalDate date, LocalTime time, Movie movie, Room room, Cinema cinema) {
+    public Showtimes(LocalDate date, LocalTime time, Movie movie, Room room, Cinema cinema, String movieFormat) {
         this.date = date;
         this.time = time;
         this.movie = movie;
         this.room = room;
         this.cinema = cinema;
+        this.movieFormat = movieFormat;
     }
 }
