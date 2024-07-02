@@ -179,7 +179,6 @@ const MovieCreate = (props) => {
       releaseDate: "",
       endDate: "",
       language: "",
-      movieFormat: "",
       trailer: "",
       price: "",
       // prices: [],
@@ -196,7 +195,6 @@ const MovieCreate = (props) => {
       producer: Yup.string().required("Please Enter a Movie producer"),
       status: Yup.string().required("Please Enter a Movie status"),
       language: Yup.string().required("Please Enter a Movie language"),
-      movieFormat: Yup.string().required("Please Enter a Movie Format"),
       duration_movie: Yup.number()
         .required("Please Enter a duration movie")
         .min(60, "Duration must be at least 60 minutes")
@@ -270,7 +268,6 @@ const MovieCreate = (props) => {
       formData.append("trailer", values.trailer);
       formData.append("rules", values.rules);
       formData.append("price", values.price);
-      formData.append("movieFormat", values.movieFormat);
       formData.append(
         "releaseDate",
         new Date(values.releaseDate).toISOString().split("T")[0]
@@ -639,40 +636,8 @@ const MovieCreate = (props) => {
                           ) : null}
                         </div>
                       </Col>
-                      <Col md={6}>
-                        <div className="mb-3">
-                          <Label
-                            className="form-label"
-                            htmlFor="product-title-input"
-                          >
-                            Movie Format
-                          </Label>
-                          <Input
-                            type="text"
-                            className="form-control"
-                            id="product-title-input"
-                            placeholder="Enter movie Format"
-                            name="movieFormat"
-                            value={validation.values.movieFormat || ""}
-                            onBlur={validation.handleBlur}
-                            onChange={validation.handleChange}
-                            invalid={
-                              validation.errors.movieFormat &&
-                              validation.touched.movieFormat
-                                ? true
-                                : false
-                            }
-                          />
-                          {validation.errors.movieFormat &&
-                          validation.touched.movieFormat ? (
-                            <FormFeedback type="invalid">
-                              {validation.errors.movieFormat}
-                            </FormFeedback>
-                          ) : null}
-                        </div>
-                      </Col>
 
-                      <Col md={6}>
+                      <Col md={3}>
                         <div className="mb-3">
                           <Label
                             className="form-label"
@@ -704,7 +669,7 @@ const MovieCreate = (props) => {
                           ) : null}
                         </div>
                       </Col>
-                      <Col md={4}>
+                      <Col md={3}>
                         <div className="mb-3">
                           <Label
                             className="form-label"
@@ -736,7 +701,7 @@ const MovieCreate = (props) => {
                           ) : null}
                         </div>
                       </Col>
-                      <Col md={4}>
+                      <Col md={3}>
                         <div className="mb-3">
                           <Label
                             className="form-label"
@@ -770,7 +735,7 @@ const MovieCreate = (props) => {
                             )}
                         </div>
                       </Col>
-                      <Col md={4}>
+                      <Col md={3}>
                         <div className="mb-3">
                           <Label
                             className="form-label"

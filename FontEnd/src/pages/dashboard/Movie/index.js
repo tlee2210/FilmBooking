@@ -277,11 +277,6 @@ const Movies = (props) => {
         enableColumnFilter: false,
       },
       {
-        header: "movie Format",
-        accessorKey: "movieFormat",
-        enableColumnFilter: false,
-      },
-      {
         header: "price",
         accessorKey: "price",
         enableColumnFilter: false,
