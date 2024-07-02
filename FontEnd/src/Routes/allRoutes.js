@@ -85,6 +85,10 @@ const BookTickets = lazy(() => import("../pages/Page/BuyTicket/index"));
 import MovieCommentary from "../pages/Page/MovieCommentary/index";
 import MovieCommentaryDetails from "../pages/Page/MovieCommentary/details";
 
+//The Loai Phim
+import TheLoaiPhim from '../pages/Page/TheLoaiPhim/index';
+import TheLoaiPhimDetails from '../pages/Page/TheLoaiPhim/Details';
+
 //Rạp Phim
 import CinemaHome from "../pages/Page/Cinema/Index";
 import Booking from "../pages/Page/Booking/index";
@@ -180,6 +184,9 @@ const homeRoutes = [
     path: "/movie-commentary/:slug/details",
     component: <MovieCommentaryDetails />,
   },
+  { path: "/the-loai-phim", component: <TheLoaiPhim /> },
+  { path: "/the-loai-phim/details", component: <TheLoaiPhimDetails /> },
+
   // book-tickets
   { path: "/book-tickets/:slug", component: <BookTickets /> },
   { path: "/movie", component: <MovieList /> },

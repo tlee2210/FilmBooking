@@ -40,12 +40,14 @@ const Navbar = () => {
     navbarData: state.HomeMovie.navbarData,
   }));
   const { error, messageError, navbarData } = useSelector(MovieStateData);
-  
+
   const [isOpenMenu, setisOpenMenu] = useState(false);
   const [navClass, setnavClass] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dropdownRapPhim, setdropdownRapPhim] = useState(false);
   const [moviesDropdownOpen, setMoviesDropdownOpen] = useState(false);
 
+  const toggleDropdownRapPhim = () => setdropdownRapPhim(!dropdownOpen);
   const toggle = () => setisOpenMenu(!isOpenMenu);
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
   const toggleMoviesDropdown = () =>
@@ -225,7 +227,7 @@ const Navbar = () => {
                                 />
                                 <div className="movie-overlay">
                                   <button className="ticket-button">
-                                   <img style={{filter:'blur(0px)'}} src={buttonTicket}/>
+                                    <img style={{ filter: 'blur(0px)' }} src={buttonTicket} />
                                   </button>
                                 </div>
                               </div>
@@ -254,7 +256,7 @@ const Navbar = () => {
                                 />
                                 <div className="movie-overlay">
                                   <button className="ticket-button">
-                                  <img style={{filter:'blur(0px)'}} src={buttonTicket}/>
+                                    <img style={{ filter: 'blur(0px)' }} src={buttonTicket} />
                                   </button>
                                 </div>
                               </div>
@@ -287,9 +289,9 @@ const Navbar = () => {
                     Cinema Corner
                   </DropdownToggle>
                   <DropdownMenu style={{}}>
-                    {/* <DropdownItem tag={Link} to="/the-loai-phim">
+                    <DropdownItem tag={Link} to="/the-loai-phim">
                       Thể Loại Phim
-                    </DropdownItem> */}
+                    </DropdownItem>
                     <DropdownItem tag={Link} to="/actor">
                       Actor
                     </DropdownItem>
@@ -306,7 +308,7 @@ const Navbar = () => {
                 </Dropdown>
               </li>
               <li className="nav-item">
-                <NavLink className="fs-16" href="#Cinema">
+                <NavLink className="fs-16" href="/rap-phim">
                   Cinema
                 </NavLink>
               </li>
@@ -315,10 +317,56 @@ const Navbar = () => {
                   Events
                 </NavLink>
               </li>
-              <li className="nav-item">
-                <NavLink className="fs-16" href="/rap-phim">
-                  Rạp Phim
-                </NavLink>
+
+              {/* Rạp Phim */}
+              <li
+                className="nav-item"
+                onMouseEnter={() => setdropdownRapPhim(true)}
+                onMouseLeave={() => setdropdownRapPhim(false)}
+              >
+                <Dropdown isOpen={dropdownRapPhim} toggle={toggleDropdownRapPhim}>
+                  <DropdownToggle
+                    className="fs-16 nav-link"
+                    caret
+                    style={{
+                      backgroundColor: "transparent",
+                      color: "black",
+                      borderColor: "transparent",
+                    }}
+                  >
+                    Rạp Phim
+                  </DropdownToggle>
+                  <DropdownMenu style={{ textAlign: "center", paddingLeft: 20, paddingRight: 20, maxHeight: "200px", overflowY: "auto" ,marginLeft:-73}}>
+                    <DropdownItem tag={Link} to="/cinema/galaxy-nguyendu">
+                      Galaxy Nguyễn Du
+                    </DropdownItem>
+                    <DropdownItem tag={Link} to="/galaxy-sala">
+                      Galaxy Sala
+                    </DropdownItem>
+                    <DropdownItem tag={Link} to="/galaxy-tanbinh">
+                      Galaxy Tân Bình
+                    </DropdownItem>
+                    <DropdownItem tag={Link} to="/galaxy-kdv">
+                      Galaxy Kinh Dương Vương
+                    </DropdownItem>
+                    <DropdownItem tag={Link} to="/galaxy-quangtrung">
+                      Galaxy Quang Trung
+                    </DropdownItem>
+                    <DropdownItem tag={Link} to="/galaxy-bentre">
+                      Galaxy Bến Tre
+                    </DropdownItem>
+                    <DropdownItem tag={Link} to="/galaxy-mipeclongbien">
+                      Galaxy Mipec Long Biên
+                    </DropdownItem>
+                    <DropdownItem tag={Link} to="/galaxy-danang">
+                      Galaxy Đà Nẵng
+                    </DropdownItem>
+                    <DropdownItem tag={Link} to="/galaxy-camau">
+                      Galaxy Cà Mau
+                    </DropdownItem>
+
+                  </DropdownMenu>
+                </Dropdown>
               </li>
             </Scrollspy>
 
