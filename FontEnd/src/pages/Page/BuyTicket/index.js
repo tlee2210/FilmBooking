@@ -29,6 +29,8 @@ import "swiper/css";
 import { useDispatch, useSelector } from "react-redux";
 import withRouter from "../../../Components/Common/withRouter";
 import { getBooking } from "../../../slices/home/booking/thunk";
+import { getBookingTime } from "../../../slices/home/booking/thunk";
+
 // getMovieDetailsBook
 import MovieIsShowing from "../BuyTicket/MovieIsShowing";
 import {
@@ -48,7 +50,6 @@ const Booking = (props) => {
 
   useEffect(() => {
     dispatch(getMovieDetailsBook(slug));
-    // dispatch(getMovieDetailsBook(slug, props.router.navigate));
   }, [slug]);
 
   useEffect(() => {
@@ -100,6 +101,11 @@ const Booking = (props) => {
 
   const toggleModal = () => {
     setModal(!modal);
+  };
+
+  const handleBooking = (idRoom) => {
+    // console.log(idRoom);
+    dispatch(getBookingTime(idRoom, props.router.navigate));
   };
 
   const getEmbedUrl = (url) => {
@@ -489,6 +495,11 @@ const Booking = (props) => {
                                                                           md={5}
                                                                           key={
                                                                             index
+                                                                          }
+                                                                          onClick={() =>
+                                                                            handleBooking(
+                                                                              showtime.idRoom
+                                                                            )
                                                                           }
                                                                         >
                                                                           <Button className="btn-showTime">
