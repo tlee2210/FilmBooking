@@ -1,133 +1,33 @@
-import React, { useState, useEffect } from "react";
-import { Link, useSearchParams } from "react-router-dom";
-import {
-    Card,
-    CardBody,
-    CardHeader,
-    Col,
-    Container,
-    Row,
-    Button,
-    Input,
-} from "reactstrap";
+import React, { useState } from "react";
+import { Col, Container, Row } from "reactstrap";
 import { Image } from "antd";
-import { useSelector, useDispatch } from "react-redux";
-import { getHomeActor } from "../../../slices/home/CelebrityHome/thunk";
 import withRouter from "../../../Components/Common/withRouter";
 import RightColumn from "../CinemaCorner/RightColumn";
-import "../CinemaCorner/css/CinemaCorner.css";
-import { createSelector } from "reselect";
-import { getMovieActiveLimitIntroduce } from "../../../slices/home/MovieHome/thunk";
 import MovieIsShowing from "../BuyTicket/MovieIsShowing";
-import buttonTicket from "../../../assets/images/buttonTicket/btn-ticket.png";
+import "../CinemaCorner/css/CinemaCorner.css";
+import "./css/Event.css";
+import { Link } from "react-router-dom";
 
 const UuDai = () => {
-    const dispatch = useDispatch();
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [selectedOption, setSelectedOption] = useState("");
+    const [hoveredIndex, setHoveredIndex] = useState(null);
 
-    const [pageNo, setPageNo] = useState(
-        parseInt(searchParams.get("pageNo"), 10) || 1
-    );
-    const [pageSize, setPageSize] = useState(
-        parseInt(searchParams.get("pageSize"), 10) || 10
-    );
-    const [country, setCountry] = useState(searchParams.get("country") || "");
-
-    // getMovieActiveLimitIntroduce
-    useEffect(() => {
-        dispatch(getMovieActiveLimitIntroduce());
-    }, [dispatch]);
-
-    const CelebrityState = (state) => state;
-    const CelebrityStateData = createSelector(CelebrityState, (state) => ({
-        error: state.Message.error,
-        messageError: state.Message.messageError,
-        data: state.HomeCelebrity.data,
-        selectOptions: state.HomeCelebrity.selectOptions,
-        MovieIntroduce: state.HomeMovie.MovieIntroduce,
-    }));
-
-    const { error, messageError, data, selectOptions, MovieIntroduce } =
-        useSelector(CelebrityStateData);
-
-    useEffect(() => {
-        let params = {};
-        if (country && country !== null && country !== undefined) {
-            params.country = country;
-        }
-
-        params.pageNo = pageNo;
-        params.pageSize = pageSize;
-
-        setSearchParams(params);
-        dispatch(getHomeActor(country ? country : null, pageNo, pageSize));
-
-        document.body.scrollTop = 0;
-        document.documentElement.scrollTop = 0;
-    }, [dispatch, country, pageNo, pageSize]);
-
-    const handlePagination = (page) => {
-        const newPageNo = page + 1;
-        setPageNo(newPageNo);
-        setSearchParams({ country, page: newPageNo, pageSize });
-        dispatch(getHomeActor(country, pageNo, pageSize));
-    };
-
-    const getPagination = (totalPages, currentPage) => {
-        if (totalPages <= 1) {
-            return [1];
-        }
-
-        let delta = 2;
-        let range = [];
-        let rangeWithDots = [];
-        let l;
-
-        range.push(1);
-        for (let i = currentPage - delta; i <= currentPage + delta; i++) {
-            if (i >= 2 && i < totalPages) {
-                range.push(i);
-            }
-        }
-        range.push(totalPages);
-
-        for (let i of range) {
-            if (l) {
-                if (i - l === 2) {
-                    rangeWithDots.push(l + 1);
-                } else if (i - l !== 1) {
-                    rangeWithDots.push("...");
-                }
-            }
-            rangeWithDots.push(i);
-            l = i;
-        }
-
-        return rangeWithDots.filter(
-            (item, index) => rangeWithDots.indexOf(item) === index
-        );
-    };
-
-    const paginationItems = data
-        ? getPagination(data.totalPages, data.number)
-        : [];
-
-    const handleSelectChange = (event) => {
-        const selectedCountry = event.target.value;
-        setSelectedOption(event.target.value);
-        // console.log(selectedCountry);
-        setCountry(selectedCountry);
-        setPageNo(1);
-        setSearchParams({ country: selectedCountry, pageNo: 1, pageSize });
-        // dispatch(getHomeActor(country, 1, pageSize));
-    };
+    const movies = [
+        { id: 1, title: "Khởi Động “Giải Đua Mùa Hè” GalaXummer 2024", image: "https://cdn.galaxycine.vn/media/2024/6/27/500_1719459554323.jpg" },
+        { id: 2, title: "Movie 2", image: "https://cdn.galaxycine.vn/media/2024/5/24/500_1716521540457.jpg" },
+        { id: 3, title: "Movie 3", image: "https://cdn.galaxycine.vn/media/2024/6/27/500_1719459554323.jpg" },
+        { id: 4, title: "Movie 4", image: "https://cdn.galaxycine.vn/media/2024/5/24/500_1716521540457.jpg" },
+        { id: 5, title: "Movie 5", image: "https://cdn.galaxycine.vn/media/2024/6/27/500_1719459554323.jpg" },
+        { id: 6, title: "Movie 6", image: "https://cdn.galaxycine.vn/media/2024/5/24/500_1716521540457.jpg" },
+        { id: 7, title: "Movie 7", image: "https://cdn.galaxycine.vn/media/2024/6/27/500_1719459554323.jpg" },
+        { id: 8, title: "Movie 8", image: "https://cdn.galaxycine.vn/media/2024/5/24/500_1716521540457.jpg  " },
+        { id: 9, title: "Movie 9", image: "https://cdn.galaxycine.vn/media/2024/6/27/500_1719459554323.jpg" },
+    ];
 
     document.title = "Actor";
 
     return (
         <React.Fragment>
-            <Container style={{ paddingTop: 100 }}>
+            <Container style={{ paddingTop: 100,paddingBottom:50 }}>
                 <div className="page-content">
                     <Container fluid>
                         <Row>
@@ -142,10 +42,30 @@ const UuDai = () => {
                                     <div className="bottom-border"></div>
                                 </div>
 
+                                <Row>
+                                    {movies.map((movie, index) => (
+                                        <Col md="4" key={movie.id} className="movie-col gx-3 gy-3 cursor-pointer">
+                                            <Link to={'/uu-dai/details'}>
+                                                <div
+                                                    className="movie-card"
+                                                    onMouseEnter={() => setHoveredIndex(index)}
+                                                    onMouseLeave={() => setHoveredIndex(null)}
+                                                >
+                                                    <Image src={movie.image} alt={movie.title} className="movie-image" />
+                                                    {hoveredIndex === index && (
+                                                        <div className="movie-title-overlay">
+                                                            <h3 className="title-h3">{movie.title}</h3>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </Link>
+                                        </Col>
+                                    ))}
+                                </Row>
                             </Col>
                             <Col lg={4}>
                                 <RightColumn />
-                                <MovieIsShowing MovieIntroduce={MovieIntroduce} />
+                                {/* <MovieIsShowing MovieIntroduce={{ content: movies }} /> */}
                             </Col>
                         </Row>
                     </Container>

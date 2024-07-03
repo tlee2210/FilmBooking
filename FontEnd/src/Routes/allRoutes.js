@@ -97,9 +97,11 @@ import BlogMovieDetails from "../pages/Page/BlogMovie/details";
 import MovieList from "../pages/Page/Movie/index";
 const Home = lazy(() => import("../pages/home/index"));
 
-//
+//Event
 import UuDai from "../pages/Page/Event/UuDai";
 import UudaiDetails from "../pages/Page/Event/UudaiDetails"
+import PhimHayThang from "../pages/Page/Event/PhimHayThang";
+import PhimHayThangDetails from "../pages/Page/Event/PhimHayThangDetails";
 const adminProtectedRoutes = [
   //User Profile
   { path: "/dashboard/profile", component: <UserProfile /> },
@@ -189,16 +191,13 @@ const homeRoutes = [
     path: "/movie-commentary/:slug/details",
     component: <MovieCommentaryDetails />,
   },
+  //event
+  { path: "/uu-dai", component: <UuDai /> },
+  { path: "/uu-dai/details", component: <UudaiDetails /> },
+  { path: "/phim-hay-thang", component: <PhimHayThang /> },
+  { path: "/phim-hay-thang/details", component: <PhimHayThangDetails /> },
 
-<<<<<<< Updated upstream
-=======
-  //Event
-    { path: "/uu-dai", component: <UuDai /> },
-    { path: "/uu-dai/details", component: <UudaiDetails/> },
-    
 
-  // book-tickets
->>>>>>> Stashed changes
   { path: "/book-tickets/:slug", component: <BookTickets /> },
   { path: "/movie-showing", component: <MovieList /> },
 

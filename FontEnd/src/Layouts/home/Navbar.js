@@ -46,8 +46,11 @@ const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownRapPhim, setdropdownRapPhim] = useState(false);
   const [moviesDropdownOpen, setMoviesDropdownOpen] = useState(false);
+  const [eventDropdownOpen, setEventsDropdownOpen] = useState(false);
 
   const toggleDropdownRapPhim = () => setdropdownRapPhim(!dropdownOpen);
+  const toggleDropdownEvent = () => setEventsDropdownOpen(!eventDropdownOpen);
+
   const toggle = () => setisOpenMenu(!isOpenMenu);
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
   const toggleMoviesDropdown = () =>
@@ -191,30 +194,30 @@ const Navbar = () => {
                     <Row>
                       {navbarData && navbarData?.movieShowingList
                         ? navbarData?.movieShowingList?.map((movie, index) => (
-                            <Col md={3} key={index}>
-                              <DropdownItem
-                                tag={Link}
-                                to={`/book-tickets/${movie.slug}`}
-                                className="movie-item"
-                              >
-                                <div className="movie-thumbnail">
-                                  <img
-                                    src={movie.imagePortrait}
-                                    alt={movie.name}
-                                  />
-                                  <div className="movie-overlay">
-                                    <button className="ticket-button">
-                                      <img
-                                        style={{ filter: "blur(0px)" }}
-                                        src={buttonTicket}
-                                      />
-                                    </button>
-                                  </div>
+                          <Col md={3} key={index}>
+                            <DropdownItem
+                              tag={Link}
+                              to={`/book-tickets/${movie.slug}`}
+                              className="movie-item"
+                            >
+                              <div className="movie-thumbnail">
+                                <img
+                                  src={movie.imagePortrait}
+                                  alt={movie.name}
+                                />
+                                <div className="movie-overlay">
+                                  <button className="ticket-button">
+                                    <img
+                                      style={{ filter: "blur(0px)" }}
+                                      src={buttonTicket}
+                                    />
+                                  </button>
                                 </div>
-                                <div className="movie-name">{movie.name}</div>
-                              </DropdownItem>
-                            </Col>
-                          ))
+                              </div>
+                              <div className="movie-name">{movie.name}</div>
+                            </DropdownItem>
+                          </Col>
+                        ))
                         : null}
                     </Row>
                     <DropdownItem className="header-movies-dropdown" header>
@@ -223,30 +226,30 @@ const Navbar = () => {
                     <Row>
                       {navbarData && navbarData?.movieSoonList
                         ? navbarData?.movieSoonList?.map((movie, index) => (
-                            <Col md={3} key={index}>
-                              <DropdownItem
-                                tag={Link}
-                                to={`/book-tickets/${movie.slug}`}
-                                className="movie-item"
-                              >
-                                <div className="movie-thumbnail">
-                                  <img
-                                    src={movie.imagePortrait}
-                                    alt={movie.name}
-                                  />
-                                  <div className="movie-overlay">
-                                    <button className="ticket-button">
-                                      <img
-                                        style={{ filter: "blur(0px)" }}
-                                        src={buttonTicket}
-                                      />
-                                    </button>
-                                  </div>
+                          <Col md={3} key={index}>
+                            <DropdownItem
+                              tag={Link}
+                              to={`/book-tickets/${movie.slug}`}
+                              className="movie-item"
+                            >
+                              <div className="movie-thumbnail">
+                                <img
+                                  src={movie.imagePortrait}
+                                  alt={movie.name}
+                                />
+                                <div className="movie-overlay">
+                                  <button className="ticket-button">
+                                    <img
+                                      style={{ filter: "blur(0px)" }}
+                                      src={buttonTicket}
+                                    />
+                                  </button>
                                 </div>
-                                <div className="movie-name">{movie.name}</div>
-                              </DropdownItem>
-                            </Col>
-                          ))
+                              </div>
+                              <div className="movie-name">{movie.name}</div>
+                            </DropdownItem>
+                          </Col>
+                        ))
                         : null}
                     </Row>
                   </DropdownMenu>
@@ -295,10 +298,32 @@ const Navbar = () => {
                   Cinema
                 </NavLink>
               </li> */}
-              <li className="nav-item">
-                <NavLink className="fs-16" href="#Events">
-                  Events
-                </NavLink>
+              <li
+                className="nav-item"
+                onMouseEnter={() => setEventsDropdownOpen(true)}
+                onMouseLeave={() => setEventsDropdownOpen(false)}
+              >
+                <Dropdown isOpen={eventDropdownOpen} toggle={toggleDropdownEvent}>
+                  <DropdownToggle
+                    className="fs-16 nav-link"
+                    caret
+                    style={{
+                      backgroundColor: "transparent",
+                      color: "black",
+                      borderColor: "transparent",
+                    }}
+                  >
+                    Event
+                  </DropdownToggle>
+                  <DropdownMenu style={{textAlign:"center", marginLeft:-40}}>
+                    <DropdownItem tag={Link} to="/uu-dai" >
+                      Ưu Đãi
+                    </DropdownItem>
+                    <DropdownItem tag={Link} to="/phim-hay-thang">
+                      Phim Hay Tháng
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
               </li>
 
               {/* Rạp Phim */}
@@ -334,14 +359,14 @@ const Navbar = () => {
                   >
                     {navbarData
                       ? navbarData?.selectOptionList?.map((item, index) => (
-                          <DropdownItem
-                            key={index}
-                            tag={Link}
-                            to={`/cinema/${item?.value}`}
-                          >
-                            {item?.label}
-                          </DropdownItem>
-                        ))
+                        <DropdownItem
+                          key={index}
+                          tag={Link}
+                          to={`/cinema/${item?.value}`}
+                        >
+                          {item?.label}
+                        </DropdownItem>
+                      ))
                       : null}
                   </DropdownMenu>
                 </Dropdown>
