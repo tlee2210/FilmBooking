@@ -102,6 +102,7 @@ import UuDai from "../pages/Page/Event/UuDai";
 import UudaiDetails from "../pages/Page/Event/UudaiDetails"
 import PhimHayThang from "../pages/Page/Event/PhimHayThang";
 import PhimHayThangDetails from "../pages/Page/Event/PhimHayThangDetails";
+import Profile from "../pages/Page/Profile";
 const adminProtectedRoutes = [
   //User Profile
   { path: "/dashboard/profile", component: <UserProfile /> },
@@ -197,6 +198,8 @@ const homeRoutes = [
   { path: "/phim-hay-thang", component: <PhimHayThang /> },
   { path: "/phim-hay-thang/details", component: <PhimHayThangDetails /> },
 
+  //Profile
+  { path: "/tai-khoan", component: <Profile /> },
 
   { path: "/book-tickets/:slug", component: <BookTickets /> },
   { path: "/movie-showing", component: <MovieList /> },

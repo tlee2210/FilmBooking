@@ -1,0 +1,175 @@
+.container-tai-khoan {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.profile-wrapper-tai-khoan {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.profile-card-tai-khoan {
+    width: 30%;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+}
+
+.profile-header-tai-khoan {
+    display: flex;
+    align-items: center;
+}
+
+.avatar-tai-khoan {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+
+.profile-info-tai-khoan {
+    margin-left: 15px;
+}
+
+.profile-name-tai-khoan {
+    margin: 0;
+    font-size: 18px;
+}
+
+.profile-stars-tai-khoan {
+    margin: 0;
+    color: gray;
+}
+
+.spending-info-tai-khoan {
+    margin-top: 20px;
+}
+
+.spending-title-tai-khoan {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.spending-amount-tai-khoan {
+    font-size: 24px;
+    color: red;
+}
+
+.spending-scale-tai-khoan {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: gray;
+}
+
+.progress-bar-tai-khoan {
+    height: 8px;
+    background: gray;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.progress-fill-tai-khoan {
+    height: 100%;
+    background: blue;
+}
+
+.contact-info-tai-khoan {
+    margin-top: 20px;
+    font-size: 12px;
+    color: gray;
+}
+
+.tabs-container-tai-khoan {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.tabs-tai-khoan {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.tab-item-tai-khoan {
+    margin-right: 20px;
+    cursor: pointer;
+    padding: 10px;
+    color: #b1acac;
+    font-weight: bold;
+}
+
+.tab-item-tai-khoan.active-tai-khoan {
+    border-bottom: 2px solid blue;
+    color: rgb(27, 27, 153);
+}
+
+.tab-content-tai-khoan {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+}
+
+.form-tai-khoan {
+    margin: auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group-tai-khoan {
+    margin-bottom: 15px;
+}
+
+.form-label-tai-khoan {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-control-tai-khoan {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-control-disabled {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    color: #777;
+    height: 40px;
+}
+
+.form-radio-group-tai-khoan {
+    display: flex;
+    gap: 10px;
+}
+
+.form-radio-tai-khoan input {
+    margin-right: 5px;
+}
+
+.form-button-tai-khoan {
+    width: 100%;
+    padding: 10px;
+    background-color: #ff9800;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-button-tai-khoan:hover {
+    background-color: #e68900;
+}
