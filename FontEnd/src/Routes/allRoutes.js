@@ -97,6 +97,9 @@ import BlogMovieDetails from "../pages/Page/BlogMovie/details";
 import MovieList from "../pages/Page/Movie/index";
 const Home = lazy(() => import("../pages/home/index"));
 
+//
+import UuDai from "../pages/Page/Event/UuDai";
+import UudaiDetails from "../pages/Page/Event/UudaiDetails"
 const adminProtectedRoutes = [
   //User Profile
   { path: "/dashboard/profile", component: <UserProfile /> },
@@ -187,6 +190,15 @@ const homeRoutes = [
     component: <MovieCommentaryDetails />,
   },
 
+<<<<<<< Updated upstream
+=======
+  //Event
+    { path: "/uu-dai", component: <UuDai /> },
+    { path: "/uu-dai/details", component: <UudaiDetails/> },
+    
+
+  // book-tickets
+>>>>>>> Stashed changes
   { path: "/book-tickets/:slug", component: <BookTickets /> },
   { path: "/movie-showing", component: <MovieList /> },
 
