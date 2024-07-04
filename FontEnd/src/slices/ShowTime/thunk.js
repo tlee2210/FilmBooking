@@ -45,7 +45,7 @@ export const getRoomForShowTime = (id) => async (dispatch) => {
     .get(`http://localhost:8081/api/admin/v1/room/${id}`)
     .then((response) => {
       console.log(response);
-      dispatch(setRoomItem(response?.data?.result));
+      dispatch(setRoomItem({ data: response?.data?.result }));
     })
     .catch((err) => {
       console.error(err);

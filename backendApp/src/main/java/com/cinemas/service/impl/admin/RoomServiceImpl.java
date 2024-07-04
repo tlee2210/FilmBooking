@@ -9,6 +9,7 @@ import com.cinemas.dto.response.RoomTableReponse;
 import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.*;
+import com.cinemas.enums.MovieFormat;
 import com.cinemas.exception.AppException;
 import com.cinemas.repositories.CinemaImageRespository;
 import com.cinemas.repositories.CinemaRespository;
@@ -119,14 +120,24 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<SelectOptionReponse> getAllRoomByCinemaId(Integer id) {
+    public SelectOptionAndModelReponse getAllRoomAndStatusByCinemaId(Integer id) {
+        SelectOptionAndModelReponse optionAndModelReponse = new SelectOptionAndModelReponse();
+
         List<Room> rooms = roomRepository.getRoomByCinemaId(id);
         List<SelectOptionReponse> selectOptionReponses = new ArrayList<>();
 
         rooms.forEach(room -> {
             selectOptionReponses.add(new SelectOptionReponse<>(room.getId(), room.getName()));
         });
-        return selectOptionReponses;
+        optionAndModelReponse.setSelectOptionReponse(selectOptionReponses);
+
+        List<SelectOptionReponse> selectOptionReponseStatus = new ArrayList<>();
+        for (MovieFormat movieFormat : MovieFormat.values()){
+            selectOptionReponseStatus.add(new SelectOptionReponse<>(movieFormat.getValue(), movieFormat.getValue()));
+        }
+        optionAndModelReponse.setSelectOptionStatus(selectOptionReponseStatus);
+
+        return optionAndModelReponse;
     }
 
     @Override

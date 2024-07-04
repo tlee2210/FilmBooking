@@ -25,9 +25,6 @@ public class HomeBuyTicketServiceImpl implements HomeBuyTicketService {
     @Autowired
     private MovieRepository movieRepository;
 
-    @Autowired
-    private CinemaRespository cinemaRepository;
-
     @Override
     public BuyTicketResponse getInfoTicket(String slugmovie, String slugcinema, LocalDate date) {
         List<Movie> movies = movieRepository.getListBySlug(slugmovie);

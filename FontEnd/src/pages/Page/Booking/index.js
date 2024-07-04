@@ -110,6 +110,11 @@ const Booking = (props) => {
     dispatch(getBookingTime(id, props.router.navigate));
   };
 
+  const formatTime = (timeString) => {
+    const [hours, minutes] = timeString.split(":");
+    return `${hours}:${minutes}`;
+  };
+
   const renderSeats = (numRows, numCols, totalColumns, isDouble = false) => {
     const rows = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
       .split("")
@@ -353,37 +358,58 @@ const Booking = (props) => {
                   <Col xl={8}>
                     <TabContent activeTab={activeTab}>
                       <TabPane tabId={1}>
-                        <div>
+                        <Row>
                           {/* Seat Selection Content */}
-                          <div
+                          <Row
                             className="btn-group-order rounded-3 shadow-lg p-3 bg-white rounded"
                             style={{ backgroundColor: "white", padding: 20 }}
                           >
-                            <span className="showtime-title-order">
+                            <Col md={3} className="showtime-title-order">
                               Change show time
-                            </span>
-                            <div className="btn-group-order" role="group">
-                              {data && data?.showtimes
-                                ? data?.showtimes?.map((item, index) => (
-                                    <button
-                                      key={index}
-                                      // className="btn btn-outline-primary"
-                                      className={classnames({
-                                        "btn btn-primary":
-                                          item?.idRoom == data.id,
-                                        "btn btn-outline-primary":
-                                          item?.idRoom != data.id,
-                                      })}
-                                      onClick={() => {
-                                        handleChangeShowtime(item?.idRoom);
-                                      }}
-                                    >
-                                      {item.time}
-                                    </button>
-                                  ))
-                                : null}
-                            </div>
-                          </div>
+                            </Col>
+                            <Col
+                              md={12}
+                              className="btn-group-order"
+                              role="group"
+                            >
+                              <Row>
+                                {data && data.movieformats
+                                  ? data.movieformats.map((item, index) => (
+                                      <Row className="ms-4 mb-4" key={index}>
+                                        <Col md={2}>{item.name}</Col>
+                                        <Col md={10}>
+                                          {item.times
+                                            ? item.times.map(
+                                                (timeItem, timeIndex) => (
+                                                  <Col
+                                                    key={timeIndex}
+                                                    md={2}
+                                                    className={classnames({
+                                                      "btn btn-primary me-3 mb-3":
+                                                        timeItem.idRoom ==
+                                                        data.id,
+                                                      "btn btn-outline-primary me-3 mb-3":
+                                                        timeItem.idRoom !=
+                                                        data.id,
+                                                    })}
+                                                    onClick={() => {
+                                                      handleChangeShowtime(
+                                                        timeItem.idRoom
+                                                      );
+                                                    }}
+                                                  >
+                                                    {formatTime(timeItem.time)}
+                                                  </Col>
+                                                )
+                                              )
+                                            : null}
+                                        </Col>
+                                      </Row>
+                                    ))
+                                  : null}
+                              </Row>
+                            </Col>
+                          </Row>
                           <div
                             className="mt-4 rounded-3 shadow-lg p-3 mb-5 bg-white rounded"
                             style={{ backgroundColor: "white", padding: 20 }}
@@ -436,7 +462,7 @@ const Booking = (props) => {
                               </div>
                             </div> */}
                           </div>
-                        </div>
+                        </Row>
                       </TabPane>
                       <TabPane tabId={2}>
                         {WaterCornData
@@ -640,9 +666,9 @@ const Booking = (props) => {
                           </div>
                           <div>
                             <div className="movie-title">{data?.movieName}</div>
-                            {/* <div className="movie-info">
-                              <p>2D Lồng Tiếng </p>
-                            </div> */}
+                            <div className="movie-info">
+                              <p>{data?.movieFormat}</p>
+                            </div>
                           </div>
                         </div>
                         <div className="detailed-info">

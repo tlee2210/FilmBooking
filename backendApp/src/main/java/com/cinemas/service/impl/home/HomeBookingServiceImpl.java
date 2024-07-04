@@ -1,11 +1,9 @@
 package com.cinemas.service.impl.home;
 
-import com.cinemas.dto.response.SelectOptionReponse;
-import com.cinemas.dto.response.ShowTimeTableResponse;
-import com.cinemas.dto.response.bookTicketsResponse;
-import com.cinemas.dto.response.bookingShowTimeResponse;
+import com.cinemas.dto.response.*;
 import com.cinemas.entities.Showtimes;
 import com.cinemas.entities.PriceMovie;
+import com.cinemas.enums.MovieFormat;
 import com.cinemas.repositories.CinemaRespository;
 import com.cinemas.repositories.PriceMovieResponsetory;
 import com.cinemas.repositories.ShowTimeResponsitory;
@@ -37,13 +35,26 @@ public class HomeBookingServiceImpl implements HomeBookingService {
         List<bookingShowTimeResponse> showtimes = showTimeResponsitory.findDayByMovie_Slug(slug, cinema);
         LocalTime currentTimePlus15 = LocalTime.now().plusMinutes(15);
 
+        List<MovieFormat> listMovieFormat = new ArrayList<>();
+
         showtimes.forEach(item -> {
             item.setCinemaTimeMovies(showTimeResponsitory.findByDayAndMovie_Slug(item.getDay(), slug, currentTimePlus15, cinema));
+            listMovieFormat.addAll(showTimeResponsitory.findMovieFormat(item.getDay(), slug, currentTimePlus15, cinema));
         });
 
         showtimes.forEach(item -> {
             item.getCinemaTimeMovies().forEach(timeMovies -> {
-                timeMovies.setTimes(showTimeResponsitory.findMovieTimes(item.getDay(), slug, currentTimePlus15, timeMovies.getName()));
+                List<HomeMovieFormatResponse> homeMovieFormatResponses = new ArrayList<>();
+
+                listMovieFormat.forEach(name -> {
+                    HomeMovieFormatResponse homeMovieFormatResponse = new HomeMovieFormatResponse();
+                    homeMovieFormatResponse.setName(name.getValue());
+                    homeMovieFormatResponse.setTimes(showTimeResponsitory.findMovieTimes(item.getDay(), slug, currentTimePlus15, timeMovies.getName(), name));
+
+                    homeMovieFormatResponses.add(homeMovieFormatResponse);
+                });
+
+                timeMovies.setMovieFormat(homeMovieFormatResponses);
             });
         });
 
@@ -68,12 +79,21 @@ public class HomeBookingServiceImpl implements HomeBookingService {
         response.setImage(fileStorageServiceImpl.getUrlFromPublicId(response.getImage()));
         PriceMovie priceMovie = priceMovieResponsetory.findPriceMovie(response.getMovieName(), response.getDate());
 
-        if(priceMovie != null){
+        if (priceMovie != null) {
             response.setPrice(priceMovie.getPrice());
         }
         LocalTime timeNow = LocalTime.now().plusMinutes(15);
+        List<HomeMovieFormatResponse> homeMovieFormatResponses = new ArrayList<>();
+        List<MovieFormat> listMovieFormat = showTimeResponsitory.findMovieFormat(response.getDate(), timeNow, response.getMovieName(), response.getCinemaName());
+        listMovieFormat.forEach(item -> {
+            HomeMovieFormatResponse homeMovieFormatResponse = new HomeMovieFormatResponse();
+            homeMovieFormatResponse.setName(item.getValue());
+            homeMovieFormatResponse.setTimes(showTimeResponsitory.findshowtimes(response.getDate(), timeNow, response.getMovieName(), response.getCinemaName(), item));
 
-        response.setShowtimes(showTimeResponsitory.findshowtimes(response.getDate(), timeNow, response.getMovieName(), response.getCinemaName()));
+            homeMovieFormatResponses.add(homeMovieFormatResponse);
+        });
+
+        response.setMovieformats(homeMovieFormatResponses);
 
         return response;
     }

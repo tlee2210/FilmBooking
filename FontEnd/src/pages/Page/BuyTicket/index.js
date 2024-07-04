@@ -469,8 +469,7 @@ const Booking = (props) => {
                                               <div className="live-preview">
                                                 <div className="table-responsive table-striped table-nowrap align-middle mb-0">
                                                   {/* <Row className="table-striped table-nowrap align-middle mb-0"> */}
-                                                  {item &&
-                                                  item?.cinemaTimeMovies
+                                                  {item && item.cinemaTimeMovies
                                                     ? item.cinemaTimeMovies.map(
                                                         (cinema, index) => (
                                                           <Row
@@ -478,48 +477,85 @@ const Booking = (props) => {
                                                             key={index}
                                                           >
                                                             <Col
-                                                              md={3}
-                                                              className="fw-bolder table-showTime"
+                                                              md={12}
+                                                              className="table-showTime"
                                                             >
-                                                              <div className="max-width mb-4 mt-3">
+                                                              <div className="fw-bolder max-width mb-4 mt-3">
                                                                 {cinema.name}
                                                               </div>
                                                               <div className="time-item">
-                                                                {cinema
-                                                                  ? cinema.times.map(
+                                                                {cinema &&
+                                                                cinema.movieFormat ? (
+                                                                  <Row>
+                                                                    {cinema.movieFormat.map(
                                                                       (
-                                                                        showtime,
-                                                                        index
+                                                                        format,
+                                                                        formatIndex
                                                                       ) => (
                                                                         <Col
-                                                                          md={5}
-                                                                          key={
-                                                                            index
+                                                                          md={
+                                                                            12
                                                                           }
-                                                                          onClick={() =>
-                                                                            handleBooking(
-                                                                              showtime.idRoom
-                                                                            )
+                                                                          key={
+                                                                            formatIndex
                                                                           }
                                                                         >
-                                                                          <Button className="btn-showTime">
-                                                                            {
-                                                                              showtime.time
-                                                                            }
-                                                                            {/* {
-                                                                              showtime.idRoom
-                                                                            } */}
-                                                                          </Button>
+                                                                          <Row className="mb-4">
+                                                                            <Col
+                                                                              md={
+                                                                                2
+                                                                              }
+                                                                              className="ms-4"
+                                                                            >
+                                                                              {
+                                                                                format.name
+                                                                              }
+                                                                            </Col>
+                                                                            <Col>
+                                                                              <Row>
+                                                                                {format.times
+                                                                                  ? format.times.map(
+                                                                                      (
+                                                                                        timeItem,
+                                                                                        timeIndex
+                                                                                      ) => (
+                                                                                        <Col
+                                                                                          md={
+                                                                                            2
+                                                                                          }
+                                                                                          key={
+                                                                                            timeIndex
+                                                                                          }
+                                                                                          onClick={() =>
+                                                                                            handleBooking(
+                                                                                              timeItem.idRoom
+                                                                                            )
+                                                                                          }
+                                                                                        >
+                                                                                          <Button className="btn-showTime mb-2">
+                                                                                            {
+                                                                                              timeItem.time
+                                                                                            }
+                                                                                          </Button>
+                                                                                        </Col>
+                                                                                      )
+                                                                                    )
+                                                                                  : null}
+                                                                              </Row>
+                                                                            </Col>
+                                                                          </Row>
                                                                         </Col>
                                                                       )
-                                                                    )
-                                                                  : null}
+                                                                    )}
+                                                                  </Row>
+                                                                ) : null}
                                                               </div>
                                                             </Col>
                                                           </Row>
                                                         )
                                                       )
                                                     : null}
+
                                                   {/* </Row> */}
                                                 </div>
                                               </div>

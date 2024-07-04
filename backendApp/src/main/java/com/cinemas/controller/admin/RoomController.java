@@ -144,9 +144,9 @@ public class RoomController {
     }
 
     @GetMapping("/{id}")
-    public APIResponse<List<SelectOptionReponse>> getAllRoomByCinemaIdToSelectOption(@PathVariable Integer id) {
-        List<SelectOptionReponse> cinemaList = roomService.getAllRoomByCinemaId(id);
-        APIResponse<List<SelectOptionReponse>> apiResponse = new APIResponse<>();
+    public APIResponse<SelectOptionAndModelReponse> getAllRoomByCinemaIdToSelectOption(@PathVariable Integer id) {
+        SelectOptionAndModelReponse cinemaList = roomService.getAllRoomAndStatusByCinemaId(id);
+        APIResponse<SelectOptionAndModelReponse> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(cinemaList);
 

@@ -1,5 +1,6 @@
 package com.cinemas.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,11 +10,9 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CinemaTimeMovie {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class HomeMovieFormatResponse {
     private String name;
-    private List<HomeMovieFormatResponse> movieFormat;
+    private List<HomeTimeAndRoomResponse> times;
 
-    public CinemaTimeMovie(String name) {
-        this.name = name;
-    }
 }

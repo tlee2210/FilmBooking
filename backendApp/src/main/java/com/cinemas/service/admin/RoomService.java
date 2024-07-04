@@ -23,5 +23,5 @@ public interface RoomService {
     boolean updateRoom(RoomRequest roomRequest);
     boolean delete(Integer id);
 
-    List<SelectOptionReponse> getAllRoomByCinemaId(Integer id);
+    SelectOptionAndModelReponse getAllRoomAndStatusByCinemaId(Integer id);
 }

@@ -53,6 +53,7 @@ const ShowTimeCreate = (props) => {
     selectMovie: state.ShowTime.selectMovie,
     movieItem: state.ShowTime.movieItem,
     selectRoom: state.ShowTime.selectRoom,
+    MovieFormat: state.ShowTime.MovieFormat,
   }));
 
   const {
@@ -62,6 +63,7 @@ const ShowTimeCreate = (props) => {
     selectMovie,
     movieItem,
     selectRoom,
+    MovieFormat,
   } = useSelector(ShowTimeStateData);
 
   useEffect(() => {
@@ -82,9 +84,11 @@ const ShowTimeCreate = (props) => {
       day: [],
       time: [],
       room: [],
+      movieFormat: "",
     },
     validationSchema: Yup.object({
       cinema: Yup.string().required("Please Select a Cinema"),
+      movieFormat: Yup.string().required("Please Select Movie Format"),
       movie: Yup.string().required("Please Select a Movie"),
       day: Yup.array().min(1, "Please Select a Day"),
       time: Yup.array().min(1, "Please Select a time"),
@@ -96,6 +100,7 @@ const ShowTimeCreate = (props) => {
       formData.append("cinemaId", values.cinema);
       formData.append("movieId", values.movie);
       formData.append("roomId", values.room);
+      formData.append("movieFormat", values.movieFormat);
       values.room.forEach((value, index) => {
         formData.append(`roomId[${index}]`, value);
       });
@@ -271,7 +276,7 @@ const ShowTimeCreate = (props) => {
                   <CardBody>
                     <Card className="shadow-lg p-3 mb-5 bg-white rounded">
                       <Row className="mb-3">
-                        <Col sm={12}>
+                        <Col sm={6}>
                           <div className="mb-3">
                             <label className="form-label mb-0">Day</label>
                             <Flatpickr
@@ -306,6 +311,46 @@ const ShowTimeCreate = (props) => {
                                   style={{ display: "block" }}
                                 >
                                   {validation.errors.day}
+                                </div>
+                              )}
+                          </div>
+                        </Col>
+                        <Col sm={6}>
+                          <div className="search-box">
+                            <Label
+                              className="form-label"
+                              htmlFor="product-title-input"
+                            >
+                              Movie Format
+                            </Label>
+                            <Select
+                              name="movieFormat"
+                              options={MovieFormat}
+                              placeholder="Select Movie Format..."
+                              classNamePrefix="select"
+                              onChange={(option) => {
+                                const roleValue = option ? option.value : null;
+                                validation.setFieldValue(
+                                  "movieFormat",
+                                  roleValue
+                                );
+                                validation.setFieldTouched("movieFormat", true);
+                              }}
+                              onBlur={() =>
+                                validation.setFieldTouched("movieFormat", true)
+                              }
+                              value={MovieFormat.find(
+                                (opt) =>
+                                  opt.value === validation.values.movieFormat
+                              )}
+                            />
+                            {validation.touched.MovieFormat &&
+                              validation.errors.MovieFormat && (
+                                <div
+                                  className="invalid-feedback"
+                                  style={{ display: "block" }}
+                                >
+                                  {validation.errors.MovieFormat}
                                 </div>
                               )}
                           </div>

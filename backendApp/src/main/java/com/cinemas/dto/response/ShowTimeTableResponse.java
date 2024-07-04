@@ -28,8 +28,9 @@ public class ShowTimeTableResponse {
     private float price;
     private Room room;
     private MovieFormat movieFormat;
-    private List<HomeTimeAndRoomResponse> showtimes;
-    public ShowTimeTableResponse(Integer id, LocalDate date, LocalTime time, String cinemaName, String movieName, String roomName,MovieFormat movieFormat) {
+    private List<HomeMovieFormatResponse> movieformats;
+
+    public ShowTimeTableResponse(Integer id, LocalDate date, LocalTime time, String cinemaName, String movieName, String roomName, MovieFormat movieFormat) {
         this.id = id;
         this.date = date;
         this.time = time;
@@ -39,7 +40,7 @@ public class ShowTimeTableResponse {
         this.movieFormat = movieFormat;
     }
 
-    public ShowTimeTableResponse(Integer id, LocalDate date, LocalTime time, String cinemaName, String movieName, String roomName, String image, float price,Room room) {
+    public ShowTimeTableResponse(Integer id, LocalDate date, LocalTime time, String cinemaName, String movieName, String roomName, String image, float price, Room room, MovieFormat movieFormat) {
         this.id = id;
         this.date = date;
         this.time = time;
@@ -49,6 +50,7 @@ public class ShowTimeTableResponse {
         this.image = image;
         this.price = price;
         this.room = room;
+        this.movieFormat = movieFormat;
     }
 
 }

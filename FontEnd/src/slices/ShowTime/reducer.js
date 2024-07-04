@@ -7,6 +7,7 @@ export const initialState = {
   selectRoom: [],
   movieItem: {},
   item: {},
+  MovieFormat: [],
 };
 
 const ShowTimeSlice = createSlice({
@@ -25,7 +26,8 @@ const ShowTimeSlice = createSlice({
       state.movieItem = action.payload;
     },
     setRoomItem(state, action) {
-      state.selectRoom = action.payload;
+      state.selectRoom = action.payload.data.selectOptionReponse;
+      state.MovieFormat = action.payload.data.selectOptionStatus;
     },
     setShowTime(state, action) {
       state.item = action.payload;
