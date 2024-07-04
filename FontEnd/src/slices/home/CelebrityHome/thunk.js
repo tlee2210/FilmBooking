@@ -10,7 +10,7 @@ export const getHomeActor =
         params: { slugCountry, pageNo, pageSize },
       })
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         dispatch(fetchSuccess({ data: response?.data?.result }));
       })
       .catch((error) => {
@@ -23,7 +23,7 @@ export const getcelebrityDetails = (slug, history) => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/home/v1/celebrity/detail/${slug}`)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(setItem({ data: response?.data?.result }));
     })
     .catch((error) => {
@@ -42,7 +42,7 @@ export const getHomedirector =
         params: { slugCountry, pageNo, pageSize },
       })
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         dispatch(fetchSuccess({ data: response?.data?.result }));
       })
       .catch((error) => {

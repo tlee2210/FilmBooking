@@ -1,5 +1,6 @@
 package com.cinemas.dto.request;
 
+import com.cinemas.enums.MovieFormat;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -29,5 +30,5 @@ public class ShowTimeRequest {
 //    @NotEmpty(message = "VALIDATION")
     private List<LocalTime> times;
 
-    private String movieFormat;
+    private MovieFormat movieFormat;
 }

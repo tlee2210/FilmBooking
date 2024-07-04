@@ -44,7 +44,7 @@ export const getRoomForShowTime = (id) => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/admin/v1/room/${id}`)
     .then((response) => {
-      // console.log(response);
+      console.log(response);
       dispatch(setRoomItem(response?.data?.result));
     })
     .catch((err) => {

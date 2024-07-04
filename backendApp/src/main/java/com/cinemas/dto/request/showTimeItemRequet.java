@@ -1,5 +1,6 @@
 package com.cinemas.dto.request;
 
+import com.cinemas.enums.MovieFormat;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
@@ -15,5 +16,5 @@ public class showTimeItemRequet {
     private Integer roomId;
     private LocalDate days;
     private LocalTime times;
-    private String movieFormat;
+    private MovieFormat movieFormat;
 }

@@ -180,6 +180,11 @@ const ShowTime = (props) => {
         enableColumnFilter: false,
       },
       {
+        header: "Movie Format",
+        accessorKey: "movieFormat",
+        enableColumnFilter: false,
+      },
+      {
         header: "Day",
         accessorKey: "date",
         enableColumnFilter: false,

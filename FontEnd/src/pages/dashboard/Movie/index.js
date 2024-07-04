@@ -289,24 +289,24 @@ const Movies = (props) => {
           const value = cell.getValue();
           return (
             <React.Fragment>
-              {value === "COMING_SOON" ? (
+              {value === "Coming Soon" ? (
                 <span className="badge bg-warning-subtle  text-warning badge-border">
                   {" "}
                   {value}
                 </span>
-              ) : value === "NO_LONGER_SHOWING" ? (
+              ) : value === "No Longer Showing" ? (
                 <span className="badge bg-danger-subtle text-danger badge-border">
                   {value}
                 </span>
-              ) : value === "NOW_SHOWING" ? (
+              ) : value === "Now Showing" ? (
                 <span className="badge bg-success-subtle text-success badge-border">
                   {value}
                 </span>
-              ) : value === "LIMITED_RELEASE" ? (
+              ) : value === "Limited Release" ? (
                 <span className="badge bg-danger-subtle  text-danger badge-border">
                   {value}
                 </span>
-              ) : value === "SPECIAL_SCREENING" ? (
+              ) : value === "Special Screening" ? (
                 <span className="badge bg-primary-subtle text-primary badge-border">
                   {value}
                 </span>

@@ -1,5 +1,7 @@
 package com.cinemas.enums;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum ReviewType {
     preview("Preview"),
     review("Review");
@@ -8,7 +10,7 @@ public enum ReviewType {
     ReviewType(String value) {
         this.value = value;
     }
-
+    @JsonValue
     public String getValue() {
         return value;
     }

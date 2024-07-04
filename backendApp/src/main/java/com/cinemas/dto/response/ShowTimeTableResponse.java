@@ -2,6 +2,7 @@ package com.cinemas.dto.response;
 
 import com.cinemas.entities.Movie;
 import com.cinemas.entities.Room;
+import com.cinemas.enums.MovieFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,14 +27,16 @@ public class ShowTimeTableResponse {
     private Movie movie;
     private float price;
     private Room room;
+    private MovieFormat movieFormat;
     private List<HomeTimeAndRoomResponse> showtimes;
-    public ShowTimeTableResponse(Integer id, LocalDate date, LocalTime time, String cinemaName, String movieName, String roomName) {
+    public ShowTimeTableResponse(Integer id, LocalDate date, LocalTime time, String cinemaName, String movieName, String roomName,MovieFormat movieFormat) {
         this.id = id;
         this.date = date;
         this.time = time;
         this.cinemaName = cinemaName;
         this.movieName = movieName;
         this.roomName = roomName;
+        this.movieFormat = movieFormat;
     }
 
     public ShowTimeTableResponse(Integer id, LocalDate date, LocalTime time, String cinemaName, String movieName, String roomName, String image, float price,Room room) {

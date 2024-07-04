@@ -669,7 +669,9 @@ const Booking = (props) => {
                                 </Col>
                                 <Col md={3}>
                                   <p className="total">
-                                    {doubleSeats.length * data.price} USD
+                                    {doubleSeats.length *
+                                      (data.price * 2 * 1.05)}{" "}
+                                    USD
                                   </p>
                                 </Col>
                                 <Col md={9}>

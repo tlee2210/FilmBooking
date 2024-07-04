@@ -22,7 +22,7 @@ public interface ShowTimeResponsitory extends JpaRepository<Showtimes, Integer> 
 
     //    @Query("SELECT t FROM Showtimes t WHERE (:slug IS NULL OR t.cinema.slug = :slug) " +
 //            "AND (:startDay IS NULL OR :endDay IS NULL OR t.date BETWEEN :startDay AND :endDay)")
-    @Query("SELECT new com.cinemas.dto.response.ShowTimeTableResponse(t.id, t.date, t.time, t.cinema.name, t.movie.name, t.room.name) FROM Showtimes t WHERE (:startDay IS NULL OR t.date >= :startDay) AND (:endDay IS NULL OR t.date <= :endDay) AND (:slug IS NULL OR t.cinema.slug = :slug)")
+    @Query("SELECT new com.cinemas.dto.response.ShowTimeTableResponse(t.id, t.date, t.time, t.cinema.name, t.movie.name, t.room.name, t.movieFormat) FROM Showtimes t WHERE (:startDay IS NULL OR t.date >= :startDay) AND (:endDay IS NULL OR t.date <= :endDay) AND (:slug IS NULL OR t.cinema.slug = :slug)")
     List<ShowTimeTableResponse> searchAllByCinemaAndDate(String slug, LocalDate startDay, LocalDate endDay);
 
     @Query(value = "SELECT s FROM Showtimes s WHERE s.cinema.slug = :slug AND s.movie.id = :id AND s.date = :date AND s.time > :time GROUP BY s.time")

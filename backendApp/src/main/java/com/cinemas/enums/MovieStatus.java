@@ -1,5 +1,7 @@
 package com.cinemas.enums;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum MovieStatus {
     NOW_SHOWING("Now Showing"),
     COMING_SOON("Coming Soon"),
@@ -13,7 +15,7 @@ public enum MovieStatus {
     MovieStatus(String value) {
         this.value = value;
     }
-
+    @JsonValue
     public String getValue() {
         return value;
     }

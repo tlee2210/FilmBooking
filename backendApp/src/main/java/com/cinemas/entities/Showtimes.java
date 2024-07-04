@@ -1,5 +1,6 @@
 package com.cinemas.entities;
 
+import com.cinemas.enums.MovieFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -30,7 +31,7 @@ public class Showtimes {
     private LocalTime time;
 
     @Column(nullable = false)
-    private String movieFormat;
+    private MovieFormat movieFormat;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id", referencedColumnName = "id")
@@ -47,7 +48,7 @@ public class Showtimes {
     @JsonIgnore
     Cinema cinema;
 
-    public Showtimes(LocalDate date, LocalTime time, Movie movie, Room room, Cinema cinema, String movieFormat) {
+    public Showtimes(LocalDate date, LocalTime time, Movie movie, Room room, Cinema cinema, MovieFormat movieFormat) {
         this.date = date;
         this.time = time;
         this.movie = movie;
