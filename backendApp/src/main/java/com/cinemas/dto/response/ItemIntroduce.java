@@ -18,6 +18,11 @@ public class ItemIntroduce {
     private String imagePortrait;
     private String trailer;
 
+    public ItemIntroduce(String slug, String description) {
+        this.slug = slug;
+        this.description = description;
+    }
+
     public ItemIntroduce(Integer id, String name, String slug, String imagePortrait) {
         this.id = id;
         this.name = name;

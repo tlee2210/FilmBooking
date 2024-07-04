@@ -30,4 +30,6 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
     @Query("SELECT r FROM Review r WHERE r.movie.id = :movieId")
     List<Review> findByMovieId(Integer movieId);
+@Query("SELECT new com.cinemas.dto.response.ItemIntroduce(r.slug, r.description) FROM Review r WHERE r.movie.id = :idMovie AND r.type = :type")
+    List<ItemIntroduce> findTypeByIdMovie(Integer idMovie, ReviewType type);
 }

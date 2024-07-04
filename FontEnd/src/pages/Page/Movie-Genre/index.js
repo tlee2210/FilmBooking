@@ -17,7 +17,6 @@ import MovieIsShowing from "../BuyTicket/MovieIsShowing";
 import { Image } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "reselect";
-import { getHomeBlog } from "../../../slices/home/BlogAndReviewHome/thunk";
 import { getHomeMovieGenre } from "../../../slices/home/Movie-GenreHome/thunk";
 import { getMovieActiveLimitIntroduce } from "../../../slices/home/MovieHome/thunk";
 import RightColumn from "../CinemaCorner/RightColumn";
@@ -67,8 +66,10 @@ const index = () => {
   } = useSelector(MovieGenreStateData);
 
   useEffect(() => {
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
 
     let params = {};
 

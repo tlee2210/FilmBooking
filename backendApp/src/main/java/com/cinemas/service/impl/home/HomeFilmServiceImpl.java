@@ -136,14 +136,15 @@ public class HomeFilmServiceImpl implements HomeFilmService {
 
         List<Review> reviewList = reviewRepository.findByMovieId(movie.getId());
 
-        List<List<imageDescription>> imgList = new ArrayList<>();
+        List<imageDescription> imgList = new ArrayList<>();
 
         for (Review review : reviewList) {
             List<imageDescription> imageDescriptionList = imageDescriptionRespository.findBySlug_name(review.getSlug());
             for (imageDescription imageDescription : imageDescriptionList) {
                 imageDescription.setUrl(fileStorageServiceImpl.getUrlFromPublicId(imageDescription.getUrl()));
             }
-            imgList.add(imageDescriptionList);
+
+            imgList.addAll(imageDescriptionList);
         }
 
         homeFilmResponse.setImages(imgList);
@@ -152,6 +153,9 @@ public class HomeFilmServiceImpl implements HomeFilmService {
             item.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(item.getImagePortrait()));
         }
         homeFilmResponse.setReviews(items);
+        homeFilmResponse.setMovieReview(reviewRepository.findTypeByIdMovie(movie.getId(), ReviewType.review));
+        homeFilmResponse.setSubplot(reviewRepository.findTypeByIdMovie(movie.getId(), ReviewType.preview));
+
         return homeFilmResponse;
     }
 }

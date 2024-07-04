@@ -30,6 +30,8 @@ public class HomeFilmResponse {
     private List<Celebrity> actor;
     private List<Celebrity> director;
     private LocalDate releaseDate;
-    private List<List<imageDescription>> images;
+    private List<imageDescription> images;
     private List<ItemIntroduce> reviews;
+    private List<ItemIntroduce> Subplot;
+    private List<ItemIntroduce> movieReview;
 }

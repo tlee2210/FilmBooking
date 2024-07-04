@@ -101,17 +101,19 @@ const ActorInfor = (props) => {
                           <Row>
                             {item.movieList?.map((movie, index) => (
                               <Col key={index} md={6}>
-                                <div className="movie-item-ActorInfor hadow-lg p-3 bg-white rounded">
-                                  <img
-                                    src={movie.image || "default_image_url"}
-                                    alt={movie.name}
-                                    className="img-fluid"
-                                  />
-                                  <div className="align-items-center">
-                                    {/* <h5>{movie.name}</h5> */}
-                                    {movie.name}
+                                <Link to={`/movie/${movie.slug}/details`}>
+                                  <div className="movie-item-ActorInfor hadow-lg p-3 bg-white rounded">
+                                    <img
+                                      src={movie.image || "default_image_url"}
+                                      alt={movie.name}
+                                      className="img-fluid"
+                                    />
+                                    <div className="align-items-center">
+                                      {/* <h5>{movie.name}</h5> */}
+                                      {movie.name}
+                                    </div>
                                   </div>
-                                </div>
+                                </Link>
                               </Col>
                             ))}
                           </Row>

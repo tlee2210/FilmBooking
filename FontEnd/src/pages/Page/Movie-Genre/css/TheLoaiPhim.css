@@ -1,112 +1,113 @@
 .movie-header-theloaiphimDetails {
-    margin-bottom: 20px;
-    padding-bottom: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 .movie-poster-theloaiphimDetails {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
 }
 
 .movie-title-theloaiphimDetails {
-    font-size: 24px;
-    font-weight: bold;
-    margin: 0;
-    display: flex;
-    align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+  display: flex;
+  align-items: center;
 }
 
 .movie-rating-badge-theloaiphimDetails {
-    background-color: #f39c12;
-    color: white;
-    padding: 2px 8px;
-    font-size: 14px;
-    border-radius: 3px;
-    margin-left: 10px;
+  background-color: #f39c12;
+  color: white;
+  padding: 2px 8px;
+  font-size: 14px;
+  border-radius: 3px;
+  margin-left: 10px;
 }
 
 .movie-meta-theloaiphimDetails {
-    display: flex;
-    gap: 15px;
-    margin-top: 10px;
-    font-size: 14px;
-    color: #555;
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #555;
 }
 
 .movie-meta-theloaiphimDetails span {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .movie-meta-theloaiphimDetails i {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 
 .movie-info-theloaiphimDetails p {
-    margin: 5px 0;
-    color: #333;
-    font-size: 14px;
+  margin: 5px 0;
+  color: #333;
+  font-size: 14px;
 }
 
 .section-title-theloaiphimDetails {
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
-    margin-top: 20px;
-    margin-bottom: 10px;
-    border-left: 4px solid #007bff;
-    padding-left: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  border-left: 4px solid #007bff;
+  padding-left: 10px;
 }
 
 .actor-item-theloaiphimDetails {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
 .actor-image-theloaiphimDetails {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 10px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
 }
 
 .actor-name-theloaiphimDetails {
-    font-size: 14px;
-    font-weight: bold;
-    color: #333;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
 }
 
 .see-more-link-theloaiphimDetails {
-    color: #007bff;
-    text-decoration: none;
+  color: #007bff;
+  text-decoration: none;
+  padding-bottom: 2px;
 }
 
 .see-more-link-theloaiphimDetails:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .related-articles-theloaiphimDetails {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .related-article-link-theloaiphimDetails {
-    display: block;
-    text-align: center;
-    margin-bottom: 20px;
-    text-decoration: none;
-    color: inherit;
+  display: block;
+  text-align: center;
+  margin-bottom: 20px;
+  text-decoration: none;
+  color: inherit;
 }
 
 .related-article-image-theloaiphimDetails {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
 }
 
 .related-article-title-theloaiphimDetails {
-    font-size: 14px;
-    font-weight: bold;
-    margin-top: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 10px;
 }

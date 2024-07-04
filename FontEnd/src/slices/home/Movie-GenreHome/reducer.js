@@ -6,6 +6,7 @@ export const initialState = {
   selectOptionGenre: [],
   selectOptionStatus: [],
   selectOptionYear: [],
+  movieDetail: [],
 };
 
 const HomeMovieGenreSlice = createSlice({
@@ -19,9 +20,12 @@ const HomeMovieGenreSlice = createSlice({
       state.selectOptionStatus = action.payload.data.selectOptionStatus;
       state.selectOptionYear = action.payload.data.selectOptionYear;
     },
+    setDetail: (state, action) => {
+      state.movieDetail = action.payload;
+    },
   },
 });
 
-export const { fetchSuccess } = HomeMovieGenreSlice.actions;
+export const { fetchSuccess, setDetail } = HomeMovieGenreSlice.actions;
 
 export default HomeMovieGenreSlice.reducer;
