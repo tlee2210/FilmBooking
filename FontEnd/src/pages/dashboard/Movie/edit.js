@@ -344,7 +344,7 @@ const MovieEdit = (props) => {
       dispatch(UpdateMovie(formData, props.router.navigate));
     },
   });
-  console.log(validation.values);
+  // console.log(validation.values);
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {

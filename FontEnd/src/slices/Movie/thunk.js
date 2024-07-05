@@ -99,13 +99,12 @@ export const UpdateMovie = (formData, history) => async (dispatch) => {
       },
     })
     .then((response) => {
-      // console.log(response);
+      console.log(response);
       dispatch(Success(response.data?.message));
       history("/dashboard/movie");
     })
     .catch((err) => {
-      // console.error(err);
+      console.error(err);
       dispatch(Error(err.response?.data.message));
-      // history("/dashboard/celebrity");
     });
 };

@@ -142,7 +142,7 @@ public class ReviewServiceImp implements ReviewService {
         List<SelectOptionReponse> selectOptionReponses = new ArrayList<>();
 
         for (ReviewType reviewType : ReviewType.values()) {
-            selectOptionReponses.add(new SelectOptionReponse(reviewType.name(), reviewType.name()));
+            selectOptionReponses.add(new SelectOptionReponse(reviewType.getValue(), reviewType.getValue()));
         }
 
         optionAndModelReponse.setSelectOptionStatus(selectOptionReponses);

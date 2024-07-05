@@ -12,4 +12,7 @@ public interface imageDescriptionRespository extends JpaRepository<imageDescript
 
     @Query("SELECT i FROM imageDescription i WHERE i.slug_name = ?1")
     List<imageDescription> findBySlug_name(String slug);
+
+    @Query("SELECT i FROM imageDescription i WHERE i.slug_name = null")
+    List<imageDescription> findBySlug_nameNull();
 }
