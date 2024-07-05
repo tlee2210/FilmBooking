@@ -332,7 +332,6 @@ const HomeCinema = (props) => {
                                                                 formatIndex
                                                               ) => (
                                                                 <Col
-                                                                  md={2}
                                                                   key={
                                                                     formatIndex
                                                                   }
@@ -425,37 +424,42 @@ const HomeCinema = (props) => {
                             </div>
                           </Col>
                         </Row>
-                        <div
-                          id="gmaps-markers"
-                          className="gmaps"
-                          style={{ position: "relative" }}
-                        >
-                          {/* {cinemaData?.lat } */}
-                          <Map
-                            google={props.google}
-                            zoom={10}
-                            style={mapStyles}
-                            initialCenter={{
-                              lat: cinemaData?.lat,
-                              lng: cinemaData?.lng,
-                            }}
+                        {cinemaData && cinemaData?.lat && cinemaData.lng ? (
+                          <div
+                            id="gmaps-markers"
+                            className="gmaps"
+                            style={{ position: "relative" }}
                           >
-                            {cinemaData && cinemaData.lat && cinemaData.lng ? (
-                              <Marker
-                                position={{
-                                  lat:
-                                    cinemaData && cinemaData?.lat
-                                      ? cinemaData?.lat
-                                      : 48.0,
-                                  lng:
-                                    cinemaData && cinemaData?.lng
-                                      ? cinemaData?.lng
-                                      : -122.0,
-                                }}
-                              />
-                            ) : null}
-                          </Map>
-                        </div>
+                            {/* {cinemaData?.lat } */}
+                            <Map
+                              google={props.google}
+                              zoom={10}
+                              style={mapStyles}
+                              initialCenter={{
+                                lat: cinemaData?.lat,
+                                lng: cinemaData?.lng,
+                              }}
+                            >
+                              {cinemaData &&
+                              cinemaData.lat &&
+                              cinemaData.lng ? (
+                                <Marker
+                                  position={{
+                                    lat:
+                                      cinemaData && cinemaData?.lat
+                                        ? cinemaData?.lat
+                                        : 48.0,
+                                    lng:
+                                      cinemaData && cinemaData?.lng
+                                        ? cinemaData?.lng
+                                        : -122.0,
+                                  }}
+                                />
+                              ) : null}
+                            </Map>
+                          </div>
+                        ) : null}
+
                         <Row className="mt-4" style={{ fontSize: "16px" }}>
                           <div
                             id="renderHtml"

@@ -13,7 +13,7 @@ public interface PromotionRepository extends JpaRepository<Promotion, Integer> {
     Promotion findBySlug(String slug);
 
     @Query("SELECT p FROM Promotion p WHERE p.name = ?1 AND p.id != ?2")
-    Promotion findByNameWithId(String name, int id);
+    Promotion findByNameWithId(String name, Integer id);
 
     @Query("select p FROM Promotion p where (:name is null or p.name like %:name%)" +"ORDER BY p.id DESC")
     List<Promotion> searchByName(String name);

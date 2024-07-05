@@ -529,9 +529,6 @@ const Booking = (props) => {
                                                                                         timeIndex
                                                                                       ) => (
                                                                                         <Col
-                                                                                          md={
-                                                                                            2
-                                                                                          }
                                                                                           key={
                                                                                             timeIndex
                                                                                           }

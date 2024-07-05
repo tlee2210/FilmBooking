@@ -28,7 +28,7 @@ public class Review {
     private ReviewType type;
 
     @Column
-    private Integer views = 0;
+    private Integer view = 0;
 
     @Column
     private String slug;

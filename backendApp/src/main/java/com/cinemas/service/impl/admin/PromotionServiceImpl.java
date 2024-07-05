@@ -5,8 +5,10 @@ import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.PromotionRequest;
 import com.cinemas.dto.request.SearchRequest;
 import com.cinemas.entities.Promotion;
+import com.cinemas.entities.imageDescription;
 import com.cinemas.exception.AppException;
 import com.cinemas.repositories.PromotionRepository;
+import com.cinemas.repositories.imageDescriptionRespository;
 import com.cinemas.service.admin.PromotionService;
 import com.cinemas.service.impl.FileStorageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.cinemas.exception.ErrorCode.NAME_EXISTED;
 import static com.cinemas.exception.ErrorCode.NOT_FOUND;
@@ -31,9 +35,13 @@ public class PromotionServiceImpl implements PromotionService {
     @Autowired
     FileStorageServiceImpl fileStorageServiceImpl;
 
+    @Autowired
+    imageDescriptionRespository imageDescriptionRespository;
+
     @Override
     public Page<Promotion> getAllPromotion(SearchRequest paginationHelper) {
         List<Promotion> promotions = promotionRepository.searchByName(paginationHelper.getSearchname());
+
 
         promotions.forEach(promotion -> {
             String imageUrl = fileStorageServiceImpl.getUrlFromPublicId(promotion.getImage());
@@ -60,12 +68,26 @@ public class PromotionServiceImpl implements PromotionService {
         }
         Promotion promotion = new Promotion();
 
-        promotion.setImage(fileStorageServiceImpl.uploadFile(promotionRequest.getImage(), "promotion"));
+        promotion.setImage(fileStorageServiceImpl.uploadFile(promotionRequest.getFile(), "promotion"));
+
         ObjectUtils.copyFields(promotionRequest, promotion);
 
         promotion.setSlug(promotionRequest.getName().toLowerCase().replaceAll("\\s+", "-"));
 
+        List<imageDescription> imageDescriptionList = new ArrayList<>();
+
+        if (promotionRequest.getUrl() != null) {
+            promotionRequest.getUrl().forEach(item -> {
+                imageDescription imageDescription = imageDescriptionRespository.findByUrl(item);
+
+                imageDescription.setSlug_name(promotion.getSlug());
+                imageDescriptionList.add(imageDescription);
+            });
+        }
+        imageDescriptionRespository.saveAll(imageDescriptionList);
+
         promotionRepository.save(promotion);
+
         return true;
     }
 
@@ -86,15 +108,42 @@ public class PromotionServiceImpl implements PromotionService {
             throw new AppException(NAME_EXISTED);
         }
 
-        if (promotionRequest.getImage() != null) {
+        if (promotionRequest.getFile() != null) {
             fileStorageServiceImpl.deleteFile(promotion.getImage());
-            promotion.setImage(fileStorageServiceImpl.uploadFile(promotionRequest.getImage(), "promotion"));
+            promotion.setImage(fileStorageServiceImpl.uploadFile(promotionRequest.getFile(), "promotion"));
         }
+        String slugOld = promotion.getSlug();
 
         ObjectUtils.copyFields(promotionRequest, promotion);
 
         String slug = promotionRequest.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-");
         promotion.setSlug(slug);
+
+        List<imageDescription> imageDescriptionList = imageDescriptionRespository.findBySlug_name(slugOld);
+
+        if (promotionRequest.getUrl() != null) {
+            List<imageDescription> imageDelete = imageDescriptionList.stream().filter(image -> !promotionRequest.getUrl().contains(image.getUrl())).peek(images -> {
+                try {
+                    fileStorageServiceImpl.deleteFile(images.getUrl());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }).collect(Collectors.toList());
+
+            List<imageDescription> newImages = promotionRequest.getUrl().stream()
+                    .map(url -> {
+                        imageDescription imageDescription = imageDescriptionRespository.findByUrl(url);
+                        imageDescription.setSlug_name(promotion.getSlug());
+                        return imageDescription;
+                    })
+                    .collect(Collectors.toList());
+
+            imageDescriptionRespository.saveAll(newImages);
+
+            imageDescriptionRespository.deleteAll(imageDelete);
+        } else {
+            imageDescriptionRespository.deleteAll(imageDescriptionList);
+        }
 
         promotionRepository.save(promotion);
 
@@ -108,6 +157,18 @@ public class PromotionServiceImpl implements PromotionService {
         if (promotion == null) throw new AppException(NOT_FOUND);
 
         fileStorageServiceImpl.deleteFile(promotion.getImage());
+
+        List<imageDescription> imageDescriptionList = imageDescriptionRespository.findBySlug_name(slug);
+
+        imageDescriptionList.forEach(item -> {
+            try {
+                fileStorageServiceImpl.deleteFile(item.getUrl());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        imageDescriptionRespository.deleteAll(imageDescriptionList);
 
         promotionRepository.delete(promotion);
 

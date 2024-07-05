@@ -8,9 +8,9 @@ const Navdata = () => {
   const [isCinema, setIsCinema] = useState(false);
   const [isUser, setIsUser] = useState(false);
   const [isShowTime, setIsShowTime] = useState(false);
+  const [isPromotion, setIsPromotion] = useState(false);
   const [isBlogAndReview, setIsBlogAndReview] = useState(false);
   const [iscurrentState, setIscurrentState] = useState("Dashboard");
-
   function updateIconSidebar(e) {
     if (e && e.target && e.target.getAttribute("subitems")) {
       const ul = document.getElementById("two-column-menu");
@@ -42,7 +42,18 @@ const Navdata = () => {
     if (iscurrentState !== "blogAndReview") {
       setIsBlogAndReview(false);
     }
-  }, [history, isMovie, isCinema, isUser, isShowTime, isBlogAndReview]);
+    if (iscurrentState !== "promotion") {
+      setIsPromotion(false);
+    }
+  }, [
+    history,
+    isMovie,
+    isCinema,
+    isUser,
+    isShowTime,
+    isBlogAndReview,
+    isPromotion,
+  ]);
 
   const menuItems = [
     {
@@ -110,7 +121,7 @@ const Navdata = () => {
     {
       id: "cinemas",
       label: "Cinemas Management",
-      icon: "ri-dashboard-2-line",
+      icon: "bx bx-movie",
       link: "/#",
       stateVariables: isCinema,
       click: function (e) {
@@ -164,7 +175,7 @@ const Navdata = () => {
     {
       id: "blogAndReview",
       label: "Blog & Review Management",
-      icon: "ri-slideshow-2-fill",
+      icon: "bx bxl-blogger",
       link: "/#",
       stateVariables: isBlogAndReview,
       click: function (e) {
@@ -185,6 +196,27 @@ const Navdata = () => {
           label: "Review Management",
           link: "/dashboard/review",
           parentId: "blogAndReview",
+        },
+      ],
+    },
+    {
+      id: "promotion",
+      label: "Promotion Management",
+      icon: "bx bx-volume-full",
+      link: "/#",
+      stateVariables: isPromotion,
+      click: function (e) {
+        e.preventDefault();
+        setIsPromotion(!isPromotion);
+        setIscurrentState("promotion");
+        updateIconSidebar(e);
+      },
+      subItems: [
+        {
+          id: "blog",
+          label: "promotion Management",
+          link: "/dashboard/promotion",
+          parentId: "promotion",
         },
       ],
     },

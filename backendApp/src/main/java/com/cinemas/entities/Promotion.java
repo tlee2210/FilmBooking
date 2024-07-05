@@ -27,6 +27,8 @@ public class Promotion {
 
     @Column
     private String slug;
+    @Column
+    private Integer view = 0;
 
     @Column
     private String image;

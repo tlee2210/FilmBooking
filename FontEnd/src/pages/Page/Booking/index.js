@@ -295,57 +295,59 @@ const Booking = (props) => {
     <React.Fragment>
       <div style={{ backgroundColor: "#e9e9e9" }}>
         <div style={{ paddingTop: 100 }}>
-          <Col xl="12">
-            <Card>
-              <CardBody className="checkout-tab">
-                <Form action="#">
-                  <div className="step-arrow-nav">
-                    <div
-                      className="nav-pills nav-justified custom-nav"
-                      role="tablist"
-                    >
+          <Container>
+            <Col xl="12">
+              <Card>
+                <CardBody className="checkout-tab">
+                  <Form action="#">
+                    <div className="step-arrow-nav">
                       <div
-                        className={`step-item -order-1 ${
-                          activeTab >= 1 ? "done" : ""
-                        } ${activeTab === 1 ? "active" : ""}`}
+                        className="nav-pills nav-justified custom-nav"
+                        role="tablist"
                       >
-                        <span>Cinema interest</span>
-                      </div>
-                      {/* tablist here */}
-                      <div
-                        className={`step-item -order-2 ${
-                          activeTab >= 2 ? "done" : ""
-                        } ${activeTab === 2 ? "active" : ""}`}
-                      >
-                        <span>Choose a food</span>
-                      </div>
-                      <div
-                        className={`step-item -order-3 ${
-                          activeTab >= 3 ? "done" : ""
-                        } ${activeTab === 3 ? "active" : ""}`}
-                      >
-                        <span>Payment</span>
-                      </div>
-                      {/* <div
+                        <div
+                          className={`step-item -order-1 ${
+                            activeTab >= 1 ? "done" : ""
+                          } ${activeTab === 1 ? "active" : ""}`}
+                        >
+                          <span>Cinema interest</span>
+                        </div>
+                        {/* tablist here */}
+                        <div
+                          className={`step-item -order-2 ${
+                            activeTab >= 2 ? "done" : ""
+                          } ${activeTab === 2 ? "active" : ""}`}
+                        >
+                          <span>Choose a food</span>
+                        </div>
+                        <div
+                          className={`step-item -order-3 ${
+                            activeTab >= 3 ? "done" : ""
+                          } ${activeTab === 3 ? "active" : ""}`}
+                        >
+                          <span>Payment</span>
+                        </div>
+                        {/* <div
                         className={`step-item -order-4 ${
                           activeTab >= 4 ? "done" : ""
                         } ${activeTab === 4 ? "active" : ""}`}
                       >
                         <span>Thanh toán</span>
                       </div> */}
-                      {/* <div
+                        {/* <div
                         className={`step-item -order-5 ${
                           activeTab >= 5 ? "done" : ""
                         } ${activeTab === 5 ? "active" : ""}`}
                       >
                         <span>Xác nhận</span>
                       </div> */}
+                      </div>
                     </div>
-                  </div>
-                </Form>
-              </CardBody>
-            </Card>
-          </Col>
+                  </Form>
+                </CardBody>
+              </Card>
+            </Col>
+          </Container>
         </div>
         <Container>
           <div
@@ -384,7 +386,6 @@ const Booking = (props) => {
                                                   (timeItem, timeIndex) => (
                                                     <Col
                                                       key={timeIndex}
-                                                      md={2}
                                                       onClick={() => {
                                                         handleChangeShowtime(
                                                           timeItem.idRoom
@@ -417,11 +418,11 @@ const Booking = (props) => {
                               </Row>
                             </Col>
                           </Row>
-                          <div
+                          <Row
                             className="mt-4 rounded-3 shadow-lg p-3 mb-5 bg-white rounded"
                             style={{ backgroundColor: "white", padding: 20 }}
                           >
-                            <div>
+                            <Row>
                               {data?.room?.doubleSeatColumns > 0 &&
                                 data?.room?.doubleSeatRows > 0 &&
                                 renderSeats(
@@ -437,7 +438,7 @@ const Booking = (props) => {
                                   parseInt(data?.room?.seatColumns, 10),
                                   parseInt(data?.room?.totalColumn, 10)
                                 )}
-                            </div>
+                            </Row>
                             <div className="screen-title-order">
                               <strong className="span-order">Screen</strong>
                               <hr className="hr-order" />
@@ -468,7 +469,7 @@ const Booking = (props) => {
                                 </div>
                               </div>
                             </div> */}
-                          </div>
+                          </Row>
                         </Row>
                       </TabPane>
                       <TabPane tabId={2}>

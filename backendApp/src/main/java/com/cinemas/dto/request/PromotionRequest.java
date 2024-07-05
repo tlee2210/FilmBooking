@@ -16,6 +16,8 @@ public class PromotionRequest {
     @NotEmpty
     private String description;
 
+    private List<String> url;
+
     @NotEmpty
-    private MultipartFile image;
+    private MultipartFile file;
 }

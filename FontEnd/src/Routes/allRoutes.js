@@ -62,6 +62,12 @@ const Blog = lazy(() => import("../pages/dashboard/Blog/index"));
 const BlogCreate = lazy(() => import("../pages/dashboard/Blog/create"));
 const BlogEdit = lazy(() => import("../pages/dashboard/Blog/edit"));
 
+const Promotion = lazy(() => import("../pages/dashboard/Promotion/index"));
+const PromotionEdit = lazy(() => import("../pages/dashboard/Promotion/edit"));
+const PromotionCreate = lazy(() =>
+  import("../pages/dashboard/Promotion/create")
+);
+
 const Review = lazy(() => import("../pages/dashboard/Review/index"));
 const ReviewCreate = lazy(() => import("../pages/dashboard/Review/create"));
 const ReviewEdit = lazy(() => import("../pages/dashboard/Review/edit"));
@@ -89,7 +95,6 @@ import HomeMovieGenreDetails from "../pages/Page/Movie-Genre/Details";
 //Rạp Phim
 import CinemaHome from "../pages/Page/Cinema/Index";
 import Booking from "../pages/Page/Booking/index";
-
 //Order
 import BlogMovie from "../pages/Page/BlogMovie";
 import BlogMovieDetails from "../pages/Page/BlogMovie/details";
@@ -99,7 +104,7 @@ const Home = lazy(() => import("../pages/home/index"));
 
 //Event
 import UuDai from "../pages/Page/Event/UuDai";
-import UudaiDetails from "../pages/Page/Event/UudaiDetails"
+import UudaiDetails from "../pages/Page/Event/UudaiDetails";
 import PhimHayThang from "../pages/Page/Event/PhimHayThang";
 import PhimHayThangDetails from "../pages/Page/Event/PhimHayThangDetails";
 import Profile from "../pages/Page/Profile";
@@ -146,6 +151,13 @@ const adminProtectedRoutes = [
   { path: "/dashboard/review", component: <Review /> },
   { path: "/dashboard/review/create", component: <ReviewCreate /> },
   { path: "/dashboard/review/:slug/edit", component: <ReviewEdit /> },
+
+  { path: "/dashboard/promotion", component: <Promotion /> },
+  { path: "/dashboard/promotion/create", component: <PromotionCreate /> },
+  { path: "/dashboard/promotion/:slug/edit", component: <PromotionEdit /> },
+
+  // Promotion
+  // /dashboard/promotion
 
   // /dashboard/blog/create
   // {
