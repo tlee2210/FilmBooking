@@ -378,31 +378,38 @@ const Booking = (props) => {
                                       <Row className="ms-4 mb-4" key={index}>
                                         <Col md={2}>{item.name}</Col>
                                         <Col md={10}>
-                                          {item.times
-                                            ? item.times.map(
-                                                (timeItem, timeIndex) => (
-                                                  <Col
-                                                    key={timeIndex}
-                                                    md={2}
-                                                    className={classnames({
-                                                      "btn btn-primary me-3 mb-3":
-                                                        timeItem.idRoom ==
-                                                        data.id,
-                                                      "btn btn-outline-primary me-3 mb-3":
-                                                        timeItem.idRoom !=
-                                                        data.id,
-                                                    })}
-                                                    onClick={() => {
-                                                      handleChangeShowtime(
-                                                        timeItem.idRoom
-                                                      );
-                                                    }}
-                                                  >
-                                                    {formatTime(timeItem.time)}
-                                                  </Col>
+                                          <Row>
+                                            {item.times
+                                              ? item.times.map(
+                                                  (timeItem, timeIndex) => (
+                                                    <Col
+                                                      key={timeIndex}
+                                                      md={2}
+                                                      onClick={() => {
+                                                        handleChangeShowtime(
+                                                          timeItem.idRoom
+                                                        );
+                                                      }}
+                                                    >
+                                                      <button
+                                                        className={classnames({
+                                                          "btn btn-primary me-3 mb-3":
+                                                            timeItem.idRoom ==
+                                                            data.id,
+                                                          "btn btn-outline-primary me-3 mb-3":
+                                                            timeItem.idRoom !=
+                                                            data.id,
+                                                        })}
+                                                      >
+                                                        {formatTime(
+                                                          timeItem.time
+                                                        )}
+                                                      </button>
+                                                    </Col>
+                                                  )
                                                 )
-                                              )
-                                            : null}
+                                              : null}
+                                          </Row>
                                         </Col>
                                       </Row>
                                     ))

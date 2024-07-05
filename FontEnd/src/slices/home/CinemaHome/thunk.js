@@ -7,7 +7,7 @@ export const getCinemaHome = (slug, city, history) => async (dispatch) => {
       params: { city },
     })
     .then((response) => {
-      // console.log(response);
+      console.log(response);
       dispatch(setCinema(response?.data?.result));
     })
     .catch((error) => {

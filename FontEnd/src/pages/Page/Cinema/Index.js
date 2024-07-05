@@ -73,6 +73,7 @@ const HomeCinema = (props) => {
     if (activeTab !== tab) setActiveTab(tab);
     setSelectedMovie(null);
   };
+
   const handleBooking = (idRoom) => {
     dispatch(getBookingTime(idRoom, props.router.navigate));
   };
@@ -106,6 +107,11 @@ const HomeCinema = (props) => {
     if (event.target.value !== slug && event.target.value !== "") {
       props.router.navigate(`/cinema/${event.target.value}`);
     }
+  };
+
+  const formatTime = (timeString) => {
+    const [hours, minutes] = timeString.split(":");
+    return `${hours}:${minutes}`;
   };
 
   document.title = cinemaData.name || "Cinema";
@@ -263,69 +269,103 @@ const HomeCinema = (props) => {
                                   {Array.isArray(day.movieList) &&
                                     day.movieList.map((movie, movieIndex) => (
                                       <React.Fragment key={movieIndex}>
-                                        <Col
-                                          md={3}
-                                          className={`movie-rapphim ${
-                                            selectedMovie === movie.name
-                                              ? "selected-rapphim"
-                                              : ""
-                                          }`}
-                                          onClick={() =>
-                                            handleMovieClick(
-                                              movie,
-                                              movieIndex,
-                                              index
-                                            )
-                                          }
-                                        >
-                                          <img
-                                            src={movie.imagePortrait}
-                                            alt={movie.name}
-                                          />
-                                          <div className="title-phim-rapphim">
-                                            {movie.name}
-                                          </div>
-                                          {selectedMovie === movie.name && (
-                                            <div className="selection-overlay-rapphim">
-                                              <i
-                                                style={{ fontSize: 70 }}
-                                                className="ri-checkbox-circle-fill"
-                                              ></i>
+                                        <Row>
+                                          <Col
+                                            md={3}
+                                            className={`movie-rapphim ${
+                                              selectedMovie === movie.name
+                                                ? "selected-rapphim"
+                                                : ""
+                                            }`}
+                                            onClick={() =>
+                                              handleMovieClick(
+                                                movie,
+                                                movieIndex,
+                                                index
+                                              )
+                                            }
+                                          >
+                                            <img
+                                              src={movie.imagePortrait}
+                                              alt={movie.name}
+                                            />
+                                            <div className="title-phim-rapphim">
+                                              {movie.name}
                                             </div>
-                                          )}
-                                        </Col>
+                                            {selectedMovie === movie.name && (
+                                              <div className="selection-overlay-rapphim">
+                                                <i
+                                                  style={{ fontSize: 70 }}
+                                                  className="ri-checkbox-circle-fill"
+                                                ></i>
+                                              </div>
+                                            )}
+                                          </Col>
+                                        </Row>
+
                                         {selectedMovie &&
                                           movieTime &&
                                           movieIndex === movieIndexRender && (
-                                            <Col
-                                              md={12}
-                                              className="showtimes-rapphim"
-                                            >
-                                              <div className="title-phu-de">
+                                            <Row className="showtimes-rapphim mb-3">
+                                              <Col className=" max-width mb-1">
                                                 <h3>Show Times</h3>
-                                              </div>
-                                              <div className="times-rapphim">
-                                                {movieTime.times.map(
-                                                  (time, dayIndex) => (
-                                                    <button
-                                                      key={dayIndex}
-                                                      className="time-rapphim"
-                                                      onClick={() =>
-                                                        handleBooking(
-                                                          time.idRoom
-                                                        )
-                                                      }
-                                                    >
-                                                      <span
-                                                        style={{ fontSize: 17 }}
+                                              </Col>
+                                              {movieTime &&
+                                                movieTime?.movieFormats?.map(
+                                                  (movieFormats, dayIndex) => (
+                                                    <Row>
+                                                      <Col
+                                                        md={12}
+                                                        className="table-showTime ms-3 mn-4"
                                                       >
-                                                        {time.time}
-                                                      </span>
-                                                    </button>
+                                                        <div className="title-phu-de">
+                                                          {movieFormats.name}
+                                                        </div>
+                                                      </Col>
+                                                      <div className="times-rapphim mb-3">
+                                                        {movieTime &&
+                                                        movieTime.movieFormats ? (
+                                                          <Row>
+                                                            {movieFormats.times.map(
+                                                              (
+                                                                format,
+                                                                formatIndex
+                                                              ) => (
+                                                                <Col
+                                                                  md={2}
+                                                                  key={
+                                                                    formatIndex
+                                                                  }
+                                                                >
+                                                                  {" "}
+                                                                  <button
+                                                                    className="time-rapphim"
+                                                                    onClick={() =>
+                                                                      handleBooking(
+                                                                        format.idRoom
+                                                                      )
+                                                                    }
+                                                                  >
+                                                                    <span
+                                                                      style={{
+                                                                        fontSize: 17,
+                                                                      }}
+                                                                    >
+                                                                      {formatTime(
+                                                                        format.time
+                                                                      )}
+                                                                    </span>
+                                                                  </button>
+                                                                </Col>
+                                                              )
+                                                            )}
+                                                          </Row>
+                                                        ) : null}
+                                                      </div>
+                                                    </Row>
                                                   )
                                                 )}
-                                              </div>
-                                            </Col>
+                                            </Row>
                                             // </Row>
                                           )}
                                       </React.Fragment>

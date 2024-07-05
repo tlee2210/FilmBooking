@@ -15,4 +15,7 @@ public class HomeMovieFormatResponse {
     private String name;
     private List<HomeTimeAndRoomResponse> times;
 
+    public HomeMovieFormatResponse(String name) {
+        this.name = name;
+    }
 }

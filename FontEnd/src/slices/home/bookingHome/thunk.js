@@ -7,7 +7,7 @@ export const getBooking = (slug, city, cinema) => async (dispatch) => {
       params: { slug, city, cinema },
     })
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(selectBooking(response?.data?.result));
     })
     .catch((error) => {
@@ -20,7 +20,7 @@ export const getBookingTime = (id, history) => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/home/v1/booking/${id}`)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       localStorage.setItem(
         "bookingData",
         JSON.stringify(response?.data?.result)

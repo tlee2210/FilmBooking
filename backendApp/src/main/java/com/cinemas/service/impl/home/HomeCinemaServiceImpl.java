@@ -1,13 +1,11 @@
 package com.cinemas.service.impl.home;
 
 import com.cinemas.Utils.ObjectUtils;
-import com.cinemas.dto.response.HomeCinemaResponse;
-import com.cinemas.dto.response.HomeShowtimeResponse;
-import com.cinemas.dto.response.MovieAndShowtimeResponse;
-import com.cinemas.dto.response.SelectOptionReponse;
+import com.cinemas.dto.response.*;
 import com.cinemas.entities.Cinema;
 import com.cinemas.entities.Movie;
 import com.cinemas.entities.Showtimes;
+import com.cinemas.enums.MovieFormat;
 import com.cinemas.repositories.CinemaRespository;
 import com.cinemas.repositories.ShowTimeResponsitory;
 import com.cinemas.service.home.HomeCinemaService;
@@ -52,8 +50,20 @@ public class HomeCinemaServiceImpl implements HomeCinemaService {
         homeCinemaResponse.getDays().forEach(day -> {
             day.getMovieList().forEach(movie -> {
                 movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
+                List<HomeMovieFormatResponse> homeMovieFormatResponses = new ArrayList<>();
 
-                movie.setTimes(showTimeResponsitory.findMovieTimesForNameCinema(day.getDate(), movie.getName(), timeNow, slug));
+                List<MovieFormat> formatMovie = showTimeResponsitory.findMovieFormatForNameCinema(day.getDate(), movie.getName(), timeNow, slug);
+
+                formatMovie.forEach(item -> {
+                    HomeMovieFormatResponse homeMovieFormatResponse = new HomeMovieFormatResponse();
+                    homeMovieFormatResponse.setName(item.getValue());
+                    homeMovieFormatResponse.setTimes(showTimeResponsitory.findMovieTimesForNameCinema(day.getDate(), movie.getName(), timeNow, slug, item));
+
+                    homeMovieFormatResponses.add(homeMovieFormatResponse);
+                });
+
+                movie.setMovieFormats(homeMovieFormatResponses);
+
             });
         });
 

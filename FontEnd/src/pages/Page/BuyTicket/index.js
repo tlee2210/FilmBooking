@@ -128,6 +128,11 @@ const Booking = (props) => {
     setSelectedCinema(event.target.value);
   };
 
+  const formatTime = (timeString) => {
+    const [hours, minutes] = timeString.split(":");
+    return `${hours}:${minutes}`;
+  };
+
   return (
     <Container style={{ paddingTop: 80 }} fluid>
       {/* Banner */}
@@ -248,12 +253,16 @@ const Booking = (props) => {
                             {MovieDetails && MovieDetails.categories?.length > 0
                               ? MovieDetails.categories.map((item, index) => {
                                   return (
-                                    <button
-                                      key={index}
-                                      className="custom-button-ticketFilm"
+                                    <Link
+                                      to={`/movie-genre?category=${item.slug}`}
                                     >
-                                      {item.name}
-                                    </button>
+                                      <button
+                                        key={index}
+                                        className="custom-button-ticketFilm"
+                                      >
+                                        {item.name}
+                                      </button>
+                                    </Link>
                                   );
                                 })
                               : null}
@@ -533,9 +542,9 @@ const Booking = (props) => {
                                                                                           }
                                                                                         >
                                                                                           <Button className="btn-showTime mb-2">
-                                                                                            {
+                                                                                            {formatTime(
                                                                                               timeItem.time
-                                                                                            }
+                                                                                            )}
                                                                                           </Button>
                                                                                         </Col>
                                                                                       )
