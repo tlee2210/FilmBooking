@@ -17,6 +17,7 @@
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-right: 20px;
+    height: 70%;
 }
 
 .profile-header-tai-khoan {
@@ -111,9 +112,10 @@
 }
 
 .tab-content-tai-khoan {
-    background: white;
+    background: #f9f9f9;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 752px;
 
 }
 
@@ -172,4 +174,157 @@
 
 .form-button-tai-khoan:hover {
     background-color: #e68900;
+}
+
+.tabs-container-tai-khoan {
+    margin-top: 20px;
+}
+
+.policy-tabs {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    padding: 0;
+    margin: 20px 0;
+    border-radius: 5px;
+    box-shadow: #555;
+
+
+}
+
+.policy-tab-item {
+    font-size: 14px;
+    margin-top: 20px;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #555;
+    border-bottom: 2px solid transparent;
+    transition: color 0.3s, border-bottom 0.3s;
+}
+
+.policy-tab-item:hover {
+    color: #000;
+}
+
+.policy-tab-item.active-policy-tab {
+    background: rgb(27, 27, 153);
+    border-radius: 35px;
+    color: #ffffff;
+
+}
+
+.policy-tab-content {
+    padding: 20px;
+    background-color: #f9f9f9;
+
+}
+
+.policy-tab-content h5 {
+    margin-top: 0;
+    font-size: 1.25em;
+    color: #333;
+}
+
+.policy-tab-content ul {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+.policy-tab-content p,
+.policy-tab-content li {
+    margin-bottom: 10px;
+    font-size: 1em;
+    color: #666;
+}
+
+.policy-tab-content img {
+    max-width: 100%;
+    height: auto;
+    margin: 20px 0;
+}
+
+.transaction-history {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.transaction-history h5 {
+    margin-top: 0;
+    font-size: 1.25em;
+    color: #333;
+}
+
+.transaction-history p {
+    margin-bottom: 20px;
+    color: #666;
+}
+
+.transaction-month {
+    margin: 20px 0;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #333;
+}
+
+.transaction {
+    font-size: 13.5px;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.transaction-image img {
+    width: 60px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.transaction-details {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+    margin-left: 20px;
+}
+
+.transaction-info-left {
+    flex: 1;
+    
+}
+.transaction-info-right {
+    flex: 1;
+    margin-right: -140px;
+}
+
+.transaction-info-left p, .transaction-info-right p {
+    margin: 5px 0;
+    color: #333;
+}
+
+.age-restriction {
+    display: inline-block;
+    padding: 2px 6px;
+    background-color: #ff5722;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 0.9em;
+    margin-left: 10px;
+}
+
+.transaction-action a {
+    color: #007bff;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+.transaction-action a:hover {
+    text-decoration: underline;
 }
