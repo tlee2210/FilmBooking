@@ -116,7 +116,7 @@ import Profile from "../pages/Page/Profile";
 import DatVeXemPhim from "../pages/Page/Dat-Ve-Xem-Phim";
 const adminProtectedRoutes = [
   //User Profile
-  { path: "/dashboard/profile", component: <UserProfile /> },
+  // { path: "/dashboard/profile", component: <UserProfile /> },
   { path: "/pages-starter", component: <Starter /> },
 
   { path: "/dashboard/celebrity", component: <Celebrity /> },
@@ -219,7 +219,7 @@ const homeRoutes = [
   { path: "/phim-hay-thang/details", component: <PhimHayThangDetails /> },
 
   //Profile
-  { path: "/tai-khoan", component: <Profile /> },
+  { path: "/profile", component: <Profile /> },
 
   { path: "/book-tickets/:slug", component: <BookTickets /> },
   { path: "/movie-showing", component: <MovieList /> },

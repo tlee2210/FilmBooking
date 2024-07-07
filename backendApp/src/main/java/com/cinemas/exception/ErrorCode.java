@@ -34,7 +34,7 @@ public enum ErrorCode {
     OTP_EXPIRED(HttpStatus.EXPECTATION_FAILED, "Invalid OTP!"),
 
     CONFIRM_PASSWORD(HttpStatus.EXPECTATION_FAILED, "please enter the Password again!"),
-
+    INVALID_CURRENT_PASSWORD(HttpStatus.UNAUTHORIZED, "Current password is incorrect"),
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "Email not found"),
 
     NOT_FOUND(HttpStatus.NOT_FOUND, "not found"),

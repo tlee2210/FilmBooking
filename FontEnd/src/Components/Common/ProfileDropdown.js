@@ -7,11 +7,14 @@ import {
   DropdownToggle,
 } from "reactstrap";
 import { createSelector } from "reselect";
-import { useSelector } from "react-redux";
 import avatar from "../../assets/images/User-avatar.png";
+import { logoutUser } from "../../slices/auth/login/thunk";
+import { useSelector, useDispatch } from "react-redux";
+
 // import avatar6 from "../../assets/images/users/avatar-6.jpg";
 
 const ProfileDropdown = () => {
+  const dispatch = useDispatch();
   const [userName, setUserName] = useState(null);
   const [avatar1, setavatar] = useState(null);
   const [role, setrole] = useState(null);
@@ -22,6 +25,7 @@ const ProfileDropdown = () => {
       const userObj = JSON.parse(authUserString);
       // setavatar(userObj.user.avatar);
       setUserName(userObj.user.name);
+      setavatar(userObj.user.avatar);
       setrole(userObj.user.role);
       // console.log(userObj.user);
     }
@@ -31,6 +35,10 @@ const ProfileDropdown = () => {
   const [isProfileDropdown, setIsProfileDropdown] = useState(false);
   const toggleProfileDropdown = () => {
     setIsProfileDropdown(!isProfileDropdown);
+  };
+
+  const handleLogOut = () => {
+    dispatch(logoutUser());
   };
   return (
     <React.Fragment>
@@ -50,21 +58,31 @@ const ProfileDropdown = () => {
               <span className="d-none d-xl-inline-block ms-1 fw-medium user-name-text">
                 {userName}
               </span>
-              <span className="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">
-                {role}
-                {/* Founder */}
-              </span>
+              {role === "ADMIN" ? (
+                <span className="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">
+                  {role}
+                  {/* Founder */}
+                </span>
+              ) : null}
             </span>
           </span>
         </DropdownToggle>
         <DropdownMenu className="dropdown-menu-end">
           <h6 className="dropdown-header">Welcome {role}!</h6>
           <DropdownItem className="p-0">
-            <Link to="/dashboard/profile" className="dropdown-item">
+            <Link to="/profile" className="dropdown-item">
               <i className="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i>
               <span className="align-middle">Profile</span>
             </Link>
           </DropdownItem>
+          {role === "ADMIN" ? (
+            <DropdownItem className="p-0">
+              <Link to="/apps-chat" className="dropdown-item">
+                <i className="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i>{" "}
+                <span className="align-middle">Messages</span>
+              </Link>
+            </DropdownItem>
+          ) : null}
           {/* <DropdownItem className="p-0">
             <Link to="/apps-chat" className="dropdown-item">
               <i className="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i>{" "}
@@ -85,12 +103,16 @@ const ProfileDropdown = () => {
           </DropdownItem> */}
           <div className="dropdown-divider"></div>
           <DropdownItem className="p-0">
-            <Link to="/logout" className="dropdown-item">
+            {/* <Link to="/logout" className="dropdown-item">
               <i className="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>{" "}
               <span className="align-middle" data-key="t-logout">
                 Logout
               </span>
-            </Link>
+            </Link> */}
+            <a className="dropdown-item" onClick={handleLogOut}>
+              <i className=" ri-logout-box-r-fill text-muted fs-16 align-middle me-1"></i>{" "}
+              log Out
+            </a>
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>

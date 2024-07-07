@@ -1,15 +1,13 @@
 package com.cinemas.repositories;
 
-import com.cinemas.entities.Movie;
-import com.cinemas.entities.MovieGenre;
 import com.cinemas.entities.User;
 
-import com.cinemas.enums.MovieStatus;
 import com.cinemas.enums.RoleType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -17,7 +15,6 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByEmail(String email);
-
     boolean existsByEmail(String email);
 
     User findByRole(RoleType role);
@@ -32,7 +29,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("SELECT u FROM User u WHERE (:name is null or u.name like %:name%)" +
             "AND (:role is null or u.role = :role) " +
-            "AND u.role != RoleType.ADMIN")
+            "AND u.role != com.cinemas.enums.RoleType.ADMIN")
     List<User> searchUser(@Param("name") String name, @Param("role") RoleType role);
 
     @Query("SELECT DISTINCT u.role FROM User AS u")

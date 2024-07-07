@@ -28,8 +28,8 @@ axios.interceptors.response.use(
         break;
       case 401:
         message = "Invalid credentials";
-        sessionStorage.removeItem("authUser");
-        window.location.href = "/";
+        // sessionStorage.removeItem("authUser");
+        // window.location.href = "/";
         break;
       case 404:
         message = "Sorry! the data you are looking for could not be found";
@@ -39,6 +39,7 @@ axios.interceptors.response.use(
         message = error;
         if (message.message === "Network Error") {
           sessionStorage.removeItem("authUser");
+          // window.location.href = "/";
         }
         break;
     }
