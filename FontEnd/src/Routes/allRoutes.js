@@ -105,9 +105,15 @@ const Home = lazy(() => import("../pages/home/index"));
 //Event
 import UuDai from "../pages/Page/Event/UuDai";
 import UudaiDetails from "../pages/Page/Event/UudaiDetails";
+
 import PhimHayThang from "../pages/Page/Event/PhimHayThang";
+
 import PhimHayThangDetails from "../pages/Page/Event/PhimHayThangDetails";
+
 import Profile from "../pages/Page/Profile";
+
+//dat ve
+import DatVeXemPhim from "../pages/Page/Dat-Ve-Xem-Phim";
 const adminProtectedRoutes = [
   //User Profile
   { path: "/dashboard/profile", component: <UserProfile /> },
@@ -204,6 +210,8 @@ const homeRoutes = [
     path: "/movie-commentary/:slug/details",
     component: <MovieCommentaryDetails />,
   },
+  //đặt vế
+  { path: "/dat-ve", component: <DatVeXemPhim /> },
   //event
   { path: "/uu-dai", component: <UuDai /> },
   { path: "/uu-dai/details", component: <UudaiDetails /> },

@@ -1,0 +1,39 @@
+.location-selection,
+.movie-selection,
+.showtime-selection {
+    margin: 20px 0;
+}
+
+.location-options button,
+.showtime-options button {
+    margin: 5px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.location-options button:hover,
+.showtime-options button:hover {
+    background-color: #ccc;
+}
+
+.movie-options {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.movie-option {
+    margin: 10px;
+    cursor: pointer;
+}
+
+.movie-option img {
+    width: 150px;
+    height: 200px;
+}
+
+.movie-option p {
+    text-align: center;
+    margin-top: 5px;
+}
