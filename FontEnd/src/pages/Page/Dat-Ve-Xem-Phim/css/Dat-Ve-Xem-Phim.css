@@ -1,7 +1,30 @@
-.location-selection,
-.movie-selection,
-.showtime-selection {
+.selection-section {
     margin: 20px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.selection-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f7f7f7;
+    cursor: pointer;
+    
+}
+
+
+.selection-header h1 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.selection-header button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
 }
 
 .location-options button,
@@ -18,22 +41,60 @@
     background-color: #ccc;
 }
 
+.movie-selection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .movie-options {
+    padding-left: 45px;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+    background-color: white;
 }
 
 .movie-option {
-    margin: 10px;
+    position: relative;
     cursor: pointer;
+    margin: 5px;
+    flex: 0 0 calc(33.3333% - 10px);
+    box-sizing: border-box;
 }
 
 .movie-option img {
-    width: 150px;
-    height: 200px;
+    width: 77%;
+    height: auto;
+    display: block;
+    border-radius: 5px;
 }
 
 .movie-option p {
     text-align: center;
     margin-top: 5px;
+}
+
+.selected-movie img {
+    filter: blur(2px);
+    opacity: 0.7;
+}
+
+.selected-overlay {
+    position: absolute;
+    top: 45%;
+    left: 40%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    background-color: orange;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.selected-overlay i {
+    color: white;
+    font-size: 24px;
 }
