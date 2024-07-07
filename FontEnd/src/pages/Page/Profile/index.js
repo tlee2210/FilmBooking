@@ -467,9 +467,10 @@ const Profile = (props) => {
                     Update
                   </button>
                 </div> */}
+
                 <Col lg={12}>
-                  <div className="hstack gap-2 justify-content-end">
-                    <button type="submit" className="btn btn-primary">
+                  <div className="hstack gap-2 justify-content-end mt-2 mb-2">
+                    <button type="submit" className="btn btn-success">
                       Updates
                     </button>
                     {/* <button
