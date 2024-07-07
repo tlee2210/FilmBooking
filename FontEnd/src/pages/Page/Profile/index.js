@@ -198,7 +198,7 @@ const Profile = (props) => {
       style={{ paddingTop: 120, minHeight: "100vh" }}
     >
       <div className="profile-wrapper-tai-khoan">
-        <div className="profile-card-tai-khoan rounded-3 shadow-lg p-3 bg-white rounded">
+        <div className="profile-card-tai-khoan rounded-4 shadow-lg p-3 bg-white rounded">
           <div className="profile-header-tai-khoan">
             <div className="profile-user position-relative d-inline-block mb-4">
               {ProfileData && ProfileData?.avatar ? (
@@ -264,7 +264,7 @@ const Profile = (props) => {
           <div className="tab-content-tai-khoan mb-3 ">
             {selectedTab === "Personal Information" && (
               <Form
-                className="form-tai-khoan"
+                className="form-tai-khoan rounded-4 shadow-lg p-3 bg-white rounded"
                 onSubmit={(e) => {
                   e.preventDefault();
                   validation.handleSubmit();
@@ -526,7 +526,7 @@ const Profile = (props) => {
 
             {selectedTab === "Change Password" && (
               <React.Fragment>
-                <div className="p-2">
+                <div className="p-2 rounded-4 shadow-lg p-3 bg-white rounded">
                   <Form
                     onSubmit={(e) => {
                       e.preventDefault();
