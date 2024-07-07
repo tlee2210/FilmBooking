@@ -56,6 +56,7 @@ public class SecurityConfiguration {
                                 "/api/home/v1/cinema/**",
                                 "/api/home/v1/buy-ticket/**",
                                 "/api/home/v1/watercorn/**",
+                                "/api/home/v1/user/**",
                                 "/api/home/v1/movie-genre/**",
                                 "/api/home/v1/promotion/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()

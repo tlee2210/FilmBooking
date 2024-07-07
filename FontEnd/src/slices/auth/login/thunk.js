@@ -20,7 +20,8 @@ export const loginUser = (user, history) => async (dispatch) => {
         const validUserObj = { ...userLogin, ...tokenObj };
         sessionStorage.setItem("authUser", JSON.stringify(res.data?.result));
         // dispatch(loginSuccess(res.data?.result.user));
-        history("/pages-starter");
+        window.location.href = "/";
+
         resolve([200, validUserObj]);
       })
       .catch((err) => {
@@ -53,13 +54,7 @@ export const loginWithGoogle = (user, history) => async (dispatch) => {
 export const logoutUser = () => async (dispatch) => {
   try {
     sessionStorage.removeItem("authUser");
-    // let fireBaseBackend = getFirebaseBackend();
-    // if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-    //   const response = fireBaseBackend.logout;
-    //   dispatch(logoutUserSuccess(response));
-    // } else {
-    //   dispatch(logoutUserSuccess(true));
-    // }
+    window.location.href = "/";
   } catch (error) {
     console.log(error);
   }
