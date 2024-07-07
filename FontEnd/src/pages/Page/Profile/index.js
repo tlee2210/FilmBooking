@@ -261,7 +261,7 @@ const Profile = (props) => {
         </div>
         <div className="tabs-container-tai-khoan">
           <Tabs selectedTab={selectedTab} onTabChange={setSelectedTab} />
-          <div className="tab-content-tai-khoan mb-3">
+          <div className="tab-content-tai-khoan mb-3 ">
             {selectedTab === "Personal Information" && (
               <Form
                 className="form-tai-khoan"
@@ -489,38 +489,6 @@ const Profile = (props) => {
                 <h5>Lịch Sử Giao Dịch</h5>
                 <p>Lưu ý: chỉ hiển thị 20 giao dịch gần nhất</p>
                 <div className="transaction-month">Tháng 05/2022</div>
-                <div className="transaction">
-                  <div className="transaction-image">
-                    <img
-                      src="https://www.galaxycine.vn/media/2019/4/10/640wx396h_1554864314405.jpg"
-                      alt="Movie"
-                    />
-                  </div>
-                  <div className="transaction-details">
-                    <div className="transaction-info-left">
-                      <p style={{ fontWeight: "bold" }}>
-                        Phù Thủy Tối Thượng Trong Đa Vũ Trụ Hỗn Loạn
-                      </p>
-                      <p>
-                        2D Phụ Đề <span className="age-restriction">T13</span>
-                      </p>
-                    </div>
-                    <div className="transaction-info-right">
-                      <p>Galaxy Kinh Dương Vương</p>
-                      <p>
-                        <span style={{ fontWeight: "bold" }}>21:15</span> - Thứ
-                        Hai,
-                        <span style={{ fontWeight: "bold" }}>
-                          09/05/2022
-                        </span>{" "}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="transaction-action">
-                    <a href="#">Chi tiết</a>
-                  </div>
-                </div>
-                <div className="transaction-month">Tháng 01/2021</div>
                 <div className="transaction">
                   <div className="transaction-image">
                     <img

@@ -31,6 +31,7 @@ import HomeCinemaReducer from "./home/CinemaHome/reducer";
 import HomeWatercornReducer from "./home/Watercorn/reducer";
 import HomeMovieGenreReducer from "./home/Movie-GenreHome/reducer";
 import ProfileHomeReducer from "./home/profileHome/reducer";
+import PromotionHomeReducer from "./home/PromotionHome/reducer";
 
 const rootReducer = combineReducers({
   Layout: LayoutReducer,
@@ -59,6 +60,7 @@ const rootReducer = combineReducers({
   HomeWaterCorn: HomeWatercornReducer,
   HomeMovieGenre: HomeMovieGenreReducer,
   HomeProfile: ProfileHomeReducer,
+  HomePromotion: PromotionHomeReducer,
 });
 
 export default rootReducer;

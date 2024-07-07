@@ -305,42 +305,10 @@ const Navbar = () => {
                   </DropdownMenu>
                 </Dropdown>
               </li>
-              {/* <li className="nav-item">
-                <NavLink className="fs-16" href="/rap-phim">
-                  Cinema
+              <li className="nav-item">
+                <NavLink className="fs-16" href="/promotion">
+                  Promotion
                 </NavLink>
-              </li> */}
-              <li
-                className="nav-item"
-                onMouseEnter={() => setEventsDropdownOpen(true)}
-                onMouseLeave={() => setEventsDropdownOpen(false)}
-              >
-                <Dropdown
-                  isOpen={eventDropdownOpen}
-                  toggle={toggleDropdownEvent}
-                >
-                  <DropdownToggle
-                    className="fs-16 nav-link"
-                    caret
-                    style={{
-                      backgroundColor: "transparent",
-                      color: "black",
-                      borderColor: "transparent",
-                    }}
-                  >
-                    Event
-                  </DropdownToggle>
-                  <DropdownMenu
-                    style={{ textAlign: "center", marginLeft: -40 }}
-                  >
-                    <DropdownItem tag={Link} to="/uu-dai">
-                      Ưu Đãi
-                    </DropdownItem>
-                    <DropdownItem tag={Link} to="/phim-hay-thang">
-                      Phim Hay Tháng
-                    </DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
               </li>
 
               {/* Rạp Phim */}

@@ -43,6 +43,7 @@ public class HomePromotionServiceImpl implements HomePromotionService {
         promotions.forEach(promotion -> {
             ItemIntroduce item = new ItemIntroduce();
             ObjectUtils.copyFields(promotion, item);
+            item.setDescription(null);
             item.setImagePortrait(promotion.getImage());
             items.add(item);
         });

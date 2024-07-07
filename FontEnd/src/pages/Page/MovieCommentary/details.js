@@ -57,41 +57,6 @@ const MovieCommentaryDetails = (props) => {
   const { error, messageError, item, otherItem, MovieIntroduce } =
     useSelector(BlogStateData);
 
-  const movies = [
-    {
-      url: "/#",
-      alt: "preview-furiosa-a-mad-max-saga-loi-tu-su-dien-loan-cua-thong-soai-furiosa",
-      imageUrl:
-        "https://cdn.galaxycine.vn/media/2024/5/19/750_1716053499918.jpg",
-      title:
-        "[Preview] Furiosa A Mad Max Saga: Lời Tự Sự Điên Loạn Của Thống Soái Furiosa",
-    },
-    {
-      url: "/#",
-      alt: "preview-furiosa-a-mad-max-saga-loi-tu-su-dien-loan-cua-thong-soai-furiosa",
-      imageUrl:
-        "https://cdn.galaxycine.vn/media/2024/5/19/750_1716053499918.jpg",
-      title:
-        "[Preview] Furiosa A Mad Max Saga: Lời Tự Sự Điên Loạn Của Thống Soái Furiosa",
-    },
-    {
-      url: "/#",
-      alt: "preview-furiosa-a-mad-max-saga-loi-tu-su-dien-loan-cua-thong-soai-furiosa",
-      imageUrl:
-        "https://cdn.galaxycine.vn/media/2024/5/19/750_1716053499918.jpg",
-      title:
-        "[Preview] Furiosa A Mad Max Saga: Lời Tự Sự Điên Loạn Của Thống Soái Furiosa",
-    },
-    {
-      url: "/binh-luan-phim/phim1/",
-      alt: "preview-furiosa-a-mad-max-saga-loi-tu-su-dien-loan-cua-thong-soai-furiosa",
-      imageUrl:
-        "https://cdn.galaxycine.vn/media/2024/5/19/750_1716053499918.jpg",
-      title:
-        "[Preview] Furiosa A Mad Max Saga: Lời Tự Sự Điên Loạn Của Thống Soái Furiosa",
-    },
-  ];
-
   document.title = item.name || "movie-commentary";
 
   return (

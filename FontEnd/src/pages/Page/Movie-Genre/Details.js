@@ -315,7 +315,7 @@ const MovieDetail = (props) => {
                       <p>Updating...</p>
                     )}
                   </div>
-                  <div className="related-articles-theloaiphimDetails">
+                  <div className="related-articles-theloaiphimDetails mt-5">
                     <h2 className="section-title-theloaiphimDetails">
                       RELATED ARTICLES
                     </h2>
