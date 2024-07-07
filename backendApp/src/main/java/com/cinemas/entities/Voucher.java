@@ -19,29 +19,32 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Voucher {
     @Id
     @GeneratedValue
     private Integer id;
 
     @Column
-    private String code;
+    private String code = null;
 
     @Column
-    private DiscountType discountType;
+    private DiscountType discountType= null;
 
-    @Column
+    @Column(nullable = false)
     private double discountValue;
 
     @Column
-    private LocalDate expirationDate;
+    private LocalDate expirationDate= null;
 
     @Column
-    private Integer usageLimit;
+    private Integer usageLimit= null;
 
     @Column
-    private Integer usedCount;
+    private Integer usedCount= null;
+
+    @Column
+    private Double minSpend = null;
 
     @Column
     private StatusVoucher statusVoucher;

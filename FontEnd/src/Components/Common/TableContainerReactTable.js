@@ -218,7 +218,7 @@ const TableContainer = ({
               {/* {paginateData.numberOfElements} */}
               <select
                 // className="custom-select"
-                value={paginateData.size}
+                value={paginateData?.size}
                 id="inputGroupSelect01"
                 onChange={(e) => {
                   const newPageSize = Number(e.target.value);
@@ -231,7 +231,7 @@ const TableContainer = ({
                 <option value={50}>50</option>
               </select>
             </span>{" "}
-            of <span className="fw-semibold">{paginateData.totalElements}</span>{" "}
+            of <span className="fw-semibold">{paginateData?.totalElements}</span>{" "}
             Results
           </div>
         </div>
@@ -239,7 +239,7 @@ const TableContainer = ({
           <ul className="pagination pagination-separated pagination-md justify-content-center justify-content-sm-start mb-0">
             <li
               className={
-                paginateData.number === 0 ? "page-item disabled" : "page-item"
+                paginateData?.number === 0 ? "page-item disabled" : "page-item"
               }
             >
               <Link
@@ -247,7 +247,7 @@ const TableContainer = ({
                 className="page-link"
                 onClick={() => {
                   previousPage;
-                  paginate(paginateData.number - 1);
+                  paginate(paginateData?.number - 1);
                 }}
               >
                 Previous
@@ -265,12 +265,12 @@ const TableContainer = ({
                 <Link
                   to="#"
                   className={
-                    paginateData.number === index
+                    paginateData?.number === index
                       ? "page-link active"
                       : "page-link"
                   }
                   onClick={() => {
-                    if (paginateData.number !== index) {
+                    if (paginateData?.number !== index) {
                       setPageIndex(index);
                       paginate(index);
                     }
@@ -282,7 +282,7 @@ const TableContainer = ({
             ))}
             <li
               className={
-                paginateData.number === paginateData.totalPages - 1
+                paginateData?.number === paginateData?.totalPages - 1
                   ? "page-item disabled"
                   : "page-item"
               }
@@ -292,7 +292,7 @@ const TableContainer = ({
                 className="page-link"
                 onClick={() => {
                   // nextPage;
-                  paginate(paginateData.number + 1);
+                  paginate(paginateData?.number + 1);
                 }}
               >
                 Next

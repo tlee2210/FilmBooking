@@ -77,9 +77,9 @@ const ProfileDropdown = () => {
           </DropdownItem>
           {role === "ADMIN" ? (
             <DropdownItem className="p-0">
-              <Link to="/apps-chat" className="dropdown-item">
-                <i className="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i>{" "}
-                <span className="align-middle">Messages</span>
+              <Link to="/dashboard" className="dropdown-item">
+                {/* <i className="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i>{" "} */}
+                <span className="align-middle">dashboard</span>
               </Link>
             </DropdownItem>
           ) : null}

@@ -1,330 +1,329 @@
 .container-tai-khoan {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: Arial, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
 }
 
 .profile-wrapper-tai-khoan {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .profile-card-tai-khoan {
-    width: 30%;
-    padding: 20px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-right: 20px;
-    height: 70%;
+  width: 30%;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-right: 20px;
+  height: 70%;
 }
 
 .profile-header-tai-khoan {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .avatar-tai-khoan {
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
 }
 
 .profile-info-tai-khoan {
-    margin-left: 15px;
+  margin-left: 15px;
 }
 
 .profile-name-tai-khoan {
-    margin: 0;
-    font-size: 18px;
+  margin: 0;
+  font-size: 18px;
 }
 
 .profile-stars-tai-khoan {
-    margin: 0;
-    color: gray;
+  margin: 0;
+  color: gray;
 }
 
 .spending-info-tai-khoan {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .spending-title-tai-khoan {
-    font-size: 14px;
-    font-weight: bold;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .spending-amount-tai-khoan {
-    font-size: 24px;
-    color: red;
+  font-size: 24px;
+  color: red;
 }
 
 .spending-scale-tai-khoan {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    color: gray;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: gray;
 }
 
 .progress-bar-tai-khoan {
-    height: 8px;
-    background: gray;
-    border-radius: 5px;
-    overflow: hidden;
-    margin-top: 10px;
+  height: 8px;
+  background: gray;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-top: 10px;
 }
 
 .progress-fill-tai-khoan {
-    height: 100%;
-    background: blue;
+  height: 100%;
+  background: blue;
 }
 
 .contact-info-tai-khoan {
-    margin-top: 20px;
-    font-size: 12px;
-    color: gray;
+  margin-top: 20px;
+  font-size: 12px;
+  color: gray;
 }
 
 .tabs-container-tai-khoan {
-    flex-grow: 1;
-    padding: 20px;
+  flex-grow: 1;
+  padding: 20px;
 }
 
 .tabs-tai-khoan {
-    display: flex;
-    border-bottom: 1px solid #ccc;
-    margin-bottom: 20px;
-    list-style-type: none;
-    padding-left: 0;
+  display: flex;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 20px;
+  list-style-type: none;
+  padding-left: 0;
 }
 
 .tab-item-tai-khoan {
-    margin-right: 20px;
-    cursor: pointer;
-    padding: 10px;
-    color: #b1acac;
-    font-weight: bold;
+  margin-right: 20px;
+  cursor: pointer;
+  padding: 10px;
+  color: #b1acac;
+  font-weight: bold;
 }
 
 .tab-item-tai-khoan.active-tai-khoan {
-    border-bottom: 2px solid blue;
-    color: rgb(27, 27, 153);
+  border-bottom: 2px solid blue;
+  color: rgb(27, 27, 153);
 }
 
 .tab-content-tai-khoan {
-    background: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 752px;
-
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 752px;
 }
 
 .form-tai-khoan {
-    margin: auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .form-group-tai-khoan {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 .form-label-tai-khoan {
-    display: block;
-    margin-bottom: 5px;
+  display: block;
+  margin-bottom: 5px;
 }
 
 .form-control-tai-khoan {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
 
 .form-control-disabled {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    color: #777;
-    height: 40px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  color: #777;
+  height: 40px;
 }
 
 .form-radio-group-tai-khoan {
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 10px;
 }
 
 .form-radio-tai-khoan input {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 
 .form-button-tai-khoan {
-    width: 100%;
-    padding: 10px;
-    background-color: #ff9800;
-    border: none;
-    border-radius: 4px;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  width: 100%;
+  padding: 10px;
+  background-color: #ff9800;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .form-button-tai-khoan:hover {
-    background-color: #e68900;
+  background-color: #e68900;
 }
 
 .tabs-container-tai-khoan {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .policy-tabs {
-    display: flex;
-    justify-content: center;
-    list-style-type: none;
-    padding: 0;
-    margin: 20px 0;
-    border-radius: 5px;
-    box-shadow: #555;
-
-
+  display: flex;
+  justify-content: center;
+  list-style-type: none;
+  padding: 0;
+  margin: 20px 0;
+  border-radius: 5px;
+  box-shadow: #555;
 }
 
 .policy-tab-item {
-    font-size: 14px;
-    margin-top: 20px;
-    padding: 8px 15px;
-    cursor: pointer;
-    font-weight: bold;
-    color: #555;
-    border-bottom: 2px solid transparent;
-    transition: color 0.3s, border-bottom 0.3s;
+  font-size: 14px;
+  margin-top: 20px;
+  padding: 8px 15px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #555;
+  border-bottom: 2px solid transparent;
+  transition: color 0.3s, border-bottom 0.3s;
 }
 
 .policy-tab-item:hover {
-    color: #000;
+  color: #000;
 }
 
 .policy-tab-item.active-policy-tab {
-    background: rgb(27, 27, 153);
-    border-radius: 35px;
-    color: #ffffff;
-
+  background: rgb(27, 27, 153);
+  border-radius: 35px;
+  color: #ffffff;
 }
 
 .policy-tab-content {
-    padding: 20px;
-    background-color: #f9f9f9;
-
+  padding: 20px;
+  background-color: #f9f9f9;
 }
 
 .policy-tab-content h5 {
-    margin-top: 0;
-    font-size: 1.25em;
-    color: #333;
+  margin-top: 0;
+  font-size: 1.25em;
+  color: #333;
 }
 
 .policy-tab-content ul {
-    list-style-type: disc;
-    margin-left: 20px;
+  list-style-type: disc;
+  margin-left: 20px;
 }
 
 .policy-tab-content p,
 .policy-tab-content li {
-    margin-bottom: 10px;
-    font-size: 1em;
-    color: #666;
+  margin-bottom: 10px;
+  font-size: 1em;
+  color: #666;
 }
 
 .policy-tab-content img {
-    max-width: 100%;
-    height: auto;
-    margin: 20px 0;
+  max-width: 100%;
+  height: auto;
+  margin: 20px 0;
 }
 
 .transaction-history {
-    padding: 20px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }
 
 .transaction-history h5 {
-    margin-top: 0;
-    font-size: 1.25em;
-    color: #333;
+  margin-top: 0;
+  font-size: 1.25em;
+  color: #333;
 }
 
 .transaction-history p {
-    margin-bottom: 20px;
-    color: #666;
+  margin-bottom: 20px;
+  color: #666;
 }
 
 .transaction-month {
-    margin: 20px 0;
-    font-size: 1.1em;
-    font-weight: bold;
-    color: #333;
+  margin: 20px 0;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #333;
 }
 
 .transaction {
-    font-size: 13.5px;
-    display: flex;
-    align-items: center;
-    padding: 15px;
-    border-bottom: 1px solid #ddd;
-    background-color: #fff;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  font-size: 13.5px;
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+  background-color: #f8f8f8;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.hover-container :hover {
+  background-color: #c0bebe;
 }
 
 .transaction-image img {
-    width: 60px;
-    height: 70px;
-    object-fit: cover;
-    border-radius: 5px;
+  width: 60px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 5px;
 }
 
 .transaction-details {
-    display: flex;
-    justify-content: space-between;
-    flex-grow: 1;
-    margin-left: 20px;
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+  margin-left: 20px;
 }
 
 .transaction-info-left {
-    flex: 1;
-    
+  flex: 1;
 }
 .transaction-info-right {
-    flex: 1;
-    margin-right: -140px;
+  flex: 1;
+  margin-right: -140px;
 }
 
-.transaction-info-left p, .transaction-info-right p {
-    margin: 5px 0;
-    color: #333;
+.transaction-info-left p,
+.transaction-info-right p {
+  margin: 5px 0;
+  color: #333;
 }
 
 .age-restriction {
-    display: inline-block;
-    padding: 2px 6px;
-    background-color: #ff5722;
-    color: #fff;
-    border-radius: 4px;
-    font-size: 0.9em;
-    margin-left: 10px;
+  display: inline-block;
+  padding: 2px 6px;
+  background-color: #ff5722;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 0.9em;
+  margin-left: 10px;
 }
 
 .transaction-action a {
-    color: #007bff;
-    text-decoration: none;
-    margin-left: 20px;
+  color: #007bff;
+  text-decoration: none;
+  margin-left: 20px;
 }
 
 .transaction-action a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }

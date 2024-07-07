@@ -20,7 +20,7 @@ const Error500 = lazy(() =>
 
 // User Profile
 const UserProfile = lazy(() => import("../pages/Authentication/user-profile"));
-const Starter = lazy(() => import("../pages/dashboard/Starter"));
+const Dashboard = lazy(() => import("../pages/dashboard/dashboard"));
 
 const Celebrity = lazy(() => import("../pages/dashboard/Celebrity/index"));
 const CelebrityCreate = lazy(() =>
@@ -72,6 +72,10 @@ const Review = lazy(() => import("../pages/dashboard/Review/index"));
 const ReviewCreate = lazy(() => import("../pages/dashboard/Review/create"));
 const ReviewEdit = lazy(() => import("../pages/dashboard/Review/edit"));
 
+const Voucher = lazy(() => import("../pages/dashboard/Voucher/index"));
+const VoucherCreate = lazy(() => import("../pages/dashboard/Voucher/create"));
+const VoucherEdit = lazy(() => import("../pages/dashboard/Voucher/edit"));
+
 //home
 //Cinema Coner
 const Actor = lazy(() => import("../pages/Page/CinemaCorner/Actor"));
@@ -117,7 +121,7 @@ import DatVeXemPhim from "../pages/Page/Dat-Ve-Xem-Phim";
 const adminProtectedRoutes = [
   //User Profile
   // { path: "/dashboard/profile", component: <UserProfile /> },
-  { path: "/pages-starter", component: <Starter /> },
+  { path: "/dashboard", component: <Dashboard /> },
 
   { path: "/dashboard/celebrity", component: <Celebrity /> },
   { path: "/dashboard/celebrity/:slug/edit", component: <CelebrityEdit /> },
@@ -161,6 +165,14 @@ const adminProtectedRoutes = [
   { path: "/dashboard/promotion", component: <Promotion /> },
   { path: "/dashboard/promotion/create", component: <PromotionCreate /> },
   { path: "/dashboard/promotion/:slug/edit", component: <PromotionEdit /> },
+
+  { path: "/dashboard/voucher", component: <Voucher /> },
+  { path: "/dashboard/voucher/create", component: <VoucherCreate /> },
+  { path: "/dashboard/voucher/:id/edit", component: <VoucherEdit /> },
+
+  // VoucherCreate
+  // Voucher
+  // VoucherEdit
 
   // Promotion
   // /dashboard/promotion

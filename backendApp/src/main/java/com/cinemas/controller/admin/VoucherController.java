@@ -33,7 +33,7 @@ public class VoucherController {
             @RequestParam(required = false, defaultValue = "15") Integer pageSize,
             @RequestParam(required = false, defaultValue = "DESC") Sort.Direction sort
     ) {
-        PaginationHelper paginationHelper = new PaginationHelper(pageNo, pageSize, sort, "id");
+        PaginationHelper paginationHelper = new PaginationHelper(pageNo - 1, pageSize, sort, "id");
         APIResponse<Page<Voucher>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(voucherService.getAllVoucher(paginationHelper));
@@ -66,7 +66,7 @@ public class VoucherController {
     }
 
     @PutMapping("/update")
-    public APIResponse<String> updateVoucher(@RequestBody VoucherRequest voucherRequest){
+    public APIResponse<String> updateVoucher(@RequestBody VoucherRequest voucherRequest) {
         boolean checkUpdate = voucherService.updateVoucher(voucherRequest);
         if (checkUpdate) {
             APIResponse<String> apiResponse = new APIResponse();
