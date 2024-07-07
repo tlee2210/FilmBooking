@@ -33,10 +33,14 @@ const Booking = (props) => {
     const [totalPrice, setTotalPrice] = useState(0);
     const [singleSeats, setSingleSeats] = useState([]);
     const [doubleSeats, setDoubleSeats] = useState([]);
+
+
     const [selectedLocation, setSelectedLocation] = useState(null);
     const [selectedMovie, setSelectedMovie] = useState(null);
+    const [isLocationVisible, setIsLocationVisible] = useState(true);
     const [isMovieListVisible, setIsMovieListVisible] = useState(false);
     const [isShowtimeListVisible, setIsShowtimeListVisible] = useState(false);
+
 
     const data = {
         movieName: "Movie Title",
@@ -322,52 +326,94 @@ const Booking = (props) => {
                                         <TabContent activeTab={activeTab}>
                                             <TabPane tabId={1}>
                                                 <Row>
-                                                    <div className="location-selection">
-                                                        <h1>Chọn vị trí</h1>
-                                                        <div className="location-options">
-                                                            {['TP Hồ Chí Minh', 'Hà Nội', 'Đà Nẵng', 'An Giang', 'Bà Rịa - Vũng Tàu', 'Bến Tre', 'Cà Mau', 'Đắk Lắk', 'Hải Phòng', 'Khánh Hòa', 'Nghệ An'].map(location => (
-                                                                <button key={location} onClick={() => {
-                                                                    setSelectedLocation(location);
-                                                                    setIsMovieListVisible(true);
-                                                                    setIsShowtimeListVisible(false);
-                                                                    setSelectedMovie(null);
-                                                                }}>
-                                                                    {location}
-                                                                </button>
-                                                            ))}
+                                                    <div className="selection-section">
+                                                        <div className="selection-header" onClick={() => setIsLocationVisible(!isLocationVisible)}>
+                                                            <h1>Chọn vị trí {selectedLocation && `- ${selectedLocation}`}</h1>
+                                                            <button>{isLocationVisible ? '▲' : '▼'}</button>
                                                         </div>
+                                                        {isLocationVisible && (
+                                                            <div className="location-selection">
+                                                                <div className="location-options">
+                                                                    {['TP Hồ Chí Minh', 'Hà Nội', 'Đà Nẵng', 'An Giang', 'Bà Rịa - Vũng Tàu', 'Bến Tre', 'Cà Mau', 'Đắk Lắk', 'Hải Phòng', 'Khánh Hòa', 'Nghệ An'].map(location => (
+                                                                        <button
+                                                                            key={location}
+                                                                            onClick={() => {
+                                                                                setSelectedLocation(location);
+                                                                                setIsMovieListVisible(true);
+                                                                                setIsLocationVisible(false);
+                                                                            }}
+                                                                            className={classnames({
+                                                                                "selected-location": selectedLocation === location
+                                                                            })}
+                                                                        >
+                                                                            {location}
+                                                                        </button>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        )}
                                                     </div>
-                                                    {isMovieListVisible && (
-                                                        <div className="movie-selection">
-                                                            <h1>Chọn phim</h1>
-                                                            <div className="movie-options">
-                                                                {['Movie 1', 'Movie 2', 'Movie 3', 'Movie 4'].map(movie => (
-                                                                    <div key={movie} className="movie-option" onClick={() => {
-                                                                        setSelectedMovie(movie);
-                                                                        setIsShowtimeListVisible(true);
-                                                                        setIsMovieListVisible(false);
-                                                                    }}>
-                                                                        <img src="https://cdn.galaxycine.vn/media/2024/6/3/cuu-long-thanh-trai-vay-thanh-1_1717402596500.jpg" alt={movie} />
-                                                                        <p>{movie}</p>
-                                                                    </div>
-                                                                ))}
-                                                            </div>
+
+
+                                                    {/* Chọn Phim */}
+                                                    <div className="selection-section">
+                                                        <div className="selection-header" onClick={() => setIsMovieListVisible(!isMovieListVisible)}>
+                                                            <h1>Chọn phim {selectedMovie && `- ${selectedMovie}`}</h1>
+                                                            <button>{isMovieListVisible ? '▲' : '▼'}</button>
                                                         </div>
-                                                    )}
-                                                    {isShowtimeListVisible && (
-                                                        <div className="showtime-selection">
+                                                        {isMovieListVisible && (
+                                                            <div className="movie-selection">
+                                                                <div className="movie-options">
+                                                                    {['Kẻ Trộm Mặt Trăng 4', 'Cửu Long Thành Trại: Vây Thành', 'Mùa Hè Đẹp Nhất', 'Những Đường Cho Các Cảm Xúc Hội Nào', 'Vùng Đất Cầm Lặng Ngày Một', 'Gia Tài Của Ngoại'].map(movie => (
+                                                                        <div
+                                                                            key={movie}
+                                                                            onClick={() => {
+                                                                                setSelectedMovie(movie);
+                                                                                setIsShowtimeListVisible(true);
+                                                                                setIsMovieListVisible(false);
+                                                                            }}
+                                                                            className={classnames("movie-option", {
+                                                                                "selected-movie": selectedMovie === movie
+                                                                            })}
+                                                                        >
+                                                                            <img src="https://cdn.galaxycine.vn/media/2024/6/3/cuu-long-thanh-trai-vay-thanh-1_1717402596500.jpg" alt={movie} />
+                                                                            <p>{movie}</p>
+                                                                            {selectedMovie === movie && (
+                                                                                <div className="selected-overlay">
+                                                                                    <i className="ri-checkbox-circle-line" style={{fontSize:62}}></i>
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+
+                                                    {/* Chọn suất */}
+                                                    <div className="selection-section">
+                                                        <div className="selection-header" onClick={() => setIsShowtimeListVisible(!isShowtimeListVisible)}>
                                                             <h1>Chọn suất</h1>
-                                                            <div className="showtime-options">
-                                                                {['09:00', '11:00', '13:00', '15:00', '17:00'].map(showtime => (
-                                                                    <button key={showtime} onClick={() => {
-                                                                        // Handle showtime selection
-                                                                    }}>
-                                                                        {showtime}
-                                                                    </button>
-                                                                ))}
-                                                            </div>
+                                                            <button>{isShowtimeListVisible ? '▲' : '▼'}</button>
                                                         </div>
-                                                    )}
+                                                        {isShowtimeListVisible && (
+                                                            <div className="showtime-selection">
+                                                                <div className="showtime-options">
+                                                                    {['09:00', '11:00', '13:00', '15:00', '17:00'].map(showtime => (
+                                                                        <button
+                                                                            key={showtime}
+                                                                            onClick={() => {
+                                                                                // Handle showtime selection
+                                                                            }}
+                                                                        >
+                                                                            {showtime}
+                                                                        </button>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 </Row>
                                             </TabPane>
                                             <TabPane tabId={2}>
