@@ -193,9 +193,12 @@ const Profile = (props) => {
   const [selectedTab, setSelectedTab] = useState("Personal Information");
 
   return (
-    <div className="container-tai-khoan" style={{ paddingTop: 120 }}>
+    <div
+      className="container-tai-khoan"
+      style={{ paddingTop: 120, minHeight: "100vh" }}
+    >
       <div className="profile-wrapper-tai-khoan">
-        <div className="profile-card-tai-khoan">
+        <div className="profile-card-tai-khoan rounded-3 shadow-lg p-3 bg-white rounded">
           <div className="profile-header-tai-khoan">
             <div className="profile-user position-relative d-inline-block mb-4">
               {ProfileData && ProfileData?.avatar ? (

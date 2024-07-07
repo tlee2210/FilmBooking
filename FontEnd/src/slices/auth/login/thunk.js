@@ -20,7 +20,8 @@ export const loginUser = (user, history) => async (dispatch) => {
         const validUserObj = { ...userLogin, ...tokenObj };
         sessionStorage.setItem("authUser", JSON.stringify(res.data?.result));
         // dispatch(loginSuccess(res.data?.result.user));
-        history("/");
+        window.location.href = "/";
+
         resolve([200, validUserObj]);
       })
       .catch((err) => {
