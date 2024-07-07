@@ -21,6 +21,7 @@ import ShowTimeReducer from "./ShowTime/reducer";
 import BlogReducer from "./Blog/reducer";
 import ReviewReducer from "./Review/reducer";
 import PromotionReducer from "./Promotion/reducer";
+import VoucherReducer from "./Voucher/reducer";
 
 //home
 import HomeCelebrityReducer from "./home/CelebrityHome/reducer";
@@ -51,6 +52,7 @@ const rootReducer = combineReducers({
   Blog: BlogReducer,
   Review: ReviewReducer,
   Promotion: PromotionReducer,
+  Voucher: VoucherReducer,
 
   HomeCelebrity: HomeCelebrityReducer,
   BlogOrReview: HomeBlogOrReviewReducer,

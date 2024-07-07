@@ -19,4 +19,7 @@ public class VoucherRequest {
     private LocalDate expirationDate;
 
     private Integer usageLimit;
+
+    private Double minSpend;
+
 }
