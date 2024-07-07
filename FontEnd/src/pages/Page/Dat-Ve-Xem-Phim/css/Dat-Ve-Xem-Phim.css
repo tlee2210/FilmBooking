@@ -1,18 +1,24 @@
 .selection-section {
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     margin: 20px 0;
     border: 1px solid #ddd;
     border-radius: 4px;
 }
 
 .selection-header {
+
+    font-weight: bold;
+    border-radius: 4px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
-    background-color: #f7f7f7;
+    padding: 15px;
+    background-color: #ffffff;
     cursor: pointer;
-    
+
 }
+
+
 
 
 .selection-header h1 {
@@ -27,24 +33,54 @@
     cursor: pointer;
 }
 
+
+.location-selection {
+    transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    background-color: #ffffff;
+}
+
+.location-selection.show {
+    max-height: 100%;
+    opacity: 1;
+}
+
 .location-options button,
 .showtime-options button {
     margin: 5px;
     padding: 10px 20px;
     border: none;
-    background-color: #f0f0f0;
+    background-color: #ffffff;
     cursor: pointer;
+    border: 1px solid rgb(205, 203, 203);
+    border-radius: 4px;
+}
+
+.location-options button.selected-location {
+    background-color: #034ea2;
+    color: white;
+
 }
 
 .location-options button:hover,
 .showtime-options button:hover {
-    background-color: #ccc;
+    background-color: #034ea2;
+    color: white;
 }
 
 .movie-selection {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+
+    transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+}
+
+.movie-selection.show {
+    max-height: 100%;
+    opacity: 1;
 }
 
 .movie-options {
@@ -71,6 +107,7 @@
 }
 
 .movie-option p {
+    margin-left: -30px;
     text-align: center;
     margin-top: 5px;
 }
@@ -97,4 +134,123 @@
 .selected-overlay i {
     color: white;
     font-size: 24px;
+}
+
+
+
+
+
+
+
+
+.showtime-selection {
+    transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+}
+
+.showtime-selection.show {
+    max-height: 500px; 
+    opacity: 1;
+    background-color: white;
+}
+
+.date-slider-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    width: 76%;
+}
+
+.date-slider-nav {
+    cursor: pointer;
+    font-size: 24px;
+    user-select: none;
+}
+
+.date-slider {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    flex-grow: 1;
+    margin: 0 10px;
+    overflow: auto; /* Allow horizontal scrolling */
+    white-space: nowrap; /* Prevent line breaks */
+}
+
+.date-slider button {
+    display: inline-block; /* Make buttons inline to respect white-space: nowrap */
+    min-width: 80px;
+    margin: 0 5px;
+    padding: 8px;
+    border: 1px solid #ffffff;
+    background-color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
+    transition: background-color 0.3s ease;
+}
+
+.date-slider button.selected {
+    background-color: #034ea2;
+    color: white;
+    border-color: #034ea2;
+}
+
+.filter-dropdown {
+    margin-left: auto;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.showtime-options {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0;
+    gap: 10px;
+}
+
+.showtime-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.showtime-type {
+    min-width: 120px;
+}
+
+.showtime-schedule {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.showtime-schedule button {
+    margin: 5px;
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.showtime-schedule button:hover {
+    background-color: #034ea2;
+}
+
+.selected-showtime {
+    background-color: #034ea2;
+    color: white;
+    border-color: #034ea2;
 }
