@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Booking/css/order.css";
 import "../Dat-Ve-Xem-Phim/css/Dat-Ve-Xem-Phim.css";
@@ -265,6 +265,42 @@ const Booking = (props) => {
         alert(`Promo code ${promoCode} has been applied!`);
     };
 
+
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedShowtime, setSelectedShowtime] = useState(null);
+    const [dates] = useState([
+        { day: 'Hôm Nay', date: '08/07' },
+        { day: 'Thứ Ba', date: '09/07' },
+        { day: 'Thứ Tư', date: '10/07' },
+        { day: 'Thứ Năm', date: '11/07' },
+        { day: 'Thứ Sáu', date: '12/07' },
+        { day: 'Thứ Bảy', date: '13/07' },
+        { day: 'Chủ Nhật', date: '14/07' }
+    ]);
+    const [filter, setFilter] = useState('Galaxy Hải Phòng');
+    const dateSliderRef = useRef(null);
+    const [arrowDisable, setArrowDisable] = useState(true);
+
+    const handleHorizontalScroll = (element, speed, distance, step) => {
+        let scrollAmount = 0;
+        const slideTimer = setInterval(() => {
+            element.scrollLeft += step;
+            scrollAmount += Math.abs(step);
+            if (scrollAmount >= distance) {
+                clearInterval(slideTimer);
+            }
+            if (element.scrollLeft === 0) {
+                setArrowDisable(true);
+            } else {
+                setArrowDisable(false);
+            }
+        }, speed);
+    };
+
+    const handleFilterChange = (event) => {
+        setFilter(event.target.value);
+    };
+
     document.title = `Booking ${data.movieName}` || "Booking";
 
     return (
@@ -326,90 +362,128 @@ const Booking = (props) => {
                                         <TabContent activeTab={activeTab}>
                                             <TabPane tabId={1}>
                                                 <Row>
+                                                    {/* Chọn Khu Vực */}
                                                     <div className="selection-section">
                                                         <div className="selection-header" onClick={() => setIsLocationVisible(!isLocationVisible)}>
-                                                            <h1>Chọn vị trí {selectedLocation && `- ${selectedLocation}`}</h1>
+                                                            <h1 style={{ fontSize: 21 }}>Chọn vị trí {selectedLocation && `- ${selectedLocation}`}</h1>
                                                             <button>{isLocationVisible ? '▲' : '▼'}</button>
                                                         </div>
-                                                        {isLocationVisible && (
-                                                            <div className="location-selection">
-                                                                <div className="location-options">
-                                                                    {['TP Hồ Chí Minh', 'Hà Nội', 'Đà Nẵng', 'An Giang', 'Bà Rịa - Vũng Tàu', 'Bến Tre', 'Cà Mau', 'Đắk Lắk', 'Hải Phòng', 'Khánh Hòa', 'Nghệ An'].map(location => (
-                                                                        <button
-                                                                            key={location}
-                                                                            onClick={() => {
-                                                                                setSelectedLocation(location);
-                                                                                setIsMovieListVisible(true);
-                                                                                setIsLocationVisible(false);
-                                                                            }}
-                                                                            className={classnames({
-                                                                                "selected-location": selectedLocation === location
-                                                                            })}
-                                                                        >
-                                                                            {location}
-                                                                        </button>
-                                                                    ))}
-                                                                </div>
+                                                        <div className={classnames("location-selection", { show: isLocationVisible })}>
+                                                            <div className="location-options">
+                                                                {['TP Hồ Chí Minh', 'Hà Nội', 'Đà Nẵng', 'An Giang', 'Bà Rịa - Vũng Tàu', 'Bến Tre', 'Cà Mau', 'Đắk Lắk', 'Hải Phòng', 'Khánh Hòa', 'Nghệ An'].map(location => (
+                                                                    <button
+                                                                        key={location}
+                                                                        onClick={() => {
+                                                                            setSelectedLocation(location);
+                                                                            setIsMovieListVisible(true);
+                                                                            setIsLocationVisible(false);
+                                                                        }}
+                                                                        className={classnames({
+                                                                            "selected-location": selectedLocation === location
+                                                                        })}
+                                                                    >
+                                                                        {location}
+                                                                    </button>
+                                                                ))}
                                                             </div>
-                                                        )}
+                                                        </div>
                                                     </div>
 
 
                                                     {/* Chọn Phim */}
                                                     <div className="selection-section">
                                                         <div className="selection-header" onClick={() => setIsMovieListVisible(!isMovieListVisible)}>
-                                                            <h1>Chọn phim {selectedMovie && `- ${selectedMovie}`}</h1>
+                                                            <h1 style={{ fontSize: 21 }}>Chọn phim {selectedMovie && `- ${selectedMovie}`}</h1>
                                                             <button>{isMovieListVisible ? '▲' : '▼'}</button>
                                                         </div>
-                                                        {isMovieListVisible && (
-                                                            <div className="movie-selection">
-                                                                <div className="movie-options">
-                                                                    {['Kẻ Trộm Mặt Trăng 4', 'Cửu Long Thành Trại: Vây Thành', 'Mùa Hè Đẹp Nhất', 'Những Đường Cho Các Cảm Xúc Hội Nào', 'Vùng Đất Cầm Lặng Ngày Một', 'Gia Tài Của Ngoại'].map(movie => (
-                                                                        <div
-                                                                            key={movie}
-                                                                            onClick={() => {
-                                                                                setSelectedMovie(movie);
-                                                                                setIsShowtimeListVisible(true);
-                                                                                setIsMovieListVisible(false);
-                                                                            }}
-                                                                            className={classnames("movie-option", {
-                                                                                "selected-movie": selectedMovie === movie
-                                                                            })}
-                                                                        >
-                                                                            <img src="https://cdn.galaxycine.vn/media/2024/6/3/cuu-long-thanh-trai-vay-thanh-1_1717402596500.jpg" alt={movie} />
-                                                                            <p>{movie}</p>
-                                                                            {selectedMovie === movie && (
-                                                                                <div className="selected-overlay">
-                                                                                    <i className="ri-checkbox-circle-line" style={{fontSize:62}}></i>
-                                                                                </div>
-                                                                            )}
-                                                                        </div>
-                                                                    ))}
-                                                                </div>
+                                                        <div className={classnames("movie-selection", { show: isMovieListVisible })}>
+                                                            <div className="movie-options">
+                                                                {['Kẻ Trộm Mặt Trăng 4', 'Cửu Long Thành Trại: Vây Thành', 'Mùa Hè Đẹp Nhất', 'Những Đường Cho Các Cảm Xúc Hội Nào', 'Vùng Đất Cầm Lặng Ngày Một', 'Gia Tài Của Ngoại'].map(movie => (
+                                                                    <div
+                                                                        key={movie}
+                                                                        onClick={() => {
+                                                                            setSelectedMovie(movie);
+                                                                            setIsShowtimeListVisible(true);
+                                                                            setIsMovieListVisible(false);
+                                                                        }}
+                                                                        className={classnames("movie-option", {
+                                                                            "selected-movie": selectedMovie === movie
+                                                                        })}
+                                                                    >
+                                                                        <img src="https://cdn.galaxycine.vn/media/2024/6/3/cuu-long-thanh-trai-vay-thanh-1_1717402596500.jpg" alt={movie} />
+                                                                        <p>{movie}</p>
+                                                                        {selectedMovie === movie && (
+                                                                            <div className="selected-overlay">
+                                                                                <i className="ri-checkbox-circle-line" style={{ fontSize: 62 }}></i>
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                ))}
                                                             </div>
-                                                        )}
+                                                        </div>
                                                     </div>
 
 
                                                     {/* Chọn suất */}
                                                     <div className="selection-section">
                                                         <div className="selection-header" onClick={() => setIsShowtimeListVisible(!isShowtimeListVisible)}>
-                                                            <h1>Chọn suất</h1>
+                                                            <h1 style={{ fontSize: 21 }}>Chọn suất - {filter}</h1>
                                                             <button>{isShowtimeListVisible ? '▲' : '▼'}</button>
                                                         </div>
                                                         {isShowtimeListVisible && (
-                                                            <div className="showtime-selection">
+                                                            <div className="showtime-selection show">
+                                                                <div className="date-slider-container">
+                                                                    <span className="date-slider-nav" onClick={() => handleHorizontalScroll(dateSliderRef.current, 25, 100, -10)}>&lt;</span>
+                                                                    <div className="date-slider" ref={dateSliderRef}>
+                                                                        {dates.map((date, index) => (
+                                                                            <button
+                                                                                key={index}
+                                                                                onClick={() => setSelectedDate(date.date)}
+                                                                                className={classnames({ 'selected': selectedDate === date.date })}
+                                                                            >
+                                                                                <div>{date.day}</div>
+                                                                                <div>{date.date}</div>
+                                                                            </button>
+                                                                        ))}
+                                                                    </div>
+                                                                    <span className="date-slider-nav" onClick={() => handleHorizontalScroll(dateSliderRef.current, 25, 100, 10)}>&gt;</span>
+                                                                    <select className="filter-dropdown" value={filter} onChange={handleFilterChange}>
+                                                                        <option value="Galaxy Hải Phòng">Galaxy Hải Phòng</option>
+                                                                    </select>
+                                                                </div>
                                                                 <div className="showtime-options">
-                                                                    {['09:00', '11:00', '13:00', '15:00', '17:00'].map(showtime => (
-                                                                        <button
-                                                                            key={showtime}
-                                                                            onClick={() => {
-                                                                                // Handle showtime selection
-                                                                            }}
-                                                                        >
-                                                                            {showtime}
-                                                                        </button>
-                                                                    ))}
+                                                                    <Row className="showtime-row">
+                                                                        <Col md={2} className="showtime-type">
+                                                                            <h4 style={{ paddingLeft: 20, marginTop: -76 }}>2D Lồng Tiếng</h4>
+                                                                        </Col>
+                                                                        <Col md={8} className="showtime-schedule">
+                                                                            {['09:00', '10:15', '11:15', '12:00', '13:45', '15:30', '17:15', '18:00', '19:00', '19:45', '20:45', '21:30'].map(showtime => (
+                                                                                <button
+                                                                                    key={showtime}
+                                                                                    onClick={() => setSelectedShowtime(showtime)}
+                                                                                    className={classnames({ 'selected-showtime': selectedShowtime === showtime })}
+                                                                                >
+                                                                                    {showtime}
+                                                                                </button>
+                                                                            ))}
+                                                                        </Col>
+                                                                    </Row>
+                                                                    <Row className="showtime-row">
+                                                                        <Col md={2} className="showtime-type">
+                                                                            <h4 style={{ paddingLeft: 20, marginTop: -104 }}>2D Phụ Đề</h4>
+                                                                        </Col>
+                                                                        <Col md={8} className="showtime-schedule">
+                                                                            {['09:45', '10:45', '11:30', '12:30', '13:15', '14:15', '15:00', '16:00', '16:45', '17:45', '18:30', '19:30', '20:15', '21:15', '22:00', '22:30'].map(showtime => (
+                                                                                <button
+                                                                                    key={showtime}
+                                                                                    onClick={() => setSelectedShowtime(showtime)}
+                                                                                    className={classnames({ 'selected-showtime': selectedShowtime === showtime })}
+                                                                                >
+                                                                                    {showtime}
+                                                                                </button>
+                                                                            ))}
+                                                                        </Col>
+                                                                    </Row>
                                                                 </div>
                                                             </div>
                                                         )}

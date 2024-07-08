@@ -13,5 +13,5 @@ public class BuyTicketResponse {
     List<SelectOptionReponse> movieList;
     List<SelectOptionReponse> cinemaList;
     List<LocalDate> dateList;
-    List<LocalTime> timeList;
+    List<HomeMovieFormatResponse> movieFormat;
 }
