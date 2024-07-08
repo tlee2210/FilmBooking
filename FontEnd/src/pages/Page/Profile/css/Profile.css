@@ -276,9 +276,6 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.hover-container :hover {
-  background-color: #c0bebe;
-}
 
 .transaction-image img {
   width: 60px;

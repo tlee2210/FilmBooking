@@ -87,17 +87,18 @@ const HomeCinema = (props) => {
       const totalMovies = cinemaData.days[index].movieList.length;
 
       if (movieIndex <= 5) {
-        setMovieIndexRender(totalMovies - 1 < 5 ? totalMovies - 1 : 5);
+        setMovieIndexRender(Math.min(totalMovies - 1, 5));
       } else if (movieIndex < totalMovies - 1 && totalMovies - 1 <= 11) {
-        setMovieIndexRender(totalMovies - 1 < 11 ? totalMovies - 1 : 11);
+        setMovieIndexRender(Math.min(totalMovies - 1, 11));
       } else {
-        setMovieIndexRender(movieIndex + movie.times.length - 1);
+        setMovieIndexRender(totalMovies - 1);
       }
 
       setMovieTime(movie);
       setSelectedMovie(movie.name);
     }
   };
+
   const handleSelectCityChange = (event) => {
     setSelectedCinema("");
     setSelectedCity(event.target.value);

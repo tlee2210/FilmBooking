@@ -492,7 +492,7 @@ const Booking = (props) => {
                                                               <div className="fw-bolder max-width mb-4 mt-3">
                                                                 {cinema.name}
                                                               </div>
-                                                              <div className="time-item">
+                                                              <Row className="time-item">
                                                                 {cinema &&
                                                                 cinema.movieFormat ? (
                                                                   <Row>
@@ -501,61 +501,61 @@ const Booking = (props) => {
                                                                         format,
                                                                         formatIndex
                                                                       ) => (
-                                                                        <Col
-                                                                          md={
-                                                                            12
-                                                                          }
+                                                                        <Row
+                                                                          className="mb-4"
                                                                           key={
                                                                             formatIndex
                                                                           }
                                                                         >
-                                                                          <Row className="mb-4">
-                                                                            <Col
-                                                                              md={
-                                                                                2
-                                                                              }
-                                                                              className="ms-4"
-                                                                            >
-                                                                              {
-                                                                                format.name
-                                                                              }
-                                                                            </Col>
-                                                                            <Col>
-                                                                              <Row>
-                                                                                {format.times
-                                                                                  ? format.times.map(
-                                                                                      (
-                                                                                        timeItem,
+                                                                          <Col
+                                                                            md={
+                                                                              2
+                                                                            }
+                                                                            className="ms-4"
+                                                                          >
+                                                                            {
+                                                                              format.name
+                                                                            }
+                                                                          </Col>
+                                                                          <Col
+                                                                            md={
+                                                                              9
+                                                                            }
+                                                                            className="d-flex flex-wrap"
+                                                                          >
+                                                                            {format.times
+                                                                              ? format.times.map(
+                                                                                  (
+                                                                                    timeItem,
+                                                                                    timeIndex
+                                                                                  ) => (
+                                                                                    <div
+                                                                                      key={
                                                                                         timeIndex
-                                                                                      ) => (
-                                                                                        <Col
-                                                                                          key={
-                                                                                            timeIndex
-                                                                                          }
-                                                                                          onClick={() =>
-                                                                                            handleBooking(
-                                                                                              timeItem.idRoom
-                                                                                            )
-                                                                                          }
-                                                                                        >
-                                                                                          <Button className="btn-showTime mb-2">
-                                                                                            {formatTime(
-                                                                                              timeItem.time
-                                                                                            )}
-                                                                                          </Button>
-                                                                                        </Col>
-                                                                                      )
-                                                                                    )
-                                                                                  : null}
-                                                                              </Row>
-                                                                            </Col>
-                                                                          </Row>
-                                                                        </Col>
+                                                                                      }
+                                                                                      className="me-2"
+                                                                                      onClick={() =>
+                                                                                        handleBooking(
+                                                                                          timeItem.idRoom
+                                                                                        )
+                                                                                      }
+                                                                                    >
+                                                                                      <Button className="btn-showTime mb-2">
+                                                                                        {formatTime(
+                                                                                          timeItem.time
+                                                                                        )}
+                                                                                      </Button>
+                                                                                    </div>
+                                                                                  )
+                                                                                )
+                                                                              : null}
+                                                                          </Col>
+                                                                        </Row>
                                                                       )
                                                                     )}
                                                                   </Row>
                                                                 ) : null}
-                                                              </div>
+                                                              </Row>
                                                             </Col>
                                                           </Row>
                                                         )

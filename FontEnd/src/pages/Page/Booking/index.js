@@ -379,38 +379,39 @@ const Booking = (props) => {
                                   ? data.movieformats.map((item, index) => (
                                       <Row className="ms-4 mb-4" key={index}>
                                         <Col md={2}>{item.name}</Col>
-                                        <Col md={10}>
-                                          <Row>
-                                            {item.times
-                                              ? item.times.map(
-                                                  (timeItem, timeIndex) => (
-                                                    <Col
-                                                      key={timeIndex}
-                                                      onClick={() => {
-                                                        handleChangeShowtime(
-                                                          timeItem.idRoom
-                                                        );
-                                                      }}
+                                        <Col
+                                          md={10}
+                                          className="d-flex flex-wrap"
+                                        >
+                                          {item.times
+                                            ? item.times.map(
+                                                (timeItem, timeIndex) => (
+                                                  <div
+                                                    key={timeIndex}
+                                                    onClick={() => {
+                                                      handleChangeShowtime(
+                                                        timeItem.idRoom
+                                                      );
+                                                    }}
+                                                  >
+                                                    <button
+                                                      className={classnames({
+                                                        "btn btn-primary me-2 mb-2":
+                                                          timeItem.idRoom ==
+                                                          data.id,
+                                                        "btn btn-outline-primary me-2 mb-2":
+                                                          timeItem.idRoom !=
+                                                          data.id,
+                                                      })}
                                                     >
-                                                      <button
-                                                        className={classnames({
-                                                          "btn btn-primary me-3 mb-3":
-                                                            timeItem.idRoom ==
-                                                            data.id,
-                                                          "btn btn-outline-primary me-3 mb-3":
-                                                            timeItem.idRoom !=
-                                                            data.id,
-                                                        })}
-                                                      >
-                                                        {formatTime(
-                                                          timeItem.time
-                                                        )}
-                                                      </button>
-                                                    </Col>
-                                                  )
+                                                      {formatTime(
+                                                        timeItem.time
+                                                      )}
+                                                    </button>
+                                                  </div>
                                                 )
-                                              : null}
-                                          </Row>
+                                              )
+                                            : null}
                                         </Col>
                                       </Row>
                                     ))
