@@ -1,6 +1,7 @@
 package com.cinemas.controller.home;
 
 import com.cinemas.dto.response.APIResponse;
+import com.cinemas.dto.response.BuyTicketResponse;
 import com.cinemas.dto.response.ShowTimeTableResponse;
 import com.cinemas.dto.response.bookTicketsResponse;
 import com.cinemas.entities.Showtimes;
@@ -8,6 +9,8 @@ import com.cinemas.service.home.HomeBookingService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/home/v1/booking")
@@ -34,6 +37,18 @@ public class HomeBookingController {
         APIResponse<ShowTimeTableResponse> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(homeBookingService.getBookingTime(id));
+        return apiResponse;
+    }
+
+    @GetMapping("/buy-ticket")
+    public APIResponse<BuyTicketResponse> getTicketInfo(
+            @RequestParam(required = false) String slugmovie,
+            @RequestParam(required = false) String slugcinema,
+            @RequestParam(required = false) LocalDate time) {
+        BuyTicketResponse buyTicket = homeBookingService.getInfoTicket(slugmovie, slugcinema, time);
+        APIResponse<BuyTicketResponse> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setResult(buyTicket);
         return apiResponse;
     }
 }

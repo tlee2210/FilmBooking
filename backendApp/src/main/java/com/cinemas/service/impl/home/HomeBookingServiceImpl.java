@@ -1,10 +1,13 @@
 package com.cinemas.service.impl.home;
 
 import com.cinemas.dto.response.*;
+import com.cinemas.entities.Cinema;
+import com.cinemas.entities.Movie;
 import com.cinemas.entities.Showtimes;
 import com.cinemas.entities.PriceMovie;
 import com.cinemas.enums.MovieFormat;
 import com.cinemas.repositories.CinemaRespository;
+import com.cinemas.repositories.MovieRepository;
 import com.cinemas.repositories.PriceMovieResponsetory;
 import com.cinemas.repositories.ShowTimeResponsitory;
 import com.cinemas.service.home.HomeBookingService;
@@ -12,6 +15,7 @@ import com.cinemas.service.impl.FileStorageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +30,12 @@ public class HomeBookingServiceImpl implements HomeBookingService {
 
     @Autowired
     FileStorageServiceImpl fileStorageServiceImpl;
+
     @Autowired
     PriceMovieResponsetory priceMovieResponsetory;
+
+    @Autowired
+    private MovieRepository movieRepository;
 
     @Override
     public bookTicketsResponse getTimeForMovie(String slug, String city, String cinema) {
@@ -96,6 +104,41 @@ public class HomeBookingServiceImpl implements HomeBookingService {
         response.setMovieformats(homeMovieFormatResponses);
 
         return response;
+    }
+
+    @Override
+    public BuyTicketResponse getInfoTicket(String slugmovie, String slugcinema, LocalDate date) {
+        List<Movie> movies = movieRepository.getListBySlug();
+
+        BuyTicketResponse buyTicketFast = new BuyTicketResponse();
+
+        List<SelectOptionReponse> movieList = new ArrayList<>();
+        movies.forEach(movie -> {
+            movieList.add(new SelectOptionReponse<>(movie.getSlug(), movie.getName()));
+        });
+        buyTicketFast.setMovieList(movieList);
+
+        List<SelectOptionReponse> cinemaList = new ArrayList<>();
+        List<Cinema> cinemas = showTimeResponsitory.findCinemasByMovieSlug(slugmovie);
+
+        cinemas.forEach(cinema -> {
+            cinemaList.add(new SelectOptionReponse<>(cinema.getSlug(), cinema.getName()));
+        });
+        buyTicketFast.setCinemaList(cinemaList);
+
+        buyTicketFast.setDateList(showTimeResponsitory.findDates(slugcinema, slugmovie));
+
+        List<HomeMovieFormatResponse> movieFormatList = new ArrayList<>();
+        List<MovieFormat> movieFormatName = showTimeResponsitory.getMovieFormatName(slugmovie, slugcinema, date, LocalTime.now().plusMinutes(15));
+        movieFormatName.forEach(item -> {
+            HomeMovieFormatResponse homeMovieFormatResponse = new HomeMovieFormatResponse();
+            homeMovieFormatResponse.setName(item.getValue());
+            homeMovieFormatResponse.setTimes(showTimeResponsitory.getTimes(slugmovie, slugcinema, date, LocalTime.now().plusMinutes(15), item));
+            movieFormatList.add(homeMovieFormatResponse);
+        });
+        buyTicketFast.setMovieFormat(movieFormatList);
+
+        return buyTicketFast;
     }
 
 }
