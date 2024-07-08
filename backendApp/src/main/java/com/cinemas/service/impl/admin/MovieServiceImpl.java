@@ -218,7 +218,7 @@ public class MovieServiceImpl implements MovieService {
         List<SelectOptionReponse> optionsStatus = new ArrayList<>();
 
         for (MovieStatus movieStatus : MovieStatus.values()) {
-            optionsStatus.add(new SelectOptionReponse(movieStatus.name(), movieStatus.getValue()));
+            optionsStatus.add(new SelectOptionReponse(movieStatus.getValue(), movieStatus.getValue()));
         }
 
         List<Country> countryList = countryRepository.findAll();

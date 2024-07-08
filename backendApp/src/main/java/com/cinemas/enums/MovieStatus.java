@@ -14,7 +14,7 @@ public enum MovieStatus {
     MovieStatus(String value) {
         this.value = value;
     }
-//    @JsonValue
+    @JsonValue
     public String getValue() {
         return value;
     }
