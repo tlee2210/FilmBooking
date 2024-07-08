@@ -49,11 +49,11 @@ public class HomeBookingServiceImpl implements HomeBookingService {
         });
 
         showtimes.forEach(item -> {
-            List<MovieFormat> listMovieFormat = new ArrayList<>();
 
-            listMovieFormat.addAll(showTimeResponsitory.findMovieFormat(item.getDay(), slug, currentTimePlus15, cinema));
 
             item.getCinemaTimeMovies().forEach(timeMovies -> {
+                List<MovieFormat> listMovieFormat = showTimeResponsitory.findMovieFormat(item.getDay(), slug, currentTimePlus15, timeMovies.getName());
+
                 List<HomeMovieFormatResponse> homeMovieFormatResponses = new ArrayList<>();
 
                 listMovieFormat.forEach(name -> {

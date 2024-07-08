@@ -35,8 +35,8 @@ public interface ShowTimeResponsitory extends JpaRepository<Showtimes, Integer> 
     @Query("SELECT DISTINCT NEW com.cinemas.dto.response.CinemaTimeMovie(s.cinema.name) " + "FROM Showtimes s " + "WHERE (:slug IS NULL OR s.movie.slug = :slug) " + "AND (:cinema_Slug IS NULL OR s.cinema.slug = :cinema_Slug) " + "AND s.date = :day " + "AND (s.date <> CURRENT_DATE OR s.time >= :time)")
     List<CinemaTimeMovie> findByDayAndMovie_Slug(LocalDate day, String slug, LocalTime time, String cinema_Slug);
 
-    @Query("SELECT DISTINCT s.movieFormat " + "FROM Showtimes s " + "WHERE (:slug IS NULL OR s.movie.slug = :slug) " + "AND (:cinema_Slug IS NULL OR s.cinema.slug = :cinema_Slug) " + "AND s.date = :day " + "AND (s.date <> CURRENT_DATE OR s.time >= :time)")
-    List<MovieFormat> findMovieFormat(LocalDate day, String slug, LocalTime time, String cinema_Slug);
+    @Query("SELECT DISTINCT s.movieFormat " + "FROM Showtimes s " + "WHERE (:slug IS NULL OR s.movie.slug = :slug) " + "AND (:cinema_name IS NULL OR s.cinema.name = :cinema_name) " + "AND s.date = :day " + "AND (s.date <> CURRENT_DATE OR s.time >= :time)")
+    List<MovieFormat> findMovieFormat(LocalDate day, String slug, LocalTime time, String cinema_name);
 
     @Query("SELECT new com.cinemas.dto.response.HomeTimeAndRoomResponse(s.id,s.time ) FROM Showtimes s " +
             "WHERE s.movie.slug = :slug " +

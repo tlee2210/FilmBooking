@@ -254,12 +254,10 @@ const Booking = (props) => {
                               ? MovieDetails.categories.map((item, index) => {
                                   return (
                                     <Link
+                                      key={index}
                                       to={`/movie-genre?category=${item.slug}`}
                                     >
-                                      <button
-                                        key={index}
-                                        className="custom-button-ticketFilm"
-                                      >
+                                      <button className="custom-button-ticketFilm">
                                         {item.name}
                                       </button>
                                     </Link>
