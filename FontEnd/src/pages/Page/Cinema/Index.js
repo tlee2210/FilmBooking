@@ -265,7 +265,7 @@ const HomeCinema = (props) => {
                         ? cinemaData.days.map((day, index) => (
                             <TabPane tabId={index} key={index}>
                               <div className="movie-selection-rapphim">
-                                <Row className="movies-rapphim">
+                                <div className="movies-rapphim">
                                   {Array.isArray(day.movieList) &&
                                     day.movieList.map((movie, movieIndex) => (
                                       <React.Fragment key={movieIndex}>
@@ -369,7 +369,7 @@ const HomeCinema = (props) => {
                                           )}
                                       </React.Fragment>
                                     ))}
-                                </Row>
+                                </div>
                               </div>
                             </TabPane>
                           ))
