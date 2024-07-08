@@ -49,8 +49,11 @@ public interface ShowTimeResponsitory extends JpaRepository<Showtimes, Integer> 
     @Query("SELECT s.cinema FROM Showtimes s WHERE s.movie.slug = :slug GROUP BY s.cinema")
     List<Cinema> findCinemasByMovieSlug(String slug);
 
-    @Query("SELECT s.time FROM Showtimes s " + "WHERE (:slugMovie IS NULL OR s.movie.slug = :slugMovie) " + "AND (:slugCinema IS NULL OR s.cinema.slug = :slugCinema)" + "AND s.date = :date AND " + "(s.date <> CURRENT_DATE OR s.time >= :time) GROUP BY s.time")
-    List<LocalTime> getTimes(String slugMovie, String slugCinema, LocalDate date, LocalTime time);
+    @Query("SELECT new com.cinemas.dto.response.HomeTimeAndRoomResponse(s.id, s.time) FROM Showtimes s " + "WHERE (:slugMovie IS NULL OR s.movie.slug = :slugMovie) " + "AND (:slugCinema IS NULL OR s.cinema.slug = :slugCinema)" + "AND s.date = :date AND " + "(s.date <> CURRENT_DATE OR s.time >= :time) AND s.movieFormat = :nameFormat GROUP BY s.time")
+    List<HomeTimeAndRoomResponse> getTimes(String slugMovie, String slugCinema, LocalDate date, LocalTime time, MovieFormat nameFormat);
+
+    @Query("SELECT DISTINCT s.movieFormat FROM Showtimes s " + "WHERE s.movie.slug = :slugMovie " + "AND s.cinema.slug = :slugCinema " + "AND s.date = :date AND " + "(s.date <> CURRENT_DATE OR s.time >= :time)")
+    List<MovieFormat> getMovieFormatName(String slugMovie, String slugCinema, LocalDate date, LocalTime time);
 
     @Query("SELECT DISTINCT new com.cinemas.dto.response.MovieAndShowtimeResponse(s.movie.name, s.movie.imagePortrait) FROM Showtimes s " + "WHERE s.cinema.slug = :slug " + "AND s.date = :date AND (s.date <> CURRENT_DATE OR s.time >= :timeNow)")
     List<MovieAndShowtimeResponse> findMovieOfDay(String slug, LocalTime timeNow, LocalDate date);

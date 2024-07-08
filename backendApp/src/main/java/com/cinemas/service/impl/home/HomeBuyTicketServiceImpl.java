@@ -1,9 +1,11 @@
 package com.cinemas.service.impl.home;
 
 import com.cinemas.dto.response.BuyTicketResponse;
+import com.cinemas.dto.response.HomeMovieFormatResponse;
 import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Cinema;
 import com.cinemas.entities.Movie;
+import com.cinemas.enums.MovieFormat;
 import com.cinemas.enums.MovieStatus;
 import com.cinemas.repositories.CinemaRespository;
 import com.cinemas.repositories.MovieRepository;
@@ -27,7 +29,7 @@ public class HomeBuyTicketServiceImpl implements HomeBuyTicketService {
 
     @Override
     public BuyTicketResponse getInfoTicket(String slugmovie, String slugcinema, LocalDate date) {
-        List<Movie> movies = movieRepository.getListBySlug(slugmovie);
+        List<Movie> movies = movieRepository.getListBySlug();
 
         BuyTicketResponse buyTicketFast = new BuyTicketResponse();
 
@@ -47,8 +49,18 @@ public class HomeBuyTicketServiceImpl implements HomeBuyTicketService {
 
         buyTicketFast.setDateList(showTimeResponsitory.findDates(slugcinema, slugmovie));
 
-        buyTicketFast.setTimeList(showTimeResponsitory.getTimes(slugmovie, slugcinema, date, LocalTime.now().plusMinutes(15)));
+        List<HomeMovieFormatResponse> movieFormatList = new ArrayList<>();
+        List<MovieFormat> movieFormatName = showTimeResponsitory.getMovieFormatName(slugmovie, slugcinema, date, LocalTime.now().plusMinutes(15));
+        movieFormatName.forEach(item -> {
+            HomeMovieFormatResponse homeMovieFormatResponse = new HomeMovieFormatResponse();
+            homeMovieFormatResponse.setName(item.getValue());
+            homeMovieFormatResponse.setTimes(showTimeResponsitory.getTimes(slugmovie, slugcinema, date, LocalTime.now().plusMinutes(15), item));
+            movieFormatList.add(homeMovieFormatResponse);
+        });
+        buyTicketFast.setMovieFormat(movieFormatList);
+//        buyTicketFast.setTimeList(showTimeResponsitory.getTimes(slugmovie, slugcinema, date, LocalTime.now().plusMinutes(15)));
 
         return buyTicketFast;
     }
+
 }
