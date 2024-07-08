@@ -27,7 +27,7 @@ import VoucherReducer from "./Voucher/reducer";
 import HomeCelebrityReducer from "./home/CelebrityHome/reducer";
 import HomeBlogOrReviewReducer from "./home/BlogAndReviewHome/reducer";
 import HomeMovieReducer from "./home/MovieHome/reducer";
-import HomeBookingReducer from "./home/booking/reducer";
+import HomeBookingReducer from "./home/bookingHome/reducer";
 import HomeCinemaReducer from "./home/CinemaHome/reducer";
 import HomeWatercornReducer from "./home/Watercorn/reducer";
 import HomeMovieGenreReducer from "./home/Movie-GenreHome/reducer";

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardBody,
@@ -11,19 +11,48 @@ import {
   FormGroup,
   Button,
 } from "reactstrap";
-import { Link } from "react-router-dom";
 import "./css/CinemaCorner.css";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { createSelector } from "reselect";
+import withRouter from "../../../Components/Common/withRouter";
+import {
+  BuyFastTicket,
+  getBookingTime,
+} from "../../../slices/home/bookingHome/thunk";
 
-const DirectorInfor = () => {
-  const [selectedMulti, setSelectedMulti] = useState(null);
-
-  const handleMulti = (selectedMulti) => {
-    setSelectedMulti(selectedMulti);
-  };
+// BuyFastTickets
+const BuyFastTickets = (props) => {
+  const dispatch = useDispatch();
 
   const [selectedMovie, setSelectedMovie] = useState("");
   const [selectedTheater, setSelectedTheater] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
+  const [selectedMulti, setSelectedMulti] = useState(null);
+
+  useEffect(() => {
+    dispatch(
+      BuyFastTicket(selectedMovie, selectedTheater, selectedDate, useNavigate)
+    );
+  }, [dispatch, selectedMovie, selectedTheater, selectedDate]);
+
+  const BuyFastTicketsState = (state) => state;
+  const BuyFastTicketsStateData = createSelector(
+    BuyFastTicketsState,
+    (state) => ({
+      error: state.Message.error,
+      messageError: state.Message.messageError,
+      buyFastTicket: state.HomeBooking.buyFastTicket,
+    })
+  );
+
+  const { error, messageError, buyFastTicket } = useSelector(
+    BuyFastTicketsStateData
+  );
+
+  const handleMulti = (selectedMulti) => {
+    setSelectedMulti(selectedMulti);
+  };
 
   const handleMovieChange = (event) => {
     setSelectedMovie(event.target.value);
@@ -37,13 +66,22 @@ const DirectorInfor = () => {
     setSelectedDate(event.target.value);
   };
 
-  // document.title = "Đạo Diễn";
+  const handleBooking = (idRoom) => {
+    dispatch(getBookingTime(idRoom, props.router.navigate));
+  };
+
+  const formatTime = (timeString) => {
+    const [hours, minutes] = timeString.split(":");
+    return `${hours}:${minutes}`;
+  };
 
   return (
     <React.Fragment>
       {/* Mua vé Nhanh */}
       <Card className="quick-ticket-card mb-4">
-        <CardHeader className="quick-ticket-header">Mua Vé Nhanh</CardHeader>
+        <CardHeader className="quick-ticket-header">
+          Buy Fast Tickets
+        </CardHeader>
         <CardBody>
           <FormGroup>
             <Input
@@ -52,9 +90,14 @@ const DirectorInfor = () => {
               value={selectedMovie}
               onChange={handleMovieChange}
             >
-              <option value="">Chọn phim</option>
-              <option value="movie1">Phim 1</option>
-              <option value="movie2">Phim 2</option>
+              <option value="">Select movie</option>
+              {buyFastTicket && buyFastTicket.movieList
+                ? buyFastTicket?.movieList?.map((item, index) => (
+                    <option key={index} value={item.value}>
+                      {item.label}
+                    </option>
+                  ))
+                : null}
             </Input>
           </FormGroup>
           <FormGroup>
@@ -65,9 +108,12 @@ const DirectorInfor = () => {
               onChange={handleTheaterChange}
               disabled={!selectedMovie}
             >
-              <option value="">Chọn rạp</option>
-              <option value="theater1">Rạp 1</option>
-              <option value="theater2">Rạp 2</option>
+              <option value="">Choose a cinema</option>
+              {buyFastTicket?.cinemaList?.map((item, index) => (
+                <option key={index} value={item.value}>
+                  {item.label}
+                </option>
+              ))}
             </Input>
           </FormGroup>
           <FormGroup>
@@ -78,15 +124,54 @@ const DirectorInfor = () => {
               onChange={handleDateChange}
               disabled={!selectedTheater}
             >
-              <option value="">Chọn ngày</option>
-              <option value="date1">Ngày 1</option>
-              <option value="date2">Ngày 2</option>
+              <option value="">Select date</option>
+              {buyFastTicket && buyFastTicket.dateList
+                ? buyFastTicket?.dateList?.map((item, index) => (
+                    <option key={index} value={item}>
+                      {item}
+                    </option>
+                  ))
+                : null}
             </Input>
           </FormGroup>
+          {buyFastTicket?.movieFormat?.length > 0 &&
+            buyFastTicket.movieFormat.map((format, index) => (
+              <Row key={index} className="mb-4">
+                <Col md={12} className="ms-2 fs-3">
+                  <h2>{format.name}</h2>
+                </Col>
+                <Col md={12} className="d-flex flex-wrap ms-4">
+                  {format.times.map((timeItem, timeIndex) => (
+                    // <div
+                    //   key={timeIndex}
+                    //   onClick={() => handleBooking(timeItem.idRoom)}
+                    //   className="m-2"
+                    // >
+                    //   <Button className="btn-showTime mb-2">
+                    //     {formatTime(timeItem.time)}
+                    //   </Button>
+                    // </div>
+                    <button
+                      key={timeIndex}
+                      className="time-rapphim"
+                      onClick={() => handleBooking(timeItem?.idRoom)}
+                    >
+                      <span
+                        style={{
+                          fontSize: 17,
+                        }}
+                      >
+                        {formatTime(timeItem?.time)}
+                      </span>
+                    </button>
+                  ))}
+                </Col>
+              </Row>
+            ))}
         </CardBody>
       </Card>
     </React.Fragment>
   );
 };
 
-export default DirectorInfor;
+export default withRouter(BuyFastTickets);

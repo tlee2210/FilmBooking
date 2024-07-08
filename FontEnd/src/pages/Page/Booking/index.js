@@ -25,7 +25,7 @@ import { shoppingCart } from "../../../Components/Common/ecommerce";
 import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "reselect";
 import { message } from "antd";
-import { getBookingTime } from "../../../slices/home/booking/thunk";
+import { getBookingTime } from "../../../slices/home/bookingHome/thunk";
 import { getHomeWaterCorn } from "../../../slices/home/Watercorn/thunk";
 import withRouter from "../../../Components/Common/withRouter";
 

@@ -28,8 +28,10 @@ import "swiper/bundle";
 import "swiper/css";
 import { useDispatch, useSelector } from "react-redux";
 import withRouter from "../../../Components/Common/withRouter";
-import { getBooking } from "../../../slices/home/booking/thunk";
-import { getBookingTime } from "../../../slices/home/booking/thunk";
+import {
+  getBooking,
+  getBookingTime,
+} from "../../../slices/home/bookingHome/thunk";
 
 // getMovieDetailsBook
 import MovieIsShowing from "../BuyTicket/MovieIsShowing";

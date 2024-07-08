@@ -132,12 +132,15 @@ public class HomeBookingServiceImpl implements HomeBookingService {
 
         List<HomeMovieFormatResponse> movieFormatList = new ArrayList<>();
         List<MovieFormat> movieFormatName = showTimeResponsitory.getMovieFormatName(slugmovie, slugcinema, date, LocalTime.now().plusMinutes(15));
+
         movieFormatName.forEach(item -> {
             HomeMovieFormatResponse homeMovieFormatResponse = new HomeMovieFormatResponse();
             homeMovieFormatResponse.setName(item.getValue());
             homeMovieFormatResponse.setTimes(showTimeResponsitory.getTimes(slugmovie, slugcinema, date, LocalTime.now().plusMinutes(15), item));
+
             movieFormatList.add(homeMovieFormatResponse);
         });
+
         buyTicketFast.setMovieFormat(movieFormatList);
 
         return buyTicketFast;

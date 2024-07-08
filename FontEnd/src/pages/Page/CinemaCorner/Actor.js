@@ -19,7 +19,6 @@ import "./css/CinemaCorner.css";
 import { createSelector } from "reselect";
 import { getMovieActiveLimitIntroduce } from "../../../slices/home/MovieHome/thunk";
 import MovieIsShowing from "../BuyTicket/MovieIsShowing";
-import buttonTicket from "../../../assets/images/buttonTicket/btn-ticket.png";
 
 const HomeActor = () => {
   const dispatch = useDispatch();

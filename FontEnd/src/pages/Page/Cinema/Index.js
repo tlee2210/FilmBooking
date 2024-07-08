@@ -30,7 +30,7 @@ import "./css/RapPhim.css";
 // import GoogleMap from "./GoogleMap";
 import withRouter from "../../../Components/Common/withRouter";
 import { getCinemaHome } from "../../../slices/home/CinemaHome/thunk";
-import { getBookingTime } from "../../../slices/home/booking/thunk";
+import { getBookingTime } from "../../../slices/home/bookingHome/thunk";
 import { createSelector } from "reselect";
 
 const mapStyles = {
@@ -316,6 +316,7 @@ const HomeCinema = (props) => {
                                                   (movieFormats, dayIndex) => (
                                                     <Row>
                                                       <Col
+                                                        key={dayIndex}
                                                         md={12}
                                                         className="table-showTime ms-3 mn-4"
                                                       >

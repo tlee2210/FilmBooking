@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Flatpickr from "react-flatpickr";
 import { createSelector } from "reselect";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Card,
   CardBody,
@@ -20,6 +20,7 @@ import {
   ModalBody,
 } from "reactstrap";
 import classnames from "classnames";
+import { useSelector, useDispatch } from "react-redux";
 import img1 from "../../assets/images/galaxy/img-1.png";
 import filmtest from "../../assets/images/filmtest.jpg";
 import "../home/home.css";
@@ -33,33 +34,48 @@ import "swiper/css/effect-fade";
 import "swiper/css/effect-flip";
 import { Pagination, Autoplay } from "swiper/modules";
 import MovieList from "../../pages/Page/Movie/MovieList";
-// C:\Users\Dell\Documents\GitHub\FilmBooking\FontEnd\src\pages\Page\Movie\MovieList.js
-import Masonry from "react-masonry-component";
-import { useSelector, useDispatch } from "react-redux";
 import { gethomepage } from "../../slices/home/MovieHome/thunk";
+import withRouter from "../../Components/Common/withRouter";
 
-const homepage = () => {
+import {
+  BuyFastTicket,
+  getBookingTime,
+} from "../../slices/home/bookingHome/thunk";
+
+const homepage = (props) => {
   document.title = "home";
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(gethomepage());
-  }, [dispatch]);
-  const HomeState = (state) => state;
-  const HomeStateData = createSelector(HomeState, (state) => ({
-    error: state.Message.error,
-    messageError: state.Message.messageError,
-    HomeData: state.HomeMovie.HomeData,
-  }));
-
-  const { error, messageError, HomeData } = useSelector(HomeStateData);
-  // console.log("HomeData: ", HomeData);
-
   const [selectedMovie, setSelectedMovie] = useState("");
   const [selectedTheater, setSelectedTheater] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [activeTab, setActiveTab] = useState("1");
+
+  useEffect(() => {
+    dispatch(gethomepage());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(
+      BuyFastTicket(selectedMovie, selectedTheater, selectedDate, useNavigate)
+    );
+  }, [dispatch, selectedMovie, selectedTheater, selectedDate]);
+
+  const handleBooking = () => {
+    dispatch(getBookingTime(selectedTime, props.router.navigate));
+  };
+
+  const HomeState = (state) => state;
+  const HomeStateData = createSelector(HomeState, (state) => ({
+    error: state.Message.error,
+    messageError: state.Message.messageError,
+    HomeData: state.HomeMovie.HomeData,
+    buyFastTicket: state.HomeBooking.buyFastTicket,
+  }));
+
+  const { error, messageError, HomeData, buyFastTicket } =
+    useSelector(HomeStateData);
+  // console.log("HomeData: ", HomeData);
 
   const tabChange = (tab) => {
     if (activeTab !== tab) setActiveTab(tab);
@@ -73,6 +89,12 @@ const homepage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const formatTime = (timeString) => {
+    const [hours, minutes] = timeString.split(":");
+    return `${hours}:${minutes}`;
+  };
+
   return (
     <React.Fragment>
       <section className="section job-hero-section pb-0" id="hero">
@@ -125,29 +147,14 @@ const homepage = () => {
                       onChange={(e) => setSelectedMovie(e.target.value)}
                       data-choices
                     >
-                      <option value="">Chọn Phim</option>
-                      <option value="ke_trom_mat_trang_4">
-                        Kẻ Trộm Mặt Trăng 4
-                      </option>
-                      <option value="mua_he_dep_nhat">Mùa Hè Đẹp Nhất</option>
-                      <option value="nhung_manh_ghep_cam_xuc_2">
-                        Những Mảnh Ghép Cảm Xúc 2
-                      </option>
-                      <option value="cuu_long_thanh_trai_vay_thanh">
-                        Cửu Long Thành Trại: Vây Thành
-                      </option>
-                      <option value="chuyen_ma_giang_duong_nam_3">
-                        Chuyện Ma Giảng Đường - Năm 3
-                      </option>
-                      <option value="cung_em_o_ngay_the_gioi_ket_thuc">
-                        Cùng Em Ở Ngày Thế Giới Kết Thúc
-                      </option>
-                      <option value="gia_tai_cua_ngoai">
-                        Gia Tài Của Ngoại
-                      </option>
-                      <option value="tru_bat_gioi_dai_nao_the_gioi_moi">
-                        Trư Bát Giới: Đại Náo Thế Giới Mới
-                      </option>
+                      <option value="">Select movie</option>
+                      {buyFastTicket && buyFastTicket.movieList
+                        ? buyFastTicket?.movieList?.map((item, index) => (
+                            <option key={index} value={item.value}>
+                              {item.label}
+                            </option>
+                          ))
+                        : null}
                     </select>
                   </div>
                 </Col>
@@ -162,10 +169,12 @@ const homepage = () => {
                       data-choices
                       disabled={!selectedMovie}
                     >
-                      <option value="">Chọn Rạp</option>
-                      <option value="theater1">Theater 1</option>
-                      <option value="theater2">Theater 2</option>
-                      <option value="theater3">Theater 3</option>
+                      <option value="">Choose a cinema</option>
+                      {buyFastTicket?.cinemaList?.map((item, index) => (
+                        <option key={index} value={item.value}>
+                          {item.label}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </Col>
@@ -180,10 +189,14 @@ const homepage = () => {
                       data-choices
                       disabled={!selectedTheater}
                     >
-                      <option value="">Chọn Ngày</option>
-                      <option value="date1">Ngày 1</option>
-                      <option value="date2">Ngày 2</option>
-                      <option value="date3">Ngày 3</option>
+                      <option value="">Select date</option>
+                      {buyFastTicket && buyFastTicket.dateList
+                        ? buyFastTicket?.dateList?.map((item, index) => (
+                            <option key={index} value={item}>
+                              {item}
+                            </option>
+                          ))
+                        : null}
                     </select>
                   </div>
                 </Col>
@@ -198,10 +211,18 @@ const homepage = () => {
                       data-choices
                       disabled={!selectedDate}
                     >
-                      <option value="">Chọn Giờ</option>
-                      <option value="time1">Time 1</option>
-                      <option value="time2">Time 2</option>
-                      <option value="time3">Time 3</option>
+                      <option value="">Select Times</option>
+                      {buyFastTicket?.movieFormat?.length > 0 &&
+                        buyFastTicket.movieFormat.map((format, formatIndex) =>
+                          format.times.map((timeItem, timeIndex) => (
+                            <option
+                              key={`${formatIndex}_${timeIndex}`}
+                              value={timeItem.idRoom}
+                            >
+                              {`${formatTime(timeItem.time)} - ${format.name}`}
+                            </option>
+                          ))
+                        )}
                     </select>
                   </div>
                 </Col>
@@ -213,9 +234,10 @@ const homepage = () => {
                       }`}
                       type="submit"
                       disabled={!selectedTime}
+                      onClick={() => handleBooking()}
                     >
-                      <i className="ri-search-2-line align-bottom me-1"></i> Mua
-                      Vé Nhanh
+                      <i className="ri-search-2-line align-bottom me-1"></i> Buy
+                      Fast Tickets
                     </Button>
                   </div>
                 </Col>
@@ -410,4 +432,4 @@ const homepage = () => {
   );
 };
 
-export default homepage;
+export default withRouter(homepage);
