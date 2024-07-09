@@ -1,10 +1,9 @@
 package com.cinemas.controller.home;
 
-import com.cinemas.dto.response.APIResponse;
-import com.cinemas.dto.response.BuyTicketResponse;
-import com.cinemas.dto.response.ShowTimeTableResponse;
-import com.cinemas.dto.response.bookTicketsResponse;
+import com.cinemas.dto.request.VoucherApplyRequest;
+import com.cinemas.dto.response.*;
 import com.cinemas.entities.Showtimes;
+import com.cinemas.entities.Voucher;
 import com.cinemas.service.home.HomeBookingService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +48,15 @@ public class HomeBookingController {
         APIResponse<BuyTicketResponse> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(buyTicket);
+        return apiResponse;
+    }
+
+    @PostMapping("/apply-voucher")
+    public APIResponse<VoucherResponse> applyVoucher(@RequestBody VoucherApplyRequest code){
+        APIResponse<VoucherResponse> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setResult(homeBookingService.findByCode(code));
+
         return apiResponse;
     }
 }

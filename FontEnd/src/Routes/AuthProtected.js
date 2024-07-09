@@ -11,15 +11,16 @@ const AuthProtected = (props) => {
   const dispatch = useDispatch();
   const { userProfile, loading, token } = useProfile();
 
-  useEffect(() => {
-    if (userProfile && !loading && token) {
-      setAuthorization(token);
-    } else if (!userProfile && loading && !token) {
-      dispatch(logoutUser());
-    }
-  }, [token, userProfile, loading, dispatch]);
+  // useEffect(() => {
+  //   if (userProfile && !loading && token) {
+  //     setAuthorization(token);
+  //   } else if (!userProfile && loading && !token) {
+  //     dispatch(logoutUser());
+  //   }
+  // }, [token, userProfile, loading, dispatch]);
 
-  if (!userProfile && loading && !token) {
+  // console.log("userProfile :", userProfile);
+  if (!userProfile) {
     return (
       <Navigate to={{ pathname: "/login", state: { from: props.location } }} />
     );
@@ -51,7 +52,9 @@ const AdminProtected = (props) => {
 
   // console.log("userProfile: ", userProfile);
   if (!userProfile) {
-    return <Navigate to={{ pathname: "/", state: { from: props.location } }} />;
+    return (
+      <Navigate to={{ pathname: "/login", state: { from: props.location } }} />
+    );
   } else {
     const user = userProfile.user;
     if (user && user.role !== "ADMIN" && user.role !== "MANAGER") {
@@ -77,9 +80,7 @@ const AccessRoute = (props) => {
   const { userProfile, loading, token } = useProfile();
 
   if (userProfile) {
-    return (
-      <Navigate to={{ pathname: "/", state: { from: props.location } }} />
-    );
+    return <Navigate to={{ pathname: "/", state: { from: props.location } }} />;
   }
 
   return <>{props.children}</>;

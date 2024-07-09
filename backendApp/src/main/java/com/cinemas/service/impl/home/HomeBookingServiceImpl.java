@@ -1,18 +1,18 @@
 package com.cinemas.service.impl.home;
 
+import com.cinemas.Utils.ObjectUtils;
+import com.cinemas.dto.request.VoucherApplyRequest;
 import com.cinemas.dto.response.*;
-import com.cinemas.entities.Cinema;
-import com.cinemas.entities.Movie;
-import com.cinemas.entities.Showtimes;
-import com.cinemas.entities.PriceMovie;
+import com.cinemas.entities.*;
 import com.cinemas.enums.MovieFormat;
-import com.cinemas.repositories.CinemaRespository;
-import com.cinemas.repositories.MovieRepository;
-import com.cinemas.repositories.PriceMovieResponsetory;
-import com.cinemas.repositories.ShowTimeResponsitory;
+import com.cinemas.exception.AppException;
+import com.cinemas.exception.ErrorCode;
+import com.cinemas.repositories.*;
 import com.cinemas.service.home.HomeBookingService;
 import com.cinemas.service.impl.FileStorageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -20,8 +20,13 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.cinemas.exception.ErrorCode.NOT_FOUND;
+
 @Service
 public class HomeBookingServiceImpl implements HomeBookingService {
+    @Autowired
+    private UserRepository userRepository;
+
     @Autowired
     private CinemaRespository cinemaRespository;
 
@@ -29,13 +34,16 @@ public class HomeBookingServiceImpl implements HomeBookingService {
     private ShowTimeResponsitory showTimeResponsitory;
 
     @Autowired
-    FileStorageServiceImpl fileStorageServiceImpl;
+    private FileStorageServiceImpl fileStorageServiceImpl;
 
     @Autowired
-    PriceMovieResponsetory priceMovieResponsetory;
+    private PriceMovieResponsetory priceMovieResponsetory;
 
     @Autowired
     private MovieRepository movieRepository;
+
+    @Autowired
+    private VoucherRepository voucherRepository;
 
     @Override
     public bookTicketsResponse getTimeForMovie(String slug, String city, String cinema) {
@@ -144,6 +152,25 @@ public class HomeBookingServiceImpl implements HomeBookingService {
         buyTicketFast.setMovieFormat(movieFormatList);
 
         return buyTicketFast;
+    }
+
+    @Override
+    public VoucherResponse findByCode(VoucherApplyRequest code) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository
+                .findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new AppException(NOT_FOUND));
+
+        Voucher voucher = voucherRepository.findByCode(code.getCode());
+
+        if (voucher == null) {
+            throw new AppException(ErrorCode.NOT_FOUND);
+        }
+
+        VoucherResponse voucherResponse = new VoucherResponse();
+        ObjectUtils.copyFields(voucher,voucherResponse);
+
+        return voucherResponse;
     }
 
 }

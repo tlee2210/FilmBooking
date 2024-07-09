@@ -10,7 +10,7 @@ import axios from "axios";
 // getMovieActiveLimitIntroduce
 // http://localhost:8081/api/home/v1/movie/active/introduce
 
-export const gethomepage = () => async (dispatch) => {
+export const getHomepage = () => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/home/v1/home`)
     .then((response) => {

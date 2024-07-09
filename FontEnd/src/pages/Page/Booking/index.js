@@ -25,9 +25,13 @@ import { shoppingCart } from "../../../Components/Common/ecommerce";
 import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "reselect";
 import { message } from "antd";
-import { getBookingTime } from "../../../slices/home/bookingHome/thunk";
+import {
+  getBookingTime,
+  ApplyVoucher,
+} from "../../../slices/home/bookingHome/thunk";
 import { getHomeWaterCorn } from "../../../slices/home/Watercorn/thunk";
 import withRouter from "../../../Components/Common/withRouter";
+import { clearNotification } from "../../../slices/message/reducer";
 
 const Booking = (props) => {
   const dispatch = useDispatch();
@@ -38,19 +42,33 @@ const Booking = (props) => {
 
   const [addedItemIds, setAddedItemIds] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0);
   const [singleSeats, setSingleSeats] = useState([]);
   const [doubleSeats, setDoubleSeats] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [BeforetotalPrice, setBeforeTotalPrice] = useState(0);
+
+  const [promoCode, setPromoCode] = useState("");
+  const [selectedPayment, setSelectedPayment] = useState("payoo");
 
   const BookingState = (state) => state;
   const BookingStateData = createSelector(BookingState, (state) => ({
     error: state.Message.error,
     messageError: state.Message.messageError,
     data: state.HomeBooking.bookingitem,
+    voucher: state.HomeBooking.voucher,
     WaterCornData: state.HomeWaterCorn.WaterCorn,
   }));
-  const { error, messageError, data, WaterCornData } =
+  const { error, messageError, data, WaterCornData, voucher } =
     useSelector(BookingStateData);
+
+  useEffect(() => {
+    if (error) {
+      if (messageError != null) {
+        message.error(messageError);
+      }
+    }
+    dispatch(clearNotification());
+  }, [error]);
 
   useEffect(() => {
     document.body.scrollTop = 0;
@@ -230,12 +248,6 @@ const Booking = (props) => {
     }
   }
 
-  const handleConfirmation = () => {
-    setModal(false);
-
-    setactiveTab(4);
-  };
-
   const countUP = (id, itemName, itemPrice) => {
     setAddedItemIds((prevAddedItemIds) => {
       const updatedAddedItemIds = { ...prevAddedItemIds };
@@ -273,8 +285,6 @@ const Booking = (props) => {
       return updatedAddedItemIds;
     });
   };
-  const [promoCode, setPromoCode] = useState("");
-  const [selectedPayment, setSelectedPayment] = useState("payoo");
 
   const handlePromoCodeChange = (e) => {
     setPromoCode(e.target.value);
@@ -284,9 +294,40 @@ const Booking = (props) => {
     setSelectedPayment(e.target.value);
   };
 
+  // useEffect(() => {
+  //   // BeforetotalPrice
+  //   // setBeforeTotalPrice
+  //   const discount = calculateDiscount(totalPrice);
+  //   if (voucher) {
+  //     setBeforeTotalPrice(totalPrice);
+  //     setTotalPrice(BeforetotalPrice);
+  //     setTotalPrice(totalPrice - discount);
+  //   } else {
+  //     setTotalPrice(BeforetotalPrice);
+  //   }
+  // }, [voucher]);
+
+  const calculateDiscount = (price) => {
+    if (voucher && voucher.discountType === "PERCENTAGE") {
+      let discount = (price * voucher.discountValue) / 100;
+
+      discount = Math.min(discount, voucher.maxDiscount);
+
+      return discount;
+    } else if (voucher && voucher.discountType === "FIXED") {
+      return voucher.discountValue;
+    } else {
+      return 0;
+    }
+  };
+
   const applyPromoCode = () => {
     // Xử lý logic áp dụng mã khuyến mãi ở đây
-    alert(`Mã khuyến mãi ${promoCode} đã được áp dụng!`);
+    // alert(`Mã khuyến mãi ${promoCode} đã được áp dụng!`);
+    const formData = new FormData();
+    formData.append("code", promoCode);
+
+    dispatch(ApplyVoucher(formData, props.router.navigate));
   };
 
   document.title = `booking ${data?.movieName}` || "Booking";
@@ -571,7 +612,7 @@ const Booking = (props) => {
                         <Row className="gy-3">
                           <div className="container-order">
                             <h2 style={{ fontSize: 20, fontWeight: "bold" }}>
-                              Khuyến mãi
+                              Promotion
                             </h2>
                             <div
                               className="promo-code-order"
@@ -581,13 +622,13 @@ const Booking = (props) => {
                                 type="text"
                                 value={promoCode}
                                 onChange={handlePromoCodeChange}
-                                placeholder="Mã khuyến mãi"
+                                placeholder="Promotional code"
                               />
                               <button
                                 className="button-order"
                                 onClick={applyPromoCode}
                               >
-                                Áp Dụng
+                                Apply
                               </button>
                             </div>
                           </div>
@@ -772,9 +813,35 @@ const Booking = (props) => {
                           {Object.keys(addedItemIds).length > 0 ? (
                             <hr style={{ border: "1px dashed black" }} />
                           ) : null}
+                          {voucher && voucher.discountType ? (
+                            <Row>
+                              <Col md={6}>
+                                <p>Voucher Discount:</p>
+                              </Col>
+                              <Col md={6}>
+                                <p className="total">
+                                  -{" "}
+                                  {voucher.discountType === "PERCENTAGE"
+                                    ? `(${
+                                        voucher.discountValue
+                                      }%) ${calculateDiscount(totalPrice)} USD`
+                                    : `${calculateDiscount(totalPrice)} USD`}
+                                </p>
+                              </Col>
+                            </Row>
+                          ) : null}
 
+                          {voucher && voucher.discountType ? (
+                            <hr style={{ border: "1px dashed black" }} />
+                          ) : null}
                           {/* </div> */}
-                          <p className="total">Total: {totalPrice}</p>
+                          {/* <p className="total">Total: {" "}{totalPrice}</p> */}
+                          <p className="total">
+                            Total:{" "}
+                            {voucher
+                              ? `${totalPrice - calculateDiscount(totalPrice)}`
+                              : { totalPrice }}
+                          </p>
                         </div>
                       </CardBody>
                     </Card>
@@ -812,51 +879,6 @@ const Booking = (props) => {
           </div>
         </Container>
       </div>
-      {/* Modal */}
-      <Modal isOpen={modal} toggle={() => setModal(!modal)}>
-        <ModalHeader
-          className="modal-header-order"
-          toggle={() => setModal(!modal)}
-        >
-          XÁC NHẬN ĐẶT VÉ
-        </ModalHeader>
-        <ModalBody className="modal-body-order">
-          <div className="ticket-info-order">
-            <div className="ticket-section-order">
-              <strong>PHIM</strong>
-              <br />
-              Tên phim đã chọn
-            </div>
-            <div className="ticket-section-order">
-              <strong>RẠP</strong>
-              <br />
-              Tên rạp đã chọn
-            </div>
-            <div className="ticket-section-order">
-              <strong>SUẤT CHIẾU</strong>
-              <br />
-              Thời gian suất chiếu
-            </div>
-            <div>
-              <strong>TỔNG</strong>
-              <br />
-            </div>
-            <div className="ticket-section-order">
-              <div className="price-tag-order"></div>
-              75.000
-            </div>
-          </div>
-          <div className="confirmation-checkbox-order">
-            <input type="checkbox" /> TÔI XÁC NHẬN CÁC THÔNG TIN ĐẶT VÉ ĐÃ CHÍNH
-            XÁC
-          </div>
-        </ModalBody>
-        <ModalFooter className="modal-footer-order">
-          <Button color="danger" onClick={handleConfirmation}>
-            Thanh Toán
-          </Button>
-        </ModalFooter>
-      </Modal>
     </React.Fragment>
   );
 };

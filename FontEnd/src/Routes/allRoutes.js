@@ -191,12 +191,9 @@ const publicRoutes = [
   // Authentication Page
   { path: "/logout", component: <Logout /> },
   { path: "/login", component: <Login /> },
+  { path: "/register", component: <Register /> },
   { path: "/forgot-password", component: <ForgetPasswordPage /> },
   { path: "/verify-password/:opt/:id", component: <VerifyPassword /> },
-  { path: "/register", component: <Register /> },
-
-  { path: "/auth-404-alt", component: <Alt404 /> },
-  { path: "/auth-500", component: <Error500 /> },
 ];
 
 const homeRoutes = [
@@ -223,14 +220,10 @@ const homeRoutes = [
     component: <MovieCommentaryDetails />,
   },
 
-  //Profile
-  { path: "/profile", component: <Profile /> },
-
   { path: "/book-tickets/:slug", component: <BookTickets /> },
   { path: "/movie-showing", component: <MovieList /> },
 
   { path: "/cinema/:slug", component: <CinemaHome /> },
-  { path: "/booking", component: <Booking /> },
 
   { path: "/movie-genre", component: <HomeMovieGenre /> },
 
@@ -238,8 +231,11 @@ const homeRoutes = [
 
   { path: "/promotion", component: <PromotionHome /> },
   { path: "/promotion/:slug/details", component: <PromotionDetailsHome /> },
+  
+  { path: "/auth-404-alt", component: <Alt404 /> },
+  { path: "/auth-500", component: <Error500 /> },
   //------------------------------------------
-  // { path: "*", component: <Navigate to="/" /> },
+  { path: "*", component: <Navigate to="/" /> },
 
   //đặt vế
   { path: "/dat-ve", component: <DatVeXemPhim /> },
@@ -248,4 +244,10 @@ const homeRoutes = [
   { path: "/phim-hay-thang/details", component: <PhimHayThangDetails /> },
 ];
 
-export { adminProtectedRoutes, publicRoutes, homeRoutes };
+const AuthRoutes = [
+  //Profile
+  { path: "/profile", component: <Profile /> },
+  { path: "/booking", component: <Booking /> },
+];
+
+export { adminProtectedRoutes, publicRoutes, homeRoutes, AuthRoutes };

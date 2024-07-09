@@ -34,7 +34,7 @@ import "swiper/css/effect-fade";
 import "swiper/css/effect-flip";
 import { Pagination, Autoplay } from "swiper/modules";
 import MovieList from "../../pages/Page/Movie/MovieList";
-import { gethomepage } from "../../slices/home/MovieHome/thunk";
+import { getHomepage } from "../../slices/home/MovieHome/thunk";
 import withRouter from "../../Components/Common/withRouter";
 
 import {
@@ -52,7 +52,7 @@ const homepage = (props) => {
   const [activeTab, setActiveTab] = useState("1");
 
   useEffect(() => {
-    dispatch(gethomepage());
+    dispatch(getHomepage());
   }, [dispatch]);
 
   useEffect(() => {
@@ -232,7 +232,6 @@ const homepage = (props) => {
                       className={`btn submit-btn w-100 h-100 ${
                         selectedTime ? "bg-danger" : ""
                       }`}
-                      type="submit"
                       disabled={!selectedTime}
                       onClick={() => handleBooking()}
                     >
@@ -333,7 +332,7 @@ const homepage = (props) => {
                                   }}
                                 />
                                 <div>
-                                  <d
+                                  <div
                                     to="#"
                                     className="hover-link-home d-flex align-items-center"
                                     style={{
@@ -344,7 +343,7 @@ const homepage = (props) => {
                                     }}
                                   >
                                     {item.name}
-                                  </d>
+                                  </div>
                                 </div>
                               </div>
                             </Link>

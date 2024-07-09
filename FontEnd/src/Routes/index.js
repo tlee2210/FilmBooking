@@ -8,7 +8,12 @@ import VerticalLayout from "../Layouts/index";
 import LayoutHome from "../Layouts/home/index";
 
 //routes
-import { adminProtectedRoutes, publicRoutes, homeRoutes } from "./allRoutes";
+import {
+  adminProtectedRoutes,
+  publicRoutes,
+  homeRoutes,
+  AuthRoutes,
+} from "./allRoutes";
 import { AuthProtected, AdminProtected, AccessRoute } from "./AuthProtected";
 
 const loading = (
@@ -54,6 +59,22 @@ const Index = () => {
                   <LayoutHome>
                     {route.element ? route.element : route.component}
                   </LayoutHome>
+                }
+                key={idx}
+                exact={true}
+              />
+            ))}
+          </Route>
+          <Route>
+            {AuthRoutes.map((route, idx) => (
+              <Route
+                path={route.path}
+                element={
+                  <AuthProtected>
+                    <LayoutHome>
+                      {route.element ? route.element : route.component}
+                    </LayoutHome>
+                  </AuthProtected>
                 }
                 key={idx}
                 exact={true}

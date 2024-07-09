@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-//@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Voucher {
     @Id
     @GeneratedValue
@@ -29,23 +29,26 @@ public class Voucher {
     private String code = null;
 
     @Column
-    private DiscountType discountType= null;
+    private DiscountType discountType= null; //Loại giảm giá
 
     @Column(nullable = false)
-    private double discountValue;
+    private double discountValue; //Giá trị chiết khấu
 
     @Column
-    private LocalDate expirationDate= null;
+    private LocalDate expirationDate= null; //ngày hết hạn
 
     @Column
-    private Integer usageLimit= null;
+    private Integer usageLimit= null; //giới hạn sử dụng
 
     @Column
-    private Integer usedCount= null;
+    private Integer usedCount= null; //đã sử dụng
 
     @Column
-    private Double minSpend = null;
+    private Double minSpend = null; //chi tiêu tối thiểu
 
     @Column
-    private StatusVoucher statusVoucher;
+    private Double maxDiscount = null; //giảm giá tối đa
+
+    @Column
+    private StatusVoucher statusVoucher; //trạng thái Voucher
 }

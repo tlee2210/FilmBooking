@@ -1,4 +1,10 @@
-import { selectBooking, setBooking, setBuyFastTicket } from "./reducer";
+import {
+  selectBooking,
+  setBooking,
+  setBuyFastTicket,
+  setVoucher,
+} from "./reducer";
+import { Success, Error } from "../../message/reducer";
 import axios from "axios";
 
 export const getBooking = (slug, city, cinema) => async (dispatch) => {
@@ -47,3 +53,17 @@ export const BuyFastTicket =
         console.error(error);
       });
   };
+
+export const ApplyVoucher = (formData, history) => async (dispatch) => {
+  await axios
+    .post(`http://localhost:8081/api/home/v1/booking/apply-voucher`, formData)
+    .then((response) => {
+      console.log(response);
+      dispatch(setVoucher(response?.data?.result));
+    })
+    .catch((error) => {
+      console.error(error);
+      dispatch(Error(error.response?.data?.message));
+    });
+};
+// http://localhost:8081/api/home/v1/booking/apply-voucher

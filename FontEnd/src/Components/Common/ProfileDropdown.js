@@ -58,7 +58,7 @@ const ProfileDropdown = () => {
               <span className="d-none d-xl-inline-block ms-1 fw-medium user-name-text">
                 {userName}
               </span>
-              {role === "ADMIN" ? (
+              {role !== "USER" ? (
                 <span className="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">
                   {role}
                   {/* Founder */}
@@ -68,20 +68,30 @@ const ProfileDropdown = () => {
           </span>
         </DropdownToggle>
         <DropdownMenu className="dropdown-menu-end">
-          <h6 className="dropdown-header">Welcome {role}!</h6>
+          {role !== "USER" ? (
+            <h6 className="dropdown-header">Welcome {role}!</h6>
+          ) : null}
           <DropdownItem className="p-0">
             <Link to="/profile" className="dropdown-item">
               <i className="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i>
               <span className="align-middle">Profile</span>
             </Link>
           </DropdownItem>
-          {role === "ADMIN" ? (
-            <DropdownItem className="p-0">
-              <Link to="/dashboard" className="dropdown-item">
-                {/* <i className="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i>{" "} */}
-                <span className="align-middle">dashboard</span>
-              </Link>
-            </DropdownItem>
+          {role !== "USER" ? (
+            <React.Fragment>
+              <DropdownItem className="p-0">
+                <Link to="/dashboard" className="dropdown-item">
+                  {/* <i className="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i>{" "} */}
+                  <span className="align-middle">Dashboard</span>
+                </Link>
+              </DropdownItem>
+              <DropdownItem className="p-0">
+                <Link to="/" className="dropdown-item">
+                  {/* <i className="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i>{" "} */}
+                  <span className="align-middle">Home</span>
+                </Link>
+              </DropdownItem>
+            </React.Fragment>
           ) : null}
           {/* <DropdownItem className="p-0">
             <Link to="/apps-chat" className="dropdown-item">
