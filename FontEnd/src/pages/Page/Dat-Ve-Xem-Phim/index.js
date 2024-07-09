@@ -198,16 +198,16 @@ const Booking = (props) => {
     }
 
     function handleNextTab() {
-        if (activeTab === 2) {
+        if (activeTab === 1) {
+            setActiveTab(2);
+        } else if (activeTab === 2) {
             selectedSeats.length > 0
-                ? setActiveTab(activeTab + 1)
+                ? setActiveTab(3)
                 : message.error("Please select at least one seat!");
-        }
-        if (activeTab === 2) {
-            setActiveTab(activeTab + 1);
+        } else if (activeTab === 3) {
+            setActiveTab(4);
         }
     }
-
     const handleConfirmation = () => {
         setModal(false);
         setActiveTab(3);

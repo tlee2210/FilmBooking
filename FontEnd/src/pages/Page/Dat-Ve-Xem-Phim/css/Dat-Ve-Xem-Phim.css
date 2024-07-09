@@ -176,12 +176,12 @@
     scroll-behavior: smooth;
     flex-grow: 1;
     margin: 0 10px;
-    overflow: auto; /* Allow horizontal scrolling */
-    white-space: nowrap; /* Prevent line breaks */
+    overflow: auto; 
+    white-space: nowrap; 
 }
 
 .date-slider button {
-    display: inline-block; /* Make buttons inline to respect white-space: nowrap */
+    display: inline-block; 
     min-width: 80px;
     margin: 0 5px;
     padding: 8px;
