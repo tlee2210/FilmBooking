@@ -17,5 +17,5 @@ public class VoucherResponse {
     private Integer id;
     private DiscountType discountType;
     private double discountValue;
-    private double maxDiscount;
+    private Double maxDiscount = null;
 }

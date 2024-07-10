@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useRef,
+} from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import "../Booking/css/order.css";
@@ -19,7 +25,7 @@ import {
   Button,
   Badge,
 } from "reactstrap";
-
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import classnames from "classnames";
 import { shoppingCart } from "../../../Components/Common/ecommerce";
 import { useSelector, useDispatch } from "react-redux";
@@ -37,19 +43,6 @@ const Booking = (props) => {
   const dispatch = useDispatch();
   const history = useNavigate();
 
-  const [activeTab, setactiveTab] = useState(1);
-  const [modal, setModal] = useState(false);
-
-  const [addedItemIds, setAddedItemIds] = useState([]);
-  const [selectedSeats, setSelectedSeats] = useState([]);
-  const [singleSeats, setSingleSeats] = useState([]);
-  const [doubleSeats, setDoubleSeats] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [BeforetotalPrice, setBeforeTotalPrice] = useState(0);
-
-  const [promoCode, setPromoCode] = useState("");
-  const [selectedPayment, setSelectedPayment] = useState("payoo");
-
   const BookingState = (state) => state;
   const BookingStateData = createSelector(BookingState, (state) => ({
     error: state.Message.error,
@@ -60,6 +53,44 @@ const Booking = (props) => {
   }));
   const { error, messageError, data, WaterCornData, voucher } =
     useSelector(BookingStateData);
+
+  const calculateDiscount = (price) => {
+    if (voucher && voucher.discountType === "PERCENTAGE") {
+      let discount = (price * voucher.discountValue) / 100;
+
+      if (discount > voucher.maxDiscount) {
+        discount = voucher.maxDiscount;
+      }
+
+      return discount;
+    } else if (voucher && voucher.discountType === "FIXED") {
+      return voucher.discountValue;
+    } else {
+      return 0;
+    }
+  };
+
+  const [activeTab, setactiveTab] = useState(1);
+  const [modal, setModal] = useState(false);
+
+  const [addedItemIds, setAddedItemIds] = useState([]);
+  const [selectedSeats, setSelectedSeats] = useState([]);
+  const [singleSeats, setSingleSeats] = useState([]);
+  const [doubleSeats, setDoubleSeats] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [BeforetotalPrice, setBeforeTotalPrice] = useState(0);
+  const [promoCode, setPromoCode] = useState("");
+  const [selectedPayment, setSelectedPayment] = useState("payoo");
+
+  const totalPriceRef = useRef(
+    voucher ? totalPrice - calculateDiscount(totalPrice) : totalPrice
+  );
+
+  useEffect(() => {
+    totalPriceRef.current = voucher
+      ? totalPrice - calculateDiscount(totalPrice)
+      : totalPrice;
+  }, [totalPrice, voucher]);
 
   useEffect(() => {
     if (error) {
@@ -83,26 +114,66 @@ const Booking = (props) => {
     }
   }, [data]);
   // price
+  // const handleChooseSeat = (seat, isDouble) => {
+  //   const price = isDouble ? data?.price * 2 * 1.05 : data?.price;
+
+  //   setSelectedSeats((prevSeats) => {
+  //     if (prevSeats?.includes(seat)) {
+  //       setTotalPrice(totalPrice - price);
+  //       return prevSeats?.filter((s) => s !== seat);
+  //     } else if (prevSeats.length < 8) {
+  //       setTotalPrice(totalPrice + price);
+  //       return [...prevSeats, seat];
+  //     } else {
+  //       message.error("Maximum number of 8 seats exceeded!");
+  //       return prevSeats;
+  //     }
+  //   });
+
+  //   if (isDouble) {
+  //     setDoubleSeats((prevSeats) => {
+  //       if (prevSeats?.includes(seat)) {
+  //         return prevSeats?.filter((s) => s !== seat);
+  //       } else if (prevSeats.length + singleSeats.length < 8) {
+  //         return [...prevSeats, seat];
+  //       } else {
+  //         return prevSeats;
+  //       }
+  //     });
+  //   } else {
+  //     setSingleSeats((prevSeats) => {
+  //       if (prevSeats?.includes(seat)) {
+  //         return prevSeats?.filter((s) => s !== seat);
+  //       } else if (prevSeats.length + doubleSeats.length < 8) {
+  //         return [...prevSeats, seat];
+  //       } else {
+  //         return prevSeats;
+  //       }
+  //     });
+  //   }
+  // };
+
   const handleChooseSeat = (seat, isDouble) => {
     const price = isDouble ? data?.price * 2 * 1.05 : data?.price;
-
     setSelectedSeats((prevSeats) => {
-      if (prevSeats?.includes(seat)) {
-        setTotalPrice(totalPrice - price);
-        return prevSeats?.filter((s) => s !== seat);
+      let newTotalPrice = totalPrice;
+      if (prevSeats.includes(seat)) {
+        newTotalPrice -= price;
+        setTotalPrice(newTotalPrice);
+        return prevSeats.filter((s) => s !== seat);
       } else if (prevSeats.length < 8) {
-        setTotalPrice(totalPrice + price);
+        newTotalPrice += price;
+        setTotalPrice(newTotalPrice);
         return [...prevSeats, seat];
       } else {
         message.error("Maximum number of 8 seats exceeded!");
         return prevSeats;
       }
     });
-
     if (isDouble) {
       setDoubleSeats((prevSeats) => {
-        if (prevSeats?.includes(seat)) {
-          return prevSeats?.filter((s) => s !== seat);
+        if (prevSeats.includes(seat)) {
+          return prevSeats.filter((s) => s !== seat);
         } else if (prevSeats.length + singleSeats.length < 8) {
           return [...prevSeats, seat];
         } else {
@@ -111,8 +182,8 @@ const Booking = (props) => {
       });
     } else {
       setSingleSeats((prevSeats) => {
-        if (prevSeats?.includes(seat)) {
-          return prevSeats?.filter((s) => s !== seat);
+        if (prevSeats.includes(seat)) {
+          return prevSeats.filter((s) => s !== seat);
         } else if (prevSeats.length + doubleSeats.length < 8) {
           return [...prevSeats, seat];
         } else {
@@ -121,6 +192,7 @@ const Booking = (props) => {
       });
     }
   };
+
   const handleChangeShowtime = (id) => {
     setSelectedSeats([]);
     setDoubleSeats([]);
@@ -307,20 +379,6 @@ const Booking = (props) => {
   //   }
   // }, [voucher]);
 
-  const calculateDiscount = (price) => {
-    if (voucher && voucher.discountType === "PERCENTAGE") {
-      let discount = (price * voucher.discountValue) / 100;
-
-      discount = Math.min(discount, voucher.maxDiscount);
-
-      return discount;
-    } else if (voucher && voucher.discountType === "FIXED") {
-      return voucher.discountValue;
-    } else {
-      return 0;
-    }
-  };
-
   const applyPromoCode = () => {
     // Xử lý logic áp dụng mã khuyến mãi ở đây
     // alert(`Mã khuyến mãi ${promoCode} đã được áp dụng!`);
@@ -328,6 +386,51 @@ const Booking = (props) => {
     formData.append("code", promoCode);
 
     dispatch(ApplyVoucher(formData, props.router.navigate));
+  };
+
+  const initialOptions = {
+    clientId:
+      "AdjeY1YkcgIWMTbos5WNR6jUkJvsq-u-noGd5XkxcfOihm7HtY9CeV4usR3jTXFPaaCFr180mKmn79G_",
+    currency: "USD",
+    intent: "capture",
+  };
+
+  const conversionRate = 23000;
+  const onCreateOrder = (data, actions) => {
+    // const totalPriceInUSD = (totalPrice / conversionRate).toFixed(2);
+    // if (totalPriceInUSD <= 0) {
+    //   console.error("Total price must be greater than zero");
+    //   return;
+    // }
+    const currentTotalPrice = totalPriceRef.current;
+    const totalPriceInUSD = (currentTotalPrice / conversionRate).toFixed(2);
+    // console.log("Current total price ", totalPriceInUSD);
+
+    return actions.order.create({
+      purchase_units: [
+        {
+          amount: {
+            value: totalPriceInUSD,
+            currency_code: "USD",
+          },
+        },
+      ],
+    });
+  };
+
+  const onApprove = (data, actions) => {
+    return actions.order.capture().then((details) => {
+      const transaction = details.purchase_units[0].payments.captures[0];
+      console.log("Transaction details:", transaction);
+      console.log("Price:", transaction.amount.value * conversionRate);
+      // console.log("data: " + JSON.stringify(data, null, 2));
+      console.log("totalPrice: " + totalPrice);
+    });
+  };
+
+  const onError = (err) => {
+    console.error("PayPal error:", err);
+    // Handle the error
   };
 
   document.title = `booking ${data?.movieName}` || "Booking";
@@ -634,7 +737,7 @@ const Booking = (props) => {
                           </div>
                           <div className="container-order">
                             <h2 style={{ fontSize: 20, fontWeight: "bold" }}>
-                              Phương thức thanh toán
+                              Payment methods
                             </h2>
                             <div className="payment-methods-order">
                               <label>
@@ -739,18 +842,18 @@ const Booking = (props) => {
                           </div> */}
                           <Row>
                             {doubleSeats.length > 0 && (
-                              <Row>
-                                <Col md={9}>
+                              <Row className="mb-3">
+                                <Col md={6}>
                                   {doubleSeats.length}x Double Seats:
                                 </Col>
-                                <Col md={3}>
+                                <Col md={6}>
                                   <p className="total">
                                     {doubleSeats.length *
                                       (data.price * 2 * 1.05)}{" "}
                                     USD
                                   </p>
                                 </Col>
-                                <Col md={9}>
+                                <Col md={12}>
                                   {doubleSeats.map((i) => (
                                     <Badge
                                       key={i}
@@ -765,15 +868,15 @@ const Booking = (props) => {
                             )}
                             {singleSeats.length > 0 && (
                               <Row>
-                                <Col md={9}>
+                                <Col md={6}>
                                   {singleSeats.length}x Single Seats:
                                 </Col>
-                                <Col md={3}>
+                                <Col md={6}>
                                   <p className="total">
                                     {singleSeats.length * data.price} USD
                                   </p>
                                 </Col>
-                                <Col md={9}>
+                                <Col md={12}>
                                   {singleSeats.map((i) => (
                                     <Badge
                                       key={i}
@@ -845,7 +948,7 @@ const Booking = (props) => {
                         </div>
                       </CardBody>
                     </Card>
-                    <Row className="align-items-center mt-4">
+                    <Row className="align-items-center mt-4 mb-2">
                       <Col md={5} className="me-4">
                         <Row>
                           <Button
@@ -872,6 +975,16 @@ const Booking = (props) => {
                         </Row>
                       </Col>
                     </Row>
+                    <PayPalScriptProvider options={initialOptions}>
+                      <PayPalButtons
+                        style={{ layout: "horizontal" }}
+                        createOrder={(data, actions) =>
+                          onCreateOrder(data, actions)
+                        }
+                        onApprove={(data, actions) => onApprove(data, actions)}
+                        onError={(err) => onError(err)}
+                      />
+                    </PayPalScriptProvider>
                   </Col>
                 </Row>
               </Row>
