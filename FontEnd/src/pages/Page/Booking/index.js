@@ -376,7 +376,6 @@ const Booking = (props) => {
     // console.log("currentAddedItemIds: " + JSON.stringify(currentaddedItemIds));
     Object.entries(currentaddedItemIds).forEach(([key, item]) => {
       console.log("================================================");
-      console.log("Key: " + key);
       console.log("Item: " + JSON.stringify(item));
     });
 

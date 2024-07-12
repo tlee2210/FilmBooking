@@ -21,7 +21,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public String createpaymentVnpay() throws UnsupportedEncodingException {
         String orderType = "other";
-        long amount = 100000 * 100;
+        long amount = 1000000 * 100;
 //        String bankCode = req.getParameter("bankCode");
 
 
