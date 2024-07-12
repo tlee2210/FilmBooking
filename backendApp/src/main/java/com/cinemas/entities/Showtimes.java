@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -47,6 +49,9 @@ public class Showtimes {
     @JoinColumn(name = "cinema_id", referencedColumnName = "id")
     @JsonIgnore
     Cinema cinema;
+
+    @OneToMany(mappedBy = "showtime", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Booking> bookings = new ArrayList<>();
 
     public Showtimes(LocalDate date, LocalTime time, Movie movie, Room room, Cinema cinema, MovieFormat movieFormat) {
         this.date = date;

@@ -1,22 +1,53 @@
 package com.cinemas.service.impl.home;
 
+import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.configuration.ConfigVNPAY;
-import com.cinemas.dto.response.APIResponse;
+import com.cinemas.dto.request.PaymentRequest;
+import com.cinemas.entities.Booking;
+import com.cinemas.entities.BookingWaterCorn;
+import com.cinemas.entities.User;
+import com.cinemas.entities.Voucher;
+import com.cinemas.enums.PaymentType;
+import com.cinemas.exception.AppException;
+import com.cinemas.repositories.*;
 import com.cinemas.service.home.PaymentService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
+
+import static com.cinemas.exception.ErrorCode.NOT_FOUND;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
     @Autowired
     private HttpServletRequest request;
+
+    @Autowired
+    private ShowTimeResponsitory showTimeResponsitory;
+
+    @Autowired
+    private VoucherRepository voucherRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private BookingRepository bookingRepository;
+
+    @Autowired
+    private WaterCornRepository waterCornRepository;
+
+    @Autowired
+    private BookingWaterRepository bookingWaterRepository;
 
     @Override
     public String createpaymentVnpay() throws UnsupportedEncodingException {
@@ -102,5 +133,37 @@ public class PaymentServiceImpl implements PaymentService {
 //        resp.getWriter().write(gson.toJson(job));
 
         return paymentUrl;
+    }
+
+    @Override
+    public boolean bookingPaypal(PaymentRequest paymentRequest) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        User user = userRepository
+                .findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new AppException(NOT_FOUND));
+        Booking booking = new Booking();
+        ObjectUtils.copyFields(paymentRequest, booking);
+        booking.setPaymentType(PaymentType.PAYPAL);
+        booking.setCreateAt(LocalDate.now());
+        booking.setQuantityDoubleSeat(String.join(", ", paymentRequest.getQuantityDoubleSeat()));
+        booking.setQuantitySeat(String.join(", ", paymentRequest.getQuantitySeat()));
+        booking.setShowtime(showTimeResponsitory.findById(paymentRequest.getShowtimeId()).get());
+        booking.setVoucher(paymentRequest.getVoucherId().equals(0) ? null : voucherRepository.findById(paymentRequest.getVoucherId()).get());
+        booking.setUser(user);
+        bookingRepository.save(booking);
+
+        List<BookingWaterCorn> waterCorns = new ArrayList<>();
+        paymentRequest.getQuantityWater().forEach(item -> {
+            BookingWaterCorn waterCorn = new BookingWaterCorn();
+            waterCorn.setQuantity(item.getQuantity());
+            waterCorn.setWaterCorn(waterCornRepository.findById(item.getBookingId()).get());
+            waterCorn.setBooking(booking);
+            bookingWaterRepository.save(waterCorn);
+            waterCorns.add(waterCorn);
+        });
+        booking.setBookingWaterCorn(waterCorns);
+        bookingRepository.save(booking);
+        return true;
     }
 }
