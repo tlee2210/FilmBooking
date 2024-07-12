@@ -58,7 +58,7 @@ export const ApplyVoucher = (formData, history) => async (dispatch) => {
   await axios
     .post(`http://localhost:8081/api/home/v1/booking/apply-voucher`, formData)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(setVoucher(response?.data?.result));
     })
     .catch((error) => {

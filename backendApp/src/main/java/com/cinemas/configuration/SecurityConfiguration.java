@@ -59,6 +59,7 @@ public class SecurityConfiguration {
                                 "/api/home/v1/watercorn/**",
                                 "/api/home/v1/user/**",
                                 "/api/home/v1/movie-genre/**",
+                                "/api/payment/**",
                                 "/api/home/v1/promotion/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/admin").hasAnyAuthority(RoleType.ADMIN.name())

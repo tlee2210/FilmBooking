@@ -71,14 +71,12 @@ const Booking = (props) => {
   };
 
   const [activeTab, setactiveTab] = useState(1);
-  const [modal, setModal] = useState(false);
 
   const [addedItemIds, setAddedItemIds] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [singleSeats, setSingleSeats] = useState([]);
   const [doubleSeats, setDoubleSeats] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [BeforetotalPrice, setBeforeTotalPrice] = useState(0);
   const [promoCode, setPromoCode] = useState("");
   const [selectedPayment, setSelectedPayment] = useState("payoo");
 
@@ -113,82 +111,54 @@ const Booking = (props) => {
       props.router.navigate("/");
     }
   }, [data]);
-  // price
-  // const handleChooseSeat = (seat, isDouble) => {
-  //   const price = isDouble ? data?.price * 2 * 1.05 : data?.price;
-
-  //   setSelectedSeats((prevSeats) => {
-  //     if (prevSeats?.includes(seat)) {
-  //       setTotalPrice(totalPrice - price);
-  //       return prevSeats?.filter((s) => s !== seat);
-  //     } else if (prevSeats.length < 8) {
-  //       setTotalPrice(totalPrice + price);
-  //       return [...prevSeats, seat];
-  //     } else {
-  //       message.error("Maximum number of 8 seats exceeded!");
-  //       return prevSeats;
-  //     }
-  //   });
-
-  //   if (isDouble) {
-  //     setDoubleSeats((prevSeats) => {
-  //       if (prevSeats?.includes(seat)) {
-  //         return prevSeats?.filter((s) => s !== seat);
-  //       } else if (prevSeats.length + singleSeats.length < 8) {
-  //         return [...prevSeats, seat];
-  //       } else {
-  //         return prevSeats;
-  //       }
-  //     });
-  //   } else {
-  //     setSingleSeats((prevSeats) => {
-  //       if (prevSeats?.includes(seat)) {
-  //         return prevSeats?.filter((s) => s !== seat);
-  //       } else if (prevSeats.length + doubleSeats.length < 8) {
-  //         return [...prevSeats, seat];
-  //       } else {
-  //         return prevSeats;
-  //       }
-  //     });
-  //   }
-  // };
 
   const handleChooseSeat = (seat, isDouble) => {
     const price = isDouble ? data?.price * 2 * 1.05 : data?.price;
+
     setSelectedSeats((prevSeats) => {
       let newTotalPrice = totalPrice;
+      let newSelectedSeats;
+
       if (prevSeats.includes(seat)) {
         newTotalPrice -= price;
-        setTotalPrice(newTotalPrice);
-        return prevSeats.filter((s) => s !== seat);
+        newSelectedSeats = prevSeats.filter((s) => s !== seat);
       } else if (prevSeats.length < 8) {
         newTotalPrice += price;
-        setTotalPrice(newTotalPrice);
-        return [...prevSeats, seat];
+        newSelectedSeats = [...prevSeats, seat];
       } else {
         message.error("Maximum number of 8 seats exceeded!");
         return prevSeats;
       }
+
+      setTotalPrice(newTotalPrice);
+      return newSelectedSeats;
     });
+
     if (isDouble) {
       setDoubleSeats((prevSeats) => {
+        let newDoubleSeats;
         if (prevSeats.includes(seat)) {
-          return prevSeats.filter((s) => s !== seat);
+          newDoubleSeats = prevSeats.filter((s) => s !== seat);
         } else if (prevSeats.length + singleSeats.length < 8) {
-          return [...prevSeats, seat];
+          newDoubleSeats = [...prevSeats, seat];
         } else {
           return prevSeats;
         }
+
+        return newDoubleSeats;
       });
     } else {
       setSingleSeats((prevSeats) => {
+        let newSingleSeats;
         if (prevSeats.includes(seat)) {
-          return prevSeats.filter((s) => s !== seat);
+          newSingleSeats = prevSeats.filter((s) => s !== seat);
         } else if (prevSeats.length + doubleSeats.length < 8) {
-          return [...prevSeats, seat];
+          newSingleSeats = [...prevSeats, seat];
         } else {
           return prevSeats;
         }
+
+        return newSingleSeats;
       });
     }
   };
@@ -249,53 +219,11 @@ const Booking = (props) => {
     );
   };
 
-  // const renderSeats = (numRows, numCols, totalColumns, isDouble = false) => {
-  //   const rows = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-  //     .split("")
-  //     .slice(0, numRows + (isDouble ? data?.room.seatRows : 0))
-  //     .reverse();
-  //   const seatsPerPart = Math.ceil(numCols / totalColumns);
-
-  //   return (
-  //     <div className="seating-grid">
-  //       {rows.slice(0, numRows).map((row) => (
-  //         <div className="seat-row" key={row}>
-  //           {[...Array(numCols).keys()].map((i) => {
-  //             const seatNumber = isDouble
-  //               ? `${row}${i * 2 + 1}-${row}${i * 2 + 2}` // Adjust seat numbering for double seats
-  //               : `${row}${i + 1}`;
-  //             const applyMargin =
-  //               totalColumns !== 1 && i !== 0 && (i + 1) % seatsPerPart === 0;
-  //             const isSelected = selectedSeats?.includes(seatNumber);
-
-  //             return (
-  //               <div
-  //                 key={seatNumber}
-  //                 onClick={() => {
-  //                   handleChooseSeat(seatNumber);
-  //                 }}
-  //                 className={classnames({
-  //                   "double-seat": isDouble,
-  //                   seat: !isDouble,
-  //                   "margin-right-seat": applyMargin,
-  //                   "selected-seat": isSelected,
-  //                 })}
-  //               >
-  //                 <div>{seatNumber}</div>
-  //               </div>
-  //             );
-  //           })}
-  //         </div>
-  //       ))}
-  //     </div>
-  //   );
-  // };
-
-  function toggleTab(tab) {
-    if (tab >= 1 && tab <= 4) {
-      setactiveTab(tab);
-    }
-  }
+  // function toggleTab(tab) {
+  //   if (tab >= 1 && tab <= 4) {
+  //     setactiveTab(tab);
+  //   }
+  // }
 
   function handlePrevTab() {
     if (activeTab > 1) {
@@ -328,6 +256,7 @@ const Booking = (props) => {
         updatedAddedItemIds[id].quantity += 1;
       } else {
         updatedAddedItemIds[id] = {
+          id: id,
           name: itemName,
           price: itemPrice,
           quantity: 1,
@@ -365,19 +294,6 @@ const Booking = (props) => {
   const handlePaymentChange = (e) => {
     setSelectedPayment(e.target.value);
   };
-
-  // useEffect(() => {
-  //   // BeforetotalPrice
-  //   // setBeforeTotalPrice
-  //   const discount = calculateDiscount(totalPrice);
-  //   if (voucher) {
-  //     setBeforeTotalPrice(totalPrice);
-  //     setTotalPrice(BeforetotalPrice);
-  //     setTotalPrice(totalPrice - discount);
-  //   } else {
-  //     setTotalPrice(BeforetotalPrice);
-  //   }
-  // }, [voucher]);
 
   const applyPromoCode = () => {
     // Xử lý logic áp dụng mã khuyến mãi ở đây
@@ -423,9 +339,51 @@ const Booking = (props) => {
       const transaction = details.purchase_units[0].payments.captures[0];
       console.log("Transaction details:", transaction);
       console.log("Price:", transaction.amount.value * conversionRate);
-      // console.log("data: " + JSON.stringify(data, null, 2));
-      console.log("totalPrice: " + totalPrice);
+      console.log("data: " + JSON.stringify(data, null, 2));
+
+      // postTransactionToBackend(transaction, data, totalPrice);
+      postTransactionToBackend(transaction);
     });
+  };
+
+  const selectedSeatsRef = useRef([]);
+  const singleSeatsRef = useRef([]);
+  const doubleSeatsRef = useRef([]);
+  const promoCodeRef = useRef("");
+  const addedItemIdsRef = useRef("");
+  useEffect(() => {
+    selectedSeatsRef.current = selectedSeats;
+    singleSeatsRef.current = singleSeats;
+    doubleSeatsRef.current = doubleSeats;
+    promoCodeRef.current = promoCode;
+    addedItemIdsRef.current = addedItemIds;
+  }, [selectedSeats, singleSeats, doubleSeats, promoCode, addedItemIds]);
+
+  const postTransactionToBackend = (transaction) => {
+    const currentTotalPrice = totalPriceRef.current;
+    const currentSelectedSeats = selectedSeatsRef.current;
+    const currentSingleSeats = singleSeatsRef.current;
+    const currentDoubleSeats = doubleSeatsRef.current;
+    const currentPromoCode = promoCodeRef.current;
+    const currentaddedItemIds = addedItemIdsRef.current;
+
+    console.log("================================================");
+    console.log("currentTotalPrice: " + currentTotalPrice);
+    console.log("selectedSeats: " + currentSelectedSeats);
+    console.log("singleSeats: " + currentSingleSeats);
+    console.log("doubleSeats: " + currentDoubleSeats);
+    console.log("promoCode: " + currentPromoCode);
+    // console.log("currentAddedItemIds: " + JSON.stringify(currentaddedItemIds));
+    Object.entries(currentaddedItemIds).forEach(([key, item]) => {
+      console.log("================================================");
+      console.log("Key: " + key);
+      console.log("Item: " + JSON.stringify(item));
+    });
+
+    // alert(`Đã đặt phim thành công! Transaction ID: ${transaction.id}`);
+    // console.log("Transaction ID: " + transaction.id);
+    // console.log("data: " + JSON.stringify(data, null, 2));
+    // console.log("totalPrice: " + totalPrice);
   };
 
   const onError = (err) => {
@@ -471,20 +429,6 @@ const Booking = (props) => {
                         >
                           <span>Payment</span>
                         </div>
-                        {/* <div
-                        className={`step-item -order-4 ${
-                          activeTab >= 4 ? "done" : ""
-                        } ${activeTab === 4 ? "active" : ""}`}
-                      >
-                        <span>Thanh toán</span>
-                      </div> */}
-                        {/* <div
-                        className={`step-item -order-5 ${
-                          activeTab >= 5 ? "done" : ""
-                        } ${activeTab === 5 ? "active" : ""}`}
-                      >
-                        <span>Xác nhận</span>
-                      </div> */}
                       </div>
                     </div>
                   </Form>
