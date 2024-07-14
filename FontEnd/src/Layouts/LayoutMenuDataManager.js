@@ -161,7 +161,7 @@ const navdataManager = () => {
         {
           id: "Voucher",
           label: "Voucher Management",
-          link: "/dashboard/Voucher",
+          link: "/dashboard/voucher",
           parentId: "promotion",
         },
       ],

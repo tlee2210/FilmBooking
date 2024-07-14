@@ -10,6 +10,7 @@ const Navdata = () => {
   const [isShowTime, setIsShowTime] = useState(false);
   const [isPromotion, setIsPromotion] = useState(false);
   const [isBlogAndReview, setIsBlogAndReview] = useState(false);
+  const [isBooking, setIsBooking] = useState(false);
   const [iscurrentState, setIscurrentState] = useState("Dashboard");
   function updateIconSidebar(e) {
     if (e && e.target && e.target.getAttribute("subitems")) {
@@ -45,6 +46,9 @@ const Navdata = () => {
     if (iscurrentState !== "promotion") {
       setIsPromotion(false);
     }
+    if (iscurrentState !== "booking") {
+      setIsBooking(false);
+    }
   }, [
     history,
     isMovie,
@@ -53,6 +57,7 @@ const Navdata = () => {
     isShowTime,
     isBlogAndReview,
     isPromotion,
+    isBooking,
   ]);
 
   const menuItems = [
@@ -221,10 +226,23 @@ const Navdata = () => {
         {
           id: "Voucher",
           label: "Voucher Management",
-          link: "/dashboard/Voucher",
+          link: "/dashboard/voucher",
           parentId: "promotion",
         },
       ],
+    },
+    {
+      id: "bookings",
+      label: "bookings Management",
+      icon: "ri-bank-card-2-fill",
+      link: "/#",
+      stateVariables: isBooking,
+      click: function (e) {
+        e.preventDefault();
+        setIsBooking(!isBooking);
+        setIscurrentState("booking");
+        updateIconSidebar(e);
+      },
     },
   ];
   return <React.Fragment>{menuItems}</React.Fragment>;

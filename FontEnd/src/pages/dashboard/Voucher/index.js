@@ -65,7 +65,6 @@ const ShowTime = (props) => {
   // Inside your component
   const { error, success, messageSuccess, messageError, data } =
     useSelector(VoucherStateData);
-  console.log(data);
 
   useEffect(() => {
     if (success) {

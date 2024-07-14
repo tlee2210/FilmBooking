@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -52,5 +53,6 @@ public class Voucher {
     private StatusVoucher statusVoucher; //trạng thái Voucher
 
     @OneToMany(mappedBy = "voucher", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Booking> bookings = new ArrayList<>();
 }

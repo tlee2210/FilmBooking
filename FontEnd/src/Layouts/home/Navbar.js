@@ -9,7 +9,6 @@ import {
   NavbarToggler,
   NavLink,
   Dropdown,
-  dropdownOpen,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
@@ -22,11 +21,10 @@ import LogoLight from "../../assets/images/logo-light.png";
 import Ticket from "../../assets/images/Ticket.jpg";
 import { getNavbar } from "../../slices/home/MovieHome/thunk";
 import { useSelector, useDispatch } from "react-redux";
+import SimpleBar from "simplebar-react";
 
 import buttonTicket from "../../assets/images/buttonTicket/btn-ticket.png";
 import ProfileDropdown from "../../Components/Common/ProfileDropdown";
-
-// getNavbar
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -59,7 +57,10 @@ const Navbar = () => {
 
   useEffect(() => {
     window.addEventListener("scroll", scrollNavigation, true);
-  });
+    return () => {
+      window.removeEventListener("scroll", scrollNavigation, true);
+    };
+  }, []);
 
   const scrollNavigation = () => {
     var scrollup = document.documentElement.scrollTop;
@@ -105,7 +106,6 @@ const Navbar = () => {
     if (authUserString) {
       const userObj = JSON.parse(authUserString);
       setAuthUser(userObj.user);
-      // console.log(userObj.user);
     }
   }, []);
 
@@ -200,12 +200,15 @@ const Navbar = () => {
                     Movies
                   </DropdownToggle>
                   <DropdownMenu className="movies-dropdown-menu">
-                    <DropdownItem className="header-movies-dropdown" header>
-                      Movies Showing Now
-                    </DropdownItem>
-                    <Row>
-                      {navbarData && navbarData?.movieShowingList
-                        ? navbarData?.movieShowingList?.map((movie, index) => (
+                    {navbarData &&
+                    navbarData.movieShowingList &&
+                    navbarData.movieShowingList.length > 0 ? (
+                      <>
+                        <DropdownItem className="header-movies-dropdown" header>
+                          Movies Showing Now
+                        </DropdownItem>
+                        <Row>
+                          {navbarData.movieShowingList.map((movie, index) => (
                             <Col md={3} key={index}>
                               <DropdownItem
                                 tag={Link}
@@ -229,15 +232,21 @@ const Navbar = () => {
                                 <div className="movie-name">{movie.name}</div>
                               </DropdownItem>
                             </Col>
-                          ))
-                        : null}
-                    </Row>
-                    <DropdownItem className="header-movies-dropdown" header>
-                      Movie coming soon
-                    </DropdownItem>
-                    <Row>
-                      {navbarData && navbarData?.movieSoonList
-                        ? navbarData?.movieSoonList?.map((movie, index) => (
+                          ))}
+                        </Row>
+                      </>
+                    ) : (
+                      <DropdownItem>No movies available</DropdownItem>
+                    )}
+                    {navbarData &&
+                    navbarData.movieSoonList &&
+                    navbarData.movieSoonList.length > 0 ? (
+                      <>
+                        <DropdownItem className="header-movies-dropdown" header>
+                          Movies Coming Soon
+                        </DropdownItem>
+                        <Row>
+                          {navbarData.movieSoonList.map((movie, index) => (
                             <Col md={3} key={index}>
                               <DropdownItem
                                 tag={Link}
@@ -261,9 +270,12 @@ const Navbar = () => {
                                 <div className="movie-name">{movie.name}</div>
                               </DropdownItem>
                             </Col>
-                          ))
-                        : null}
-                    </Row>
+                          ))}
+                        </Row>
+                      </>
+                    ) : (
+                      <DropdownItem>No upcoming movies available</DropdownItem>
+                    )}
                   </DropdownMenu>
                 </Dropdown>
               </li>
@@ -332,27 +344,28 @@ const Navbar = () => {
                   >
                     Cinemas
                   </DropdownToggle>
-                  <DropdownMenu
-                    style={{
-                      textAlign: "center",
-                      paddingLeft: 20,
-                      paddingRight: 20,
-                      maxHeight: "200px",
-                      overflowY: "auto",
-                      marginLeft: -73,
-                    }}
-                  >
-                    {navbarData
-                      ? navbarData?.selectOptionList?.map((item, index) => (
+                  <DropdownMenu>
+                    <SimpleBar
+                      // forceVisible="y"
+                      style={{ maxHeight: "200px", width: "200px" }}
+                      className="px-3"
+                    >
+                      {navbarData &&
+                      navbarData.selectOptionList &&
+                      navbarData.selectOptionList.length > 0 ? (
+                        navbarData.selectOptionList.map((item, index) => (
                           <DropdownItem
                             key={index}
                             tag={Link}
-                            to={`/cinema/${item?.value}`}
+                            to={`/cinema/${item.value}`}
                           >
-                            {item?.label}
+                            {item.label}
                           </DropdownItem>
                         ))
-                      : null}
+                      ) : (
+                        <DropdownItem>No cinemas available</DropdownItem>
+                      )}
+                    </SimpleBar>
                   </DropdownMenu>
                 </Dropdown>
               </li>
