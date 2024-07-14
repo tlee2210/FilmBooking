@@ -136,7 +136,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public boolean bookingPaypal(PaymentRequest paymentRequest) {
+    public boolean bookingPaypal(PaymentRequest paymentRequest, PaymentType type) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         User user = userRepository
@@ -144,7 +144,7 @@ public class PaymentServiceImpl implements PaymentService {
                 .orElseThrow(() -> new AppException(NOT_FOUND));
         Booking booking = new Booking();
         ObjectUtils.copyFields(paymentRequest, booking);
-        booking.setPaymentType(PaymentType.PAYPAL);
+        booking.setPaymentType(type);
         booking.setCreateAt(LocalDate.now());
         booking.setQuantityDoubleSeat(String.join(", ", paymentRequest.getQuantityDoubleSeat()));
         booking.setQuantitySeat(String.join(", ", paymentRequest.getQuantitySeat()));
@@ -154,14 +154,16 @@ public class PaymentServiceImpl implements PaymentService {
         bookingRepository.save(booking);
 
         List<BookingWaterCorn> waterCorns = new ArrayList<>();
-        paymentRequest.getQuantityWater().forEach(item -> {
-            BookingWaterCorn waterCorn = new BookingWaterCorn();
-            waterCorn.setQuantity(item.getQuantity());
-            waterCorn.setWaterCorn(waterCornRepository.findById(item.getBookingId()).get());
-            waterCorn.setBooking(booking);
-            bookingWaterRepository.save(waterCorn);
-            waterCorns.add(waterCorn);
-        });
+        if (paymentRequest.getQuantityWater() != null){
+            paymentRequest.getQuantityWater().forEach(item -> {
+                BookingWaterCorn waterCorn = new BookingWaterCorn();
+                waterCorn.setQuantity(item.getQuantity());
+                waterCorn.setWaterCorn(waterCornRepository.findById(item.getBookingId()).get());
+                waterCorn.setBooking(booking);
+                bookingWaterRepository.save(waterCorn);
+                waterCorns.add(waterCorn);
+            });
+        }
         booking.setBookingWaterCorn(waterCorns);
         bookingRepository.save(booking);
         return true;

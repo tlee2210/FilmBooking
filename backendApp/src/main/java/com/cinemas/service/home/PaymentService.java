@@ -1,11 +1,12 @@
 package com.cinemas.service.home;
 
 import com.cinemas.dto.request.PaymentRequest;
+import com.cinemas.enums.PaymentType;
 
 import java.io.UnsupportedEncodingException;
 
 public interface PaymentService {
     String createpaymentVnpay() throws UnsupportedEncodingException;
 
-    boolean bookingPaypal(PaymentRequest paymentRequest);
+    boolean bookingPaypal(PaymentRequest paymentRequest, PaymentType type);
 }

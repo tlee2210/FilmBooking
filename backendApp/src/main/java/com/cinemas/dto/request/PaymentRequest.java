@@ -26,4 +26,15 @@ public class PaymentRequest {
     private Integer voucherId;
 
     private List<BookingWaterRequest> quantityWater;
+
+    public PaymentRequest(String orderId, String paymentId, List<String> quantitySeat, List<String> quantityDoubleSeat, Float totalPrice, Integer showtimeId, Integer voucherId, List<BookingWaterRequest> quantityWater) {
+        this.orderId = orderId;
+        this.paymentId = paymentId;
+        this.quantitySeat = quantitySeat;
+        this.quantityDoubleSeat = quantityDoubleSeat;
+        this.totalPrice = totalPrice;
+        this.showtimeId = showtimeId;
+        this.voucherId = voucherId;
+        this.quantityWater = quantityWater;
+    }
 }
