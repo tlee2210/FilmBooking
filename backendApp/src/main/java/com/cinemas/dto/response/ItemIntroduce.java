@@ -30,11 +30,18 @@ public class ItemIntroduce {
         this.imagePortrait = imagePortrait;
     }
 
-    public ItemIntroduce(Integer id, String name, String slug, String imagePortrait, String description) {
+//    public ItemIntroduce(Integer id, String name, String slug, String imagePortrait, String description) {
+//        this.id = id;
+//        this.name = name;
+//        this.slug = slug;
+//        this.imagePortrait = imagePortrait;
+//        this.description = description;
+//    }
+    public ItemIntroduce(Integer id, String name, String slug, String imagePortrait, String trailer) {
         this.id = id;
         this.name = name;
         this.slug = slug;
         this.imagePortrait = imagePortrait;
-        this.description = description;
+        this.trailer = trailer;
     }
 }

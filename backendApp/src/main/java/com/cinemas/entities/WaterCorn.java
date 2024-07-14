@@ -35,5 +35,6 @@ public class WaterCorn {
     private String image;
 
     @OneToMany(mappedBy = "waterCorn", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<BookingWaterCorn> bookingWaterCorn;
 }

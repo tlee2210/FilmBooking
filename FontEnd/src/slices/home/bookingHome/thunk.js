@@ -67,3 +67,28 @@ export const ApplyVoucher = (formData, history) => async (dispatch) => {
     });
 };
 // http://localhost:8081/api/home/v1/booking/apply-voucher
+
+export const getPaymentVnpayMethods = () => async (dispatch) => {
+  await axios
+    .get(`http://localhost:8081/api/payment/create_payment_vnpay`)
+    .then((response) => {
+      console.log(response);
+      window.location.href = response?.data?.result;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
+export const getPaymentResult = (formData, history) => async (dispatch) => {
+  await axios
+    .post(`http://localhost:8081/api/payment/booking_paypal`, formData)
+    .then((response) => {
+      console.log(response);
+      // getPaymentResult
+      history("/profile");
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};

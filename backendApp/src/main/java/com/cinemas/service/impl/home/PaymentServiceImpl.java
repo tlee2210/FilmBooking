@@ -146,19 +146,19 @@ public class PaymentServiceImpl implements PaymentService {
         ObjectUtils.copyFields(paymentRequest, booking);
         booking.setPaymentType(type);
         booking.setCreateAt(LocalDate.now());
-        booking.setQuantityDoubleSeat(String.join(", ", paymentRequest.getQuantityDoubleSeat()));
-        booking.setQuantitySeat(String.join(", ", paymentRequest.getQuantitySeat()));
+        booking.setQuantityDoubleSeat(paymentRequest.getQuantityDoubleSeat() != null ? String.join(", ", paymentRequest.getQuantityDoubleSeat()) : null);
+        booking.setQuantitySeat(paymentRequest.getQuantitySeat() != null ? String.join(", ", paymentRequest.getQuantitySeat()) : null);
         booking.setShowtime(showTimeResponsitory.findById(paymentRequest.getShowtimeId()).get());
-        booking.setVoucher(paymentRequest.getVoucherId().equals(0) ? null : voucherRepository.findById(paymentRequest.getVoucherId()).get());
+        booking.setVoucher(paymentRequest.getVoucherId() != null ? voucherRepository.findById(paymentRequest.getVoucherId()).get() : null);
         booking.setUser(user);
         bookingRepository.save(booking);
 
         List<BookingWaterCorn> waterCorns = new ArrayList<>();
-        if (paymentRequest.getQuantityWater() != null){
+        if (paymentRequest.getQuantityWater() != null) {
             paymentRequest.getQuantityWater().forEach(item -> {
                 BookingWaterCorn waterCorn = new BookingWaterCorn();
                 waterCorn.setQuantity(item.getQuantity());
-                waterCorn.setWaterCorn(waterCornRepository.findById(item.getBookingId()).get());
+                waterCorn.setWaterCorn(waterCornRepository.findById(item.getId()).get());
                 waterCorn.setBooking(booking);
                 bookingWaterRepository.save(waterCorn);
                 waterCorns.add(waterCorn);

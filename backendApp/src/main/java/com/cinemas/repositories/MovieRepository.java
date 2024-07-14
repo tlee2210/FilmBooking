@@ -56,4 +56,7 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
 
     @Query("SELECT  new com.cinemas.dto.response.SelectOptionReponse(m.id, m.name) FROM Movie m WHERE m.status = com.cinemas.enums.MovieStatus.NOW_SHOWING or m.status = com.cinemas.enums.MovieStatus.COMING_SOON")
     List<SelectOptionReponse> SelectOptionNameAndid();
+
+    @Query("SELECT t.trailer FROM Movie t WHERE t.id = :id")
+    String findTrailerByid(Integer id);
 }

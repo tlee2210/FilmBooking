@@ -95,7 +95,7 @@ public class PaymentController {
         int bookingId = Integer.parseInt(parts[0]);
         int quantity = Integer.parseInt(parts[1]);
         BookingWaterRequest bookingWaterRequest = new BookingWaterRequest();
-        bookingWaterRequest.setBookingId(bookingId);
+        bookingWaterRequest.setId(bookingId);
         bookingWaterRequest.setQuantity(quantity);
         return bookingWaterRequest;
     }

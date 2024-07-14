@@ -143,7 +143,7 @@ const MovieList = ({ HomeData, SeeMore = false }) => {
                                     outline
                                     className="waves-effect waves-light material-shadow-none text-light align-items-center"
                                     style={{ width: "134px" }}
-                                    onClick={() => toggleModal(item.trailer)}
+                                    onClick={() => toggleModal(item?.trailer)}
                                   >
                                     <span className="icon-off">
                                       <i className="ri-play-circle-line align-bottom me-1"></i>

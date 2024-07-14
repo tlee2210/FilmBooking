@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class BookingWaterRequest {
-    private int bookingId;
+    private int id;
     private int quantity;
 }

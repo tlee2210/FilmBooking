@@ -49,9 +49,11 @@ public class HomeMovieSerivceImpl implements HomeMovieSerivce {
 
         movieComingSoom.forEach(movie -> {
             movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
+//            movie.setTrailer(movieRepository.findTrailerByid(movie.getId()));
         });
         movieNowShow.forEach(movie -> {
             movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
+//            movie.setTrailer(movieRepository.findTrailerByid(movie.getId()));
         });
         HomeResponse homeResponse = new HomeResponse();
         homeResponse.setMovieShowingList(movieNowShow);

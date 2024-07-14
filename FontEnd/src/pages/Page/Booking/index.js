@@ -34,6 +34,8 @@ import { message } from "antd";
 import {
   getBookingTime,
   ApplyVoucher,
+  getPaymentVnpayMethods,
+  getPaymentResult,
 } from "../../../slices/home/bookingHome/thunk";
 import { getHomeWaterCorn } from "../../../slices/home/Watercorn/thunk";
 import withRouter from "../../../Components/Common/withRouter";
@@ -78,7 +80,6 @@ const Booking = (props) => {
   const [doubleSeats, setDoubleSeats] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [promoCode, setPromoCode] = useState("");
-  const [selectedPayment, setSelectedPayment] = useState("payoo");
 
   const totalPriceRef = useRef(
     voucher ? totalPrice - calculateDiscount(totalPrice) : totalPrice
@@ -219,12 +220,6 @@ const Booking = (props) => {
     );
   };
 
-  // function toggleTab(tab) {
-  //   if (tab >= 1 && tab <= 4) {
-  //     setactiveTab(tab);
-  //   }
-  // }
-
   function handlePrevTab() {
     if (activeTab > 1) {
       setactiveTab(activeTab - 1);
@@ -241,10 +236,14 @@ const Booking = (props) => {
     if (activeTab === 1) {
       selectedSeats.length > 0
         ? setactiveTab(activeTab + 1)
-        : message.error("Please select at least one seat!");
+        : message.warning("Please select at least one seat!");
     }
     if (activeTab === 2) {
       setactiveTab(activeTab + 1);
+    }
+
+    if (activeTab === 3) {
+      message.warning("Please select payment method!");
     }
   }
 
@@ -291,13 +290,7 @@ const Booking = (props) => {
     setPromoCode(e.target.value);
   };
 
-  const handlePaymentChange = (e) => {
-    setSelectedPayment(e.target.value);
-  };
-
   const applyPromoCode = () => {
-    // Xử lý logic áp dụng mã khuyến mãi ở đây
-    // alert(`Mã khuyến mãi ${promoCode} đã được áp dụng!`);
     const formData = new FormData();
     formData.append("code", promoCode);
 
@@ -337,52 +330,72 @@ const Booking = (props) => {
   const onApprove = (data, actions) => {
     return actions.order.capture().then((details) => {
       const transaction = details.purchase_units[0].payments.captures[0];
-      console.log("Transaction details:", transaction);
-      console.log("Price:", transaction.amount.value * conversionRate);
-      console.log("data: " + JSON.stringify(data, null, 2));
-
-      // postTransactionToBackend(transaction, data, totalPrice);
-      postTransactionToBackend(transaction);
+      postTransactionToBackend(transaction, data);
     });
   };
 
-  const selectedSeatsRef = useRef([]);
   const singleSeatsRef = useRef([]);
   const doubleSeatsRef = useRef([]);
+  const showtimeIdRef = useRef("");
   const promoCodeRef = useRef("");
   const addedItemIdsRef = useRef("");
   useEffect(() => {
-    selectedSeatsRef.current = selectedSeats;
-    singleSeatsRef.current = singleSeats;
-    doubleSeatsRef.current = doubleSeats;
-    promoCodeRef.current = promoCode;
-    addedItemIdsRef.current = addedItemIds;
-  }, [selectedSeats, singleSeats, doubleSeats, promoCode, addedItemIds]);
+    if (data) {
+      showtimeIdRef.current = data.id;
+    }
+    if (singleSeats) {
+      singleSeatsRef.current = singleSeats;
+    }
+    if (doubleSeats) {
+      doubleSeatsRef.current = doubleSeats;
+    }
+    if (promoCode) {
+      promoCodeRef.current = voucher.id;
+    }
+    if (addedItemIds) {
+      addedItemIdsRef.current = addedItemIds;
+    }
+  }, [data, singleSeats, doubleSeats, promoCode, addedItemIds, voucher]);
 
-  const postTransactionToBackend = (transaction) => {
+  const postTransactionToBackend = (transaction, data) => {
     const currentTotalPrice = totalPriceRef.current;
-    const currentSelectedSeats = selectedSeatsRef.current;
     const currentSingleSeats = singleSeatsRef.current;
     const currentDoubleSeats = doubleSeatsRef.current;
     const currentPromoCode = promoCodeRef.current;
     const currentaddedItemIds = addedItemIdsRef.current;
+    const showtimeId = showtimeIdRef.current;
 
-    console.log("================================================");
-    console.log("currentTotalPrice: " + currentTotalPrice);
-    console.log("selectedSeats: " + currentSelectedSeats);
-    console.log("singleSeats: " + currentSingleSeats);
-    console.log("doubleSeats: " + currentDoubleSeats);
-    console.log("promoCode: " + currentPromoCode);
-    // console.log("currentAddedItemIds: " + JSON.stringify(currentaddedItemIds));
-    Object.entries(currentaddedItemIds).forEach(([key, item]) => {
-      console.log("================================================");
-      console.log("Item: " + JSON.stringify(item));
-    });
+    const formData = new FormData();
+    formData.append("orderId", data.orderID);
+    formData.append("paymentId", data.paymentID);
+    formData.append("totalPrice", currentTotalPrice);
+    if (currentDoubleSeats) {
+      currentDoubleSeats.forEach((item) => {
+        formData.append("quantityDoubleSeat", item);
+      });
+    }
+    if (currentSingleSeats) {
+      currentSingleSeats.forEach((item) => {
+        formData.append("quantitySeat", item);
+      });
+    }
+    formData.append("showtimeId", showtimeId);
 
-    // alert(`Đã đặt phim thành công! Transaction ID: ${transaction.id}`);
-    // console.log("Transaction ID: " + transaction.id);
-    // console.log("data: " + JSON.stringify(data, null, 2));
-    // console.log("totalPrice: " + totalPrice);
+    if (
+      addedItemIdsRef.current &&
+      typeof addedItemIdsRef.current === "object"
+    ) {
+      Object.values(addedItemIdsRef.current).forEach((item, index) => {
+        formData.append(`quantityWater[${index}].id`, item.id);
+        formData.append(`quantityWater[${index}].quantity`, item.quantity);
+      });
+    }
+
+    if (currentPromoCode) {
+      formData.append("voucherId", currentPromoCode);
+    }
+
+    dispatch(getPaymentResult(formData, props.router.navigate));
   };
 
   const onError = (err) => {
@@ -682,70 +695,35 @@ const Booking = (props) => {
                             <h2 style={{ fontSize: 20, fontWeight: "bold" }}>
                               Payment methods
                             </h2>
-                            <div className="payment-methods-order">
-                              <label>
-                                <input
-                                  type="radio"
-                                  name="payment"
-                                  value="payoo"
-                                  checked={selectedPayment === "payoo"}
-                                  onChange={handlePaymentChange}
+                            <Row className="payment-methods-order">
+                              \
+                              <PayPalScriptProvider options={initialOptions}>
+                                <PayPalButtons
+                                  style={{ layout: "horizontal" }}
+                                  createOrder={(data, actions) =>
+                                    onCreateOrder(data, actions)
+                                  }
+                                  onApprove={(data, actions) =>
+                                    onApprove(data, actions)
+                                  }
+                                  onError={(err) => onError(err)}
                                 />
-                                <img
-                                  src="payoo-logo.png"
-                                  alt="Payoo"
-                                  width="20"
-                                />{" "}
-                                HSBC/Payoo - ATM/VISA/MASTER/JCB/QRCode
-                              </label>
-                              <label>
-                                <input
-                                  type="radio"
-                                  name="payment"
-                                  value="shopeepay"
-                                  checked={selectedPayment === "shopeepay"}
-                                  onChange={handlePaymentChange}
-                                />
-                                <img
-                                  src="shopeepay-logo.png"
-                                  alt="ShopeePay"
-                                  width="20"
-                                />{" "}
-                                Ví ShopeePay - Nhập mã: SPPCINE06 Giảm 20K cho
-                                đơn từ 100K
-                              </label>
-                              <label>
-                                <input
-                                  type="radio"
-                                  name="payment"
-                                  value="momo"
-                                  checked={selectedPayment === "momo"}
-                                  onChange={handlePaymentChange}
-                                />
-                                <img
-                                  src="momo-logo.png"
-                                  alt="MoMo"
-                                  width="20"
-                                />{" "}
-                                Ví Điện Tử MoMo
-                              </label>
-                              <label>
-                                <input
-                                  type="radio"
-                                  name="payment"
-                                  value="zalopay"
-                                  checked={selectedPayment === "zalopay"}
-                                  onChange={handlePaymentChange}
-                                />
-                                <img
-                                  src="zalopay-logo.png"
-                                  alt="ZaloPay"
-                                  width="20"
-                                />{" "}
-                                ZaloPay - Bạn mới Zalopay nhập mã GLX50 - Giảm
-                                50k cho đơn từ 200k
-                              </label>
-                            </div>
+                              </PayPalScriptProvider>
+                              <button
+                                style={{
+                                  backgroundColor: "#ff5a00",
+                                  color: "white",
+                                  padding: "15px 20px",
+                                  border: "none",
+                                  borderRadius: "5px",
+                                  cursor: "pointer",
+                                  fontSize: "16px",
+                                }}
+                                // onClick={onClick}
+                              >
+                                Pay with VNPay
+                              </button>
+                            </Row>
                           </div>
                         </Row>
                       </TabPane>
@@ -918,16 +896,6 @@ const Booking = (props) => {
                         </Row>
                       </Col>
                     </Row>
-                    <PayPalScriptProvider options={initialOptions}>
-                      <PayPalButtons
-                        style={{ layout: "horizontal" }}
-                        createOrder={(data, actions) =>
-                          onCreateOrder(data, actions)
-                        }
-                        onApprove={(data, actions) => onApprove(data, actions)}
-                        onError={(err) => onError(err)}
-                      />
-                    </PayPalScriptProvider>
                   </Col>
                 </Row>
               </Row>
