@@ -53,4 +53,15 @@ public class ShowTimeTableResponse {
         this.movieFormat = movieFormat;
     }
 
+    public ShowTimeTableResponse(Integer id, LocalDate date, LocalTime time, String cinemaName, String movieName, String roomName, String image, float price, MovieFormat movieFormat) {
+        this.id = id;
+        this.date = date;
+        this.time = time;
+        this.cinemaName = cinemaName;
+        this.movieName = movieName;
+        this.roomName = roomName;
+        this.image = image;
+        this.price = price;
+        this.movieFormat = movieFormat;
+    }
 }
