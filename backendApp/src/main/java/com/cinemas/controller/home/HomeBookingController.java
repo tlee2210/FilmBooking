@@ -59,4 +59,12 @@ public class HomeBookingController {
 
         return apiResponse;
     }
+
+    @GetMapping("/seat-booked/{id}")
+    public APIResponse<SeatBookedResponse> getSeatBooked(@PathVariable Integer id){
+        APIResponse<SeatBookedResponse> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setResult(homeBookingService.getBookedSeats(id));
+        return apiResponse;
+    }
 }

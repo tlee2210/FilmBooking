@@ -45,6 +45,12 @@ public class HomeBookingServiceImpl implements HomeBookingService {
     @Autowired
     private VoucherRepository voucherRepository;
 
+    @Autowired
+    private BookingRepository bookingRepository;
+
+    @Autowired
+    WaterCornRepository waterCornRepository;
+
     @Override
     public bookTicketsResponse getTimeForMovie(String slug, String city, String cinema) {
         List<String> cityList = cinemaRespository.findByCity();
@@ -171,6 +177,32 @@ public class HomeBookingServiceImpl implements HomeBookingService {
         ObjectUtils.copyFields(voucher,voucherResponse);
 
         return voucherResponse;
+    }
+
+    @Override
+    public SeatBookedResponse getBookedSeats(Integer id) {
+        SeatBookedResponse seatBookedResponse = new SeatBookedResponse();
+
+        List<WaterCorn> waterCorns = waterCornRepository.findAll();
+        waterCorns.forEach(item -> {
+            item.setImage(fileStorageServiceImpl.getUrlFromPublicId(item.getImage()));
+        });
+        seatBookedResponse.setWaterCorns(waterCorns);
+
+        List<Booking> bookings = bookingRepository.findByShowtimeId(id);
+        String seat = "";
+        for (Booking booking : bookings) {
+            if(booking.getQuantitySeat() != null){
+                seat = seat.concat(booking.getQuantitySeat()).concat(", ");
+            }
+            if(booking.getQuantityDoubleSeat() != null){
+                seat = seat.concat(booking.getQuantityDoubleSeat()).concat(", ");
+            }
+        }
+
+        seat = seat.substring(0, seat.length()-2);
+        seatBookedResponse.setSeatBooked(seat);
+        return seatBookedResponse;
     }
 
 }
