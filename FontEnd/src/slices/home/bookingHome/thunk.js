@@ -26,7 +26,7 @@ export const getBookingTime = (id, history) => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/home/v1/booking/${id}`)
     .then((response) => {
-      // console.log(response);
+      console.log(response);
       localStorage.setItem(
         "bookingData",
         JSON.stringify(response?.data?.result)
@@ -68,9 +68,9 @@ export const ApplyVoucher = (formData, history) => async (dispatch) => {
 };
 // http://localhost:8081/api/home/v1/booking/apply-voucher
 
-export const getPaymentVnpayMethods = () => async (dispatch) => {
+export const getPaymentVnpayMethods = (formData) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/payment/create_payment_vnpay`)
+    .post(`http://localhost:8081/api/payment/create_payment_vnpay`, formData)
     .then((response) => {
       console.log(response);
       window.location.href = response?.data?.result;

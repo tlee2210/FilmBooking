@@ -1,28 +1,23 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardBody,
-  CardHeader,
   Col,
   Container,
   Nav,
-  NavItem,
   NavLink,
-  ButtonGroup,
   Modal,
   Row,
-  ModalBody,
   Button,
   TabContent,
   TabPane,
-  Table,
   Input,
 } from "reactstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./css/BuyTicket.css";
 import "../CinemaCorner/css/CinemaCorner.css";
 import classnames from "classnames";
-import { StrippedRow } from "../../../Components/Common/BasicTablesCode";
+// import { StrippedRow } from "../../../Components/Common/BasicTablesCode";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/bundle";
 import "swiper/css";

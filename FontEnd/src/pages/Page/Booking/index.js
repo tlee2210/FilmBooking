@@ -227,12 +227,6 @@ const Booking = (props) => {
   }
 
   function handleNextTab() {
-    // if (activeTab === 3) {
-    //   setModal(true); // Hiển thị modal khi ở Tab 3
-    // } else {
-    //   setactiveTab(activeTab + 1);
-    //   // setPassedSteps([...passedSteps, activeTab + 1]);
-    // }
     if (activeTab === 1) {
       selectedSeats.length > 0
         ? setactiveTab(activeTab + 1)
@@ -357,12 +351,51 @@ const Booking = (props) => {
     }
   }, [data, singleSeats, doubleSeats, promoCode, addedItemIds, voucher]);
 
+  const handleSubmitVnpay = () => {
+    const currentTotalPrice = totalPriceRef.current;
+    const currentSingleSeats = singleSeatsRef.current;
+    const currentDoubleSeats = doubleSeatsRef.current;
+    const currentPromoCode = promoCodeRef.current;
+    const showtimeId = showtimeIdRef.current;
+
+    const formData = new FormData();
+    formData.append("orderId", data.orderID);
+    formData.append("paymentId", data.paymentID);
+    formData.append("totalPrice", currentTotalPrice);
+    if (currentDoubleSeats) {
+      currentDoubleSeats.forEach((item, index) => {
+        formData.append(`quantityDoubleSeat[${index}]`, item);
+      });
+    }
+    if (currentSingleSeats) {
+      currentSingleSeats.forEach((item, index) => {
+        formData.append(`quantitySeat[${index}]`, item);
+      });
+    }
+    formData.append("showtimeId", showtimeId);
+
+    if (
+      addedItemIdsRef.current &&
+      typeof addedItemIdsRef.current === "object"
+    ) {
+      Object.values(addedItemIdsRef.current).forEach((item, index) => {
+        formData.append(`quantityWater[${index}].id`, item.id);
+        formData.append(`quantityWater[${index}].quantity`, item.quantity);
+      });
+    }
+
+    if (currentPromoCode) {
+      formData.append("voucherId", currentPromoCode);
+    }
+
+    dispatch(getPaymentVnpayMethods(formData));
+  };
+
   const postTransactionToBackend = (transaction, data) => {
     const currentTotalPrice = totalPriceRef.current;
     const currentSingleSeats = singleSeatsRef.current;
     const currentDoubleSeats = doubleSeatsRef.current;
     const currentPromoCode = promoCodeRef.current;
-    const currentaddedItemIds = addedItemIdsRef.current;
     const showtimeId = showtimeIdRef.current;
 
     const formData = new FormData();
@@ -696,7 +729,6 @@ const Booking = (props) => {
                               Payment methods
                             </h2>
                             <Row className="payment-methods-order">
-                              \
                               <PayPalScriptProvider options={initialOptions}>
                                 <PayPalButtons
                                   style={{ layout: "horizontal" }}
@@ -719,7 +751,7 @@ const Booking = (props) => {
                                   cursor: "pointer",
                                   fontSize: "16px",
                                 }}
-                                // onClick={onClick}
+                                onClick={handleSubmitVnpay}
                               >
                                 Pay with VNPay
                               </button>
