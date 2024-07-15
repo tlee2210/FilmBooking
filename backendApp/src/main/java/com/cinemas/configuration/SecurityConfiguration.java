@@ -47,6 +47,7 @@ public class SecurityConfiguration {
                                 "/api/admin/v1/movie-blog/**",
                                 "/api/admin/v1/promotion/**",
                                 "/api/admin/v1/voucher/**",
+                                "/api/admin/v1/booking/**",
                                 "/api/admin/v1/file-upload",
                                 "/api/home/v1/movie/**",
                                 "/api/home/v1/celebrity/**",

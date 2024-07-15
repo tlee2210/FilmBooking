@@ -1,10 +1,7 @@
 package com.cinemas.service.home;
 
 import com.cinemas.dto.request.VoucherApplyRequest;
-import com.cinemas.dto.response.BuyTicketResponse;
-import com.cinemas.dto.response.ShowTimeTableResponse;
-import com.cinemas.dto.response.VoucherResponse;
-import com.cinemas.dto.response.bookTicketsResponse;
+import com.cinemas.dto.response.*;
 
 import java.time.LocalDate;
 
@@ -16,4 +13,6 @@ public interface HomeBookingService {
     BuyTicketResponse getInfoTicket(String slugmovie, String slugcinema, LocalDate date);
 
     VoucherResponse findByCode(VoucherApplyRequest code);
+
+    SeatBookedResponse getBookedSeats(Integer id);
 }
