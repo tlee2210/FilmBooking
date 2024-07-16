@@ -59,4 +59,7 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
 
     @Query("SELECT t.trailer FROM Movie t WHERE t.id = :id")
     String findTrailerByid(Integer id);
+
+    @Query("SELECT  new com.cinemas.dto.response.SelectOptionReponse(m.slug, m.imageLandscape) FROM Movie m ORDER BY m.releaseDate DESC LIMIT 3")
+    List<SelectOptionReponse> getImageCarousel();
 }

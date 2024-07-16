@@ -1,5 +1,6 @@
 package com.cinemas.repositories;
 
+import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.imageDescription;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,4 +16,8 @@ public interface imageDescriptionRespository extends JpaRepository<imageDescript
 
     @Query("SELECT i FROM imageDescription i WHERE i.slug_name = null")
     List<imageDescription> findBySlug_nameNull();
+
+    @Query("SELECT new com.cinemas.dto.response.SelectOptionReponse(i.slug_name, i.url) FROM  imageDescription i JOIN (SELECT MIN(id) as id FROM imageDescription GROUP BY slug_name) subquery " +
+            "ON i.id = subquery.id ORDER BY i.id DESC LIMIT 3")
+    List<SelectOptionReponse> getImageCarousel();
 }
