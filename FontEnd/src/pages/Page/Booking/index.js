@@ -1,8 +1,6 @@
 import React, {
   useState,
   useEffect,
-  useMemo,
-  useCallback,
   useRef,
 } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -18,16 +16,11 @@ import {
   TabContent,
   TabPane,
   Input,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
   Badge,
 } from "reactstrap";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import classnames from "classnames";
-import { shoppingCart } from "../../../Components/Common/ecommerce";
 import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "reselect";
 import { message } from "antd";
@@ -51,9 +44,10 @@ const Booking = (props) => {
     messageError: state.Message.messageError,
     data: state.HomeBooking.bookingitem,
     voucher: state.HomeBooking.voucher,
-    WaterCornData: state.HomeWaterCorn.WaterCorn,
+    WaterCornData: state.HomeBooking.WaterCornData,
+    seatsBooked: state.HomeBooking.seatsBooked,
   }));
-  const { error, messageError, data, WaterCornData, voucher } =
+  const { error, messageError, data, WaterCornData, voucher, seatsBooked } =
     useSelector(BookingStateData);
 
   const calculateDiscount = (price) => {
@@ -194,18 +188,20 @@ const Booking = (props) => {
               const applyMargin =
                 totalColumns !== 1 && i !== 0 && (i + 1) % seatsPerPart === 0;
               const isSelected = selectedSeats?.includes(seatNumber);
+              const isBooked = seatsBooked.includes(seatNumber);
               return (
                 <div
                   key={seatNumber}
                   onClick={() => {
-                    handleChooseSeat(seatNumber, isDouble);
+                    isBooked ? null : handleChooseSeat(seatNumber, isDouble);
                   }}
                   // className={
                   //   isDouble ? "" : applyMargin ? "margin-right-seat" : null
                   // }
                   className={classnames({
                     "double-seat": isDouble,
-                    seat: !isDouble,
+                    "seatsBooked": isBooked,
+                    "seat": !isDouble,
                     "margin-right-seat": applyMargin,
                     "selected-seat": isSelected,
                   })}

@@ -657,12 +657,6 @@ const Profile = (props) => {
             </h4>
             <Row className="text-muted mb-4">
               <Col md={6}>
-                <p>Show Time: </p>
-              </Col>
-              <Col md={6}>
-                <p> {DetailBooking?.showtime?.time}</p>
-              </Col>
-              <Col md={6}>
                 <p>Cinema Name: </p>
               </Col>
               <Col md={6}>
@@ -673,6 +667,12 @@ const Profile = (props) => {
               </Col>
               <Col md={6}>
                 <p> {DetailBooking?.showtime?.roomName}</p>
+              </Col>
+              <Col md={6}>
+                <p>Show Time: </p>
+              </Col>
+              <Col md={6}>
+                <p> {DetailBooking?.showtime?.time}</p>
               </Col>
               <Col md={6}>
                 <p>Payment Type: </p>

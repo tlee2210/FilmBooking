@@ -3,6 +3,7 @@ import {
   setBooking,
   setBuyFastTicket,
   setVoucher,
+  setSeatBooked,
 } from "./reducer";
 import { Success, Error } from "../../message/reducer";
 import axios from "axios";
@@ -26,13 +27,27 @@ export const getBookingTime = (id, history) => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/home/v1/booking/${id}`)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       localStorage.setItem(
         "bookingData",
         JSON.stringify(response?.data?.result)
       );
       dispatch(setBooking(response?.data?.result));
       history("/booking");
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+  await axios
+    .get(`http://localhost:8081/api/home/v1/booking/seat-booked/${id}`)
+    .then((response) => {
+      console.log(response);
+      localStorage.setItem(
+        "seatsBooked",
+        JSON.stringify(response?.data?.result?.seatBooked)
+      );
+      dispatch(setSeatBooked({ data: response?.data?.result }));
     })
     .catch((error) => {
       console.error(error);

@@ -174,13 +174,14 @@ public class HomeBookingServiceImpl implements HomeBookingService {
         }
 
         VoucherResponse voucherResponse = new VoucherResponse();
-        ObjectUtils.copyFields(voucher,voucherResponse);
+        ObjectUtils.copyFields(voucher, voucherResponse);
 
         return voucherResponse;
     }
 
     @Override
     public SeatBookedResponse getBookedSeats(Integer id) {
+
         SeatBookedResponse seatBookedResponse = new SeatBookedResponse();
 
         List<WaterCorn> waterCorns = waterCornRepository.findAll();
@@ -191,17 +192,25 @@ public class HomeBookingServiceImpl implements HomeBookingService {
 
         List<Booking> bookings = bookingRepository.findByShowtimeId(id);
         String seat = "";
-        for (Booking booking : bookings) {
-            if(booking.getQuantitySeat() != null){
-                seat = seat.concat(booking.getQuantitySeat()).concat(", ");
+        if (bookings != null) {
+            for (Booking booking : bookings) {
+                if (booking.getQuantitySeat() != null) {
+                    seat = seat.concat(booking.getQuantitySeat()).concat(", ");
+                }
+                if (booking.getQuantityDoubleSeat() != null) {
+                    seat = seat.concat(booking.getQuantityDoubleSeat()).concat(", ");
+                }
             }
-            if(booking.getQuantityDoubleSeat() != null){
-                seat = seat.concat(booking.getQuantityDoubleSeat()).concat(", ");
-            }
+
+
         }
 
-        seat = seat.substring(0, seat.length()-2);
+        if (!seat.isEmpty()) {
+            seat = seat.substring(0, seat.length() - 2);
+        }
+
         seatBookedResponse.setSeatBooked(seat);
+
         return seatBookedResponse;
     }
 

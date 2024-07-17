@@ -44,7 +44,6 @@
   width: 30px;
   height: 30px;
   margin: 4px;
-  background-color: #e7e7e7;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -86,7 +85,7 @@
   width: 64px; /* Gấp đôi chiều rộng của một ghế thường */
   height: 30px;
   margin: 4px;
-  background-color: #e7e7e7;
+  // background-color: #dbd9d9;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -94,6 +93,12 @@
   user-select: none;
   border: 1px solid #007bff;
   border-radius: 4px;
+}
+
+.seatsBooked {
+  background-color: #898989;
+  color: #4f4e4e;
+  border: 1px solid #898989;
 }
 
 .todo-content {
