@@ -3,6 +3,7 @@ package com.cinemas.controller.home;
 import com.cinemas.dto.request.ChangePasswordRequest;
 import com.cinemas.dto.request.ProfileRequest;
 import com.cinemas.dto.response.APIResponse;
+import com.cinemas.dto.response.ProfileResponse;
 import com.cinemas.dto.response.UserResponse;
 import com.cinemas.exception.AppException;
 import com.cinemas.service.home.HomeUserService;
@@ -23,8 +24,8 @@ public class HomeUserController {
     private HomeUserService userService;
 
     @GetMapping(value = "/profile")
-    public APIResponse<UserResponse> getUserProfile() {
-        APIResponse<UserResponse> apiResponse = new APIResponse();
+    public APIResponse<ProfileResponse> getUserProfile() {
+        APIResponse<ProfileResponse> apiResponse = new APIResponse();
         apiResponse.setCode(200);
         apiResponse.setResult(userService.getUserProfile());
 

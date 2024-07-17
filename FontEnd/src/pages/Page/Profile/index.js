@@ -28,10 +28,18 @@ import {
   Label,
   Input,
   FormFeedback,
+  Modal,
+  ModalHeader,
+  ModalBody,
 } from "reactstrap";
+import { color } from "echarts";
 
 const Tabs = ({ selectedTab, onTabChange }) => {
-  const tabs = ["Lịch Sử Giao Dịch", "Personal Information", "Change Password"];
+  const tabs = [
+    "Transaction History",
+    "Personal Information",
+    "Change Password",
+  ];
 
   return (
     <ul className="tabs-tai-khoan">
@@ -50,29 +58,13 @@ const Tabs = ({ selectedTab, onTabChange }) => {
   );
 };
 
-const PolicyTabs = ({ selectedPolicyTab, onPolicyTabChange }) => {
-  const policyTabs = ["Thể Lệ", "Quyền Lợi", "Hướng Dẫn"];
-
-  return (
-    <ul className="policy-tabs">
-      {policyTabs.map((tab, index) => (
-        <li
-          key={index}
-          className={`policy-tab-item ${
-            selectedPolicyTab === tab ? "active-policy-tab" : ""
-          }`}
-          onClick={() => onPolicyTabChange(tab)}
-        >
-          {tab}
-        </li>
-      ))}
-    </ul>
-  );
-};
-
 const Profile = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [modal_center, setmodal_center] = useState(false);
+  const [DetailBooking, setDetailBooking] = useState(null);
+  const [selectedTab, setSelectedTab] = useState("Transaction History");
 
   useEffect(() => {
     dispatch(getprofile());
@@ -170,7 +162,7 @@ const Profile = (props) => {
         .required("Please confirm your password"),
     }),
     onSubmit: (values) => {
-      console.log(values);
+      // console.log(values);
       const formData = new FormData();
       formData.append("password", values.old_password);
       formData.append("newPassword", values.password);
@@ -190,7 +182,13 @@ const Profile = (props) => {
 
   document.title = "Profile";
 
-  const [selectedTab, setSelectedTab] = useState("Personal Information");
+  function tog_center(id) {
+    if (id) {
+      setDetailBooking(ProfileData.paymentList.find((item) => item.id === id));
+    }
+    setmodal_center(!modal_center);
+  }
+  console.log(DetailBooking);
 
   return (
     <div
@@ -485,42 +483,50 @@ const Profile = (props) => {
               </Form>
             )}
 
-            {selectedTab === "Lịch Sử Giao Dịch" && (
+            {selectedTab === "Transaction History" && (
               <div className="transaction-history">
-                <h5>Lịch Sử Giao Dịch</h5>
-                <p>Lưu ý: chỉ hiển thị 20 giao dịch gần nhất</p>
-                <div className="transaction-month">Tháng 05/2022</div>
-                <div className="transaction">
-                  <div className="transaction-image">
-                    <img
-                      src="https://www.galaxycine.vn/media/2019/4/10/640wx396h_1554864314405.jpg"
-                      alt="Movie"
-                    />
-                  </div>
-                  <div className="transaction-details">
-                    <div className="transaction-info-left">
-                      <p style={{ fontWeight: "bold" }}>
-                        Phù Thủy Tối Thượng Trong Đa Vũ Trụ Hỗn Loạn
-                      </p>
-                      <p>
-                        2D Phụ Đề <span className="age-restriction">T13</span>
-                      </p>
-                    </div>
-                    <div className="transaction-info-right">
-                      <p>Galaxy Kinh Dương Vương</p>
-                      <p>
-                        <span style={{ fontWeight: "bold" }}>21:15</span> - Thứ
-                        Hai,
-                        <span style={{ fontWeight: "bold" }}>
-                          09/05/2022
-                        </span>{" "}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="transaction-action">
-                    <a href="#">Chi tiết</a>
-                  </div>
-                </div>
+                <h5>Transaction History</h5>
+                <p>Note: only displays the 20 most recent transactions</p>
+                {/* <div className="transaction-month">Tháng 05/2022</div> */}
+                {ProfileData && ProfileData.paymentList
+                  ? ProfileData.paymentList.map((item, index) => (
+                      <div className="transaction" key={index}>
+                        <div className="transaction-image">
+                          <img src={item?.showtime?.image} alt="Movie" />
+                        </div>
+                        <div className="transaction-details">
+                          <div className="transaction-info-left">
+                            <p style={{ fontWeight: "bold" }}>
+                              {item?.showtime?.movieName}
+                            </p>
+                            <p>
+                              {item?.showtime?.movieFormat}{" "}
+                              <span className="age-restriction">T13</span>
+                            </p>
+                          </div>
+                          <div className="transaction-info-right">
+                            <p>{item?.showtime?.cinemaName}</p>
+                            <p>
+                              <span style={{ fontWeight: "bold" }}>
+                                {item?.showtime?.time} -
+                              </span>{" "}
+                              <span style={{ fontWeight: "bold" }}>
+                                {item?.showtime?.date}
+                              </span>
+                            </p>
+                          </div>
+                        </div>
+                        <div className="transaction-action">
+                          <a
+                            style={{ color: "rgb(245, 128, 32)" }}
+                            onClick={() => tog_center(item?.id)}
+                          >
+                            Detail
+                          </a>
+                        </div>
+                      </div>
+                    ))
+                  : null}
               </div>
             )}
 
@@ -628,6 +634,94 @@ const Profile = (props) => {
           </div>
         </div>
       </div>
+      <Modal
+        isOpen={modal_center}
+        toggle={() => {
+          tog_center();
+        }}
+        centered
+      >
+        <ModalHeader className="modal-title" />
+
+        <ModalBody className="text-center p-5">
+          <img
+            src={DetailBooking?.showtime?.image}
+            alt={DetailBooking?.showtime?.movieName}
+            colors="primary:#121331,secondary:#08a88a"
+            style={{ width: "120px" }}
+          ></img>
+          <div className="mt-4">
+            <h4 className="mb-3">
+              {DetailBooking?.showtime?.movieName} -{" "}
+              {DetailBooking?.showtime?.movieFormat}
+            </h4>
+            <Row className="text-muted mb-4">
+              <Col md={6}>
+                <p>Show Time: </p>
+              </Col>
+              <Col md={6}>
+                <p> {DetailBooking?.showtime?.time}</p>
+              </Col>
+              <Col md={6}>
+                <p>Cinema Name: </p>
+              </Col>
+              <Col md={6}>
+                <p> {DetailBooking?.showtime?.cinemaName}</p>
+              </Col>
+              <Col md={6}>
+                <p>Room: </p>
+              </Col>
+              <Col md={6}>
+                <p> {DetailBooking?.showtime?.roomName}</p>
+              </Col>
+              <Col md={6}>
+                <p>Payment Type: </p>
+              </Col>
+              <Col md={6}>
+                <p> {DetailBooking?.paymentType}</p>
+              </Col>
+              <Col md={6}>
+                <p>Quantity Seat: </p>
+              </Col>
+              <Col md={6}>
+                <p> {DetailBooking?.quantitySeat}</p>
+              </Col>
+              <Col md={6}>
+                <p>Quantity DoubleSeat: </p>
+              </Col>
+              <Col md={6}>
+                <p> {DetailBooking?.quantityDoubleSeat}</p>
+              </Col>
+              <Col md={6}>
+                <p>Water Corn: </p>
+              </Col>
+              <Col md={6}>
+                {DetailBooking && DetailBooking?.bookingWaterCorn
+                  ? DetailBooking?.bookingWaterCorn.map((item, index) => (
+                      <p key={index}>
+                        {item.quantity}X {item.waterCorn.name}
+                      </p>
+                    ))
+                  : null}
+              </Col>
+              <Col md={6}>
+                <p>Total Price: </p>
+              </Col>
+              <Col md={6}>
+                <p> {DetailBooking?.totalPrice}</p>
+              </Col>
+            </Row>
+            <div className="hstack gap-2 justify-content-center">
+              <Button color="light" onClick={() => setmodal_center(false)}>
+                Close
+              </Button>
+              {/* <Link to="#" className="btn btn-danger">
+                Try Again
+              </Link> */}
+            </div>
+          </div>
+        </ModalBody>
+      </Modal>
     </div>
   );
 };

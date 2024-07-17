@@ -3,10 +3,13 @@ package com.cinemas.service.impl.home;
 import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.ChangePasswordRequest;
 import com.cinemas.dto.request.ProfileRequest;
-import com.cinemas.dto.response.UserResponse;
+import com.cinemas.dto.response.*;
+import com.cinemas.entities.Booking;
 import com.cinemas.entities.ChangePassword;
+import com.cinemas.entities.Showtimes;
 import com.cinemas.entities.User;
 import com.cinemas.exception.AppException;
+import com.cinemas.repositories.BookingRepository;
 import com.cinemas.repositories.UserRepository;
 import com.cinemas.service.home.HomeUserService;
 import com.cinemas.service.impl.FileStorageServiceImpl;
@@ -20,6 +23,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -36,16 +41,44 @@ public class HomeUserServiceImpl implements HomeUserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private BookingRepository bookingRepository;
+
     @Override
-    public UserResponse getUserProfile() {
+    public ProfileResponse getUserProfile() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        UserResponse userResponse = new UserResponse();
+        ProfileResponse profileResponse = new ProfileResponse();
 
-        ObjectUtils.copyFields(userDetails, userResponse);
-        userResponse.setAvatar(fileStorageServiceImpl.getUrlFromPublicId(userResponse.getAvatar()));
+        ObjectUtils.copyFields(userDetails, profileResponse);
+        profileResponse.setAvatar(fileStorageServiceImpl.getUrlFromPublicId(profileResponse.getAvatar()));
 
-        return userResponse;
+        List<Booking> bookings = bookingRepository.findByUserId(profileResponse.getId());
+        List<PaymentResponse> paymentResponses = new ArrayList<>();
+        bookings.forEach(booking -> {
+            PaymentResponse paymentResponse = new PaymentResponse();
+            Showtimes showtimes = booking.getShowtime();
+            List<BookingWaterCornResponse> bookingWaterCornResponses = new ArrayList<>();
+            ShowTimeTableResponse showTimeTableResponse =
+                    new ShowTimeTableResponse(showtimes.getId(), showtimes.getDate(), showtimes.getTime(),
+                            showtimes.getCinema().getName(), showtimes.getMovie().getName(), showtimes.getRoom().getName(),
+                            showtimes.getMovie().getImagePortrait(), showtimes.getMovie().getPrice(), showtimes.getMovieFormat());
+
+            ObjectUtils.copyFields(booking, paymentResponse);
+            booking.getBookingWaterCorn().forEach(waterCorn -> {
+                BookingWaterCornResponse bookingWaterCornResponse = new BookingWaterCornResponse();
+                ObjectUtils.copyFields(waterCorn, bookingWaterCornResponse);
+                bookingWaterCornResponses.add(bookingWaterCornResponse);
+            });
+            showTimeTableResponse.setImage(fileStorageServiceImpl.getUrlFromPublicId(showTimeTableResponse.getImage()));
+            paymentResponse.setShowtime(showTimeTableResponse);
+            paymentResponse.setBookingWaterCorn(bookingWaterCornResponses);
+
+            paymentResponses.add(paymentResponse);
+        });
+        profileResponse.setPaymentList(paymentResponses);
+
+        return profileResponse;
     }
 
     @Override
@@ -98,11 +131,11 @@ public class HomeUserServiceImpl implements HomeUserService {
                 .findByEmail(userDetails.getUsername())
                 .orElseThrow(() -> new AppException(NOT_FOUND));
 
-        if(user.getAvatar() != null){
+        if (user.getAvatar() != null) {
             fileStorageServiceImpl.deleteFile(user.getAvatar());
         }
 
-        user.setAvatar(fileStorageServiceImpl.uploadFile(file,"users"));
+        user.setAvatar(fileStorageServiceImpl.uploadFile(file, "users"));
         userRepository.save(user);
 
         return true;
