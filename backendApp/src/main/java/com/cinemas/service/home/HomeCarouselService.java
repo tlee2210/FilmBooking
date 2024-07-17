@@ -1,7 +1,9 @@
 package com.cinemas.service.home;
 
-import com.cinemas.dto.response.HomeCarouselResponse;
+import com.cinemas.dto.response.SelectOptionReponse;
+
+import java.util.List;
 
 public interface HomeCarouselService {
-    HomeCarouselResponse getHomeCarousel();
+    List<SelectOptionReponse> getHomeCarousel();
 }
