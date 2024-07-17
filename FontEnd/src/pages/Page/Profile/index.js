@@ -171,6 +171,14 @@ const Profile = (props) => {
     },
   });
 
+  const formatTime = (timeString) => {
+    if (timeString) {
+      const [hours, minutes] = timeString.split(":");
+      return `${hours}:${minutes}`;
+    }
+    return "";
+  };
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -184,11 +192,13 @@ const Profile = (props) => {
 
   function tog_center(id) {
     if (id) {
-      setDetailBooking(ProfileData.paymentList.find((item) => item.id === id));
+      setDetailBooking(
+        ProfileData?.bookingList?.find((item) => item.id === id)
+      );
     }
     setmodal_center(!modal_center);
   }
-  console.log(DetailBooking);
+  // console.log(DetailBooking);
 
   return (
     <div
@@ -488,30 +498,34 @@ const Profile = (props) => {
                 <h5>Transaction History</h5>
                 <p>Note: only displays the 20 most recent transactions</p>
                 {/* <div className="transaction-month">Tháng 05/2022</div> */}
-                {ProfileData && ProfileData.paymentList
-                  ? ProfileData.paymentList.map((item, index) => (
+                {ProfileData && ProfileData.bookingList
+                  ? ProfileData.bookingList.map((item, index) => (
                       <div className="transaction" key={index}>
                         <div className="transaction-image">
-                          <img src={item?.showtime?.image} alt="Movie" />
+                          <img src={item?.image} alt="Movie" />
                         </div>
                         <div className="transaction-details">
                           <div className="transaction-info-left">
                             <p style={{ fontWeight: "bold" }}>
-                              {item?.showtime?.movieName}
+                              {item?.movieName}
                             </p>
                             <p>
-                              {item?.showtime?.movieFormat}{" "}
-                              <span className="age-restriction">T13</span>
+                              {item?.movieFormat}{" "}
+                              {item?.rules ? (
+                                <span className="age-restriction">
+                                  {item?.rules} yrs
+                                </span>
+                              ) : null}
                             </p>
                           </div>
                           <div className="transaction-info-right">
-                            <p>{item?.showtime?.cinemaName}</p>
+                            <p>{item?.cinemaName}</p>
                             <p>
                               <span style={{ fontWeight: "bold" }}>
-                                {item?.showtime?.time} -
+                                {formatTime(item?.showTime)} -
                               </span>{" "}
                               <span style={{ fontWeight: "bold" }}>
-                                {item?.showtime?.date}
+                                {item?.showTimeDate}
                               </span>
                             </p>
                           </div>
@@ -641,74 +655,108 @@ const Profile = (props) => {
         }}
         centered
       >
-        <ModalHeader className="modal-title" />
+        <ModalHeader
+          className="modal-title"
+          style={{ borderTop: "14px solid #ff6600" }}
+        />
 
         <ModalBody className="text-center p-5">
           <img
-            src={DetailBooking?.showtime?.image}
-            alt={DetailBooking?.showtime?.movieName}
+            src={DetailBooking?.image}
+            alt={DetailBooking?.movieName}
             colors="primary:#121331,secondary:#08a88a"
             style={{ width: "120px" }}
           ></img>
           <div className="mt-4">
             <h4 className="mb-3">
-              {DetailBooking?.showtime?.movieName} -{" "}
-              {DetailBooking?.showtime?.movieFormat}
+              {DetailBooking?.movieName} - {DetailBooking?.movieFormat}
+              {DetailBooking?.rules ? (
+                <span className="age-restriction">
+                  {DetailBooking?.rules} yrs
+                </span>
+              ) : null}
             </h4>
             <Row className="text-muted mb-4">
-              <Col md={6}>
-                <p>Cinema Name: </p>
+              <Col md={5}>
+                <p className="text-start">Cinema Name: </p>
               </Col>
               <Col md={6}>
-                <p> {DetailBooking?.showtime?.cinemaName}</p>
+                <p className="text-start"> {DetailBooking?.cinemaName}</p>
+              </Col>
+              <hr style={{ border: "1px dashed black" }} />
+              <Col md={5}>
+                <p className="text-start">Room: </p>
               </Col>
               <Col md={6}>
-                <p>Room: </p>
+                <p className="text-start"> {DetailBooking?.roomName}</p>
+              </Col>
+              <hr style={{ border: "1px dashed black" }} />
+              <Col md={5}>
+                <p className="text-start">Show Time: </p>
               </Col>
               <Col md={6}>
-                <p> {DetailBooking?.showtime?.roomName}</p>
+                <p className="text-start">
+                  {formatTime(DetailBooking?.showTime)} Day{" "}
+                  {DetailBooking?.bookingDate}
+                </p>
+                {/* <p>{DetailBooking?.bookingDate} </p> */}
+              </Col>
+              <hr style={{ border: "1px dashed black" }} />
+              <Col md={5}>
+                <p className="text-start">Payment Type: </p>
               </Col>
               <Col md={6}>
-                <p>Show Time: </p>
+                <p className="text-start">{DetailBooking?.paymentType}</p>
+              </Col>
+              <hr style={{ border: "1px dashed black" }} />
+              {DetailBooking && DetailBooking?.quantitySeat ? (
+                <React.Fragment>
+                  <Col md={5}>
+                    <p className="text-start">Quantity Seat: </p>
+                  </Col>
+                  <Col md={6}>
+                    <p className="text-start">{DetailBooking?.quantitySeat}</p>
+                  </Col>
+                  <hr style={{ border: "1px dashed black" }} />
+                </React.Fragment>
+              ) : null}
+              {DetailBooking && DetailBooking?.quantityDoubleSeat ? (
+                <React.Fragment>
+                  <Col md={5}>
+                    <p className="text-start">Quantity DoubleSeat: </p>
+                  </Col>
+                  <Col md={6}>
+                    <p className="text-start">
+                      {DetailBooking?.quantityDoubleSeat}
+                    </p>
+                  </Col>
+                  <hr style={{ border: "1px dashed black" }} />
+                </React.Fragment>
+              ) : null}
+              {DetailBooking &&
+              DetailBooking?.bookingWaterCorn &&
+              DetailBooking?.bookingWaterCorn.length > 0 ? (
+                <React.Fragment>
+                  <Col md={5}>
+                    <p className="text-start">Water Corn: </p>
+                  </Col>
+                  <Col md={6}>
+                    {DetailBooking && DetailBooking?.bookingWaterCorn
+                      ? DetailBooking?.bookingWaterCorn.map((item, index) => (
+                          <p className="text-start" key={index}>
+                            {item.quantity}X {item.name}
+                          </p>
+                        ))
+                      : null}
+                  </Col>
+                  <hr style={{ border: "1px dashed black" }} />
+                </React.Fragment>
+              ) : null}
+              <Col md={5}>
+                <p className="text-start">Total Price: </p>
               </Col>
               <Col md={6}>
-                <p> {DetailBooking?.showtime?.time}</p>
-              </Col>
-              <Col md={6}>
-                <p>Payment Type: </p>
-              </Col>
-              <Col md={6}>
-                <p> {DetailBooking?.paymentType}</p>
-              </Col>
-              <Col md={6}>
-                <p>Quantity Seat: </p>
-              </Col>
-              <Col md={6}>
-                <p> {DetailBooking?.quantitySeat}</p>
-              </Col>
-              <Col md={6}>
-                <p>Quantity DoubleSeat: </p>
-              </Col>
-              <Col md={6}>
-                <p> {DetailBooking?.quantityDoubleSeat}</p>
-              </Col>
-              <Col md={6}>
-                <p>Water Corn: </p>
-              </Col>
-              <Col md={6}>
-                {DetailBooking && DetailBooking?.bookingWaterCorn
-                  ? DetailBooking?.bookingWaterCorn.map((item, index) => (
-                      <p key={index}>
-                        {item.quantity}X {item.waterCorn.name}
-                      </p>
-                    ))
-                  : null}
-              </Col>
-              <Col md={6}>
-                <p>Total Price: </p>
-              </Col>
-              <Col md={6}>
-                <p> {DetailBooking?.totalPrice}</p>
+                <p className="text-start">{DetailBooking?.totalPrice} VND</p>
               </Col>
             </Row>
             <div className="hstack gap-2 justify-content-center">

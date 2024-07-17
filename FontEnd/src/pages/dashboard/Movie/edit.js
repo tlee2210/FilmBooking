@@ -187,39 +187,39 @@ const MovieEdit = (props) => {
     enableReinitialize: true,
 
     initialValues: {
-      name: item.name || "",
-      status: item.status || "",
-      country: item.country?.id || "",
-      producer: item.producer || "",
-      duration_movie: item.duration_movie || "",
-      Description: item.description || "",
-      rules: item.rules || "",
-      releaseDate: item.releaseDate || "",
-      endDate: item.endDate || "",
-      language: item.language || "",
-      trailer: item.trailer || "",
-      price: item.price || "",
+      name: item?.name || "",
+      status: item?.status?.toUpperCase().replace(" ", "_") || "",
+      country: item?.country?.id || "",
+      producer: item?.producer || "",
+      duration_movie: item?.duration_movie || "",
+      Description: item?.description || "",
+      rules: item?.rules || "",
+      releaseDate: item?.releaseDate || "",
+      endDate: item?.endDate || "",
+      language: item?.language || "",
+      trailer: item?.trailer || "",
+      price: item?.price || "",
       prices:
-        item.priceMovies?.map((item) => ({
-          date: new Date(item.date),
-          price: item.price,
+        item?.priceMovies?.map((item) => ({
+          date: new Date(item?.date),
+          price: item?.price,
         })) || [],
-      fileLandscape: item.imageLandscape
-        ? [{ uid: item.imageLandscape, url: item.imageLandscape }]
+      fileLandscape: item?.imageLandscape
+        ? [{ uid: item?.imageLandscape, url: item?.imageLandscape }]
         : [],
-      filePortrait: item.imagePortrait
-        ? [{ uid: item.imagePortrait, url: item.imagePortrait }]
+      filePortrait: item?.imagePortrait
+        ? [{ uid: item?.imagePortrait, url: item?.imagePortrait }]
         : [],
       Category:
-        item.categories?.map((cat) => {
+        item?.categories?.map((cat) => {
           return cat.id;
         }) || [],
       Actor:
-        item.actor?.map((act) => {
+        item?.actor?.map((act) => {
           return act.id;
         }) || [],
       Directory:
-        item.director?.map((dir) => {
+        item?.director?.map((dir) => {
           return dir.id;
         }) || [],
     },

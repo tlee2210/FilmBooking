@@ -10,6 +10,7 @@ import com.cinemas.entities.Showtimes;
 import com.cinemas.entities.User;
 import com.cinemas.exception.AppException;
 import com.cinemas.repositories.BookingRepository;
+import com.cinemas.repositories.BookingWaterRepository;
 import com.cinemas.repositories.UserRepository;
 import com.cinemas.service.home.HomeUserService;
 import com.cinemas.service.impl.FileStorageServiceImpl;
@@ -43,6 +44,8 @@ public class HomeUserServiceImpl implements HomeUserService {
 
     @Autowired
     private BookingRepository bookingRepository;
+    @Autowired
+    private BookingWaterRepository bookingWaterRepository;
 
     @Override
     public UserResponse getUserProfile() {
@@ -52,6 +55,11 @@ public class HomeUserServiceImpl implements HomeUserService {
 
         ObjectUtils.copyFields(userDetails, userResponse);
         userResponse.setAvatar(fileStorageServiceImpl.getUrlFromPublicId(userResponse.getAvatar()));
+        userResponse.setBookingList(bookingRepository.findByUserId(userResponse.getId()));
+        userResponse.getBookingList().forEach(item -> {
+            item.setImage(fileStorageServiceImpl.getUrlFromPublicId(item.getImage()));
+            item.setBookingWaterCorn(bookingWaterRepository.findByIdBooking(item.getId()));
+        });
 
         return userResponse;
     }

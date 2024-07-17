@@ -190,7 +190,6 @@ public class MovieServiceImpl implements MovieService {
         Movie movie = movieRepository.findBySlug(slug);
 
         if (movie == null) throw new AppException(NOT_FOUND);
-
         movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
         movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
 
@@ -218,7 +217,7 @@ public class MovieServiceImpl implements MovieService {
         List<SelectOptionReponse> optionsStatus = new ArrayList<>();
 
         for (MovieStatus movieStatus : MovieStatus.values()) {
-            optionsStatus.add(new SelectOptionReponse(movieStatus.getValue(), movieStatus.getValue()));
+            optionsStatus.add(new SelectOptionReponse(movieStatus.name(), movieStatus.getValue()));
         }
 
         List<Country> countryList = countryRepository.findAll();

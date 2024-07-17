@@ -28,14 +28,5 @@ public class UserResponse {
 
     private String avatar;
 
-    public UserResponse(int id, String name, String email, String phone, LocalDate DOB, Gender gender, RoleType role, String avatar) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.DOB = DOB;
-        this.gender = gender;
-        this.role = role;
-        this.avatar = avatar;
-    }
+    private List<BookingResponse> bookingList;
 }

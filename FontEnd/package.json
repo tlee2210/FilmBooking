@@ -30,6 +30,7 @@
     "bootstrap": "5.3.2",
     "chart.js": "^4.4.1",
     "cleave.js": "^1.6.0",
+    "currency-converter-lt": "^2.0.1",
     "echarts": "^5.4.3",
     "echarts-for-react": "^3.0.2",
     "emoji-picker-react": "^4.5.16",
