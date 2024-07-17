@@ -29,7 +29,6 @@ import HomeBlogOrReviewReducer from "./home/BlogAndReviewHome/reducer";
 import HomeMovieReducer from "./home/MovieHome/reducer";
 import HomeBookingReducer from "./home/bookingHome/reducer";
 import HomeCinemaReducer from "./home/CinemaHome/reducer";
-import HomeWatercornReducer from "./home/Watercorn/reducer";
 import HomeMovieGenreReducer from "./home/Movie-GenreHome/reducer";
 import ProfileHomeReducer from "./home/profileHome/reducer";
 import PromotionHomeReducer from "./home/PromotionHome/reducer";
@@ -59,7 +58,6 @@ const rootReducer = combineReducers({
   HomeMovie: HomeMovieReducer,
   HomeBooking: HomeBookingReducer,
   HomeCinema: HomeCinemaReducer,
-  HomeWaterCorn: HomeWatercornReducer,
   HomeMovieGenre: HomeMovieGenreReducer,
   HomeProfile: ProfileHomeReducer,
   HomePromotion: PromotionHomeReducer,

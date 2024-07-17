@@ -110,9 +110,9 @@ const Home = lazy(() => import("../pages/home/index"));
 import PromotionHome from "../pages/Page/Promotion/index";
 import PromotionDetailsHome from "../pages/Page/Promotion/Details";
 
-import PhimHayThang from "../pages/Page/Promotion/PhimHayThang";
+// import PhimHayThang from "../pages/Page/Promotion/PhimHayThang";
 
-import PhimHayThangDetails from "../pages/Page/Promotion/PhimHayThangDetails";
+// import PhimHayThangDetails from "../pages/Page/Promotion/PhimHayThangDetails";
 
 import Profile from "../pages/Page/Profile";
 
@@ -240,8 +240,8 @@ const homeRoutes = [
   //đặt vế
   { path: "/dat-ve", component: <DatVeXemPhim /> },
   //event
-  { path: "/phim-hay-thang", component: <PhimHayThang /> },
-  { path: "/phim-hay-thang/details", component: <PhimHayThangDetails /> },
+  // { path: "/phim-hay-thang", component: <PhimHayThang /> },
+  // { path: "/phim-hay-thang/details", component: <PhimHayThangDetails /> },
 ];
 
 const AuthRoutes = [

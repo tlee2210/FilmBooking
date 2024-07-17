@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Container,
   Row,
@@ -24,7 +24,7 @@ import { clearNotification } from "../../../slices/message/reducer";
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
-import Select from "react-select";
+// import Select from "react-select";
 
 import "react-toastify/dist/ReactToastify.css";
 import { createSelector } from "reselect";

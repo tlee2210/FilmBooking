@@ -1,16 +1,9 @@
 package com.cinemas.controller.admin;
 
-import com.cinemas.dto.request.MovieGenreRequest;
-import com.cinemas.dto.request.SearchMovie;
 import com.cinemas.dto.request.SearchUser;
 import com.cinemas.dto.request.UserRequest;
 import com.cinemas.dto.response.APIResponse;
-import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.dto.response.UserResponse;
-import com.cinemas.entities.Movie;
-import com.cinemas.entities.MovieGenre;
-import com.cinemas.entities.User;
-import com.cinemas.enums.MovieStatus;
 import com.cinemas.enums.RoleType;
 import com.cinemas.exception.AppException;
 import com.cinemas.service.UserService;

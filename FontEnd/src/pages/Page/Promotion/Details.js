@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import "./css/Event.css";
 import { createSelector } from "reselect";
 import { useSelector, useDispatch } from "react-redux";
@@ -16,7 +16,7 @@ const PromotionDetails = (props) => {
   const dispatch = useDispatch();
 
   const slug = props.router.params.slug;
-//   console.log(slug);
+  //   console.log(slug);
 
   useEffect(() => {
     document.body.scrollTop = 0;

@@ -8,7 +8,7 @@ export const getHomePromotion = (pageNo, pageSize) => async (dispatch) => {
       params: { pageNo, pageSize },
     })
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(fetchSuccess({ data: response?.data?.result }));
     })
     .catch((error) => {
@@ -20,7 +20,7 @@ export const getHomePromotionDetails = (slug, history) => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/home/v1/promotion/detail/${slug}`)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(setItem({ data: response?.data?.result }));
     })
     .catch((error) => {

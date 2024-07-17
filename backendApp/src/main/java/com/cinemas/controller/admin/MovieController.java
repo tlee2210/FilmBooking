@@ -1,10 +1,8 @@
 package com.cinemas.controller.admin;
 
 import com.cinemas.dto.request.MovieRequest;
-import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.SearchMovie;
 import com.cinemas.dto.response.*;
-import com.cinemas.entities.Cinema;
 import com.cinemas.entities.Movie;
 import com.cinemas.enums.MovieStatus;
 import com.cinemas.exception.AppException;
@@ -16,7 +14,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.List;
 
 import static com.cinemas.exception.ErrorCode.CREATE_FAILED;
 import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;

@@ -87,7 +87,7 @@ export const getPaymentVnpayMethods = (formData) => async (dispatch) => {
   await axios
     .post(`http://localhost:8081/api/payment/create_payment_vnpay`, formData)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       window.location.href = response?.data?.result;
     })
     .catch((error) => {
@@ -99,7 +99,7 @@ export const getPaymentResult = (formData, history) => async (dispatch) => {
   await axios
     .post(`http://localhost:8081/api/payment/booking_paypal`, formData)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       // getPaymentResult
       history("/profile");
     })

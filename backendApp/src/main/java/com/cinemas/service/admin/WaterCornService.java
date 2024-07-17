@@ -1,7 +1,5 @@
 package com.cinemas.service.admin;
 
-import com.cinemas.dto.request.PaginationHelper;
-
 import com.cinemas.dto.request.SearchRequest;
 import com.cinemas.dto.request.WaterCornRequest;
 import com.cinemas.entities.WaterCorn;

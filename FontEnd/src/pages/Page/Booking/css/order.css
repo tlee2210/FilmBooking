@@ -18,6 +18,17 @@
   gap: 20px;
 }
 
+.age-restriction {
+  display: inline-block;
+  padding: 2px 6px;
+  background-color: rgb(245 128 32);
+  color: #fff;
+  border-radius: 4px;
+  font-size: 0.9em;
+  margin-left: 10px;
+  font-weight: bold;
+}
+
 .screen-title-order {
   position: relative;
   text-align: center;

@@ -341,7 +341,7 @@ const index = () => {
                                     fontSize: "12px",
                                   }}
                                   dangerouslySetInnerHTML={{
-                                    __html: getFirstSentence(item.description),
+                                    __html: getFirstSentence(item.trailer),
                                   }}
                                 ></p>
                               </CardBody>

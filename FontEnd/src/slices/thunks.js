@@ -26,7 +26,6 @@ export * from "./home/BlogAndReviewHome/thunk";
 export * from "./home/MovieHome/thunk";
 export * from "./home/bookingHome/thunk";
 export * from "./home/CinemaHome/thunk";
-export * from "./home/Watercorn/thunk";
 export * from "./home/Movie-GenreHome/thunk";
 export * from "./home/profileHome/thunk";
 export * from "./home/PromotionHome/thunk";

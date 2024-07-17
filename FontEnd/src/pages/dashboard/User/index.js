@@ -1,16 +1,5 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  CardHeader,
-  Modal,
-  ModalBody,
-  Button,
-  Form,
-  Input,
-} from "reactstrap";
+import React, { useState, useEffect, useMemo } from "react";
+import { Container, Row, Col, Card, CardHeader, Form, Input } from "reactstrap";
 
 import TableContainer from "../../../Components/Common/TableContainerReactTable";
 import { message, Image } from "antd";
@@ -31,7 +20,6 @@ import { useSelector, useDispatch } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import { createSelector } from "reselect";
 
-import { celebrity, deleteCelebrity } from "../../../slices/Celebrity/thunk";
 import { getUsers } from "../../../slices/User/thunk";
 import avatar from "../../../assets/images/User-avatar.png";
 

@@ -70,7 +70,7 @@ export const editReview = (slug, history) => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/admin/v1/review/${slug}/edit`)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(
         setItem({
           data: response.data?.result,

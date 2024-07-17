@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardBody,
@@ -13,6 +13,8 @@ import {
   TabContent,
   TabPane,
 } from "reactstrap";
+// import SimpleBar from "simplebar-react";
+
 import classnames from "classnames";
 import { Link, useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -113,6 +115,26 @@ const HomeCinema = (props) => {
   const formatTime = (timeString) => {
     const [hours, minutes] = timeString.split(":");
     return `${hours}:${minutes}`;
+  };
+
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const today = new Date();
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const isToday = date.toDateString() === today.toDateString();
+    const dayOfWeek = isToday ? "Today" : daysOfWeek[date.getDay()];
+    return `${dayOfWeek} ${day}/${month}`;
   };
 
   document.title = cinemaData.name || "Cinema";
@@ -236,8 +258,9 @@ const HomeCinema = (props) => {
                         MOVIE
                       </div>
                     </div>
+                    {/* <SimpleBar forceVisible="x" style={{ maxWidth: "190px" }}> */}
                     <Nav
-                      className="nav-tabs-custom-rapphim card-header-tabs-rapphim border-bottom-0-rapphim"
+                      className="nav-tabs-custom-rapphim border-bottom-0-rapphim"
                       role="tablist"
                     >
                       {cinemaData && cinemaData.days
@@ -252,12 +275,13 @@ const HomeCinema = (props) => {
                                 }}
                                 type="button"
                               >
-                                {day?.date}
+                                {formatDate(day?.date)}
                               </NavLink>
                             </NavItem>
                           ))
                         : null}
                     </Nav>
+                    {/* </SimpleBar> */}
                   </CardHeader>
 
                   <CardBody>

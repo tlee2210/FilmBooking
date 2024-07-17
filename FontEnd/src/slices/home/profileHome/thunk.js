@@ -6,7 +6,7 @@ export const getprofile = () => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/home/v1/user/profile`)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(fetchSuccess({ data: response?.data?.result }));
     })
     .catch((error) => {

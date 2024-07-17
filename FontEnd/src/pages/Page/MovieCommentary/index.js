@@ -7,10 +7,7 @@ import {
   Col,
   Container,
   Input,
-  Label,
   Row,
-  FormGroup,
-  Button,
 } from "reactstrap";
 import "../CinemaCorner/css/CinemaCorner.css";
 import { useSelector, useDispatch } from "react-redux";
@@ -22,7 +19,7 @@ import RightColumn from "../CinemaCorner/RightColumn";
 import MovieIsShowing from "../BuyTicket/MovieIsShowing";
 import { getHomeReview } from "../../../slices/home/BlogAndReviewHome/thunk";
 
-import buttonTicket from "../../../assets/images/buttonTicket/btn-ticket.png";
+// import buttonTicket from "../../../assets/images/buttonTicket/btn-ticket.png";
 
 // Import Images
 // import avatar3 from "../../../assets/images/users/avatar-3.jpg";
@@ -325,4 +322,4 @@ const MovieCommentary = () => {
   );
 };
 
-export default MovieCommentary;
+export default withRouter(MovieCommentary);

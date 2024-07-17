@@ -81,7 +81,7 @@ export const UpdateWaterCorn = (formData, history) => async (dispatch) => {
       },
     })
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(Success(response.data?.message));
       history("/dashboard/water-corn");
     })

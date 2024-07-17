@@ -7,7 +7,6 @@ import {
   Col,
   Container,
   Row,
-  Button,
   Input,
 } from "reactstrap";
 import { Image } from "antd";

@@ -1,21 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Container,
-  Form,
-  Nav,
-  NavItem,
-  NavLink,
-  Row,
-  TabContent,
-  TabPane,
-  Button,
-  Modal,
-  ModalBody,
-} from "reactstrap";
+import { Col, Container, Row } from "reactstrap";
 import { Image } from "antd";
 import withRouter from "../../../Components/Common/withRouter";
 import { useSelector, useDispatch } from "react-redux";

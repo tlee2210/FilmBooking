@@ -11,7 +11,7 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Flatpickr from "react-flatpickr";
-import Select from "react-select";
+// import Select from "react-select";
 import avatar from "../../../assets/images/User-avatar.png";
 import { clearNotification } from "../../../slices/message/reducer";
 import { message } from "antd";
@@ -32,7 +32,7 @@ import {
   ModalHeader,
   ModalBody,
 } from "reactstrap";
-import { color } from "echarts";
+// import { color } from "echarts";
 
 const Tabs = ({ selectedTab, onTabChange }) => {
   const tabs = [

@@ -1,26 +1,8 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Container,
-  Nav,
-  NavItem,
-  NavLink,
-  ButtonGroup,
-  Modal,
-  Row,
-  ModalBody,
-  Button,
-  TabContent,
-  TabPane,
-  Table,
-  Input,
-} from "reactstrap";
-import RightColumn from "../CinemaCorner/RightColumn";
+import { Card, CardBody, Container, Row } from "reactstrap";
+// import RightColumn from "../CinemaCorner/RightColumn";
 import { Link, useNavigate } from "react-router-dom";
-import classnames from "classnames";
+// import classnames from "classnames";
 import { useDispatch, useSelector } from "react-redux";
 import withRouter from "../../../Components/Common/withRouter";
 import buttonTicket from "../../../assets/images/buttonTicket/btn-ticket.png";

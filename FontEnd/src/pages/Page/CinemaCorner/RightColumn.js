@@ -4,12 +4,9 @@ import {
   CardBody,
   CardHeader,
   Col,
-  Container,
   Input,
-  Label,
   Row,
   FormGroup,
-  Button,
 } from "reactstrap";
 import "./css/CinemaCorner.css";
 import { Link, useNavigate } from "react-router-dom";

@@ -1,6 +1,5 @@
 package com.cinemas.service.impl.admin;
 
-import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.ShowTimeRequest;
 import com.cinemas.dto.request.searchShowTimeRequest;

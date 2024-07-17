@@ -20,6 +20,7 @@ public class ShowTimeTableResponse {
     private Integer id;
     private LocalDate date;
     private LocalTime time;
+    private String rules;
     private String cinemaName;
     private String movieName;
     private String roomName;
@@ -53,15 +54,17 @@ public class ShowTimeTableResponse {
         this.movieFormat = movieFormat;
     }
 
-    public ShowTimeTableResponse(Integer id, LocalDate date, LocalTime time, String cinemaName, String movieName, String roomName, String image, float price, MovieFormat movieFormat) {
+    public ShowTimeTableResponse(Integer id, LocalDate date, LocalTime time, String rules, String cinemaName, String movieName, String roomName, String image, float price, Room room, MovieFormat movieFormat) {
         this.id = id;
         this.date = date;
         this.time = time;
+        this.rules = rules;
         this.cinemaName = cinemaName;
         this.movieName = movieName;
         this.roomName = roomName;
         this.image = image;
         this.price = price;
+        this.room = room;
         this.movieFormat = movieFormat;
     }
 }

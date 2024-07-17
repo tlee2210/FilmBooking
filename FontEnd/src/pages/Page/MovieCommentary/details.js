@@ -1,20 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { createSelector } from "reselect";
 import { useSelector, useDispatch } from "react-redux";
 
 import { Link } from "react-router-dom";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Container,
-  Input,
-  Label,
-  Row,
-  FormGroup,
-  Button,
-} from "reactstrap";
+import { Card, CardBody, Col, Container, Row } from "reactstrap";
 import MovieIsShowing from "../BuyTicket/MovieIsShowing";
 import "../CinemaCorner/css/CinemaCorner.css";
 import withRouter from "../../../Components/Common/withRouter";

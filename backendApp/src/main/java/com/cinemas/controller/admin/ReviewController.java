@@ -1,13 +1,10 @@
 package com.cinemas.controller.admin;
 
-import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.ReviewRequest;
 import com.cinemas.dto.request.SearchRequest;
-import com.cinemas.dto.request.SearchReviewRequest;
 import com.cinemas.dto.response.APIResponse;
 import com.cinemas.dto.response.ReviewResponse;
 import com.cinemas.dto.response.SelectOptionAndModelReponse;
-import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Review;
 import com.cinemas.enums.ReviewType;
 import com.cinemas.exception.AppException;

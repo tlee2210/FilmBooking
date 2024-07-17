@@ -9,7 +9,7 @@ export const getUsers = (name, role, pageNo, pageSize) => async (dispatch) => {
       params: { name, role, pageNo, pageSize },
     })
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       dispatch(getData(response?.data?.result));
     })
     .catch((err) => {

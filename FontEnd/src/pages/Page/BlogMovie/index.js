@@ -1,20 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Container,
-  Input,
-  Label,
-  Row,
-  FormGroup,
-  Button,
-} from "reactstrap";
+import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
 import "../CinemaCorner/css/CinemaCorner.css";
 import MovieIsShowing from "../BuyTicket/MovieIsShowing";
-import { Image } from "antd";
+// import { Image } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import withRouter from "../../../Components/Common/withRouter";
 import { createSelector } from "reselect";
@@ -267,4 +256,4 @@ const BlogMovie = () => {
   );
 };
 
-export default BlogMovie;
+export default withRouter(BlogMovie);

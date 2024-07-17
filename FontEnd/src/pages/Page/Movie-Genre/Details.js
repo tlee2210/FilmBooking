@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Card, CardBody, Col, Container, Row } from "reactstrap";
 import { Link } from "react-router-dom";
 import withRouter from "../../../Components/Common/withRouter";
@@ -42,75 +42,6 @@ const MovieDetail = (props) => {
     return description + "...";
   };
 
-  const movieDetails = {
-    title: "Avengers: Hồi Kết",
-    duration: "182 Phút",
-    releaseDate: "18/04/2019",
-    rating: "9.0",
-    votes: "3391 votes",
-    director: "Anthony Russo, Joe Russo",
-    country: "Mỹ",
-    genre: "Hành Động, Phiêu Lưu, Giả Tưởng",
-    cast: [
-      {
-        name: "Robert Downey Jr.",
-        image: "https://via.placeholder.com/100x100.png?text=Robert+Downey+Jr",
-      },
-      {
-        name: "Chris Hemsworth",
-        image: "https://via.placeholder.com/100x100.png?text=Chris+Hemsworth",
-      },
-      {
-        name: "Chris Evans",
-        image: "https://via.placeholder.com/100x100.png?text=Chris+Evans",
-      },
-      {
-        name: "Scarlett Johansson",
-        image:
-          "https://via.placeholder.com/100x100.png?text=Scarlett+Johansson",
-      },
-      {
-        name: "Mark Ruffalo",
-        image: "https://via.placeholder.com/100x100.png?text=Mark+Ruffalo",
-      },
-      {
-        name: "Jeremy Renner",
-        image: "https://via.placeholder.com/100x100.png?text=Jeremy+Renner",
-      },
-      {
-        name: "Paul Rudd",
-        image: "https://via.placeholder.com/100x100.png?text=Paul+Rudd",
-      },
-    ],
-    description: "Cú búng tay của Thanos đã khiến toàn bộ ...",
-    trivia: "Có lẽ vào năm 2008, khi đặt viên gạch đầu tiên...",
-    comments: "Hơn 3 tiếng đồng hồ của Avengers: Endgame chúng ta có gì?...",
-    relatedArticles: [
-      {
-        title: "[Review] A Quiet Place Day One...",
-        image:
-          "https://via.placeholder.com/150x150.png?text=A+Quiet+Place+Day+One",
-        link: "#",
-      },
-      {
-        title: "Phim Hay Tháng 7: Siêu Anh Hùng Trỗi Dậy",
-        image: "https://via.placeholder.com/150x150.png?text=Phim+Hay+Tháng+7",
-        link: "#",
-      },
-      {
-        title: "Despicable Me 4: Chúng Ta Biết Được Bao Nhiêu Về Minions?",
-        image: "https://via.placeholder.com/150x150.png?text=Despicable+Me+4",
-        link: "#",
-      },
-      {
-        title: "[Review] Cửu Long Thành Trại Vây Thành...",
-        image:
-          "https://via.placeholder.com/150x150.png?text=Cửu+Long+Thành+Trại+Vây+Thành",
-        link: "#",
-      },
-    ],
-  };
-
   document.title = `Movie ${movie?.name}`;
 
   return (
@@ -136,9 +67,11 @@ const MovieDetail = (props) => {
                       <Col md="9" style={{ paddingLeft: 20 }}>
                         <h1 className="movie-title-theloaiphimDetails">
                           {movie?.name}{" "}
-                          <span className="movie-rating-badge-theloaiphimDetails">
-                            T13
-                          </span>
+                          {movie && movie?.rules ? (
+                            <span className="movie-rating-badge-theloaiphimDetails">
+                              {movie?.rules} yrs
+                            </span>
+                          ) : null}
                         </h1>
                         <div className="movie-meta-theloaiphimDetails">
                           <span className="movie-duration-theloaiphimDetails">

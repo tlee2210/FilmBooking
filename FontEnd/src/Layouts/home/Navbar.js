@@ -18,7 +18,6 @@ import {
 import LogoDark from "../../assets/images/logo-dark.png";
 import LogoLight from "../../assets/images/logo-light.png";
 
-import Ticket from "../../assets/images/Ticket.jpg";
 import { getNavbar } from "../../slices/home/MovieHome/thunk";
 import { useSelector, useDispatch } from "react-redux";
 import SimpleBar from "simplebar-react";

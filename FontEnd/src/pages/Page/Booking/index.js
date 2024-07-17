@@ -1,8 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import "../Booking/css/order.css";
@@ -30,7 +26,6 @@ import {
   getPaymentVnpayMethods,
   getPaymentResult,
 } from "../../../slices/home/bookingHome/thunk";
-import { getHomeWaterCorn } from "../../../slices/home/Watercorn/thunk";
 import withRouter from "../../../Components/Common/withRouter";
 import { clearNotification } from "../../../slices/message/reducer";
 
@@ -93,13 +88,6 @@ const Booking = (props) => {
     }
     dispatch(clearNotification());
   }, [error]);
-
-  useEffect(() => {
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-
-    dispatch(getHomeWaterCorn());
-  }, [dispatch]);
 
   useEffect(() => {
     if (!data) {
@@ -200,8 +188,8 @@ const Booking = (props) => {
                   // }
                   className={classnames({
                     "double-seat": isDouble,
-                    "seatsBooked": isBooked,
-                    "seat": !isDouble,
+                    seatsBooked: isBooked,
+                    seat: !isDouble,
                     "margin-right-seat": applyMargin,
                     "selected-seat": isSelected,
                   })}
@@ -769,7 +757,14 @@ const Booking = (props) => {
                           <div>
                             <div className="movie-title">{data?.movieName}</div>
                             <div className="movie-info">
-                              <p>{data?.movieFormat}</p>
+                              <p>
+                                {data?.movieFormat}
+                                {data && data.rules ? (
+                                  <span className="age-restriction">
+                                    {data?.rules} yrs
+                                  </span>
+                                ) : null}
+                              </p>
                             </div>
                           </div>
                         </div>

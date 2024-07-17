@@ -130,6 +130,27 @@ const Booking = (props) => {
     return `${hours}:${minutes}`;
   };
 
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const today = new Date();
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const isToday = date.toDateString() === today.toDateString();
+    const dayOfWeek = isToday ? "Today" : daysOfWeek[date.getDay()];
+    // return `<span className="d-flex block align-items-center pb-3">${dayOfWeek}</span> ${day}/${month}`;
+    return `${dayOfWeek} ${day}/${month}`;
+  };
+
   return (
     <Container style={{ paddingTop: 80 }} fluid>
       {/* Banner */}
@@ -194,6 +215,12 @@ const Booking = (props) => {
                       <Card className="h-100" style={{ paddingLeft: 20 }}>
                         <h1 className="title-ticketFilm mb-1">
                           {MovieDetails.name}
+
+                          {MovieDetails && MovieDetails?.rules ? (
+                            <span className="movie-rating-badge-theloaiphimDetails">
+                              {MovieDetails?.rules} yrs
+                            </span>
+                          ) : null}
                         </h1>
                         <p className=" mb-2">
                           <span>
@@ -374,7 +401,7 @@ const Booking = (props) => {
                             >
                               <Row style={{ width: "100%" }}>
                                 <Col md="7">
-                                  <Swiper spaceBetween={10} slidesPerView={3.5}>
+                                  <Swiper spaceBetween={10} slidesPerView={4.5}>
                                     {bookingShowTime
                                       ? bookingShowTime.map((item, index) => (
                                           <SwiperSlide key={index}>
@@ -396,7 +423,12 @@ const Booking = (props) => {
                                                 animationNavToggle(index);
                                               }}
                                             >
-                                              {item.day}
+                                              {formatDate(item?.day)}
+                                              {/* <div
+                                                dangerouslySetInnerHTML={{
+                                                  __html: formatDate(item?.day),
+                                                }}
+                                              /> */}
                                             </NavLink>
                                           </SwiperSlide>
                                         ))

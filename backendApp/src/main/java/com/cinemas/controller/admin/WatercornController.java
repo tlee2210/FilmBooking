@@ -1,13 +1,9 @@
 package com.cinemas.controller.admin;
 
 
-import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.SearchRequest;
 import com.cinemas.dto.request.WaterCornRequest;
 import com.cinemas.dto.response.APIResponse;
-import com.cinemas.dto.response.SelectOptionAndModelReponse;
-import com.cinemas.entities.Celebrity;
-import com.cinemas.entities.Cinema;
 import com.cinemas.entities.WaterCorn;
 import com.cinemas.exception.AppException;
 import com.cinemas.service.admin.WaterCornService;

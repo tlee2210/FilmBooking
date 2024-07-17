@@ -3,12 +3,12 @@ import Footer from "./Footer";
 import Navbar from "./Navbar";
 import withRouter from "../../Components/Common/withRouter";
 import PropTypes from "prop-types";
-import { Container } from "reactstrap";
-import {
-  useLocation,
-  useNavigate,
-  useParams
-} from "react-router-dom";
+// import { Container } from "reactstrap";
+// import {
+//   useLocation,
+//   useNavigate,
+//   useParams
+// } from "react-router-dom";
 
 const LayoutHome = (props) => {
 

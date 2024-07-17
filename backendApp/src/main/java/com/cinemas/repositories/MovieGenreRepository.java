@@ -1,6 +1,5 @@
 package com.cinemas.repositories;
 
-import com.cinemas.entities.Celebrity;
 import com.cinemas.entities.MovieGenre;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -7,16 +7,13 @@ import {
   Col,
   Container,
   Input,
-  Label,
   Row,
-  FormGroup,
-  Button,
 } from "reactstrap";
 import "./css/CinemaCorner.css";
 import { Image } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { getHomedirector } from "../../../slices/home/CelebrityHome/thunk";
-import withRouter from "../../../Components/Common/withRouter";
+// import withRouter from "../../../Components/Common/withRouter";
 import RightColumn from "./RightColumn";
 import MovieIsShowing from "../BuyTicket/MovieIsShowing";
 
@@ -24,7 +21,7 @@ import "./css/CinemaCorner.css";
 import { createSelector } from "reselect";
 import { getMovieActiveLimitIntroduce } from "../../../slices/home/MovieHome/thunk";
 
-import buttonTicket from "../../../assets/images/buttonTicket/btn-ticket.png";
+// import buttonTicket from "../../../assets/images/buttonTicket/btn-ticket.png";
 
 const Director = () => {
   const dispatch = useDispatch();
@@ -187,7 +184,7 @@ const Director = () => {
                                   </h1>
                                 </CardHeader>
                                 <CardBody>
-                                  Biography:
+                                  {/* Biography:
                                   <div
                                     className="card-text text-muted"
                                     style={{
@@ -197,7 +194,7 @@ const Director = () => {
                                     dangerouslySetInnerHTML={{
                                       __html: item.biography,
                                     }}
-                                  />
+                                  /> */}
                                   Description:{" "}
                                   <div
                                     className="card-text text-muted"

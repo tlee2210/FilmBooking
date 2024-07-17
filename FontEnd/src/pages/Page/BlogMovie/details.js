@@ -1,20 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { createSelector } from "reselect";
 import { useSelector, useDispatch } from "react-redux";
 
 import { Link } from "react-router-dom";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Container,
-  Input,
-  Label,
-  Row,
-  FormGroup,
-  Button,
-} from "reactstrap";
+import { Card, CardBody, Col, Container, Row } from "reactstrap";
 import "../CinemaCorner/css/CinemaCorner.css";
 import withRouter from "../../../Components/Common/withRouter";
 
@@ -23,7 +12,7 @@ import MovieIsShowing from "../BuyTicket/MovieIsShowing";
 import { getBlogDetails } from "../../../slices/home/BlogAndReviewHome/thunk";
 import { getMovieActiveLimitIntroduce } from "../../../slices/home/MovieHome/thunk";
 
-import buttonTicket from "../../../assets/images/buttonTicket/btn-ticket.png";
+// import buttonTicket from "../../../assets/images/buttonTicket/btn-ticket.png";
 
 const BlogDetails = (props) => {
   const dispatch = useDispatch();

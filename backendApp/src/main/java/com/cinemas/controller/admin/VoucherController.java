@@ -1,11 +1,8 @@
 package com.cinemas.controller.admin;
 
-import com.cinemas.dto.request.MovieBlogRequest;
 import com.cinemas.dto.request.PaginationHelper;
-import com.cinemas.dto.request.SearchRequest;
 import com.cinemas.dto.request.VoucherRequest;
 import com.cinemas.dto.response.APIResponse;
-import com.cinemas.entities.MovieBlog;
 import com.cinemas.entities.Voucher;
 import com.cinemas.exception.AppException;
 import com.cinemas.service.admin.VoucherService;

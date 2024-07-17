@@ -1,6 +1,5 @@
 package com.cinemas.repositories;
 
-import com.cinemas.dto.response.VoucherResponse;
 import com.cinemas.entities.Voucher;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createRef } from "react";
+import React, { useState, useEffect } from "react";
 import withRouter from "../../../Components/Common/withRouter";
 import {
   Card,
@@ -11,8 +11,6 @@ import {
   Label,
   FormFeedback,
   Form,
-  Button,
-  FormGroup,
 } from "reactstrap";
 import { PlusOutlined } from "@ant-design/icons";
 import { Image, Upload, message } from "antd";

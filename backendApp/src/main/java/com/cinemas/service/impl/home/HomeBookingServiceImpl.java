@@ -57,13 +57,11 @@ public class HomeBookingServiceImpl implements HomeBookingService {
         List<bookingShowTimeResponse> showtimes = showTimeResponsitory.findDayByMovie_Slug(slug, cinema);
         LocalTime currentTimePlus15 = LocalTime.now().plusMinutes(15);
 
-
         showtimes.forEach(item -> {
             item.setCinemaTimeMovies(showTimeResponsitory.findByDayAndMovie_Slug(item.getDay(), slug, currentTimePlus15, cinema));
         });
 
         showtimes.forEach(item -> {
-
 
             item.getCinemaTimeMovies().forEach(timeMovies -> {
                 List<MovieFormat> listMovieFormat = showTimeResponsitory.findMovieFormat(item.getDay(), slug, currentTimePlus15, timeMovies.getName());
