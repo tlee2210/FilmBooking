@@ -51,7 +51,7 @@ const HomeCinema = (props) => {
   const [movieTime, setMovieTime] = useState(null);
   const [movieIndexRender, setMovieIndexRender] = useState(null);
   const [selectedCity, setSelectedCity] = useState("");
-  const [selectedCinema, setSelectedCinema] = useState("");
+  const [selectedCinema, setSelectedCinema] = useState(slug || "");
 
   const CinemaState = (state) => state;
   const CinemaStateData = createSelector(CinemaState, (state) => ({
@@ -69,6 +69,7 @@ const HomeCinema = (props) => {
         props.router.navigate
       )
     );
+    setSelectedCinema(slug);
   }, [slug, selectedCity]);
 
   const tabChange = (tab) => {
