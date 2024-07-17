@@ -45,40 +45,15 @@ public class HomeUserServiceImpl implements HomeUserService {
     private BookingRepository bookingRepository;
 
     @Override
-    public ProfileResponse getUserProfile() {
+    public UserResponse getUserProfile() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        ProfileResponse profileResponse = new ProfileResponse();
+        UserResponse userResponse = new UserResponse();
 
-        ObjectUtils.copyFields(userDetails, profileResponse);
-        profileResponse.setAvatar(fileStorageServiceImpl.getUrlFromPublicId(profileResponse.getAvatar()));
+        ObjectUtils.copyFields(userDetails, userResponse);
+        userResponse.setAvatar(fileStorageServiceImpl.getUrlFromPublicId(userResponse.getAvatar()));
 
-        List<Booking> bookings = bookingRepository.findByUserId(profileResponse.getId());
-        List<PaymentResponse> paymentResponses = new ArrayList<>();
-        bookings.forEach(booking -> {
-            PaymentResponse paymentResponse = new PaymentResponse();
-            Showtimes showtimes = booking.getShowtime();
-            List<BookingWaterCornResponse> bookingWaterCornResponses = new ArrayList<>();
-            ShowTimeTableResponse showTimeTableResponse =
-                    new ShowTimeTableResponse(showtimes.getId(), showtimes.getDate(), showtimes.getTime(),
-                            showtimes.getCinema().getName(), showtimes.getMovie().getName(), showtimes.getRoom().getName(),
-                            showtimes.getMovie().getImagePortrait(), showtimes.getMovie().getPrice(), showtimes.getMovieFormat());
-
-            ObjectUtils.copyFields(booking, paymentResponse);
-            booking.getBookingWaterCorn().forEach(waterCorn -> {
-                BookingWaterCornResponse bookingWaterCornResponse = new BookingWaterCornResponse();
-                ObjectUtils.copyFields(waterCorn, bookingWaterCornResponse);
-                bookingWaterCornResponses.add(bookingWaterCornResponse);
-            });
-            showTimeTableResponse.setImage(fileStorageServiceImpl.getUrlFromPublicId(showTimeTableResponse.getImage()));
-            paymentResponse.setShowtime(showTimeTableResponse);
-            paymentResponse.setBookingWaterCorn(bookingWaterCornResponses);
-
-            paymentResponses.add(paymentResponse);
-        });
-        profileResponse.setPaymentList(paymentResponses);
-
-        return profileResponse;
+        return userResponse;
     }
 
     @Override

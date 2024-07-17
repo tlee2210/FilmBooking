@@ -2,15 +2,14 @@ package com.cinemas.dto.response;
 
 import com.cinemas.enums.Gender;
 import com.cinemas.enums.RoleType;
-import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 public class UserResponse {
     private int id;
@@ -28,4 +27,15 @@ public class UserResponse {
     private RoleType role;
 
     private String avatar;
+
+    public UserResponse(int id, String name, String email, String phone, LocalDate DOB, Gender gender, RoleType role, String avatar) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.DOB = DOB;
+        this.gender = gender;
+        this.role = role;
+        this.avatar = avatar;
+    }
 }

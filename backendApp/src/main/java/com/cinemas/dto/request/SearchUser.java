@@ -1,6 +1,5 @@
 package com.cinemas.dto.request;
 
-import com.cinemas.enums.MovieStatus;
 import com.cinemas.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Data;

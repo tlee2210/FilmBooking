@@ -188,7 +188,7 @@ const Booking = (props) => {
               const applyMargin =
                 totalColumns !== 1 && i !== 0 && (i + 1) % seatsPerPart === 0;
               const isSelected = selectedSeats?.includes(seatNumber);
-              const isBooked = seatsBooked.includes(seatNumber);
+              const isBooked = seatsBooked?.includes(seatNumber);
               return (
                 <div
                   key={seatNumber}

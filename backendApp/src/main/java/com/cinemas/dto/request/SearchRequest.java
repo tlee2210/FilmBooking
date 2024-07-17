@@ -1,6 +1,5 @@
 package com.cinemas.dto.request;
 
-import com.cinemas.enums.RoleCeleb;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

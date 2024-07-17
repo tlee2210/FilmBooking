@@ -42,7 +42,7 @@ export const getBookingTime = (id, history) => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/home/v1/booking/seat-booked/${id}`)
     .then((response) => {
-      console.log(response);
+      // console.log(response);
       localStorage.setItem(
         "seatsBooked",
         JSON.stringify(response?.data?.result?.seatBooked)

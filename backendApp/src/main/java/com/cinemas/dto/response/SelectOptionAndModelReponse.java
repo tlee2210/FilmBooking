@@ -1,11 +1,9 @@
 package com.cinemas.dto.response;
 
-import com.cinemas.entities.Movie;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 

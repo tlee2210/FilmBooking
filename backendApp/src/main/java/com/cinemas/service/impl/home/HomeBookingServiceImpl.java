@@ -201,8 +201,6 @@ public class HomeBookingServiceImpl implements HomeBookingService {
                     seat = seat.concat(booking.getQuantityDoubleSeat()).concat(", ");
                 }
             }
-
-
         }
 
         if (!seat.isEmpty()) {
