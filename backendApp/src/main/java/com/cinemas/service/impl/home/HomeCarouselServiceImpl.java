@@ -1,8 +1,6 @@
 package com.cinemas.service.impl.home;
 
-import com.cinemas.dto.response.HomeCarouselResponse;
 import com.cinemas.dto.response.SelectOptionReponse;
-import com.cinemas.entities.imageDescription;
 import com.cinemas.repositories.MovieRepository;
 import com.cinemas.repositories.imageDescriptionRespository;
 import com.cinemas.service.home.HomeCarouselService;
@@ -25,21 +23,21 @@ public class HomeCarouselServiceImpl implements HomeCarouselService {
     FileStorageServiceImpl fileStorageServiceImpl;
 
     @Override
-    public HomeCarouselResponse getHomeCarousel() {
-        HomeCarouselResponse homeCarouselResponse = new HomeCarouselResponse();
+    public List<SelectOptionReponse> getHomeCarousel() {
+//        HomeCarouselResponse homeCarouselResponse = new HomeCarouselResponse();
 
+        List<SelectOptionReponse> homeCarouselResponse = new ArrayList<>();
         List<SelectOptionReponse> imagePromotions = imageDescriptionRespository.getImageCarousel();
         imagePromotions.forEach(image -> {
             image.setLabel(fileStorageServiceImpl.getUrlFromPublicId(image.getLabel()));
+            homeCarouselResponse.add(image);
         });
-
-        homeCarouselResponse.setImagePromotions(imagePromotions);
 
         List<SelectOptionReponse> imageMovies = movieRepository.getImageCarousel();
         imageMovies.forEach(imageMovie -> {
             imageMovie.setLabel(fileStorageServiceImpl.getUrlFromPublicId(imageMovie.getLabel()));
+            homeCarouselResponse.add(imageMovie);
         });
-        homeCarouselResponse.setImageMovies(imageMovies);
         return homeCarouselResponse;
     }
 }
