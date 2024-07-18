@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Booking/css/order.css";
-// import "../Dat-Ve-Xem-Phim/css/Dat-Ve-Xem-Phim.css";
+import "../Dat-Ve-Xem-Phim/dat-ve.css"
 import {
   Form,
   Row,
@@ -140,10 +140,10 @@ const Booking = (props) => {
                       <TabPane tabId={1}>
                         <Row>
                           <Accordion
-                            className="custom-accordionwithicon custom-accordion-border accordion-border-box accordion-success"
+                            className="custom-accordionwithicon custom-accordion-border accordion-border-box accordion-danger"
                             id="accordionBordered"
                           >
-                            <AccordionItem className="material-shadow shadow-lg bg-white rounded">
+                            <AccordionItem className="material-shadow shadow-lg bg-white rounded" >
                               <h1
                                 className="accordion-header "
                                 id="accordionborderedExample1"
@@ -160,7 +160,7 @@ const Booking = (props) => {
                                   onClick={t_borderCol1}
                                   style={{ cursor: "pointer" }}
                                 >
-                                  choose place
+                                  Choose Place
                                 </button>
                               </h1>
                               <Collapse
@@ -173,34 +173,34 @@ const Booking = (props) => {
                                     <Col className="d-flex flex-wrap">
                                       <button
                                         className="btn btn-primary me-2 mb-2"
-                                        //   className={classnames({
-                                        //     "btn btn-primary me-2 mb-2":
-                                        //       timeItem.idRoom == data.id,
-                                        //     "btn btn-outline-primary me-2 mb-2":
-                                        //       timeItem.idRoom != data.id,
-                                        //   })}
+                                      //   className={classnames({
+                                      //     "btn btn-primary me-2 mb-2":
+                                      //       timeItem.idRoom == data.id,
+                                      //     "btn btn-outline-primary me-2 mb-2":
+                                      //       timeItem.idRoom != data.id,
+                                      //   })}
                                       >
                                         Hồ chí Minh
                                       </button>
                                       <button
                                         className="btn btn-outline-primary me-2 mb-2"
-                                        //   className={classnames({
-                                        //     "btn btn-primary me-2 mb-2":
-                                        //       timeItem.idRoom == data.id,
-                                        //     "btn btn-outline-primary me-2 mb-2":
-                                        //       timeItem.idRoom != data.id,
-                                        //   })}
+                                      //   className={classnames({
+                                      //     "btn btn-primary me-2 mb-2":
+                                      //       timeItem.idRoom == data.id,
+                                      //     "btn btn-outline-primary me-2 mb-2":
+                                      //       timeItem.idRoom != data.id,
+                                      //   })}
                                       >
                                         Da lat
                                       </button>
                                       <button
                                         className="btn btn-outline-primary me-2 mb-2"
-                                        //   className={classnames({
-                                        //     "btn btn-primary me-2 mb-2":
-                                        //       timeItem.idRoom == data.id,
-                                        //     "btn btn-outline-primary me-2 mb-2":
-                                        //       timeItem.idRoom != data.id,
-                                        //   })}
+                                      //   className={classnames({
+                                      //     "btn btn-primary me-2 mb-2":
+                                      //       timeItem.idRoom == data.id,
+                                      //     "btn btn-outline-primary me-2 mb-2":
+                                      //       timeItem.idRoom != data.id,
+                                      //   })}
                                       >
                                         Da lat
                                       </button>
@@ -213,15 +213,15 @@ const Booking = (props) => {
                               <h2
                                 className="accordion-header"
                                 id="accordionborderedExample2"
-                                style={{ fontSize: "20px", fontWeight: "Bold" }}
+                                style={{ fontSize: '20px', fontWeight: 'Bold' }}
                               >
                                 <button
-                                  className={classnames("accordion-button", {
+                                  className={classnames('accordion-button', {
                                     collapsed: !borderCol2,
                                   })}
                                   type="button"
                                   onClick={t_borderCol2}
-                                  style={{ cursor: "pointer" }}
+                                  style={{ cursor: 'pointer' }}
                                 >
                                   Choose Movie
                                 </button>
@@ -233,24 +233,21 @@ const Booking = (props) => {
                               >
                                 <div className="accordion-body">
                                   <div className="selection-section">
-                                    <SimpleBar
-                                      // forceVisible = "y"
-                                      style={{ maxHeight: "500px" }}
-                                      //   style={{ maxWidth: "2500px" }}
-                                      className="px-3"
-                                    >
-                                      <Row className="movie-options">
+                                    <SimpleBar style={{ maxHeight: 600, maxWidth: '2000px' }} className="px-3">
+                                      <Row className="movie-options gx-3">
                                         {[
-                                          "Kẻ Trộm Mặt Trăng 4",
-                                          "Cửu Long Thành Trại: Vây Thành",
-                                          "Mùa Hè Đẹp Nhất",
-                                          "Những Đường Cho Các Cảm Xúc Hội Nào",
-                                          "Vùng Đất Cầm Lặng Ngày Một",
-                                          "Gia Tài Của Ngoại",
+                                          'Kẻ Trộm Mặt Trăng 4',
+                                          'Cửu Long Thành Trại: Vây Thành',
+                                          'Mùa Hè Đẹp Nhất',
+                                          'Những Đường Cho Các Cảm Xúc Hội Nào',
+                                          'Vùng Đất Cầm Lặng Ngày Một',
+                                          'Gia Tài Của Ngoại',
                                         ].map((movie) => (
                                           <Col
                                             xxl={3}
-                                            xl={4}
+                                            xl={3}
+                                            lg={3}
+                                            md={3}
                                             sm={6}
                                             key={movie}
                                             onClick={() => {
@@ -258,27 +255,28 @@ const Booking = (props) => {
                                               setIsMovieListVisible(false);
                                             }}
                                             className={classnames(
-                                              "movie-option element-item project designing development me-2",
+                                              'movie-option element-item project designing development',
                                               {
-                                                "selected-movie":
-                                                  selectedMovie === movie,
+                                                'selected-movie': selectedMovie === movie,
                                               }
                                             )}
                                           >
-                                            <img
-                                              className="gallery-img img-fluid mx-auto rounded-3"
-                                              src="https://cdn.galaxycine.vn/media/2024/6/3/cuu-long-thanh-trai-vay-thanh-1_1717402596500.jpg"
-                                              alt={movie}
-                                            />
-                                            <p>{movie}</p>
-                                            {selectedMovie === movie && (
-                                              <div className="selected-overlay">
-                                                <i
-                                                  className="ri-checkbox-circle-line"
-                                                  style={{ fontSize: 62 }}
-                                                ></i>
-                                              </div>
-                                            )}
+                                            <div className="movie-container">
+                                              <img
+                                                className="gallery-img img-fluid mx-auto rounded-3"
+                                                src="https://cdn.galaxycine.vn/media/2024/6/3/cuu-long-thanh-trai-vay-thanh-1_1717402596500.jpg"
+                                                alt={movie}
+                                              />
+                                              <p>{movie}</p>
+                                              {selectedMovie === movie && (
+                                                <div className="selected-overlay">
+                                                  <i
+                                                    className="ri-checkbox-circle-fill"
+                                                    style={{ fontSize: 62 }}
+                                                  ></i>
+                                                </div>
+                                              )}
+                                            </div>
                                           </Col>
                                         ))}
                                       </Row>
