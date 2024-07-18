@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Flatpickr from "react-flatpickr";
+
 import { createSelector } from "reselect";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -95,35 +95,48 @@ const homepage = (props) => {
     return `${hours}:${minutes}`;
   };
 
+  const images = [
+    'https://cdn.galaxycine.vn/media/2024/6/27/xummer2024-duatop-digital-2048x682_1719459622629.jpg',
+    'https://cdn.galaxycine.vn/media/2024/7/10/my-boo-2048_1720598615672.jpg',
+    'https://cdn.galaxycine.vn/media/2024/7/12/bup-mang-non-co-bap-nuoc-ngon-6_1720776471984.jpg',
+  ];
+
+  const [isSwiperReady, setIsSwiperReady] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsSwiperReady(true);
+    }, 100); // Điều chỉnh độ trễ nếu cần thiết
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <React.Fragment>
       <section className="section job-hero-section pb-0" id="hero">
         <Swiper
-          slidesPerView={"1"}
+          slidesPerView={1.3}
+          spaceBetween={40}
           pagination={{ clickable: true, dynamicBullets: true }}
-          modules={[Pagination, Autoplay]}
           loop={true}
           centeredSlides={true}
-          autoplay={{ delay: 2500, disableOnInteraction: false }}
-          className="mySwiper swiper pagination-dynamic-swiper rounded bg-light custom-swiper-height"
+          autoplay={{ delay: 2500, disableOnInteraction: true }}
+          className="mySwiper swiper pagination-dynamic-swiper rounded"
+          style={{ paddingTop: 46, backgroundColor: "white" }}
+          onInit={(swiper) => {
+            swiper.update();
+          }}
+          onResize={(swiper) => {
+            swiper.update();
+          }}
         >
-          <div className="swiper-wrapper">
-            <SwiperSlide>
-              <div className="swiper-slide d-flex justify-content-center align-items-center">
-                <img src={img1} alt="" className="img-fluid" />
+          {images.map((imgSrc, index) => (
+            <SwiperSlide key={index}>
+              <div className="swiper-slide  justify-content-center align-items-center">
+                <img src={imgSrc} alt={`Slide ${index}`} className="img-fluid" />
               </div>
             </SwiperSlide>
-            <SwiperSlide>
-              <div className="swiper-slide d-flex justify-content-center align-items-center">
-                <img src={img1} alt="" className="img-fluid" />
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="swiper-slide d-flex justify-content-center align-items-center">
-                <img src={img1} alt="" className="img-fluid" />
-              </div>
-            </SwiperSlide>
-          </div>
+          ))}
         </Swiper>
         <Container>
           <div
@@ -150,10 +163,10 @@ const homepage = (props) => {
                       <option value="">Select movie</option>
                       {buyFastTicket && buyFastTicket.movieList
                         ? buyFastTicket?.movieList?.map((item, index) => (
-                            <option key={index} value={item.value}>
-                              {item.label}
-                            </option>
-                          ))
+                          <option key={index} value={item.value}>
+                            {item.label}
+                          </option>
+                        ))
                         : null}
                     </select>
                   </div>
@@ -192,10 +205,10 @@ const homepage = (props) => {
                       <option value="">Select date</option>
                       {buyFastTicket && buyFastTicket.dateList
                         ? buyFastTicket?.dateList?.map((item, index) => (
-                            <option key={index} value={item}>
-                              {item}
-                            </option>
-                          ))
+                          <option key={index} value={item}>
+                            {item}
+                          </option>
+                        ))
                         : null}
                     </select>
                   </div>
@@ -229,9 +242,8 @@ const homepage = (props) => {
                 <Col className="col-md-2">
                   <div className="h-100">
                     <Button
-                      className={`btn submit-btn w-100 h-100 ${
-                        selectedTime ? "bg-danger" : ""
-                      }`}
+                      className={`btn submit-btn w-100 h-100 ${selectedTime ? "bg-danger" : ""
+                        }`}
                       disabled={!selectedTime}
                       onClick={() => handleBooking()}
                     >
@@ -308,47 +320,47 @@ const homepage = (props) => {
                   <Row className="mb-3">
                     {HomeData && HomeData.movieBlogList
                       ? HomeData.movieBlogList.map((item, index) => (
-                          <Col md={6} key={index}>
-                            <Link
-                              to={`/blog-movie/${item.slug}/details`}
-                              className="hover-link-home d-flex align-items-center"
-                              style={{
-                                fontSize: 21,
-                                fontWeight: "bold",
-                                width: "100%",
-                                marginBottom: 10,
-                              }}
-                            >
-                              <div className="d-flex align-items-center mb-2 hover-img-home">
-                                <img
-                                  src={item.imagePortrait}
-                                  alt={item.name}
+                        <Col md={6} key={index}>
+                          <Link
+                            to={`/blog-movie/${item.slug}/details`}
+                            className="hover-link-home d-flex align-items-center"
+                            style={{
+                              fontSize: 21,
+                              fontWeight: "bold",
+                              width: "100%",
+                              marginBottom: 10,
+                            }}
+                          >
+                            <div className="d-flex align-items-center mb-2 hover-img-home">
+                              <img
+                                src={item.imagePortrait}
+                                alt={item.name}
+                                style={{
+                                  marginRight: "15px",
+                                  width: "195px",
+                                  height: "130px",
+                                  objectFit: "cover",
+                                  flexShrink: 0,
+                                }}
+                              />
+                              <div>
+                                <div
+                                  to="#"
+                                  className="hover-link-home d-flex align-items-center"
                                   style={{
-                                    marginRight: "15px",
-                                    width: "195px",
-                                    height: "130px",
-                                    objectFit: "cover",
-                                    flexShrink: 0,
+                                    fontSize: 21,
+                                    fontWeight: "bold",
+                                    width: "100%",
+                                    marginBottom: 10,
                                   }}
-                                />
-                                <div>
-                                  <div
-                                    to="#"
-                                    className="hover-link-home d-flex align-items-center"
-                                    style={{
-                                      fontSize: 21,
-                                      fontWeight: "bold",
-                                      width: "100%",
-                                      marginBottom: 10,
-                                    }}
-                                  >
-                                    {item.name}
-                                  </div>
+                                >
+                                  {item.name}
                                 </div>
                               </div>
-                            </Link>
-                          </Col>
-                        ))
+                            </div>
+                          </Link>
+                        </Col>
+                      ))
                       : null}
                   </Row>
                   <Col>
@@ -368,46 +380,46 @@ const homepage = (props) => {
                   <Row className="mb-3">
                     {HomeData && HomeData.reviewList
                       ? HomeData.reviewList.map((item, index) => (
-                          <Col md={6} key={index}>
-                            <Link
-                              to={`/movie-commentary/${item.slug}/details`}
-                              className="hover-link-home d-flex align-items-center"
-                              style={{
-                                fontSize: 21,
-                                fontWeight: "bold",
-                                width: "100%",
-                                marginBottom: 10,
-                              }}
-                            >
-                              <div className="d-flex align-items-center mb-2 hover-img-home">
-                                <img
-                                  src={item.imagePortrait}
-                                  alt={item.name}
+                        <Col md={6} key={index}>
+                          <Link
+                            to={`/movie-commentary/${item.slug}/details`}
+                            className="hover-link-home d-flex align-items-center"
+                            style={{
+                              fontSize: 21,
+                              fontWeight: "bold",
+                              width: "100%",
+                              marginBottom: 10,
+                            }}
+                          >
+                            <div className="d-flex align-items-center mb-2 hover-img-home">
+                              <img
+                                src={item.imagePortrait}
+                                alt={item.name}
+                                style={{
+                                  marginRight: "15px",
+                                  width: "195px",
+                                  height: "130px",
+                                  objectFit: "cover",
+                                  flexShrink: 0,
+                                }}
+                              />
+                              <div>
+                                <div
+                                  className="hover-link-home d-flex align-items-center"
                                   style={{
-                                    marginRight: "15px",
-                                    width: "195px",
-                                    height: "130px",
-                                    objectFit: "cover",
-                                    flexShrink: 0,
+                                    fontSize: 21,
+                                    fontWeight: "bold",
+                                    width: "100%",
+                                    marginBottom: 10,
                                   }}
-                                />
-                                <div>
-                                  <div
-                                    className="hover-link-home d-flex align-items-center"
-                                    style={{
-                                      fontSize: 21,
-                                      fontWeight: "bold",
-                                      width: "100%",
-                                      marginBottom: 10,
-                                    }}
-                                  >
-                                    {item.name}
-                                  </div>
+                                >
+                                  {item.name}
                                 </div>
                               </div>
-                            </Link>
-                          </Col>
-                        ))
+                            </div>
+                          </Link>
+                        </Col>
+                      ))
                       : null}
                   </Row>
                   <Col>

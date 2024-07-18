@@ -112,3 +112,36 @@
   font-weight: bold;
   margin-top: 10px;
 }
+
+
+
+
+
+.custom-modal-movie {
+  max-width: 900px;
+  width: 100%;
+}
+
+.zoomIn {
+  animation: zoomIn 0.3s;
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.3);
+  }
+  to {
+    transform: scale(0.5);
+  }
+}
+
+
+.modal-content {
+  border: none;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+
+
+

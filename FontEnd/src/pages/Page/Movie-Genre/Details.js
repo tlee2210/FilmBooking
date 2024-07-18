@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Card, CardBody, Col, Container, Row } from "reactstrap";
+import React, { useEffect, useState } from "react";
+import { Button, Card, CardBody, Col, Container, Modal, Row } from "reactstrap";
 import { Link } from "react-router-dom";
 import withRouter from "../../../Components/Common/withRouter";
 import "./css/TheLoaiPhim.css";
@@ -42,6 +42,12 @@ const MovieDetail = (props) => {
     return description + "...";
   };
 
+  const [modal, setModal] = useState(false);
+
+  const toggleModal = () => {
+    setModal(!modal);
+  };
+
   document.title = `Movie ${movie?.name}`;
 
   return (
@@ -57,12 +63,46 @@ const MovieDetail = (props) => {
                 <CardBody>
                   <div className="movie-header-theloaiphimDetails">
                     <Row>
-                      <Col md="3">
+                      <Col md="3" style={{ position: 'relative', textAlign: 'center' }}>
                         <img
                           src={movie?.imagePortrait}
                           alt={movie?.name}
                           className="movie-poster-theloaiphimDetails"
+                          style={{ width: '100%', height: 'auto', display: 'block', margin: '0 auto' }}
                         />
+                        <Button
+                          color="primary"
+                          style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            background: 'none',
+                            border: 'none'
+                          }}
+                          onClick={toggleModal}
+                        >
+                          <i className="ri-play-circle-line" style={{ fontSize: 69, color: '#ffffff7d', textShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)' }}></i>
+                        </Button>
+
+                        <Modal
+                          isOpen={modal}
+                          toggle={toggleModal}
+                          centered
+                          className="custom-modal-movie"
+                          modalClassName="zoomIn"
+                        >
+                          <div className="ratio ratio-16x9">
+                            <iframe
+                              width="942"
+                              height="1000"
+                              src='https://www.youtube.com/embed/q6UDgv5TGWA'
+                              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                              title="YouTube video"
+                            ></iframe>
+                          </div>
+                        </Modal>
                       </Col>
                       <Col md="9" style={{ paddingLeft: 20 }}>
                         <h1 className="movie-title-theloaiphimDetails">
@@ -222,8 +262,8 @@ const MovieDetail = (props) => {
                       MOVIE REVIEW
                     </h2>
                     {movie &&
-                    movie.movieReview &&
-                    movie.movieReview.length > 0 ? (
+                      movie.movieReview &&
+                      movie.movieReview.length > 0 ? (
                       movie?.movieReview?.map((item, index) => (
                         <React.Fragment key={index}>
                           <p
@@ -255,28 +295,28 @@ const MovieDetail = (props) => {
                     <Row className="g-3">
                       {movie && movie?.reviews
                         ? movie?.reviews?.map((movie, index) => (
-                            <Col key={index} className="col-xxl col-6">
-                              <Link
-                                key={index}
-                                to={`/movie-commentary/${movie.slug}/details`}
-                                style={{
-                                  textDecoration: "none",
-                                  color: "inherit",
-                                }}
-                              >
-                                <Card className="h-100">
-                                  <img
-                                    className="card-img-top img-fluid"
-                                    src={movie.imagePortrait}
-                                    alt={movie.imagePortrait}
-                                  />
-                                  <CardBody>
-                                    <h4 className="card-title">{movie.name}</h4>
-                                  </CardBody>
-                                </Card>
-                              </Link>
-                            </Col>
-                          ))
+                          <Col key={index} className="col-xxl col-6">
+                            <Link
+                              key={index}
+                              to={`/movie-commentary/${movie.slug}/details`}
+                              style={{
+                                textDecoration: "none",
+                                color: "inherit",
+                              }}
+                            >
+                              <Card className="h-100">
+                                <img
+                                  className="card-img-top img-fluid"
+                                  src={movie.imagePortrait}
+                                  alt={movie.imagePortrait}
+                                />
+                                <CardBody>
+                                  <h4 className="card-title">{movie.name}</h4>
+                                </CardBody>
+                              </Card>
+                            </Link>
+                          </Col>
+                        ))
                         : null}
                     </Row>
                   </div>

@@ -119,7 +119,7 @@ const Navbar = () => {
         id="navbar"
       >
         <Container fluid className="custom-container">
-          <Link className="navbar-brand" to="/">
+          <Link className="navbar-brand cursor-pointer" to="/">
             <img
               src={LogoDark}
               className="card-logo card-logo-dark"
