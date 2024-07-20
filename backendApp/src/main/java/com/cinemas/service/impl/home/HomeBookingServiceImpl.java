@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.cinemas.exception.ErrorCode.NOT_FOUND;
@@ -208,6 +209,58 @@ public class HomeBookingServiceImpl implements HomeBookingService {
         seatBookedResponse.setSeatBooked(seat);
 
         return seatBookedResponse;
+    }
+
+    @Override
+    public BookingTicketResponse getBookingTicket(String city, String slugMovie) {
+        BookingTicketResponse bookingTicketResponse = new BookingTicketResponse();
+        bookingTicketResponse.setListCity(cinemaRespository.findByCity());
+        bookingTicketResponse.setMovieList(new ArrayList<>());
+        if(city != null){
+            List<SelectOptionReponse<?>> cinemaList = cinemaRespository.selectCinema(city);
+            List<MovieBookingResponse> movieListOld = new ArrayList<>();
+            cinemaList.forEach(cine -> {
+                List<MovieBookingResponse> movieListNew = showTimeResponsitory.findMoviesByCinema(String.valueOf(cine.getValue()));
+                boolean isEqual = Arrays.equals(movieListOld.toArray(), movieListNew.toArray());
+                if (!isEqual && movieListNew.size() != 0) {
+                    movieListNew.forEach(movie -> {
+                        movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
+                        movieListOld.add(movie);
+                    });
+                    bookingTicketResponse.setMovieList(movieListNew);
+                }
+            });
+        }
+
+        List<bookingShowTimeResponse> showtimes = showTimeResponsitory.findDayByMovie_Slug(slugMovie);
+        LocalTime currentTimePlus15 = LocalTime.now().plusMinutes(15);
+
+        showtimes.forEach(item -> {
+            item.setCinemaTimeMovies(showTimeResponsitory.findByDayAndMovie_Slug(item.getDay(), slugMovie, currentTimePlus15));
+        });
+
+        showtimes.forEach(item -> {
+
+            item.getCinemaTimeMovies().forEach(timeMovies -> {
+                List<MovieFormat> listMovieFormat = showTimeResponsitory.findMovieFormat(item.getDay(), slugMovie, currentTimePlus15, timeMovies.getName());
+
+                List<HomeMovieFormatResponse> homeMovieFormatResponses = new ArrayList<>();
+
+                listMovieFormat.forEach(name -> {
+                    HomeMovieFormatResponse homeMovieFormatResponse = new HomeMovieFormatResponse();
+                    homeMovieFormatResponse.setName(name.getValue());
+                    homeMovieFormatResponse.setTimes(showTimeResponsitory.findMovieTimes(item.getDay(), slugMovie, currentTimePlus15, timeMovies.getName(), name));
+
+                    homeMovieFormatResponses.add(homeMovieFormatResponse);
+                });
+
+                timeMovies.setMovieFormat(homeMovieFormatResponses);
+            });
+        });
+
+        bookingTicketResponse.setBookingShowTimeResponses(showtimes);
+
+        return bookingTicketResponse;
     }
 
 }

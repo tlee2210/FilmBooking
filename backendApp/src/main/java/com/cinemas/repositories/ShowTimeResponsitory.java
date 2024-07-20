@@ -32,8 +32,14 @@ public interface ShowTimeResponsitory extends JpaRepository<Showtimes, Integer> 
     @Query("SELECT DISTINCT NEW com.cinemas.dto.response.bookingShowTimeResponse(s.date) FROM Showtimes s WHERE " + "(:cinema_Slug IS NULL OR s.cinema.slug = :cinema_Slug)" + "AND s.movie.slug = :slug_movie " + "AND s.date >= CURRENT_DATE " + "ORDER BY s.date ASC LIMIT 7")
     List<bookingShowTimeResponse> findDayByMovie_Slug(String slug_movie, String cinema_Slug);
 
+    @Query("SELECT DISTINCT NEW com.cinemas.dto.response.bookingShowTimeResponse(s.date) FROM Showtimes s WHERE " + "s.movie.slug = :slug_movie " + "AND s.date >= CURRENT_DATE " + "ORDER BY s.date ASC LIMIT 7")
+    List<bookingShowTimeResponse> findDayByMovie_Slug(String slug_movie);
+
     @Query("SELECT DISTINCT NEW com.cinemas.dto.response.CinemaTimeMovie(s.cinema.name) " + "FROM Showtimes s " + "WHERE (:slug IS NULL OR s.movie.slug = :slug) " + "AND (:cinema_Slug IS NULL OR s.cinema.slug = :cinema_Slug) " + "AND s.date = :day " + "AND (s.date <> CURRENT_DATE OR s.time >= :time)")
     List<CinemaTimeMovie> findByDayAndMovie_Slug(LocalDate day, String slug, LocalTime time, String cinema_Slug);
+
+    @Query("SELECT DISTINCT NEW com.cinemas.dto.response.CinemaTimeMovie(s.cinema.name) " + "FROM Showtimes s " + "WHERE (:slug IS NULL OR s.movie.slug = :slug) " +  "AND s.date = :day " + "AND (s.date <> CURRENT_DATE OR s.time >= :time)")
+    List<CinemaTimeMovie> findByDayAndMovie_Slug(LocalDate day, String slug, LocalTime time);
 
     @Query("SELECT DISTINCT s.movieFormat " + "FROM Showtimes s " + "WHERE (:slug IS NULL OR s.movie.slug = :slug) " + "AND (:cinema_name IS NULL OR s.cinema.name = :cinema_name) " + "AND s.date = :day " + "AND (s.date <> CURRENT_DATE OR s.time >= :time)")
     List<MovieFormat> findMovieFormat(LocalDate day, String slug, LocalTime time, String cinema_name);
@@ -78,4 +84,7 @@ public interface ShowTimeResponsitory extends JpaRepository<Showtimes, Integer> 
             "s.movie.name = :movieName "
             + "AND (s.date <> CURRENT_DATE OR s.time >= :timeNow)")
     List<MovieFormat> findMovieFormat(LocalDate date, LocalTime timeNow, String movieName, String cinemaName);
+
+    @Query("SELECT DISTINCT new com.cinemas.dto.response.MovieBookingResponse(s.movie.name, s.movie.slug, s.movie.imagePortrait) FROM Showtimes s WHERE s.cinema.slug = :cinemaSlug")
+    List<MovieBookingResponse> findMoviesByCinema(String cinemaSlug);
 }

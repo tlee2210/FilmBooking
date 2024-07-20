@@ -67,4 +67,15 @@ public class HomeBookingController {
         apiResponse.setResult(homeBookingService.getBookedSeats(id));
         return apiResponse;
     }
+
+    @GetMapping("/bookings")
+    public APIResponse<BookingTicketResponse> getBookingTicket(
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String movie
+    ){
+        APIResponse<BookingTicketResponse> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setResult(homeBookingService.getBookingTicket(city, movie));
+        return apiResponse;
+    }
 }

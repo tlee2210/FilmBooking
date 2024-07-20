@@ -15,4 +15,6 @@ public interface HomeBookingService {
     VoucherResponse findByCode(VoucherApplyRequest code);
 
     SeatBookedResponse getBookedSeats(Integer id);
+
+    BookingTicketResponse getBookingTicket(String city, String slugMovie);
 }
