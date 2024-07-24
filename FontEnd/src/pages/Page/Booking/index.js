@@ -417,7 +417,26 @@ const Booking = (props) => {
 
   const onError = (err) => {
     console.error("PayPal error:", err);
-    // Handle the error
+  };
+
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const today = new Date();
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const isToday = date.toDateString() === today.toDateString();
+    const dayOfWeek = isToday ? "Today" : daysOfWeek[date.getDay()];
+    return `${dayOfWeek} ${day}/${month}`;
   };
 
   document.title = `booking ${data?.movieName}` || "Booking";
@@ -495,7 +514,12 @@ const Booking = (props) => {
                                 {data && data.movieformats
                                   ? data.movieformats.map((item, index) => (
                                       <Row className="ms-4 mb-4" key={index}>
-                                        <Col md={2}>{item.name}</Col>
+                                        <Col
+                                          md={2}
+                                          // style={{ minWidth: "200px" }}
+                                        >
+                                          {item.name}
+                                        </Col>
                                         <Col
                                           md={10}
                                           className="d-flex flex-wrap"
@@ -629,7 +653,7 @@ const Booking = (props) => {
                                             fontWeight: 800,
                                           }}
                                         >
-                                          {item.price} USD
+                                          {item.price} VND
                                         </h5>
                                       </div>
                                       <div
@@ -775,8 +799,9 @@ const Booking = (props) => {
                               {data?.cinemaName} - {data?.roomName}
                             </p>
                             <p>
-                              <strong>Show Time:</strong> {data?.time} - Day:{" "}
-                              {data?.date}
+                              <strong>Show Time:</strong>{" "}
+                              {formatTime(data?.time)} - Day:{" "}
+                              {formatDate(data?.date)}
                             </p>
                           </div>
                           <hr style={{ border: "1px dashed black" }} />
@@ -794,10 +819,10 @@ const Booking = (props) => {
                                   <p className="total">
                                     {doubleSeats.length *
                                       (data.price * 2 * 1.05)}{" "}
-                                    USD
+                                    VND
                                   </p>
                                 </Col>
-                                <Col md={12}>
+                                <Col md={12} >
                                   {doubleSeats.map((i) => (
                                     <Badge
                                       key={i}
@@ -808,6 +833,7 @@ const Booking = (props) => {
                                     </Badge>
                                   ))}
                                 </Col>
+                                {/* <hr style={{ border: "1px dashed black" }} /> */}
                               </Row>
                             )}
                             {singleSeats.length > 0 && (
@@ -817,7 +843,7 @@ const Booking = (props) => {
                                 </Col>
                                 <Col md={6}>
                                   <p className="total">
-                                    {singleSeats.length * data.price} USD
+                                    {singleSeats.length * data.price} VND
                                   </p>
                                 </Col>
                                 <Col md={12}>
@@ -851,7 +877,7 @@ const Booking = (props) => {
                                     <p className="total">
                                       {addedItemIds[itemId].price *
                                         addedItemIds[itemId].quantity}{" "}
-                                      USD
+                                      VND
                                     </p>
                                   </Col>
                                 </Row>
@@ -871,8 +897,8 @@ const Booking = (props) => {
                                   {voucher.discountType === "PERCENTAGE"
                                     ? `(${
                                         voucher.discountValue
-                                      }%) ${calculateDiscount(totalPrice)} USD`
-                                    : `${calculateDiscount(totalPrice)} USD`}
+                                      }%) ${calculateDiscount(totalPrice)} VND`
+                                    : `${calculateDiscount(totalPrice)} VND`}
                                 </p>
                               </Col>
                             </Row>
@@ -883,12 +909,19 @@ const Booking = (props) => {
                           ) : null}
                           {/* </div> */}
                           {/* <p className="total">Total: {" "}{totalPrice}</p> */}
-                          <p className="total">
-                            Total:{" "}
-                            {voucher
-                              ? `${totalPrice - calculateDiscount(totalPrice)}`
-                              : { totalPrice }}
-                          </p>
+                          <Row className="total">
+                            <Col md={6} className="text-start">
+                              Total:{" "}
+                            </Col>
+                            <Col md={6} className="text-end">
+                              {voucher
+                                ? `${
+                                    totalPrice - calculateDiscount(totalPrice)
+                                  }`
+                                : { totalPrice }}{" "}
+                              VND
+                            </Col>
+                          </Row>
                         </div>
                       </CardBody>
                     </Card>

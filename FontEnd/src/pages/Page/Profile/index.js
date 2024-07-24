@@ -188,6 +188,26 @@ const Profile = (props) => {
     }
   };
 
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const today = new Date();
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const isToday = date.toDateString() === today.toDateString();
+    const dayOfWeek = isToday ? "Today" : daysOfWeek[date.getDay()];
+    return `${dayOfWeek} ${day}/${month}`;
+  };
+
   document.title = "Profile";
 
   function tog_center(id) {
@@ -525,7 +545,7 @@ const Profile = (props) => {
                                 {formatTime(item?.showTime)} -
                               </span>{" "}
                               <span style={{ fontWeight: "bold" }}>
-                                {item?.showTimeDate}
+                                {formatDate(item?.showTimeDate)}
                               </span>
                             </p>
                           </div>
@@ -696,8 +716,8 @@ const Profile = (props) => {
               </Col>
               <Col md={6}>
                 <p className="text-start">
-                  {formatTime(DetailBooking?.showTime)} Day{" "}
-                  {DetailBooking?.bookingDate}
+                  {formatTime(DetailBooking?.showTime)} -{" "}
+                  {formatDate(DetailBooking?.bookingDate)}
                 </p>
                 {/* <p>{DetailBooking?.bookingDate} </p> */}
               </Col>
