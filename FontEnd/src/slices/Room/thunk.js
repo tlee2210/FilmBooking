@@ -5,7 +5,7 @@ import axios from "axios";
 export const getRoomMovie =
   (name, cinema, pageNo, pageSize) => async (dispatch) => {
     await axios
-      .get(`http://localhost:8081/api/admin/v1/room`, {
+      .get(`http://localhost:8081/api/admin/room/v1`, {
         params: { name, cinema, pageNo, pageSize },
       })
       .then((response) => {
@@ -24,7 +24,7 @@ export const getRoomMovie =
 
 export const getCreateRoom = () => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/room/create`)
+    .get(`http://localhost:8081/api/admin/room/v1/create`)
     .then((response) => {
       // console.log(response);
       dispatch(
@@ -41,7 +41,7 @@ export const getCreateRoom = () => async (dispatch) => {
 
 export const CreateRoomMovie = (formData, history) => async (dispatch) => {
   await axios
-    .post(`http://localhost:8081/api/admin/v1/room/create`, formData)
+    .post(`http://localhost:8081/api/admin/room/v1/create`, formData)
     .then((response) => {
       // console.log(response);
       dispatch(Success(response.data?.message));
@@ -55,7 +55,7 @@ export const CreateRoomMovie = (formData, history) => async (dispatch) => {
 
 export const deleteRoom = (id) => async (dispatch) => {
   await axios
-    .delete(`http://localhost:8081/api/admin/v1/room/${id}/delete`)
+    .delete(`http://localhost:8081/api/admin/room/v1/${id}/delete`)
     .then((response) => {
       // console.log(response);
       dispatch(Success(response.data?.message));
@@ -69,7 +69,7 @@ export const deleteRoom = (id) => async (dispatch) => {
 
 export const GetEditRoom = (id, history) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/room/${id}/edit`)
+    .get(`http://localhost:8081/api/admin/room/v1/${id}/edit`)
     .then((response) => {
       // console.log(response);
       dispatch(
@@ -89,7 +89,7 @@ export const GetEditRoom = (id, history) => async (dispatch) => {
 
 export const UpdateRoom = (formData, history) => async (dispatch) => {
   await axios
-    .put(`http://localhost:8081/api/admin/v1/room/update`, formData)
+    .put(`http://localhost:8081/api/admin/room/v1/update`, formData)
     .then((response) => {
       // console.log(response);
       dispatch(Success(response.data?.message));

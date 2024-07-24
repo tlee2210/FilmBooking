@@ -12,7 +12,7 @@ import axios from "axios";
 export const getShowTime =
   (cinema, startDay, endDay, pageNo, pageSize) => async (dispatch) => {
     await axios
-      .get(`http://localhost:8081/api/admin/v1/show-time`, {
+      .get(`http://localhost:8081/api/admin/show-time/v1`, {
         params: { cinema, startDay, endDay, pageNo, pageSize },
       })
       .then((response) => {
@@ -27,7 +27,7 @@ export const getShowTime =
 
 export const getMovieAndCinema = () => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/show-time/create`)
+    .get(`http://localhost:8081/api/admin/show-time/v1/create`)
     .then((response) => {
       // console.log(response);
       dispatch(setMovieAndCinema(response?.data?.result));
@@ -42,7 +42,7 @@ export const getMovieAndCinema = () => async (dispatch) => {
 
 export const getRoomForShowTime = (id) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/room/${id}`)
+    .get(`http://localhost:8081/api/admin/room/v1/${id}`)
     .then((response) => {
       // console.log(response);
       dispatch(setRoomItem({ data: response?.data?.result }));
@@ -68,7 +68,7 @@ export const getMovieForShowTime = (id) => async (dispatch) => {
 
 export const createShowTime = (formData, history) => async (dispatch) => {
   await axios
-    .post(`http://localhost:8081/api/admin/v1/show-time/create`, formData)
+    .post(`http://localhost:8081/api/admin/show-time/v1/create`, formData)
     .then((response) => {
       // console.log(response);
       dispatch(Success(response?.data?.message));
@@ -82,7 +82,7 @@ export const createShowTime = (formData, history) => async (dispatch) => {
 
 export const deleteShowTime = (id) => async (dispatch) => {
   await axios
-    .delete(`http://localhost:8081/api/admin/v1/show-time/${id}/delete`)
+    .delete(`http://localhost:8081/api/admin/show-time/v1/${id}/delete`)
     .then((response) => {
       // console.log(response);
       dispatch(Success(response?.data?.message));
@@ -98,7 +98,7 @@ export const deleteShowTime = (id) => async (dispatch) => {
 
 export const getShowTimeEdit = (id, history) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/show-time/${id}/edit`)
+    .get(`http://localhost:8081/api/admin/show-time/v1/${id}/edit`)
     .then((response) => {
       // console.log(response);
       dispatch(setShowTime(response?.data?.result));
@@ -114,7 +114,7 @@ export const getShowTimeEdit = (id, history) => async (dispatch) => {
 };
 export const updateShowTimeEdit = (formData, history) => async (dispatch) => {
   await axios
-    .put(`http://localhost:8081/api/admin/v1/show-time/update`, formData, {
+    .put(`http://localhost:8081/api/admin/show-time/v1/update`, formData, {
       headers: {
         "Content-Type": "application/json",
       },

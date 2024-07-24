@@ -5,7 +5,7 @@ import axios from "axios";
 export const getHomeMovieGenre =
   (category, country, status, years, pageNo, pageSize) => async (dispatch) => {
     await axios
-      .get(`http://localhost:8081/api/home/v1/movie-genre`, {
+      .get(`http://localhost:8081/api/home/movie-genre/v1`, {
         params: { category, country, status, years, pageNo, pageSize },
       })
       .then((response) => {
@@ -19,7 +19,7 @@ export const getHomeMovieGenre =
   };
 export const getMovieGenreDetail = (slug, history) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/home/v1/movie-genre/detail/${slug}`)
+    .get(`http://localhost:8081/api/home/movie-genre/v1/detail/${slug}`)
     .then((response) => {
       // console.log(response);
       dispatch(setDetail(response?.data?.result));

@@ -11,7 +11,7 @@ import axios from "axios";
 
 export const getHomeBlog = (pageNo, pageSize) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/home/v1/blog`, {
+    .get(`http://localhost:8081/api/home/blog/v1`, {
       params: { pageNo, pageSize },
     })
     .then((response) => {
@@ -26,7 +26,7 @@ export const getHomeBlog = (pageNo, pageSize) => async (dispatch) => {
 
 export const getBlogDetails = (slug, history) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/home/v1/blog/detail/${slug}`)
+    .get(`http://localhost:8081/api/home/blog/v1/detail/${slug}`)
     .then((response) => {
       console.log(response);
       dispatch(setItemBlog({ data: response?.data?.result }));
@@ -42,7 +42,7 @@ export const getBlogDetails = (slug, history) => async (dispatch) => {
 
 export const getHomeReview = (type, pageNo, pageSize) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/home/v1/review`, {
+    .get(`http://localhost:8081/api/home/review/v1`, {
       params: { type, pageNo, pageSize },
     })
     .then((response) => {
@@ -57,7 +57,7 @@ export const getHomeReview = (type, pageNo, pageSize) => async (dispatch) => {
 
 export const getHomeReviewDetails = (slug, history) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/home/v1/review/${slug}/detail`)
+    .get(`http://localhost:8081/api/home/review/v1/${slug}/detail`)
     .then((response) => {
       // console.log(response);
       dispatch(setItem({ data: response?.data?.result }));

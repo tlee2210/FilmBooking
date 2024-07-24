@@ -4,7 +4,7 @@ import axios from "axios";
 
 export const getprofile = () => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/home/v1/user/profile`)
+    .get(`http://localhost:8081/api/home/user/v1/profile`)
     .then((response) => {
       // console.log(response);
       dispatch(fetchSuccess({ data: response?.data?.result }));
@@ -15,10 +15,10 @@ export const getprofile = () => async (dispatch) => {
     });
 };
 
-// http://localhost:8081/api/home/v1/user/update
+// http://localhost:8081/api/home/user/v1/update
 export const UpdateProfile = (formData, history) => async (dispatch) => {
   await axios
-    .put(`http://localhost:8081/api/home/v1/user/update`, formData, {
+    .put(`http://localhost:8081/api/home/user/v1/update`, formData, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -36,7 +36,7 @@ export const UpdateProfile = (formData, history) => async (dispatch) => {
 
 export const changePassword = (formData, history) => async (dispatch) => {
   await axios
-    .post(`http://localhost:8081/api/home/v1/user/change-password`, formData)
+    .post(`http://localhost:8081/api/home/user/v1/change-password`, formData)
     .then((response) => {
       // console.log(response);
       dispatch(Success(response.data?.message));
@@ -50,7 +50,7 @@ export const changePassword = (formData, history) => async (dispatch) => {
 
 export const uploadAvatar = (formData, history) => async (dispatch) => {
   await axios
-    .post(`http://localhost:8081/api/home/v1/user/upload-avatar`, formData, {
+    .post(`http://localhost:8081/api/home/user/v1/upload-avatar`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

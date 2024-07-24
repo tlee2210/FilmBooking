@@ -5,7 +5,7 @@ import axios from "axios";
 
 export const getReview = (name, type, pageNo, pageSize) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/review`, {
+    .get(`http://localhost:8081/api/admin/review/v1`, {
       params: { name, type, pageNo, pageSize },
     })
     .then((response) => {
@@ -23,7 +23,7 @@ export const getReview = (name, type, pageNo, pageSize) => async (dispatch) => {
 
 export const getCreateReview = () => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/review/create`)
+    .get(`http://localhost:8081/api/admin/review/v1/create`)
     .then((response) => {
       // console.log(response);
       dispatch(setSelectOption({ data: response.data?.result }));
@@ -36,7 +36,7 @@ export const getCreateReview = () => async (dispatch) => {
 
 export const CreateReview = (formData, history) => async (dispatch) => {
   await axios
-    .post(`http://localhost:8081/api/admin/v1/review/create`, formData, {
+    .post(`http://localhost:8081/api/admin/review/v1/create`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -54,7 +54,7 @@ export const CreateReview = (formData, history) => async (dispatch) => {
 
 export const deleteReview = (slug, history) => async (dispatch) => {
   await axios
-    .delete(`http://localhost:8081/api/admin/v1/review/delete/${slug}`)
+    .delete(`http://localhost:8081/api/admin/review/v1/delete/${slug}`)
     .then((response) => {
       // console.log(response);
       dispatch(Success(response.data?.message));
@@ -68,7 +68,7 @@ export const deleteReview = (slug, history) => async (dispatch) => {
 
 export const editReview = (slug, history) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/review/${slug}/edit`)
+    .get(`http://localhost:8081/api/admin/review/v1/${slug}/edit`)
     .then((response) => {
       // console.log(response);
       dispatch(
@@ -88,7 +88,7 @@ export const editReview = (slug, history) => async (dispatch) => {
 
 export const updateReview = (formData, history) => async (dispatch) => {
   await axios
-    .put(`http://localhost:8081/api/admin/v1/review/update`, formData, {
+    .put(`http://localhost:8081/api/admin/review/v1/update`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

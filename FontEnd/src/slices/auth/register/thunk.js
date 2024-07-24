@@ -9,7 +9,7 @@ import {
 
 export const registerUser = (formData, history) => async (dispatch) => {
   await axios
-    .post(`http://localhost:8081/api/auth/signup`, formData)
+    .post(`http://localhost:8081/api/auth/v1/signup`, formData)
     .then((res) => {
       // console.log(res);
       dispatch(registerSuccessful(res.data?.message));

@@ -11,7 +11,7 @@ import axios from "axios";
 
 export const getVoucher = (pageNo, pageSize) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/voucher`, {
+    .get(`http://localhost:8081/api/admin/voucher/v1`, {
       params: { pageNo, pageSize },
     })
     .then((response) => {
@@ -26,7 +26,7 @@ export const getVoucher = (pageNo, pageSize) => async (dispatch) => {
 
 export const createVoucher = (formData, history) => async (dispatch) => {
   await axios
-    .post(`http://localhost:8081/api/admin/v1/voucher/create`, formData)
+    .post(`http://localhost:8081/api/admin/voucher/v1/create`, formData)
     .then((response) => {
       // console.log(response);
       dispatch(Success(response?.data?.message));
@@ -40,7 +40,7 @@ export const createVoucher = (formData, history) => async (dispatch) => {
 
 export const deleteVoucher = (id) => async (dispatch) => {
   await axios
-    .delete(`http://localhost:8081/api/admin/v1/voucher/delete/${id}`)
+    .delete(`http://localhost:8081/api/admin/voucher/v1/delete/${id}`)
     .then((response) => {
       // console.log(response);
       dispatch(Success(response?.data?.message));
@@ -54,7 +54,7 @@ export const deleteVoucher = (id) => async (dispatch) => {
 
 export const getVoucherEdit = (id, history) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/voucher/${id}/edit`)
+    .get(`http://localhost:8081/api/admin/voucher/v1/${id}/edit`)
     .then((response) => {
       // console.log(response);
       dispatch(setItem(response?.data?.result));
@@ -69,7 +69,7 @@ export const getVoucherEdit = (id, history) => async (dispatch) => {
 };
 export const updateVoucher = (formData, history) => async (dispatch) => {
   await axios
-    .put(`http://localhost:8081/api/admin/v1/voucher/update`, formData, {
+    .put(`http://localhost:8081/api/admin/voucher/v1/update`, formData, {
       headers: {
         "Content-Type": "application/json",
       },

@@ -8,11 +8,11 @@ import {
 // import { Success, Error } from "../message/reducer";
 import axios from "axios";
 // getMovieActiveLimitIntroduce
-// http://localhost:8081/api/home/v1/movie/active/introduce
+// http://localhost:8081/api/home/movie/v1/active/introduce
 
 export const getHomepage = () => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/home/v1/home`)
+    .get(`http://localhost:8081/api/home/home/v1`)
     .then((response) => {
       // console.log(response);
       dispatch(fetchHomeData({ data: response?.data?.result }));
@@ -25,7 +25,7 @@ export const getHomepage = () => async (dispatch) => {
 
 export const getMovieActiveLimitIntroduce = () => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/home/v1/movie/active/introduce`)
+    .get(`http://localhost:8081/api/home/movie/v1/active/introduce`)
     .then((response) => {
       // console.log(response);
       dispatch(fetchSuccess(response?.data?.result));
@@ -38,7 +38,7 @@ export const getMovieActiveLimitIntroduce = () => async (dispatch) => {
 
 export const getMovieDetailsBook = (slug) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/home/v1/movie/detail/${slug}`)
+    .get(`http://localhost:8081/api/home/movie/v1/detail/${slug}`)
     .then((response) => {
       // console.log(response);
       dispatch(setMovieDetails(response?.data?.result));
@@ -50,7 +50,7 @@ export const getMovieDetailsBook = (slug) => async (dispatch) => {
 };
 export const getAllMovie = () => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/home/v1/movie`)
+    .get(`http://localhost:8081/api/home/movie/v1`)
     .then((response) => {
       // console.log(response);
       dispatch(fetchHomeData({ data: response?.data?.result }));
@@ -62,7 +62,7 @@ export const getAllMovie = () => async (dispatch) => {
 };
 export const getNavbar = () => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/home/v1/home/navbar`)
+    .get(`http://localhost:8081/api/home/home/v1/navbar`)
     .then((response) => {
       // console.log(response);
       dispatch(fetchNavbarData({ data: response?.data?.result }));

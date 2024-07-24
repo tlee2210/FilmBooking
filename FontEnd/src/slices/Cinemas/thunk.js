@@ -5,7 +5,7 @@ import axios from "axios";
 export const getCinema =
   (search, status, city, pageNo, pageSize) => async (dispatch) => {
     await axios
-      .get(`http://localhost:8081/api/admin/v1/cinema`, {
+      .get(`http://localhost:8081/api/admin/cinema/v1`, {
         params: { search, status, city, pageNo, pageSize },
       })
       .then((response) => {
@@ -24,7 +24,7 @@ export const getCinema =
 
 export const CreateCinemas = (formData, history) => async (dispatch) => {
   await axios
-    .post(`http://localhost:8081/api/admin/v1/cinema/create`, formData, {
+    .post(`http://localhost:8081/api/admin/cinema/v1/create`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -42,7 +42,7 @@ export const CreateCinemas = (formData, history) => async (dispatch) => {
 
 export const deleteCinema = (slug) => async (dispatch) => {
   await axios
-    .delete(`http://localhost:8081/api/admin/v1/cinema/delete/${slug}`)
+    .delete(`http://localhost:8081/api/admin/cinema/v1/delete/${slug}`)
     .then((response) => {
       // console.log(response);
       dispatch(Success(response.data?.message));
@@ -57,7 +57,7 @@ export const deleteCinema = (slug) => async (dispatch) => {
 
 export const GetEditCinema = (slug, history) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/cinema/${slug}/edit`)
+    .get(`http://localhost:8081/api/admin/cinema/v1/${slug}/edit`)
     .then((response) => {
       // console.log(response);
       // dispatch(setSelectOption(response.data?.result.selectOptionReponse));
@@ -74,7 +74,7 @@ export const GetEditCinema = (slug, history) => async (dispatch) => {
 
 export const UpdateCinema = (formData, history) => async (dispatch) => {
   await axios
-    .put(`http://localhost:8081/api/admin/v1/cinema/update`, formData, {
+    .put(`http://localhost:8081/api/admin/cinema/v1/update`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

@@ -2,11 +2,11 @@ import { fetchSuccess, setSelectOption, removeItem, setItem } from "./reducer";
 // import { Success, Error } from "../message/reducer";
 import axios from "axios";
 
-// http://localhost:8081/api/home/v1/celebrity/actor?pageNo=1&pageSize=15&sort=ASC
+// http://localhost:8081/api/home/celebrity/v1/actor?pageNo=1&pageSize=15&sort=ASC
 export const getHomeActor =
   (slugCountry, pageNo, pageSize) => async (dispatch) => {
     await axios
-      .get(`http://localhost:8081/api/home/v1/celebrity/actor`, {
+      .get(`http://localhost:8081/api/home/celebrity/v1/actor`, {
         params: { slugCountry, pageNo, pageSize },
       })
       .then((response) => {
@@ -21,7 +21,7 @@ export const getHomeActor =
 
 export const getcelebrityDetails = (slug, history) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/home/v1/celebrity/detail/${slug}`)
+    .get(`http://localhost:8081/api/home/celebrity/v1/detail/${slug}`)
     .then((response) => {
       // console.log(response);
       dispatch(setItem({ data: response?.data?.result }));
@@ -38,7 +38,7 @@ export const getcelebrityDetails = (slug, history) => async (dispatch) => {
 export const getHomedirector =
   (slugCountry, pageNo, pageSize) => async (dispatch) => {
     await axios
-      .get(`http://localhost:8081/api/home/v1/celebrity/director`, {
+      .get(`http://localhost:8081/api/home/celebrity/v1/director`, {
         params: { slugCountry, pageNo, pageSize },
       })
       .then((response) => {

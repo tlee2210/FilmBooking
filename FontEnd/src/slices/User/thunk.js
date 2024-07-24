@@ -5,7 +5,7 @@ import axios from "axios";
 
 export const getUsers = (name, role, pageNo, pageSize) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/user`, {
+    .get(`http://localhost:8081/api/admin/user/v1`, {
       params: { name, role, pageNo, pageSize },
     })
     .then((response) => {
@@ -20,7 +20,7 @@ export const getUsers = (name, role, pageNo, pageSize) => async (dispatch) => {
 
 export const CreateUsers = (formData, history) => async (dispatch) => {
   await axios
-    .post(`http://localhost:8081/api/admin/v1/user/create`, formData, {
+    .post(`http://localhost:8081/api/admin/user/v1/create`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -38,7 +38,7 @@ export const CreateUsers = (formData, history) => async (dispatch) => {
 
 export const GetEditUser = (id, history) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/user/${id}/edit`)
+    .get(`http://localhost:8081/api/admin/user/v1/${id}/edit`)
     .then((response) => {
       // console.log(response);
       dispatch(getitem(response.data?.result));
@@ -52,7 +52,7 @@ export const GetEditUser = (id, history) => async (dispatch) => {
 
 export const UpdateUser = (formData, history) => async (dispatch) => {
   await axios
-    .put(`http://localhost:8081/api/admin/v1/user/update`, formData, {
+    .put(`http://localhost:8081/api/admin/user/v1/update`, formData, {
       headers: {
         "Content-Type": "application/json",
       },

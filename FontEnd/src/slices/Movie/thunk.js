@@ -5,7 +5,7 @@ import axios from "axios";
 export const getMovie =
   (name, status, countryId, pageNo, pageSize) => async (dispatch) => {
     await axios
-      .get(`http://localhost:8081/api/admin/v1/movie`, {
+      .get(`http://localhost:8081/api/admin/movie/v1`, {
         params: { name, status, countryId, pageNo, pageSize },
       })
       .then((response) => {
@@ -24,7 +24,7 @@ export const getMovie =
 
 export const getCreate = () => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/movie/create`)
+    .get(`http://localhost:8081/api/admin/movie/v1/create`)
     .then((response) => {
       // console.log(response);
       dispatch(
@@ -41,7 +41,7 @@ export const getCreate = () => async (dispatch) => {
 
 export const CreateMovies = (formData, history) => async (dispatch) => {
   await axios
-    .post(`http://localhost:8081/api/admin/v1/movie/create`, formData, {
+    .post(`http://localhost:8081/api/admin/movie/v1/create`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -59,7 +59,7 @@ export const CreateMovies = (formData, history) => async (dispatch) => {
 
 export const deleteMovie = (slug) => async (dispatch) => {
   await axios
-    .delete(`http://localhost:8081/api/admin/v1/movie/delete/${slug}`)
+    .delete(`http://localhost:8081/api/admin/movie/v1/delete/${slug}`)
     .then((response) => {
       // console.log(response);
       dispatch(Success(response.data?.message));
@@ -73,7 +73,7 @@ export const deleteMovie = (slug) => async (dispatch) => {
 
 export const GetEditMovie = (slug, history) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/movie/${slug}/edit`)
+    .get(`http://localhost:8081/api/admin/movie/v1/${slug}/edit`)
     .then((response) => {
       // console.log(response);
       dispatch(
@@ -93,7 +93,7 @@ export const GetEditMovie = (slug, history) => async (dispatch) => {
 
 export const UpdateMovie = (formData, history) => async (dispatch) => {
   await axios
-    .put(`http://localhost:8081/api/admin/v1/movie/update`, formData, {
+    .put(`http://localhost:8081/api/admin/movie/v1/update`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

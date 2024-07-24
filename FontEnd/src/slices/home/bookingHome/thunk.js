@@ -10,7 +10,7 @@ import axios from "axios";
 
 export const getBooking = (slug, city, cinema) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/home/v1/booking`, {
+    .get(`http://localhost:8081/api/home/booking/v1`, {
       params: { slug, city, cinema },
     })
     .then((response) => {
@@ -25,7 +25,7 @@ export const getBooking = (slug, city, cinema) => async (dispatch) => {
 export const getBookingTime = (id, history) => async (dispatch) => {
   // console.log(id);
   await axios
-    .get(`http://localhost:8081/api/home/v1/booking/${id}`)
+    .get(`http://localhost:8081/api/home/booking/v1/${id}`)
     .then((response) => {
       // console.log(response);
       localStorage.setItem(
@@ -40,7 +40,7 @@ export const getBookingTime = (id, history) => async (dispatch) => {
     });
 
   await axios
-    .get(`http://localhost:8081/api/home/v1/booking/seat-booked/${id}`)
+    .get(`http://localhost:8081/api/home/booking/v1/seat-booked/${id}`)
     .then((response) => {
       // console.log(response);
       localStorage.setItem(
@@ -57,7 +57,7 @@ export const getBookingTime = (id, history) => async (dispatch) => {
 export const BuyFastTicket =
   (slugmovie, slugcinema, time, history) => async (dispatch) => {
     await axios
-      .get(`http://localhost:8081/api/home/v1/booking/buy-ticket`, {
+      .get(`http://localhost:8081/api/home/booking/v1/buy-ticket`, {
         params: { slugmovie, slugcinema, time },
       })
       .then((response) => {
@@ -71,7 +71,7 @@ export const BuyFastTicket =
 
 export const ApplyVoucher = (formData, history) => async (dispatch) => {
   await axios
-    .post(`http://localhost:8081/api/home/v1/booking/apply-voucher`, formData)
+    .post(`http://localhost:8081/api/home/booking/v1/apply-voucher`, formData)
     .then((response) => {
       // console.log(response);
       dispatch(setVoucher(response?.data?.result));
@@ -81,11 +81,11 @@ export const ApplyVoucher = (formData, history) => async (dispatch) => {
       dispatch(Error(error.response?.data?.message));
     });
 };
-// http://localhost:8081/api/home/v1/booking/apply-voucher
+// http://localhost:8081/api/home/booking/v1/apply-voucher
 
 export const getPaymentVnpayMethods = (formData) => async (dispatch) => {
   await axios
-    .post(`http://localhost:8081/api/payment/create_payment_vnpay`, formData)
+    .post(`http://localhost:8081/api/payment/v1/creat/api/paymente_payment_vnpay`, formData)
     .then((response) => {
       // console.log(response);
       window.location.href = response?.data?.result;
@@ -97,7 +97,7 @@ export const getPaymentVnpayMethods = (formData) => async (dispatch) => {
 
 export const getPaymentResult = (formData, history) => async (dispatch) => {
   await axios
-    .post(`http://localhost:8081/api/payment/booking_paypal`, formData)
+    .post(`http://localhost:8081/api/payment/v1/booking_paypal`, formData)
     .then((response) => {
       // console.log(response);
       // getPaymentResult

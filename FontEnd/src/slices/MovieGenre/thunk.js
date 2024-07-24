@@ -5,7 +5,7 @@ import axios from "axios";
 
 export const getMovieGenre = (search, pageNo, pageSize) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/movie-genre`, {
+    .get(`http://localhost:8081/api/admin/movie-genre/v1`, {
       params: { search, pageNo, pageSize },
     })
     .then((response) => {
@@ -20,7 +20,7 @@ export const getMovieGenre = (search, pageNo, pageSize) => async (dispatch) => {
 
 export const CreateMovieGenre = (formData) => async (dispatch) => {
   await axios
-    .post(`http://localhost:8081/api/admin/v1/movie-genre/create`, formData)
+    .post(`http://localhost:8081/api/admin/movie-genre/v1/create`, formData)
     .then((response) => {
       // console.log(response);
       dispatch(Success(response.data?.message));
@@ -34,7 +34,7 @@ export const CreateMovieGenre = (formData) => async (dispatch) => {
 
 export const deleteMovieGenre = (slug) => async (dispatch) => {
   await axios
-    .delete(`http://localhost:8081/api/admin/v1/movie-genre/${slug}/delete`)
+    .delete(`http://localhost:8081/api/admin/movie-genre/v1/${slug}/delete`)
     .then((response) => {
       // console.log(response);
       dispatch(getMovieGenre({}));
@@ -48,7 +48,7 @@ export const deleteMovieGenre = (slug) => async (dispatch) => {
 
 export const GetEditMovieGenre = (slug, history) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/movie-genre/${slug}/edit`)
+    .get(`http://localhost:8081/api/admin/movie-genre/v1/${slug}/edit`)
     .then((response) => {
       // console.log(response);
       dispatch(getitem(response.data?.result));
@@ -61,7 +61,7 @@ export const GetEditMovieGenre = (slug, history) => async (dispatch) => {
 
 export const UpdateMovieGenre = (formData) => async (dispatch) => {
   await axios
-    .put(`http://localhost:8081/api/admin/v1/movie-genre/update`, formData)
+    .put(`http://localhost:8081/api/admin/movie-genre/v1/update`, formData)
     .then((response) => {
       // console.log(response);
       dispatch(Success(response.data?.message));

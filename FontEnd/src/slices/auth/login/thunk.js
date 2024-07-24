@@ -12,7 +12,7 @@ import { Success, Error } from "../../message/reducer";
 export const loginUser = (user, history) => async (dispatch) => {
   return new Promise(async (resolve, reject) => {
     await axios
-      .post("http://localhost:8081/api/auth/signin", user)
+      .post("http://localhost:8081/api/auth/v1/signin", user)
       .then((res) => {
         // console.log(res);
         const { token, user: userLogin } = res.data?.result;
@@ -33,7 +33,7 @@ export const loginUser = (user, history) => async (dispatch) => {
 export const loginWithGoogle = (user, history) => async (dispatch) => {
   return new Promise(async (resolve, reject) => {
     await axios
-      .post("http://localhost:8081/api/auth/signin", user)
+      .post("http://localhost:8081/api/auth/v1/signin", user)
       .then((res) => {
         console.log(res);
         // const { token, user: userLogin } = res.data?.result;

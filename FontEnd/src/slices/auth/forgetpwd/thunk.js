@@ -4,7 +4,7 @@ import axios from "axios";
 
 export const ForgetPassword = (formData, history) => async (dispatch) => {
   await axios
-    .post(`http://localhost:8081/api/auth/verifyMail`, formData)
+    .post(`http://localhost:8081/api/auth/v1/verifyMail`, formData)
     .then((response) => {
       // console.log(response);
       dispatch(Success(response.data?.message));
@@ -18,7 +18,7 @@ export const ForgetPassword = (formData, history) => async (dispatch) => {
 
 export const GetverifyOtp = (id, otp, history) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/auth/verifyOtp/${otp}/${id}`)
+    .get(`http://localhost:8081/api/auth/v1/verifyOtp/${otp}/${id}`)
     .then((response) => {
       // console.log(response);
       dispatch(Success(response.data?.message));
@@ -31,7 +31,7 @@ export const GetverifyOtp = (id, otp, history) => async (dispatch) => {
 
 export const ResetPassword = (id, formData, history) => async (dispatch) => {
   await axios
-    .post(`http://localhost:8081/api/auth/changePassword/${id}`, formData)
+    .post(`http://localhost:8081/api/auth/v1/changePassword/${id}`, formData)
     .then((response) => {
       // console.log(response);
       dispatch(Success(response.data?.message));

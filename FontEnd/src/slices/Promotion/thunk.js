@@ -5,7 +5,7 @@ import axios from "axios";
 
 export const getPromotion = (name, pageNo, pageSize) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/promotion`, {
+    .get(`http://localhost:8081/api/admin/promotion/v1`, {
       params: { name, pageNo, pageSize },
     })
     .then((response) => {
@@ -23,7 +23,7 @@ export const getPromotion = (name, pageNo, pageSize) => async (dispatch) => {
 
 export const CreatePromotion = (formData, history) => async (dispatch) => {
   await axios
-    .post(`http://localhost:8081/api/admin/v1/promotion/create`, formData, {
+    .post(`http://localhost:8081/api/admin/promotion/v1/create`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -41,7 +41,7 @@ export const CreatePromotion = (formData, history) => async (dispatch) => {
 
 export const deletePromotion = (slug, history) => async (dispatch) => {
   await axios
-    .delete(`http://localhost:8081/api/admin/v1/promotion/delete/${slug}`)
+    .delete(`http://localhost:8081/api/admin/promotion/v1/delete/${slug}`)
     .then((response) => {
       // console.log(response);
       dispatch(Success(response.data?.message));
@@ -56,7 +56,7 @@ export const deletePromotion = (slug, history) => async (dispatch) => {
 
 export const editPromotion = (slug, history) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/promotion/${slug}/edit`)
+    .get(`http://localhost:8081/api/admin/promotion/v1/${slug}/edit`)
     .then((response) => {
       // console.log(response);
       dispatch(
@@ -76,7 +76,7 @@ export const editPromotion = (slug, history) => async (dispatch) => {
 
 export const updatePromotion = (formData, history) => async (dispatch) => {
   await axios
-    .put(`http://localhost:8081/api/admin/v1/promotion/update`, formData, {
+    .put(`http://localhost:8081/api/admin/promotion/v1/update`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

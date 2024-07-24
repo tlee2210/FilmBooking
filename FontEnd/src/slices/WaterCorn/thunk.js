@@ -4,7 +4,7 @@ import axios from "axios";
 
 export const getWaterCorn = (search, pageNo, pageSize) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/watercorn`, {
+    .get(`http://localhost:8081/api/admin/watercorn/v1`, {
       params: { search, pageNo, pageSize },
     })
     .then((response) => {
@@ -23,7 +23,7 @@ export const getWaterCorn = (search, pageNo, pageSize) => async (dispatch) => {
 
 export const CreateWaterCorn = (formData, history) => async (dispatch) => {
   await axios
-    .post(`http://localhost:8081/api/admin/v1/watercorn/create`, formData, {
+    .post(`http://localhost:8081/api/admin/watercorn/v1/create`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -41,7 +41,7 @@ export const CreateWaterCorn = (formData, history) => async (dispatch) => {
 
 export const deleteWaterCorn = (slug) => async (dispatch) => {
   await axios
-    .delete(`http://localhost:8081/api/admin/v1/watercorn/delete/${slug}`)
+    .delete(`http://localhost:8081/api/admin/watercorn/v1/delete/${slug}`)
     .then((response) => {
       // console.log(response);
       dispatch(Success(response.data?.message));
@@ -55,7 +55,7 @@ export const deleteWaterCorn = (slug) => async (dispatch) => {
 
 export const GetEditWaterCorn = (slug, history) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/watercorn/${slug}/edit`)
+    .get(`http://localhost:8081/api/admin/watercorn/v1/${slug}/edit`)
     .then((response) => {
       // console.log(response);
       dispatch(
@@ -75,7 +75,7 @@ export const GetEditWaterCorn = (slug, history) => async (dispatch) => {
 
 export const UpdateWaterCorn = (formData, history) => async (dispatch) => {
   await axios
-    .put(`http://localhost:8081/api/admin/v1/watercorn/update`, formData, {
+    .put(`http://localhost:8081/api/admin/watercorn/v1/update`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

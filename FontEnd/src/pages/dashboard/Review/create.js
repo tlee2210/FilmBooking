@@ -151,7 +151,7 @@ const BlogCreate = (props) => {
           loader.file.then((file) => {
             body.append("upload", file);
             body.append("type", "blog");
-            fetch("http://localhost:8081/api/admin/v1/file-upload", {
+            fetch("http://localhost:8081/api/admin/v1/file-upload/v1", {
               method: "POST",
               body: body,
             })

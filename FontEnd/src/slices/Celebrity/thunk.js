@@ -6,7 +6,7 @@ import axios from "axios";
 export const celebrity =
   (search, role, pageNo, pageSize) => async (dispatch) => {
     await axios
-      .get(`http://localhost:8081/api/admin/v1/celebrity`, {
+      .get(`http://localhost:8081/api/admin/celebrity/v1`, {
         params: { search, role, pageNo, pageSize },
       })
       .then((response) => {
@@ -25,7 +25,7 @@ export const celebrity =
 
 export const getCreateCelebrity = () => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/celebrity/create`)
+    .get(`http://localhost:8081/api/admin/celebrity/v1/create`)
     .then((response) => {
       // console.log(response);
       dispatch(setSelectOption(response.data?.result));
@@ -38,7 +38,7 @@ export const getCreateCelebrity = () => async (dispatch) => {
 
 export const CreateCelebrity = (formData, history) => async (dispatch) => {
   await axios
-    .post(`http://localhost:8081/api/admin/v1/celebrity/create`, formData, {
+    .post(`http://localhost:8081/api/admin/celebrity/v1/create`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -57,7 +57,7 @@ export const CreateCelebrity = (formData, history) => async (dispatch) => {
 
 export const deleteCelebrity = (id, history) => async (dispatch) => {
   await axios
-    .delete(`http://localhost:8081/api/admin/v1/celebrity/delete/${id}`)
+    .delete(`http://localhost:8081/api/admin/celebrity/v1/delete/${id}`)
     .then((response) => {
       // console.log(response);
       dispatch(Success(response.data?.message));
@@ -71,7 +71,7 @@ export const deleteCelebrity = (id, history) => async (dispatch) => {
 
 export const GetEditCelebrity = (id, history) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/celebrity/${id}/edit`)
+    .get(`http://localhost:8081/api/admin/celebrity/v1/${id}/edit`)
     .then((response) => {
       // console.log(response);
       dispatch(setSelectOption(response.data?.result.selectOptionReponse));
@@ -86,7 +86,7 @@ export const GetEditCelebrity = (id, history) => async (dispatch) => {
 
 export const UpdateCelebrity = (formData, history) => async (dispatch) => {
   await axios
-    .put(`http://localhost:8081/api/admin/v1/celebrity/update`, formData, {
+    .put(`http://localhost:8081/api/admin/celebrity/v1/update`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
