@@ -31,6 +31,8 @@ public class Celebrity {
 
     @Column
     private String slug;
+    @Column
+    private Integer view = 0;
 
     @Column
     private String biography;

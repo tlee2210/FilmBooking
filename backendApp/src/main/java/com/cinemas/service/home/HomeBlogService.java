@@ -14,6 +14,16 @@ public interface HomeBlogService {
     Page<MovieBlog> getAllBlog(PaginationHelper paginationHelper);
 
     HomeMovieBlogResponse getBlogDetail(String slug);
+<<<<<<< Updated upstream
 
     List<MovieBlog> getAllBlog2(String name);
+=======
+<<<<<<< HEAD
+    void incrementViewCount(String slug);
+
+=======
+
+    List<MovieBlog> getAllBlog2(String name);
+>>>>>>> 0b1c4d9c5f405c9dd795ada8ea1865811daec8cd
+>>>>>>> Stashed changes
 }

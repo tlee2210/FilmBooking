@@ -56,7 +56,7 @@ public class HomeBlogServiceImpl implements HomeBlogService {
     @Override
     public HomeMovieBlogResponse getBlogDetail(String slug) {
         MovieBlog movieBlog = movieBlogRepository.findBySlug(slug);
-
+        incrementViewCount(slug);
         if (movieBlog == null) throw new AppException(NOT_FOUND);
 
         movieBlog.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(movieBlog.getThumbnail()));
@@ -68,11 +68,25 @@ public class HomeBlogServiceImpl implements HomeBlogService {
         homeMovieBlogResponse.getBlogRelate().forEach(item -> {
             item.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(item.getImagePortrait()));
         });
+//        homeMovieBlogResponse.setViewCount(movieBlog.getView());
 
         return homeMovieBlogResponse;
     }
 
     @Override
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+    public void incrementViewCount(String slug) {
+        MovieBlog movieBlog = movieBlogRepository.findBySlug(slug);
+        if (movieBlog != null) {
+            movieBlog.setView(movieBlog.getView() + 1);
+            movieBlogRepository.save(movieBlog);
+        }
+    }
+
+=======
+>>>>>>> Stashed changes
     public List<MovieBlog> getAllBlog2(String name) {
         List<MovieBlog> blogs = movieBlogRepository.findListByName(name);
 
@@ -82,4 +96,8 @@ public class HomeBlogServiceImpl implements HomeBlogService {
 
         return blogs;
     }
+<<<<<<< Updated upstream
+=======
+>>>>>>> 0b1c4d9c5f405c9dd795ada8ea1865811daec8cd
+>>>>>>> Stashed changes
 }

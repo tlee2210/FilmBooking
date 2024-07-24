@@ -13,4 +13,5 @@ public interface HomeCelebService {
     SelectOptionCeleb<Page<Celebrity>> getAllDirector(SearchCelebRequest searchCelebRequest);
 
     CelebResponse getDetailCeleb(String slug);
+    void incrementViewCount(String slug);
 }

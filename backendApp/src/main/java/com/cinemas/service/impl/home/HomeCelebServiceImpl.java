@@ -7,6 +7,7 @@ import com.cinemas.dto.response.*;
 import com.cinemas.entities.Celebrity;
 import com.cinemas.entities.Country;
 import com.cinemas.entities.Movie;
+import com.cinemas.entities.MovieBlog;
 import com.cinemas.enums.MovieStatus;
 import com.cinemas.enums.RoleCeleb;
 import com.cinemas.exception.AppException;
@@ -101,7 +102,7 @@ public class HomeCelebServiceImpl implements HomeCelebService {
     @Override
     public CelebResponse getDetailCeleb(String slug) {
         Celebrity celebrity = celebrityRepository.findBySlug(slug);
-
+        incrementViewCount(slug);
         if (celebrity == null) throw new AppException(NOT_FOUND);
 
         celebrity.setImage(fileStorageServiceImpl.getUrlFromPublicId(celebrity.getImage()));
@@ -126,5 +127,13 @@ public class HomeCelebServiceImpl implements HomeCelebService {
         }
         celebResponse.setMovieList(movieCelebList);
         return celebResponse;
+    }
+    @Override
+    public void incrementViewCount(String slug) {
+        Celebrity celebrity = celebrityRepository.findBySlug(slug);
+        if (celebrity != null) {
+            celebrity.setView(celebrity.getView() + 1);
+            celebrityRepository.save(celebrity);
+        }
     }
 }
