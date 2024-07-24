@@ -19,7 +19,7 @@ import static com.cinemas.exception.ErrorCode.CREATE_FAILED;
 import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 
 @RestController
-@RequestMapping("/api/admin/v1/watercorn")
+@RequestMapping("/api/admin/watercorn")
 @Tag(name = "Dashboard Watercorn Controller")
 public class WatercornController {
     @Autowired
@@ -33,7 +33,7 @@ public class WatercornController {
      * @param sort
      * @return
      */
-    @GetMapping
+    @GetMapping("/v1")
     public APIResponse<Page<WaterCorn>> getAllWaterCorn( @RequestParam(required = false) String search,
                                                          @RequestParam(required = false, defaultValue = "1") Integer pageNo,
                                                          @RequestParam(required = false, defaultValue = "15") Integer pageSize,
@@ -54,7 +54,7 @@ public class WatercornController {
      * @return
      * @throws IOException
      */
-    @PostMapping("/create")
+    @PostMapping("/v1/create")
     public APIResponse<String> createWatercorn(@ModelAttribute WaterCornRequest waterCornRequest) throws IOException {
         boolean checkCreate = waterCornService.addWaterCorn(waterCornRequest);
         if (checkCreate) {
@@ -75,7 +75,7 @@ public class WatercornController {
      * @return
      * @throws IOException
      */
-    @DeleteMapping("/delete/{slug}")
+    @DeleteMapping("/v1/delete/{slug}")
     public APIResponse<Integer> deleteWaterCorn(@PathVariable String slug) throws IOException {
 
         int id = waterCornService.deleteWaterCorn(slug);
@@ -96,7 +96,7 @@ public class WatercornController {
      * @param slug
      * @return
      */
-    @GetMapping("/{slug}/edit")
+    @GetMapping("/v1/{slug}/edit")
     public APIResponse<WaterCorn> getEditWaterCorn(@PathVariable String slug) throws IOException {
         WaterCorn waterCorn = waterCornService.getEditWaterCorn(slug);
 
@@ -113,7 +113,7 @@ public class WatercornController {
      * @return
      * @throws IOException
      */
-    @PutMapping(value = "/update")
+    @PutMapping(value = "/v1/update")
     public APIResponse<String> updateWatercorn(@ModelAttribute WaterCornRequest waterCornRequest) throws IOException {
 //        System.out.println(celebrity);
         boolean checkUpdate = waterCornService.updateWaterCorn(waterCornRequest);

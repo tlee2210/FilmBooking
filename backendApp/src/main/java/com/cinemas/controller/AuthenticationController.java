@@ -32,7 +32,7 @@ public class AuthenticationController {
      * @param signUpRequest
      * @return
      */
-    @PostMapping("/signup")
+    @PostMapping("/v1/signup")
     public APIResponse<User> signup(@RequestBody @Valid SignUpRequest signUpRequest) {
         String response = authenticationService.signup(signUpRequest);
 
@@ -49,7 +49,7 @@ public class AuthenticationController {
      * @param signinRequest
      * @return
      */
-    @PostMapping(value = "/signin")
+    @PostMapping(value = "/v1/signin")
     public APIResponse<JwtAuthenticationResponse> signin(@RequestBody @Valid SigninRequest signinRequest) {
         JwtAuthenticationResponse response = authenticationService.signin(signinRequest);
 
@@ -67,7 +67,7 @@ public class AuthenticationController {
      * @param refreshTokenRequest
      * @return
      */
-    @PostMapping("/refresh")
+    @PostMapping("/v1/refresh")
     public APIResponse<JwtAuthenticationResponse> refresh(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         JwtAuthenticationResponse response = authenticationService.refreshToken(refreshTokenRequest);
 
@@ -86,7 +86,7 @@ public class AuthenticationController {
      * @return
      * @throws MessagingException
      */
-    @PostMapping("/verifyMail")
+    @PostMapping("/v1/verifyMail")
     public APIResponse<String> verifyEmail(@RequestBody verifyMailrequest email) throws MessagingException {
 
         String response = authenticationService.verifyEmail(email);
@@ -106,7 +106,7 @@ public class AuthenticationController {
      * @param id
      * @return
      */
-    @GetMapping("/verifyOtp/{otp}/{id}")
+    @GetMapping("/v1/verifyOtp/{otp}/{id}")
     public APIResponse<String> verifyOtp(@PathVariable String otp, @PathVariable String id) {
         String response = authenticationService.verifyOtp(otp, id);
 
@@ -125,7 +125,7 @@ public class AuthenticationController {
      * @param id
      * @return
      */
-    @PostMapping("/changePassword/{id}")
+    @PostMapping("/v1/changePassword/{id}")
     public APIResponse<String> changePasswordHandler(@RequestBody ChangePassword changePassword,
                                                      @PathVariable int id) {
         String response = authenticationService.changePasswordHandler(changePassword, id);
@@ -144,7 +144,7 @@ public class AuthenticationController {
      * @param tokenMap
      * @return
      */
-    @PostMapping("/auth/google")
+    @PostMapping("/v1/auth/google")
     public APIResponse<String> signinWithgoogle(@RequestBody Map<String, String> tokenMap) {
         String jwt = tokenMap.get("token");
         String secretKey = "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";

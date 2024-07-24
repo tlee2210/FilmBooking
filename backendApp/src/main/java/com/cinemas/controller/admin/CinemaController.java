@@ -22,7 +22,7 @@ import static com.cinemas.exception.ErrorCode.CREATE_FAILED;
 import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 
 @RestController
-@RequestMapping("/api/admin/v1/cinema")
+@RequestMapping("/api/admin/cinema")
 @Tag(name = "Dashboard Cinema Controller")
 public class CinemaController {
 
@@ -40,7 +40,7 @@ public class CinemaController {
      * @param sort
      * @return
      */
-    @GetMapping
+    @GetMapping("/v1")
     public APIResponse<SelectOptionAndModelReponse<Page<Cinema>>> getAllCinema(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) StatusCinema status,
@@ -65,7 +65,7 @@ public class CinemaController {
      * @return
      * @throws IOException
      */
-    @PostMapping("/create")
+    @PostMapping("/v1/create")
     public APIResponse<String> CreateCinema(@ModelAttribute CinemaRequest cinemaRequest) throws IOException {
         boolean check = cinemaService.createCinema(cinemaRequest);
 
@@ -86,7 +86,7 @@ public class CinemaController {
      * @param slug
      * @return
      */
-    @GetMapping("{slug}/edit")
+    @GetMapping("/v1/{slug}/edit")
     public APIResponse<Cinema> getCinemaEdit(@PathVariable String slug) {
 
         Cinema cinema = cinemaService.getCinemaEdit(slug);
@@ -105,7 +105,7 @@ public class CinemaController {
      * @return
      * @throws IOException
      */
-    @PutMapping("/update")
+    @PutMapping("/v1/update")
     public APIResponse<String> updateCinema(@ModelAttribute CinemaRequest cinemaRequest) throws IOException {
 
         boolean checkUpdate = cinemaService.updateCinema(cinemaRequest);
@@ -127,7 +127,7 @@ public class CinemaController {
      * @return
      * @throws IOException
      */
-    @DeleteMapping("/delete/{slug}")
+    @DeleteMapping("/v1/delete/{slug}")
     public APIResponse<Integer> deleteCinema(@PathVariable String slug) throws IOException {
         int id = cinemaService.deleteCinema(slug);
         if (id > 0) {
@@ -142,7 +142,7 @@ public class CinemaController {
         throw new AppException(CREATE_FAILED);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/v1/{id}")
     public APIResponse<Cinema> getCinemaById(@PathVariable Integer id) {
         Cinema cinema = cinemaService.findCinemaById(id);
         APIResponse<Cinema> apiResponse = new APIResponse<>();

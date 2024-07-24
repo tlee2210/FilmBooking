@@ -22,7 +22,7 @@ import static com.cinemas.exception.ErrorCode.CREATE_FAILED;
 import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 
 @RestController
-@RequestMapping("/api/admin/v1/review")
+@RequestMapping("/api/admin/review")
 @Tag(name = "Dashboard Review Controller")
 public class ReviewController {
     @Autowired
@@ -35,7 +35,7 @@ public class ReviewController {
      * @param sort
      * @return
      */
-    @GetMapping
+    @GetMapping("/v1")
     public APIResponse<SelectOptionAndModelReponse<Page<Review>>> getReview(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) ReviewType type,
@@ -52,7 +52,7 @@ public class ReviewController {
         return apiResponse;
     }
 
-    @GetMapping("/create")
+    @GetMapping("/v1/create")
     public APIResponse<SelectOptionAndModelReponse> getReview() {
 
         APIResponse<SelectOptionAndModelReponse> apiResponse = new APIResponse<>();
@@ -68,7 +68,7 @@ public class ReviewController {
      * @return
      * @throws IOException
      */
-    @PostMapping("/create")
+    @PostMapping("/v1/create")
     public APIResponse<String> createReview(@ModelAttribute ReviewRequest reviewRequest) throws IOException {
         boolean checkCreate = reviewService.addReview(reviewRequest);
         if (checkCreate) {
@@ -89,7 +89,7 @@ public class ReviewController {
      * @return
      * @throws IOException
      */
-    @DeleteMapping("/delete/{slug}")
+    @DeleteMapping("/v1/delete/{slug}")
     public APIResponse<Integer> deleteReview(@PathVariable String slug) throws IOException {
 
         int id = reviewService.deleteReview(slug);
@@ -110,7 +110,7 @@ public class ReviewController {
      * @param slug
      * @return
      */
-    @GetMapping("/{slug}/edit")
+    @GetMapping("/v1/{slug}/edit")
     public APIResponse<SelectOptionAndModelReponse<ReviewResponse>> getEditWaterCorn(@PathVariable String slug) {
         SelectOptionAndModelReponse<ReviewResponse> modelReponse = reviewService.getEditReview(slug);
 
@@ -126,7 +126,7 @@ public class ReviewController {
      * @return
      * @throws IOException
      */
-    @PutMapping(value = "/update")
+    @PutMapping(value = "/v1/update")
     public APIResponse<String> updateReview(@ModelAttribute ReviewRequest reviewRequest) throws IOException {
 //        System.out.println(celebrity);
         boolean checkUpdate = reviewService.updateReview(reviewRequest);

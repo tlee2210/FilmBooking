@@ -18,13 +18,13 @@ import static com.cinemas.exception.ErrorCode.CREATE_FAILED;
 import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 
 @RestController
-@RequestMapping("/api/admin/v1/voucher")
+@RequestMapping("/api/admin/voucher")
 @Tag(name = "Dashboard Voucher Controller")
 public class VoucherController {
     @Autowired
     private VoucherService voucherService;
 
-    @GetMapping
+    @GetMapping("/v1")
     public APIResponse<Page<Voucher>> getAllVoucher(
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
             @RequestParam(required = false, defaultValue = "15") Integer pageSize,
@@ -38,7 +38,7 @@ public class VoucherController {
         return apiResponse;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/v1/create")
     public APIResponse<String> createVoucher(@RequestBody VoucherRequest voucherRequest) {
         boolean checkCreate = voucherService.createVoucher(voucherRequest);
         if (checkCreate) {
@@ -52,7 +52,7 @@ public class VoucherController {
         throw new AppException(CREATE_FAILED);
     }
 
-    @GetMapping("/{id}/edit")
+    @GetMapping("/v1/{id}/edit")
     public APIResponse<Voucher> getVoucherById(@PathVariable Integer id) {
         APIResponse<Voucher> apiResponse = new APIResponse();
 
@@ -62,7 +62,7 @@ public class VoucherController {
         return apiResponse;
     }
 
-    @PutMapping("/update")
+    @PutMapping("/v1/update")
     public APIResponse<String> updateVoucher(@RequestBody VoucherRequest voucherRequest) {
         boolean checkUpdate = voucherService.updateVoucher(voucherRequest);
         if (checkUpdate) {
@@ -76,7 +76,7 @@ public class VoucherController {
         throw new AppException(UPDATE_FAILED);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/v1/delete/{id}")
     public APIResponse<Integer> deleteVoucher(@PathVariable Integer id) {
 
         Integer idVoucher = voucherService.deleteVoucher(id);

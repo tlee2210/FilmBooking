@@ -16,7 +16,7 @@ import static com.cinemas.exception.ErrorCode.CREATE_FAILED;
 import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 
 @RestController
-@RequestMapping("/api/admin/v1/movie-genre")
+@RequestMapping("/api/admin/movie-genre")
 @Tag(name = "Dashboard Movie Genre Controller")
 public class MovieGenreController {
     @Autowired
@@ -31,7 +31,7 @@ public class MovieGenreController {
      * @param sort
      * @return
      */
-    @GetMapping
+    @GetMapping("/v1")
     public APIResponse<Page<MovieGenre>> getAllMovieGenres(
             @RequestParam(required = false) String search,
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
@@ -53,7 +53,7 @@ public class MovieGenreController {
      * @param movieGenreRequest
      * @return
      */
-    @PostMapping(value = "/create")
+    @PostMapping(value = "/v1/create")
     public APIResponse<String> createMovieGenre(@RequestBody MovieGenreRequest movieGenreRequest) {
         boolean checkCreate = movieGenreService.addMovieGenre(movieGenreRequest);
         if (checkCreate) {
@@ -73,7 +73,7 @@ public class MovieGenreController {
      * @param slug
      * @return
      */
-    @GetMapping("/{slug}/edit")
+    @GetMapping("/v1/{slug}/edit")
     public APIResponse<MovieGenre> getMovieGenreBySlug(@PathVariable String slug) {
         APIResponse<MovieGenre> apiResponse = new APIResponse();
 
@@ -89,7 +89,7 @@ public class MovieGenreController {
      * @param movieGenreRequest
      * @return
      */
-    @PutMapping(value = "/update")
+    @PutMapping(value = "/v1/update")
     public APIResponse<String> updateMovieGenre(@ModelAttribute MovieGenreRequest movieGenreRequest) {
         boolean checkUpdate = movieGenreService.updateMovieGenre(movieGenreRequest);
         if (checkUpdate) {
@@ -109,7 +109,7 @@ public class MovieGenreController {
      * @param slug
      * @return
      */
-    @DeleteMapping("/{slug}/delete")
+    @DeleteMapping("/v1/{slug}/delete")
     public APIResponse<Integer> deleteMovieGenre(@PathVariable String slug) {
 
         int id = movieGenreService.deleteMovieGenre(slug);

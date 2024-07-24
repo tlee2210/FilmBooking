@@ -16,13 +16,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/admin/v1/file-upload")
+@RequestMapping("/api/admin/file-upload")
 @Tag(name = "Dashboard Upload File")
 public class FileUploadController {
     @Autowired
     private UploadFileService uploadFileService;
 
-    @PostMapping("")
+    @PostMapping("/v1")
     public ResponseEntity<Map<String, String>> uploadFileReview(
             @RequestParam("upload") MultipartFile file,
             @RequestParam("type") String type

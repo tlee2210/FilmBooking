@@ -20,13 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 
 @RestController
-@RequestMapping("/api/admin/v1/booking")
+@RequestMapping("/api/admin/booking")
 @Tag(name = "Dashboard Booking Controller")
 public class BookingController {
     @Autowired
     private BookingService bookingService;
 
-    @GetMapping
+    @GetMapping("/v1")
     public APIResponse<Page<BookingTableResponse>> getAllBooking(
             @RequestParam(required = false) String userName,
             @RequestParam(required = false) LocalDate startDay,

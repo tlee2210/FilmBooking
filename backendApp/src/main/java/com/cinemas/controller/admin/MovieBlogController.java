@@ -18,13 +18,13 @@ import static com.cinemas.exception.ErrorCode.CREATE_FAILED;
 import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 
 @RestController
-@RequestMapping("/api/admin/v1/movie-blog")
+@RequestMapping("/api/admin/movie-blog")
 @Tag(name = "Dashboard Movie Blog Controller")
 public class MovieBlogController {
     @Autowired
     private MovieBlogService movieBlogService;
 
-    @GetMapping
+    @GetMapping("/v1")
     public APIResponse<Page<MovieBlog>> getAllMovieBlog(
             @RequestParam(required = false) String name,
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
@@ -41,7 +41,7 @@ public class MovieBlogController {
         return apiResponse;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/v1/create")
     public APIResponse<String> createMovieBlog(@ModelAttribute MovieBlogRequest movieBlogRequest) throws IOException {
         boolean checkCreate = movieBlogService.addBlog(movieBlogRequest);
         if (checkCreate) {
@@ -55,7 +55,7 @@ public class MovieBlogController {
         throw new AppException(CREATE_FAILED);
     }
 
-    @GetMapping("/{slug}/edit")
+    @GetMapping("/v1/{slug}/edit")
     public APIResponse<MovieBlog> getMovieBlogById(@PathVariable String slug) {
         APIResponse<MovieBlog> apiResponse = new APIResponse();
 
@@ -65,7 +65,7 @@ public class MovieBlogController {
         return apiResponse;
     }
 
-    @PutMapping("/update")
+    @PutMapping("/v1/update")
     public APIResponse<String> updateMovieBlog(@ModelAttribute MovieBlogRequest movieBlogRequest) throws IOException {
         boolean checkUpdate = movieBlogService.updateBlog(movieBlogRequest);
         if (checkUpdate) {
@@ -79,7 +79,7 @@ public class MovieBlogController {
         throw new AppException(UPDATE_FAILED);
     }
 
-    @DeleteMapping("/delete/{slug}")
+    @DeleteMapping("/v1/delete/{slug}")
     public APIResponse<Integer> deleteBlog(@PathVariable String slug) throws IOException {
 
         int id = movieBlogService.deleteBlog(slug);

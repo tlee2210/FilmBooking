@@ -24,7 +24,7 @@ import static com.cinemas.exception.ErrorCode.CREATE_FAILED;
 import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 
 @RestController
-@RequestMapping("/api/admin/v1/room")
+@RequestMapping("/api/admin/room")
 @Tag(name = "Dashboard Room Cinema Controller")
 public class RoomController {
     @Autowired
@@ -40,7 +40,7 @@ public class RoomController {
      * @param sort
      * @return
      */
-    @GetMapping
+    @GetMapping("/v1")
     public APIResponse<SelectOptionAndModelReponse<Page<RoomTableReponse>>> getAllRoom(@RequestParam(required = false) String name, @RequestParam(required = false) Integer cinema, @RequestParam(required = false, defaultValue = "1") Integer pageNo, @RequestParam(required = false, defaultValue = "15") Integer pageSize, @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort) {
         SearchRoomRequest roomRequest = new SearchRoomRequest(pageNo - 1, pageSize, sort, name, cinema);
         SelectOptionAndModelReponse<Page<RoomTableReponse>> optionAndModelReponse = roomService.getAllRoom(roomRequest);
@@ -57,7 +57,7 @@ public class RoomController {
      *
      * @return
      */
-    @GetMapping("/create")
+    @GetMapping("/v1/create")
     public APIResponse<List<SelectOptionReponse<?>>> getCreateRoom() {
         APIResponse<List<SelectOptionReponse<?>>> apiResponse = new APIResponse();
 
@@ -74,7 +74,7 @@ public class RoomController {
      * @param roomRequest
      * @return
      */
-    @PostMapping("/create")
+    @PostMapping("/v1/create")
     public APIResponse<String> createRoom(@RequestBody RoomRequest roomRequest) {
         boolean checkCreate = roomService.createRoom(roomRequest);
         if (checkCreate) {
@@ -94,7 +94,7 @@ public class RoomController {
      * @param id
      * @return
      */
-    @GetMapping("/{id}/edit")
+    @GetMapping("/v1/{id}/edit")
     public APIResponse<SelectOptionAndModelReponse<RoomTableReponse>> getEditRoom(@PathVariable Integer id) {
         APIResponse<SelectOptionAndModelReponse<RoomTableReponse>> apiResponse = new APIResponse();
         apiResponse.setCode(200);
@@ -109,7 +109,7 @@ public class RoomController {
      * @param roomRequest
      * @return
      */
-    @PutMapping("/update")
+    @PutMapping("/v1/update")
     public APIResponse<String> updateRoom(@ModelAttribute RoomRequest roomRequest) {
         boolean checkUpdate = roomService.updateRoom(roomRequest);
         if (checkUpdate) {
@@ -129,7 +129,7 @@ public class RoomController {
      * @param id
      * @return
      */
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/v1/{id}/delete")
     public APIResponse<String> deleteRoom(@PathVariable Integer id) {
         boolean checkDelete = roomService.delete(id);
         if (checkDelete) {
@@ -143,7 +143,7 @@ public class RoomController {
         throw new AppException(CREATE_FAILED);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/v1/{id}")
     public APIResponse<SelectOptionAndModelReponse> getAllRoomByCinemaIdToSelectOption(@PathVariable Integer id) {
         SelectOptionAndModelReponse cinemaList = roomService.getAllRoomAndStatusByCinemaId(id);
         APIResponse<SelectOptionAndModelReponse> apiResponse = new APIResponse<>();

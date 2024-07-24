@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/home/v1/home")
+@RequestMapping("/api/home/home")
 @Tag(name = "Home Controller")
 public class HomeController {
     @Autowired
     private HomeService homeService;
 
-    @GetMapping()
+    @GetMapping("/v1")
     private APIResponse<HomeResponse> getHomePage(){
         HomeResponse info = homeService.getHomeInfo();
         APIResponse<HomeResponse> apiResponse = new APIResponse<>();
@@ -25,7 +25,7 @@ public class HomeController {
         return apiResponse;
     }
 
-    @GetMapping("/navbar")
+    @GetMapping("/v1/navbar")
     private APIResponse<HomeResponse> getNavbarPage(){
         HomeResponse info = homeService.getNavbarInfo();
         APIResponse<HomeResponse> apiResponse = new APIResponse<>();

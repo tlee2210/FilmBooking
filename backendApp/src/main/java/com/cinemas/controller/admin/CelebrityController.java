@@ -21,7 +21,7 @@ import java.util.List;
 import static com.cinemas.exception.ErrorCode.*;
 
 @RestController
-@RequestMapping("/api/admin/v1/celebrity")
+@RequestMapping("/api/admin/celebrity")
 @Tag(name = "Dashboard Celebrity Controller")
 public class CelebrityController {
     @Autowired
@@ -37,7 +37,7 @@ public class CelebrityController {
      * @param sort
      * @return
      */
-    @GetMapping
+    @GetMapping("/v1")
     public APIResponse<Page<Celebrity>> getAllCelebrity(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) RoleCeleb role,
@@ -59,7 +59,7 @@ public class CelebrityController {
      *
      * @return
      */
-    @GetMapping("/create")
+    @GetMapping("/v1/create")
     public APIResponse<List<SelectOptionReponse>> getCreateCelebrity() {
         List<SelectOptionReponse> countryList = celebrityService.getCreateCelebrity();
         APIResponse<List<SelectOptionReponse>> apiResponse = new APIResponse<>();
@@ -76,7 +76,7 @@ public class CelebrityController {
      * @return
      * @throws IOException
      */
-    @PostMapping("/create")
+    @PostMapping("/v1/create")
     public APIResponse<String> createCelebrity(@ModelAttribute CelebrityRequest celebrityRequest) throws IOException {
         boolean checkCreate = celebrityService.addCelebrity(celebrityRequest);
         if (checkCreate) {
@@ -97,7 +97,7 @@ public class CelebrityController {
      * @return
      * @throws IOException
      */
-    @DeleteMapping("/delete/{slug}")
+    @DeleteMapping("/v1/delete/{slug}")
     public APIResponse<Integer> deleteCelebrity(@PathVariable String slug) throws IOException {
 
         int id = celebrityService.deleteCelebrity(slug);
@@ -118,7 +118,7 @@ public class CelebrityController {
      * @param slug
      * @return
      */
-    @GetMapping("/{slug}/edit")
+    @GetMapping("/v1/{slug}/edit")
     public APIResponse<SelectOptionAndModelReponse<Celebrity>> getCelebrityById(@PathVariable String slug) {
         APIResponse<SelectOptionAndModelReponse<Celebrity>> apiResponse = new APIResponse();
 
@@ -135,7 +135,7 @@ public class CelebrityController {
      * @return
      * @throws IOException
      */
-    @PutMapping(value = "/update")
+    @PutMapping(value = "/v1/update")
     public APIResponse<String> updateCelebrity(@ModelAttribute CelebrityRequest celebrity) throws IOException {
 //        System.out.println(celebrity);
         boolean checkUpdate = celebrityService.updateCelebrity(celebrity);

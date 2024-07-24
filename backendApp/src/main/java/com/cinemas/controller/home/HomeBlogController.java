@@ -15,13 +15,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/home/v1/blog")
+@RequestMapping("/api/home/blog")
 @Tag(name = "Home Movie Blog Controller")
 public class HomeBlogController {
     @Autowired
     private HomeBlogService homeBlogService;
 
-    @GetMapping
+    @GetMapping("/v1")
     public APIResponse<Page<MovieBlog>> getAllBlog(
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
             @RequestParam(required = false, defaultValue = "15") Integer pageSize,
@@ -36,7 +36,7 @@ public class HomeBlogController {
         return apiResponse;
     }
 
-    @GetMapping("/detail/{slug}")
+    @GetMapping("/v1/detail/{slug}")
     public APIResponse<HomeMovieBlogResponse> getDetailMovieBlog(@PathVariable String slug) {
         APIResponse<HomeMovieBlogResponse> apiResponse = new APIResponse();
 
