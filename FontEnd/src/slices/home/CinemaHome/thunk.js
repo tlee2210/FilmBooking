@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const getCinemaHome = (slug, city, history) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/home/v1/cinema/${slug}`, {
+    .get(`http://localhost:8081/api/home/cinema/v1/${slug}`, {
       params: { city },
     })
     .then((response) => {
