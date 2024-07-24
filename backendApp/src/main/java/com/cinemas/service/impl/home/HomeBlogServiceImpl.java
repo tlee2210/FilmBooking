@@ -74,9 +74,6 @@ public class HomeBlogServiceImpl implements HomeBlogService {
     }
 
     @Override
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
     public void incrementViewCount(String slug) {
         MovieBlog movieBlog = movieBlogRepository.findBySlug(slug);
         if (movieBlog != null) {
@@ -85,8 +82,6 @@ public class HomeBlogServiceImpl implements HomeBlogService {
         }
     }
 
-=======
->>>>>>> Stashed changes
     public List<MovieBlog> getAllBlog2(String name) {
         List<MovieBlog> blogs = movieBlogRepository.findListByName(name);
 
@@ -96,8 +91,4 @@ public class HomeBlogServiceImpl implements HomeBlogService {
 
         return blogs;
     }
-<<<<<<< Updated upstream
-=======
->>>>>>> 0b1c4d9c5f405c9dd795ada8ea1865811daec8cd
->>>>>>> Stashed changes
 }
