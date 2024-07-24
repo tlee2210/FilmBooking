@@ -3,6 +3,7 @@ package com.cinemas.controller.home;
 import com.cinemas.dto.request.SearchReviewRequest;
 import com.cinemas.dto.response.APIResponse;
 import com.cinemas.dto.response.HomeReviewResponse;
+import com.cinemas.dto.response.ItemIntroduce;
 import com.cinemas.dto.response.SelectOptionAndModelReponse;
 import com.cinemas.entities.Review;
 import com.cinemas.enums.ReviewType;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/home/review")
@@ -30,6 +33,18 @@ public class HomeReviewController {
         SearchReviewRequest searchReviewRequest = new SearchReviewRequest(type, pageNo - 1, pageSize, sort);
         SelectOptionAndModelReponse<Page<Review>> reviews = homeReviewService.getAllReviews(searchReviewRequest);
         APIResponse<SelectOptionAndModelReponse<Page<Review>>> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setResult(reviews);
+
+        return apiResponse;
+    }
+
+    @GetMapping("/v2")
+    public APIResponse<List<Review>> getAllReview(
+            @RequestParam(required = false) String name
+    ) {
+        List<Review> reviews = homeReviewService.getAllReviews2(name);
+        APIResponse<List<Review>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(reviews);
 

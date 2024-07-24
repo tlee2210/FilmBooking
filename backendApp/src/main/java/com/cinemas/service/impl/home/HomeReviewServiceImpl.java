@@ -36,9 +36,6 @@ public class HomeReviewServiceImpl implements HomeReviewService {
 
     @Override
     public SelectOptionAndModelReponse<Page<Review>> getAllReviews(SearchReviewRequest searchReviewRequest) {
-        System.out.println("======================");
-        System.out.println(searchReviewRequest.getType());
-        System.out.println("======================");
         List<Review> reviewList = reviewRepository.findByType(searchReviewRequest.type);
 
         reviewList.forEach(item -> {
@@ -64,8 +61,14 @@ public class HomeReviewServiceImpl implements HomeReviewService {
     }
 
     @Override
-    public List<Review> geHomeRivew() {
-        return null;
+    public List<Review> getAllReviews2(String name) {
+        List<Review> reviewList = reviewRepository.findListByName(name);
+
+        reviewList.forEach(item -> {
+            item.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(item.getThumbnail()));
+        });
+
+        return reviewList;
     }
 
     @Override

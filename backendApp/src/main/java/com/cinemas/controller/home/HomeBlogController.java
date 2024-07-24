@@ -4,6 +4,7 @@ import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.SearchCelebRequest;
 import com.cinemas.dto.response.APIResponse;
 import com.cinemas.dto.response.HomeMovieBlogResponse;
+import com.cinemas.dto.response.ItemIntroduce;
 import com.cinemas.dto.response.SelectOptionCeleb;
 import com.cinemas.entities.Celebrity;
 import com.cinemas.entities.MovieBlog;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/home/blog")
@@ -30,6 +33,18 @@ public class HomeBlogController {
         PaginationHelper paginationHelper = new PaginationHelper(pageNo - 1, pageSize, sort, "id");
         Page<MovieBlog> blogs = homeBlogService.getAllBlog(paginationHelper);
         APIResponse<Page<MovieBlog>> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setResult(blogs);
+
+        return apiResponse;
+    }
+
+    @GetMapping("/v2")
+    public APIResponse<List<MovieBlog>> getAllBlog(
+            @RequestParam(required = false) String name
+    ) {
+        List<MovieBlog> blogs = homeBlogService.getAllBlog2(name);
+        APIResponse<List<MovieBlog>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(blogs);
 

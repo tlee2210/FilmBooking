@@ -21,4 +21,7 @@ public interface MovieBlogRepository extends JpaRepository<MovieBlog, Integer> {
 
     @Query("SELECT new com.cinemas.dto.response.ItemIntroduce(m.id, m.name, m.slug, m.thumbnail) FROM MovieBlog m ORDER BY m.id DESC LIMIT 4")
     List<ItemIntroduce> blogRelate();
+
+    @Query("SELECT m FROM MovieBlog m WHERE (:name is null or m.name LIKE %:name%)")
+    List<MovieBlog> findListByName(String name);
 }
