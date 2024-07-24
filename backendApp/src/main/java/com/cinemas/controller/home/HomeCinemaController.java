@@ -13,13 +13,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/home/v1/cinema")
+@RequestMapping("/api/home/cinema")
 @Tag(name = "Home Cinema Controller")
 public class HomeCinemaController {
     @Autowired
     private HomeCinemaService homeCinemaService;
 
-    @GetMapping("/{slug}")
+    @GetMapping("/v1/{slug}")
     public APIResponse<HomeCinemaResponse> getCinema(
             @PathVariable String slug,
             @RequestParam(required = false) String city

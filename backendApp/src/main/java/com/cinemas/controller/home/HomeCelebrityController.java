@@ -17,13 +17,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/home/v1/celebrity")
+@RequestMapping("/api/home/celebrity")
 @Tag(name = "Home Celebrity Controller")
 public class HomeCelebrityController {
     @Autowired
     private HomeCelebService homeCelebService;
 
-    @GetMapping("/actor")
+    @GetMapping("/v1/actor")
     public APIResponse<SelectOptionCeleb<Page<Celebrity>>> getAllActor(
             @RequestParam(required = false) String slugCountry,
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
@@ -39,7 +39,7 @@ public class HomeCelebrityController {
         return apiResponse;
     }
 
-    @GetMapping("/director")
+    @GetMapping("/v1/director")
     public APIResponse<SelectOptionCeleb<Page<Celebrity>>> getAllDirector(
             @RequestParam(required = false) String slugCountry,
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
@@ -55,7 +55,7 @@ public class HomeCelebrityController {
         return apiResponse;
     }
 
-    @GetMapping("/detail/{slug}")
+    @GetMapping("/v1/detail/{slug}")
     public APIResponse<CelebResponse> getDetail(@PathVariable String slug){
         CelebResponse celebResponse = homeCelebService.getDetailCeleb(slug);
         APIResponse<CelebResponse> apiResponse = new APIResponse<>();

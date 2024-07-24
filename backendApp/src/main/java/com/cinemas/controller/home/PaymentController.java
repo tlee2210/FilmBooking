@@ -24,7 +24,7 @@ public class PaymentController {
     @Autowired
     private PaymentService paymentService;
 
-    @PostMapping("/create_payment_vnpay")
+    @PostMapping("/v1/create_payment_vnpay")
     public APIResponse<String> createpaymentVnpay(@RequestBody PaymentRequest paymentRequest) throws UnsupportedEncodingException {
         APIResponse<String> apiResponse = new APIResponse<>();
         apiResponse.setResult(paymentService.createpaymentVnpay(paymentRequest));
@@ -32,7 +32,7 @@ public class PaymentController {
         return apiResponse;
     }
 
-    @PostMapping("/booking_paypal")
+    @PostMapping("/v1/booking_paypal")
     public APIResponse<String> bookingPaypal(@RequestBody PaymentRequest paymentRequest) {
         boolean checkSuccess = paymentService.bookingPaypal(paymentRequest, PaymentType.PAYPAL);
         if (checkSuccess) {
@@ -46,7 +46,7 @@ public class PaymentController {
         throw new AppException(CREATE_FAILED);
     }
 
-    @GetMapping("/booking_vnpay")
+    @GetMapping("/v1/booking_vnpay")
 //    public APIResponse<String> bookingVnpay(
     public RedirectView bookingVnpay(
             @RequestParam(required = false) String vnp_OrderInfo,

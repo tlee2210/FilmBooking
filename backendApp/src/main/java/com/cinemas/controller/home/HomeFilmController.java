@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api/home/v1/movie-genre")
+@RequestMapping("/api/home/movie-genre")
 @Tag(name = "Home Movie Genre Controller")
 public class HomeFilmController {
     @Autowired
     private HomeFilmService homeFilmService;
 
-    @GetMapping()
+    @GetMapping("/v1")
     public APIResponse<SelectOptionAndModelReponse<Page<ItemIntroduce>>> getFilms(
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String country,
@@ -40,7 +40,7 @@ public class HomeFilmController {
         return apiResponse;
     }
 
-    @GetMapping("/detail/{slug}")
+    @GetMapping("/v1/detail/{slug}")
     public APIResponse<HomeFilmResponse> getFilmDetail(@PathVariable String slug){
         APIResponse<HomeFilmResponse> apiResponse = new APIResponse();
 

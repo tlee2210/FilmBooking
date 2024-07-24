@@ -15,14 +15,14 @@ import java.io.IOException;
 
 import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 
-@RequestMapping("/api/home/v1/user")
+@RequestMapping("/api/home/user")
 @RestController
 @Tag(name = "Home User Controller")
 public class HomeUserController {
     @Autowired
     private HomeUserService userService;
 
-    @GetMapping(value = "/profile")
+    @GetMapping(value = "/v1/profile")
     public APIResponse<UserResponse> getUserProfile() {
         APIResponse<UserResponse> apiResponse = new APIResponse();
         apiResponse.setCode(200);
@@ -31,7 +31,7 @@ public class HomeUserController {
         return apiResponse;
     }
 
-    @PutMapping(value = "/update")
+    @PutMapping(value = "/v1/update")
     public APIResponse<String> updateUser(@RequestBody ProfileRequest profileRequest) {
         boolean checkUpdate = userService.updateUser(profileRequest);
         if (checkUpdate) {
@@ -45,7 +45,7 @@ public class HomeUserController {
         throw new AppException(UPDATE_FAILED);
     }
 
-    @PostMapping(value = "/change-password")
+    @PostMapping(value = "/v1/change-password")
     public APIResponse<String> changePassword(@RequestBody ChangePasswordRequest changePassword) {
         boolean changePass = userService.changePassword(changePassword);
         if (changePass) {
@@ -58,7 +58,7 @@ public class HomeUserController {
         throw new AppException(UPDATE_FAILED);
     }
 
-    @PostMapping(value = "/upload-avatar")
+    @PostMapping(value = "/v1/upload-avatar")
     public APIResponse<String> uploadAvatar(@ModelAttribute MultipartFile file) throws IOException {
         boolean changePass = userService.changeAvatar(file);
         if (changePass) {

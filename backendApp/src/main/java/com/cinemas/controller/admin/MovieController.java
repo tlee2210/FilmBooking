@@ -19,7 +19,7 @@ import static com.cinemas.exception.ErrorCode.CREATE_FAILED;
 import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 
 @RestController
-@RequestMapping("/api/admin/v1/movie")
+@RequestMapping("/api/admin/movie")
 @Tag(name = "Dashboard Movie Controller")
 public class MovieController {
     @Autowired
@@ -36,7 +36,7 @@ public class MovieController {
      * @param sort
      * @return
      */
-    @GetMapping
+    @GetMapping("/v1")
     public APIResponse<SelectOptionAndModelReponse<Page<Movie>>> getMovie(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Integer countryId,
@@ -59,7 +59,7 @@ public class MovieController {
      *
      * @return
      */
-    @GetMapping("/create")
+    @GetMapping("/v1/create")
     public APIResponse<SelectOptionMovie<?>> getCreateMovie() {
         SelectOptionMovie<?> multiList = movieService.getCreateMovie();
         APIResponse<SelectOptionMovie<?>> apiResponse = new APIResponse<>();
@@ -74,7 +74,7 @@ public class MovieController {
      * @return
      * @throws IOException
      */
-    @PostMapping("/create")
+    @PostMapping("/v1/create")
     public APIResponse<String> createMovie(@ModelAttribute MovieRequest movieRequest) throws IOException {
         boolean checkCreate = movieService.addMovie(movieRequest);
         if (checkCreate) {
@@ -95,7 +95,7 @@ public class MovieController {
      * @return
      * @throws IOException
      */
-    @DeleteMapping("/delete/{slug}")
+    @DeleteMapping("/v1/delete/{slug}")
     public APIResponse<Integer> deleteMovie(@PathVariable String slug) throws IOException {
         int id = movieService.deleteMovie(slug);
         if (id > 0) {
@@ -116,7 +116,7 @@ public class MovieController {
      * @return
      * @throws IOException
      */
-    @GetMapping("/{slug}/edit")
+    @GetMapping("/v1/{slug}/edit")
     public APIResponse<SelectOptionMovie<Movie>> getMovieBySlug(@PathVariable String slug) throws IOException {
         APIResponse<SelectOptionMovie<Movie>> apiResponse = new APIResponse();
 
@@ -133,7 +133,7 @@ public class MovieController {
      * @return
      * @throws IOException
      */
-    @PutMapping("/update")
+    @PutMapping("/v1/update")
     public APIResponse<String> updateMovie(@ModelAttribute MovieRequest movieRequest) throws IOException {
         boolean checkUpdate = movieService.updateMovie(movieRequest);
         if (checkUpdate) {
@@ -146,7 +146,7 @@ public class MovieController {
         throw new AppException(UPDATE_FAILED);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/v1/{id}")
     public APIResponse<Movie> getMovieById(@PathVariable Integer id) {
         Movie movie  = movieService.findMovieById(id);
         APIResponse<Movie> apiResponse = new APIResponse<>();

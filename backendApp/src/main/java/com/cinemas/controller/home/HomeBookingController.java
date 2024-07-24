@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 
 @RestController
-@RequestMapping("/api/home/v1/booking")
+@RequestMapping("/api/home/booking")
 @Tag(name = "Home Booking Controller")
 public class HomeBookingController {
     @Autowired
     HomeBookingService homeBookingService;
 
-    @GetMapping
+    @GetMapping("/v1")
     public APIResponse<?> getTimeForMovie(
             @RequestParam(required = false) String slug,
             @RequestParam(required = false) String city,
@@ -31,7 +31,7 @@ public class HomeBookingController {
 
         return apiResponse;
     }
-    @GetMapping("/{id}")
+    @GetMapping("/v1/{id}")
     public APIResponse<ShowTimeTableResponse> getBookingTime(@PathVariable Integer id){
         APIResponse<ShowTimeTableResponse> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
@@ -39,7 +39,7 @@ public class HomeBookingController {
         return apiResponse;
     }
 
-    @GetMapping("/buy-ticket")
+    @GetMapping("/v1/buy-ticket")
     public APIResponse<BuyTicketResponse> getTicketInfo(
             @RequestParam(required = false) String slugmovie,
             @RequestParam(required = false) String slugcinema,
@@ -51,7 +51,7 @@ public class HomeBookingController {
         return apiResponse;
     }
 
-    @PostMapping("/apply-voucher")
+    @PostMapping("/v1/apply-voucher")
     public APIResponse<VoucherResponse> applyVoucher(@RequestBody VoucherApplyRequest code){
         APIResponse<VoucherResponse> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
@@ -60,7 +60,7 @@ public class HomeBookingController {
         return apiResponse;
     }
 
-    @GetMapping("/seat-booked/{id}")
+    @GetMapping("/v1/seat-booked/{id}")
     public APIResponse<SeatBookedResponse> getSeatBooked(@PathVariable Integer id){
         APIResponse<SeatBookedResponse> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
@@ -68,7 +68,7 @@ public class HomeBookingController {
         return apiResponse;
     }
 
-    @GetMapping("/bookings")
+    @GetMapping("/v1/bookings")
     public APIResponse<BookingTicketResponse> getBookingTicket(
             @RequestParam(required = false) String city,
             @RequestParam(required = false) String movie

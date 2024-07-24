@@ -18,13 +18,13 @@ import java.util.List;
 import static com.cinemas.exception.ErrorCode.*;
 
 @RestController
-@RequestMapping("/api/admin/v1/show-time")
+@RequestMapping("/api/admin/show-time")
 @Tag(name = "Dashboard Show Time Controller")
 public class ShowTimeController {
     @Autowired
     ShowTimeService showTimeService;
 
-    @GetMapping("")
+    @GetMapping("/v1")
     public APIResponse<SelectOptionAndModelReponse<Page<ShowTimeTableResponse>>> getAllShowTime(
             @RequestParam(required = false) String cinema,
             @RequestParam(required = false) LocalDate startDay,
@@ -42,7 +42,7 @@ public class ShowTimeController {
         return apiResponse;
     }
 
-    @GetMapping("/create")
+    @GetMapping("/v1/create")
     public APIResponse<ShowTimeCreateResponse> getCreate() {
         ShowTimeCreateResponse response = showTimeService.getcreate();
         APIResponse<ShowTimeCreateResponse> apiResponse = new APIResponse<>();
@@ -52,7 +52,7 @@ public class ShowTimeController {
         return apiResponse;
     }
 
-    @GetMapping("/create/room")
+    @GetMapping("/v1/create/room")
     public APIResponse<List<SelectOptionReponse>> getRoomCreate(Integer idCinema) {
         APIResponse<List<SelectOptionReponse>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
@@ -61,7 +61,7 @@ public class ShowTimeController {
         return apiResponse;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/v1/create")
     public APIResponse<String> create(@RequestBody @Valid ShowTimeRequest showTimeRequest) {
         boolean checkCreate = showTimeService.createShowTime(showTimeRequest);
 
@@ -76,7 +76,7 @@ public class ShowTimeController {
         throw new AppException(CREATE_FAILED);
     }
 
-    @GetMapping("{id}/edit")
+    @GetMapping("/v1/{id}/edit")
     public APIResponse<showTimeItemRequet> getEdit(@PathVariable Integer id) {
         APIResponse<showTimeItemRequet> apiResponse = new APIResponse();
         apiResponse.setCode(200);
@@ -85,7 +85,7 @@ public class ShowTimeController {
         return apiResponse;
     }
 
-    @DeleteMapping("{id}/delete")
+    @DeleteMapping("/v1/{id}/delete")
     public APIResponse<String> deleteShowTime(@PathVariable Integer id) {
         boolean checkDelete = showTimeService.delete(id);
         if (checkDelete) {
@@ -99,7 +99,7 @@ public class ShowTimeController {
         throw new AppException(DELETE_FAILED);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/v1/update")
     public APIResponse<String> updateShowTime(@RequestBody showTimeItemRequet showTimeItemRequet) {
         boolean checkUpdate = showTimeService.updateShowTime(showTimeItemRequet);
         if (checkUpdate) {

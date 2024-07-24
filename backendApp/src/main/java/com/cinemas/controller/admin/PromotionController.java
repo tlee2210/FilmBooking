@@ -18,13 +18,13 @@ import static com.cinemas.exception.ErrorCode.CREATE_FAILED;
 import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 
 @RestController
-@RequestMapping("/api/admin/v1/promotion")
+@RequestMapping("/api/admin/promotion")
 @Tag(name = "Dashboard Promotion Controller")
 public class PromotionController {
     @Autowired
     private PromotionService promotionService;
 
-    @GetMapping
+    @GetMapping("/v1")
     public APIResponse<Page<Promotion>> getAllPromotion(
             @RequestParam(required = false) String name,
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
@@ -39,7 +39,7 @@ public class PromotionController {
         return apiResponse;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/v1/create")
     public APIResponse<String> createPromotion(@ModelAttribute PromotionRequest promotionRequest) throws IOException {
         boolean checkCreate = promotionService.addPromotion(promotionRequest);
         if (checkCreate) {
@@ -53,7 +53,7 @@ public class PromotionController {
         throw new AppException(CREATE_FAILED);
     }
 
-    @GetMapping("/{slug}/edit")
+    @GetMapping("/v1/{slug}/edit")
     public APIResponse<Promotion> getPromotionById(@PathVariable String slug) {
         APIResponse<Promotion> apiResponse = new APIResponse();
 
@@ -63,7 +63,7 @@ public class PromotionController {
         return apiResponse;
     }
 
-    @PutMapping("/update")
+    @PutMapping("/v1/update")
     public APIResponse<String> updatePromotion(@ModelAttribute PromotionRequest promotionRequest) throws IOException {
         boolean checkUpdate = promotionService.updatePromotion(promotionRequest);
         if (checkUpdate) {
@@ -77,7 +77,7 @@ public class PromotionController {
         throw new AppException(UPDATE_FAILED);
     }
 
-    @DeleteMapping("/delete/{slug}")
+    @DeleteMapping("/v1/delete/{slug}")
     public APIResponse<Integer> deletePromotion(@PathVariable String slug) throws IOException {
 
         int id = promotionService.deletePromotion(slug);

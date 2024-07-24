@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/home/v1/carousel")
+@RequestMapping("/api/home/carousel")
 @Tag(name = "Home Carousel Controller")
 public class HomeCarouselController {
     @Autowired
     private HomeCarouselService homeCarouselService;
 
-    @GetMapping()
+    @GetMapping("/v1")
     public APIResponse<List<SelectOptionReponse>> getCarousel() {
 
         APIResponse<List<SelectOptionReponse>> apiResponse = new APIResponse<>();

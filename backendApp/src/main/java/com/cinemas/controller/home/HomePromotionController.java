@@ -12,13 +12,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/home/v1/promotion")
+@RequestMapping("/api/home/promotion")
 @Tag(name = "Home Promotion Controller")
 public class HomePromotionController {
     @Autowired
     private HomePromotionService homePromotionService;
 
-    @GetMapping
+    @GetMapping("/v1")
     public APIResponse<Page<ItemIntroduce>> getAllPromotion(
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
             @RequestParam(required = false, defaultValue = "15") Integer pageSize,
@@ -33,7 +33,7 @@ public class HomePromotionController {
         return apiResponse;
     }
 
-    @GetMapping("/detail/{slug}")
+    @GetMapping("/v1/detail/{slug}")
     public APIResponse<HomePromotionResponse> getDetailPromotion(@PathVariable String slug) {
         APIResponse<HomePromotionResponse> apiResponse = new APIResponse();
 

@@ -14,13 +14,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/home/v1/review")
+@RequestMapping("/api/home/review")
 @Tag(name = "Home Review Controller")
 public class HomeReviewController {
     @Autowired
     private HomeReviewService homeReviewService;
 
-    @GetMapping
+    @GetMapping("/v1")
     public APIResponse<SelectOptionAndModelReponse<Page<Review>>> getAllReview(
             @RequestParam(required = false) ReviewType type,
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
@@ -36,7 +36,7 @@ public class HomeReviewController {
         return apiResponse;
     }
 
-    @GetMapping("/home")
+    @GetMapping("/v1/home")
     public APIResponse<SelectOptionAndModelReponse<Page<Review>>> gethomeReview(
             @RequestParam(required = false) ReviewType type,
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
@@ -52,7 +52,7 @@ public class HomeReviewController {
         return apiResponse;
     }
 
-    @GetMapping("/{slug}/detail")
+    @GetMapping("/v1/{slug}/detail")
     public APIResponse<HomeReviewResponse> getDetailReview(@PathVariable String slug) {
         HomeReviewResponse review = homeReviewService.getReviewDetail(slug);
 

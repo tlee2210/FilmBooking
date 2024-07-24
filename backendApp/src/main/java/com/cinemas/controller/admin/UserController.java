@@ -18,14 +18,14 @@ import java.io.IOException;
 import static com.cinemas.exception.ErrorCode.CREATE_FAILED;
 import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 
-@RequestMapping("/api/admin/v1/user")
+@RequestMapping("/api/admin/user")
 @RestController
 @Tag(name = "Dashboard User Controller")
 public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping()
+    @GetMapping("/v1")
     public APIResponse<Page<UserResponse>> getUser(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) RoleType role,
@@ -42,7 +42,7 @@ public class UserController {
         return apiResponse;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/v1/create")
     public APIResponse<String> createUser(@ModelAttribute UserRequest user) throws IOException {
 
         boolean checkCreate = userService.addUser(user);
@@ -57,7 +57,7 @@ public class UserController {
         throw new AppException(CREATE_FAILED);
     }
 
-    @GetMapping("/{id}/edit")
+    @GetMapping("/v1/{id}/edit")
     public APIResponse<UserResponse> getUserById(@PathVariable Integer id) {
         APIResponse<UserResponse> apiResponse = new APIResponse();
 
@@ -67,7 +67,7 @@ public class UserController {
         return apiResponse;
     }
 
-    @PutMapping(value = "/update")
+    @PutMapping(value = "/v1/update")
     public APIResponse<String> updateUser(@RequestBody UserRequest userRequest) throws IOException {
         System.out.println("=============");
         System.out.println(userRequest);
