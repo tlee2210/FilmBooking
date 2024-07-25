@@ -16,5 +16,4 @@ public class HomeResponse {
     List<ItemIntroduce> reviewList;
     HomeSliderResponse slider;
     List<SelectOptionReponse<?>> selectOptionList;
-
 }
