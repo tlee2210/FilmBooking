@@ -14,6 +14,7 @@ public class HomeResponse {
     List<ItemIntroduce> movieSoonList;
     List<ItemIntroduce> movieBlogList;
     List<ItemIntroduce> reviewList;
+    HomeSliderResponse slider;
     List<SelectOptionReponse<?>> selectOptionList;
 
 }

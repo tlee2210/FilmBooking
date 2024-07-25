@@ -1,21 +1,21 @@
 package com.cinemas.service.impl.home;
 
 import com.cinemas.dto.response.HomeResponse;
+import com.cinemas.dto.response.HomeSliderResponse;
 import com.cinemas.dto.response.ItemIntroduce;
+import com.cinemas.dto.response.SelectOptionReponse;
 import com.cinemas.entities.Cinema;
 import com.cinemas.entities.MovieBlog;
 import com.cinemas.entities.Review;
 import com.cinemas.enums.MovieStatus;
 import com.cinemas.enums.ReviewType;
-import com.cinemas.repositories.CinemaRespository;
-import com.cinemas.repositories.MovieBlogRepository;
-import com.cinemas.repositories.MovieRepository;
-import com.cinemas.repositories.ReviewRepository;
+import com.cinemas.repositories.*;
 import com.cinemas.service.home.HomeService;
 import com.cinemas.service.impl.FileStorageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -34,6 +34,9 @@ public class HomeServiceImpl implements HomeService {
 
     @Autowired
     private CinemaRespository cinemaRespository;
+
+    @Autowired
+    private imageDescriptionRespository imageDescriptionRespository;
 
     @Override
     public HomeResponse getHomeInfo() {
@@ -64,6 +67,22 @@ public class HomeServiceImpl implements HomeService {
             blog.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(blog.getImagePortrait()));
         });
         homeResponse.setMovieBlogList(movieBlogs);
+
+        HomeSliderResponse homeSliderResponse = new HomeSliderResponse();
+        List<SelectOptionReponse> imagePromotions = imageDescriptionRespository.getImageCarousel();
+        imagePromotions.forEach(image -> {
+            image.setLabel(fileStorageServiceImpl.getUrlFromPublicId(image.getLabel()));
+        });
+
+        homeSliderResponse.setImagePromotions(imagePromotions);
+
+        List<SelectOptionReponse> imageMovies = movieRepository.getImageCarousel();
+        imageMovies.forEach(imageMovie -> {
+            imageMovie.setLabel(fileStorageServiceImpl.getUrlFromPublicId(imageMovie.getLabel()));
+        });
+        homeSliderResponse.setImageMovies(imageMovies);
+
+        homeResponse.setSlider(homeSliderResponse);
         return homeResponse;
     }
 
