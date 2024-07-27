@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
@@ -17,7 +15,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late HomeViewModel _homeViewModel;
-  late Homegenerated _homegenerated;
+  late HomeDataModel _homeDataModel;
   List<String> carouselItems = [];
   int tabIndex = 0;
   final List<String> tabs = ['Now showing', 'Coming soon'];
@@ -37,9 +35,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void observeData() {
     _homeViewModel.homeStream.listen(
-      (Homegenerated homeData) {
+      (HomeDataModel homeData) {
         setState(() {
-          _homegenerated = homeData;
+          _homeDataModel = homeData;
         });
       },
       onError: (error) {
@@ -79,23 +77,25 @@ class _HomeScreenState extends State<HomeScreen> {
             future: _carouselList,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
                 return Center(
                     child: Text(
                   'Error: ${snapshot.error}',
                   style: TextStyle(color: Colors.white),
                 ));
-              } else {
-                return const Column(
+              } else if (_homeDataModel != null) {
+                return Column(
                   children: [
-                    SizedBox(
-                      height: 16,
-                    ),
-                    HomeSlider()
-                    // buildCarouseIndicator(),
+                    const SizedBox(height: 16),
+                    HomeSlider(sliderModel: _homeDataModel.slider),
+                    // Correct usage
                   ],
                 );
+              } else {
+                return const Center(
+                    child: Text('No data available',
+                        style: TextStyle(color: Colors.white)));
               }
             },
           ),

@@ -2,16 +2,23 @@ import '../models/home.dart';
 import '../source/home.dart';
 
 abstract interface class Responsetories {
-  Future<Homegenerated>? getHomeData();
+  Future<HomeDataModel>? getHomeData();
 }
 
 class HomeResponsetories implements Responsetories {
   final _homeDataSource = HomeData();
 
   @override
-  Future<Homegenerated>? getHomeData() async {
+  Future<HomeDataModel>? getHomeData() async {
+    // await _homeDataSource.getHomeData()?.then((value) => {
+    //   if(value != null){
+    //
+    //   }
+    // });
+
     try {
       final value = await _homeDataSource.getHomeData();
+
       if (value != null) {
         return value;
       } else {
