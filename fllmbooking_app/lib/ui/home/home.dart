@@ -1,9 +1,11 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 import '../../data/models/home.dart';
+import '../../data/models/item_introduce.dart';
+import '../MovieDetail/movie_detail.dart';
 import 'homeViewModel.dart';
+import 'home_card.dart';
 import 'home_slider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,20 +18,17 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late HomeViewModel _homeViewModel;
   late HomeDataModel _homeDataModel;
-  List<String> carouselItems = [];
   int tabIndex = 0;
   final List<String> tabs = ['Now showing', 'Coming soon'];
 
-  // late Future<List<Movie>> _movieList;
   late Future<void> _carouselList;
 
   @override
   void initState() {
+    super.initState();
     _homeViewModel = HomeViewModel();
     _homeViewModel.loadHome();
     observeData();
-    super.initState();
-
     _carouselList = _carouselImages();
   }
 
@@ -47,32 +46,24 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _carouselImages() async {
-    // carouselItems = await HomeService().getCarousel();
+    // Load carousel images
     setState(() {});
   }
 
   void _onTabSelect(int index) {
     setState(() {
       tabIndex = index;
-
-      if (tabIndex == 0) {
-        // _movieList = HomeService().getMovieShowing();
-      } else {
-        // _movieList = HomeService().getMovieSoon();
-      }
+      // Update movie list based on selected tab
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    CarouselController controller = CarouselController();
     return Scaffold(
       backgroundColor: const Color(0xff1f1d2b),
       body: Column(
         children: [
-          const SizedBox(
-            height: 30,
-          ),
+          const SizedBox(height: 30),
           FutureBuilder(
             future: _carouselList,
             builder: (context, snapshot) {
@@ -80,22 +71,25 @@ class _HomeScreenState extends State<HomeScreen> {
                 return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
                 return Center(
-                    child: Text(
-                  'Error: ${snapshot.error}',
-                  style: TextStyle(color: Colors.white),
-                ));
+                  child: Text(
+                    'Error: ${snapshot.error}',
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                );
               } else if (_homeDataModel != null) {
                 return Column(
                   children: [
                     const SizedBox(height: 16),
                     HomeSlider(sliderModel: _homeDataModel.slider),
-                    // Correct usage
                   ],
                 );
               } else {
                 return const Center(
-                    child: Text('No data available',
-                        style: TextStyle(color: Colors.white)));
+                  child: Text(
+                    'No data available',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                );
               }
             },
           ),
@@ -105,9 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: List.generate(tabs.length, (index) {
                 return GestureDetector(
-                  onTap: () {
-                    _onTabSelect(index);
-                  },
+                  onTap: () => _onTabSelect(index),
                   child: Container(
                     padding: const EdgeInsets.symmetric(
                         vertical: 8.0, horizontal: 16.0),
@@ -133,75 +125,25 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              // child: GridView.builder,
-              //
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class MovieCard extends StatelessWidget {
-  final String title;
-  final String genre;
-  final double rating;
-  final String imageUrl;
-
-  MovieCard({
-    required this.title,
-    required this.genre,
-    required this.rating,
-    required this.imageUrl,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: Colors.grey[900],
-      shape: ContinuousRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(8.0),
-              topRight: Radius.circular(8.0),
-            ),
-            child: Image.network(
-              imageUrl,
-              fit: BoxFit.cover,
-              height: 265,
-              width: double.infinity,
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 6.0,
+                  mainAxisSpacing: 6.0,
+                  childAspectRatio: 0.7,
+                ),
+                itemCount: tabIndex == 0
+                    ? _homeDataModel.movieShowingList.length
+                    : _homeDataModel.movieSoonList.length,
+                itemBuilder: (context, index) {
+                  final movie = tabIndex == 0
+                      ? _homeDataModel.movieShowingList[index]
+                      : _homeDataModel.movieSoonList[index];
+                  return MovieCard(item: movie);
+                },
+              ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 4.0),
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                SizedBox(height: 4.0),
-                Text(
-                  genre,
-                  style: TextStyle(color: Colors.grey, fontSize: 12.0),
-                ),
-              ],
-            ),
-          )
         ],
       ),
     );

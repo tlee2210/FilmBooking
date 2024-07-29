@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
+import '../../data/models/select_option.dart';
 import '../../data/models/slider.dart';
+import '../MovieDetail/movie_detail.dart';
+import '../promotionsDetail/promotionsDetail.dart';
 
 class HomeSlider extends StatefulWidget {
   final HomeSliderModel sliderModel;
@@ -14,40 +17,41 @@ class HomeSlider extends StatefulWidget {
 
 class _HomeSliderState extends State<HomeSlider> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // Convert the imageMovies and imagePromotions into lists of widgets
-    final imageMoviesWidgets = widget.sliderModel.imageMovies.map((imageMovie) {
-      return Container(
-        margin: const EdgeInsets.all(4),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(imageMovie.label), // Use dynamic image URL
-            fit: BoxFit.cover,
+    List<Widget> createImageWidgets(List<SelectOption> images, bool isMovie) {
+      return images.map((image) {
+        return InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    isMovie ? MovieDetailPage() : PromotionsDetailPage(),
+              ),
+            );
+          },
+          child: Container(
+            margin: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(image.label),
+                fit: BoxFit.cover,
+                onError: (error, stackTrace) {
+                  // Xử lý lỗi tải hình ảnh
+                },
+              ),
+              borderRadius: BorderRadius.circular(25),
+            ),
           ),
-          borderRadius: BorderRadius.circular(25),
-        ),
-      );
-    }).toList();
+        );
+      }).toList();
+    }
 
-    final imagePromotionsWidgets = widget.sliderModel.imagePromotions.map((imagePromotion) {
-      return Container(
-        margin: const EdgeInsets.all(4),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(imagePromotion.label), // Use dynamic image URL
-            fit: BoxFit.cover,
-          ),
-          borderRadius: BorderRadius.circular(25),
-        ),
-      );
-    }).toList();
+    final imageMoviesWidgets =
+        createImageWidgets(widget.sliderModel.imageMovies, true);
+    final imagePromotionsWidgets =
+        createImageWidgets(widget.sliderModel.imagePromotions, false);
 
-    // Combine the lists with a spacer between them
     final items = [
       ...imageMoviesWidgets,
       ...imagePromotionsWidgets,
@@ -57,8 +61,8 @@ class _HomeSliderState extends State<HomeSlider> {
       items: items,
       options: CarouselOptions(
         autoPlay: true,
-        autoPlayInterval: Duration(seconds: 3),
-        autoPlayAnimationDuration: Duration(milliseconds: 800),
+        autoPlayInterval: const Duration(seconds: 3),
+        autoPlayAnimationDuration: const Duration(milliseconds: 800),
         enlargeCenterPage: true,
         enlargeFactor: 0.5,
       ),

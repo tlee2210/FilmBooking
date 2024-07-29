@@ -18,9 +18,6 @@ class HomeViewModel {
         _homeStreamController.addError('No data received');
       }
     });
-    //     .catchError((error) {
-    //   _homeStreamController.addError('Failed to load home data: $error');
-    // });
   }
 
   void dispose() {
