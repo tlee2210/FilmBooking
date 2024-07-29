@@ -1,5 +1,5 @@
+import 'package:fllmbooking_app/ui/Movie/film.dart';
 import 'package:fllmbooking_app/ui/cinema/cinema.dart';
-import 'package:fllmbooking_app/ui/film/film.dart';
 import 'package:fllmbooking_app/ui/home/home.dart';
 import 'package:fllmbooking_app/ui/user/user.dart';
 import 'package:flutter/material.dart';
@@ -71,4 +71,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-

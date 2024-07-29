@@ -14,9 +14,10 @@ class HomeViewModel {
     repository.getHomeData()?.then((value) {
       if (value != null) {
         _homeStreamController.add(value);
-      } else {
-        _homeStreamController.addError('No data received');
       }
+      // else {
+      //   _homeStreamController.addError('No data received');
+      // }
     });
   }
 

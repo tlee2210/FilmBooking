@@ -24,43 +24,49 @@ class MovieCard extends StatelessWidget {
       child: Card(
         color: const Color(0xff252836),
         shape: ContinuousRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(16.0),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8.0),
-                topRight: Radius.circular(8.0),
-              ),
-              child: Image.network(
-                item.imagePortrait,
-                fit: BoxFit.cover,
-                height: 240,
-                width: double.infinity,
+            Expanded(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16.0),
+                  topRight: Radius.circular(16.0),
+                ),
+                child: Image.network(
+                  item.imagePortrait,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: double.infinity,
+                      color: Colors.grey,
+                      child: const Icon(
+                        Icons.image,
+                        size: 50,
+                        color: Colors.white,
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 4.0),
-                  Text(
-                    item.name,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      backgroundColor: Color(0xff252836),
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
+              child: Text(
+                item.name,
+                style: const TextStyle(
+                  color: Colors.white,
+                  backgroundColor: Color(0xff252836),
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w600,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-            )
+            ),
           ],
         ),
       ),

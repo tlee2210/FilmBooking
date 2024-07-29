@@ -1,11 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 
 import '../../data/models/home.dart';
-import '../../data/models/item_introduce.dart';
-import '../MovieDetail/movie_detail.dart';
+import '../Blog/blogPage.dart';
+import '../Blog/blogSlider.dart';
+import '../Movie/Movie.dart';
+import '../Movie/MovieGrid.dart';
+import '../Movie/MovieTabs.dart';
+import '../ProgressBar/getProgressBar.dart';
+import '../Review/reviewPage.dart';
 import 'homeViewModel.dart';
-import 'home_card.dart';
 import 'home_slider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,11 +21,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late HomeViewModel _homeViewModel;
-  late HomeDataModel _homeDataModel;
-  int tabIndex = 0;
-  final List<String> tabs = ['Now showing', 'Coming soon'];
-
-  late Future<void> _carouselList;
+  HomeDataModel? _homeDataModel;
+  int _movieTabIndex = 0;
+  int _blogTabIndex = 0;
+  final List<String> _movieTabs = ['Now showing', 'Coming soon'];
+  final List<String> _blogTabs = ['Blog', 'Review'];
 
   @override
   void initState() {
@@ -29,12 +33,11 @@ class _HomeScreenState extends State<HomeScreen> {
     _homeViewModel = HomeViewModel();
     _homeViewModel.loadHome();
     observeData();
-    _carouselList = _carouselImages();
   }
 
   void observeData() {
     _homeViewModel.homeStream.listen(
-      (HomeDataModel homeData) {
+          (HomeDataModel homeData) {
         setState(() {
           _homeDataModel = homeData;
         });
@@ -45,15 +48,15 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<void> _carouselImages() async {
-    // Load carousel images
-    setState(() {});
-  }
-
   void _onTabSelect(int index) {
     setState(() {
-      tabIndex = index;
-      // Update movie list based on selected tab
+      _movieTabIndex = index;
+    });
+  }
+
+  void _onTabBlogSelect(int index) {
+    setState(() {
+      _blogTabIndex = index;
     });
   }
 
@@ -61,91 +64,123 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xff1f1d2b),
-      body: Column(
-        children: [
-          const SizedBox(height: 30),
-          FutureBuilder(
-            future: _carouselList,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    'Error: ${snapshot.error}',
-                    style: const TextStyle(color: Colors.white),
+      body: getBody(),
+    );
+  }
+
+  Widget getBody() {
+    if (_homeDataModel == null ||
+        _homeDataModel!.movieBlogList == null ||
+        _homeDataModel!.reviewList == null) {
+      return getProgressBar();
+    } else {
+      return CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                const SizedBox(height: 30),
+                HomeSlider(sliderModel: _homeDataModel!.slider),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      top: 16, bottom: 6, left: 16, right: 16),
+                  child: MovieTabs(
+                    tabIndex: _movieTabIndex,
+                    onTabSelect: _onTabSelect,
+                    tabs: _movieTabs,
                   ),
-                );
-              } else if (_homeDataModel != null) {
-                return Column(
-                  children: [
-                    const SizedBox(height: 16),
-                    HomeSlider(sliderModel: _homeDataModel.slider),
-                  ],
-                );
-              } else {
-                return const Center(
-                  child: Text(
-                    'No data available',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                );
-              }
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: List.generate(tabs.length, (index) {
-                return GestureDetector(
-                  onTap: () => _onTabSelect(index),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 16.0),
-                    decoration: BoxDecoration(
-                      color: tabIndex == index
-                          ? Colors.cyanAccent.withOpacity(0.1)
-                          : Colors.transparent,
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    child: Text(
-                      tabs[index],
-                      style: TextStyle(
-                        color: tabIndex == index
-                            ? Colors.cyanAccent
-                            : Colors.white,
-                      ),
-                    ),
-                  ),
-                );
-              }),
+                ),
+              ],
             ),
           ),
-          Expanded(
+          MovieGrid(homeDataModel: _homeDataModel!, tabIndex: _movieTabIndex),
+          SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 6.0,
-                  mainAxisSpacing: 6.0,
-                  childAspectRatio: 0.7,
-                ),
-                itemCount: tabIndex == 0
-                    ? _homeDataModel.movieShowingList.length
-                    : _homeDataModel.movieSoonList.length,
-                itemBuilder: (context, index) {
-                  final movie = tabIndex == 0
-                      ? _homeDataModel.movieShowingList[index]
-                      : _homeDataModel.movieSoonList[index];
-                  return MovieCard(item: movie);
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Movie(),
+                    ),
+                  );
                 },
+                style: ButtonStyle(
+                  backgroundColor:
+                  MaterialStateProperty.all<Color>(Colors.transparent),
+                  side: MaterialStateProperty.all<BorderSide>(
+                      const BorderSide(color: Colors.white)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                ),
+                child: const Text('See More',
+                    style: TextStyle(color: Colors.white)),
               ),
             ),
           ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: MovieTabs(
+                tabIndex: _blogTabIndex,
+                onTabSelect: _onTabBlogSelect,
+                tabs: _blogTabs,
+              ),
+            ),
+          ),
+          if (_homeDataModel!.movieBlogList != null &&
+              _homeDataModel!.movieBlogList.isNotEmpty &&
+              _homeDataModel!.reviewList != null &&
+              _homeDataModel!.reviewList.isNotEmpty)
+            SliverToBoxAdapter(
+              child: _blogTabIndex == 0
+                  ? BlogSlider(
+                data: _homeDataModel!.movieBlogList,
+                isBlog: true,
+              )
+                  : BlogSlider(
+                data: _homeDataModel!.reviewList,
+                isBlog: false,
+              ),
+            ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                      _blogTabIndex == 0 ? BlogPage() : ReviewPage(),
+                    ),
+                  );
+                },
+                style: ButtonStyle(
+                  backgroundColor:
+                  MaterialStateProperty.all<Color>(Colors.transparent),
+                  side: MaterialStateProperty.all<BorderSide>(
+                      const BorderSide(color: Colors.white)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                ),
+                child: const Text('See More',
+                    style: TextStyle(color: Colors.white)),
+              ),
+            ),
+          ),
+          const SliverToBoxAdapter(
+            child: SizedBox(height: 15),
+          ),
         ],
-      ),
-    );
+      );
+    }
   }
 }
