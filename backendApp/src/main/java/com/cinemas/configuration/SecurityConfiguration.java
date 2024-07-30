@@ -49,7 +49,7 @@ public class SecurityConfiguration {
                                 "/api/admin/voucher/**",
                                 "/api/admin/booking/**",
                                 "/api/home/carousel/**",
-                                "/api/admin/file-upload",
+                                "/api/admin/file-upload/**",
                                 "/api/home/movie/**",
                                 "/api/home/celebrity/**",
                                 "/api/home/blog/**",
