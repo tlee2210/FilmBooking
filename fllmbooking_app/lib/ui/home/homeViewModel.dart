@@ -15,9 +15,7 @@ class HomeViewModel {
       if (value != null) {
         _homeStreamController.add(value);
       }
-      // else {
-      //   _homeStreamController.addError('No data received');
-      // }
+
     });
   }
 

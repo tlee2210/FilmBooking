@@ -37,15 +37,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void observeData() {
     _homeViewModel.homeStream.listen(
-          (HomeDataModel homeData) {
+      (HomeDataModel homeData) {
         setState(() {
           _homeDataModel = homeData;
         });
       },
-      onError: (error) {
-        print('Error: $error');
-      },
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _homeViewModel.dispose();
   }
 
   void _onTabSelect(int index) {
@@ -93,7 +96,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          MovieGrid(homeDataModel: _homeDataModel!, tabIndex: _movieTabIndex),
+          MovieGrid(
+            tabIndex: _movieTabIndex,
+            movieShowingList: _homeDataModel!.movieShowingList,
+            movieSoonList: _homeDataModel!.movieSoonList,
+          ),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -108,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 style: ButtonStyle(
                   backgroundColor:
-                  MaterialStateProperty.all<Color>(Colors.transparent),
+                      MaterialStateProperty.all<Color>(Colors.transparent),
                   side: MaterialStateProperty.all<BorderSide>(
                       const BorderSide(color: Colors.white)),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -139,13 +146,13 @@ class _HomeScreenState extends State<HomeScreen> {
             SliverToBoxAdapter(
               child: _blogTabIndex == 0
                   ? BlogSlider(
-                data: _homeDataModel!.movieBlogList,
-                isBlog: true,
-              )
+                      data: _homeDataModel!.movieBlogList,
+                      isBlog: true,
+                    )
                   : BlogSlider(
-                data: _homeDataModel!.reviewList,
-                isBlog: false,
-              ),
+                      data: _homeDataModel!.reviewList,
+                      isBlog: false,
+                    ),
             ),
           SliverToBoxAdapter(
             child: Padding(
@@ -156,13 +163,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                      _blogTabIndex == 0 ? BlogPage() : ReviewPage(),
+                          _blogTabIndex == 0 ? BlogPage() : ReviewPage(),
                     ),
                   );
                 },
                 style: ButtonStyle(
                   backgroundColor:
-                  MaterialStateProperty.all<Color>(Colors.transparent),
+                      MaterialStateProperty.all<Color>(Colors.transparent),
                   side: MaterialStateProperty.all<BorderSide>(
                       const BorderSide(color: Colors.white)),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(

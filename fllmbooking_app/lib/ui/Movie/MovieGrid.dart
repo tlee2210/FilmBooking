@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-import '../../data/models/home.dart';
+import '../../data/models/item_introduce.dart';
 import '../home/home_card.dart';
 
 class MovieGrid extends StatefulWidget {
-  final HomeDataModel homeDataModel;
+  List<ItemIntroduce> movieShowingList;
+  List<ItemIntroduce> movieSoonList;
   final int tabIndex;
 
-  MovieGrid({required this.homeDataModel, required this.tabIndex});
+  MovieGrid(
+      {required this.tabIndex,
+      required this.movieSoonList,
+      required this.movieShowingList});
 
   @override
   _MovieGridState createState() => _MovieGridState();
@@ -23,18 +27,16 @@ class _MovieGridState extends State<MovieGrid> {
         childAspectRatio: 0.6,
       ),
       delegate: SliverChildBuilderDelegate(
-            (context, index) {
+        (context, index) {
           final movie = widget.tabIndex == 0
-              ? widget.homeDataModel.movieShowingList[index]
-              : widget.homeDataModel.movieSoonList[index];
+              ? widget.movieShowingList[index]
+              : widget.movieSoonList[index];
           return MovieCard(item: movie);
         },
         childCount: widget.tabIndex == 0
-            ? widget.homeDataModel.movieShowingList.length
-            : widget.homeDataModel.movieSoonList.length,
+            ? widget.movieShowingList.length
+            : widget.movieSoonList.length,
       ),
     );
   }
-
-
 }
