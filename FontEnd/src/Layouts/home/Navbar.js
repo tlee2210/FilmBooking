@@ -15,8 +15,10 @@ import {
   Row,
   Col,
 } from "reactstrap";
-import LogoDark from "../../assets/images/logo-dark.png";
-import LogoLight from "../../assets/images/logo-light.png";
+// import LogoDark from "../../assets/images/logo-dark.png";
+import LogoDark from "../../assets/images/logoPage/logoPage2.png";
+// import LogoLight from "../../assets/images/logo-light.png";
+import LogoLight from "../../assets/images/logoPage/logoCineTiket.png";
 
 import { getNavbar } from "../../slices/home/MovieHome/thunk";
 import { useSelector, useDispatch } from "react-redux";
@@ -124,7 +126,7 @@ const Navbar = () => {
               src={LogoDark}
               className="card-logo card-logo-dark"
               alt="logo dark"
-              height="17"
+              height="50"              
             />
             <img
               src={LogoLight}

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import BreadCrumb from "../../../Components/Common/BreadCrumb";
-import { createSelector } from "reselect";
-import withRouter from "../../../Components/Common/withRouter";
+import React, { useState, useEffect } from "react"
+import BreadCrumb from "../../../Components/Common/BreadCrumb"
+import { createSelector } from "reselect"
+import withRouter from "../../../Components/Common/withRouter"
 import {
   Card,
   CardBody,
@@ -14,64 +14,64 @@ import {
   FormFeedback,
   Form,
   Button,
-} from "reactstrap";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import * as ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { upload } from "@testing-library/user-event/dist/cjs/utility/upload.js";
-import { PlusOutlined } from "@ant-design/icons";
-import { Image, Upload, message } from "antd";
-import { clearNotification } from "../../../slices/message/reducer";
-import Select from "react-select";
+} from "reactstrap"
+import { CKEditor } from "@ckeditor/ckeditor5-react"
+import * as ClassicEditor from "@ckeditor/ckeditor5-build-classic"
+import { useFormik } from "formik"
+import * as Yup from "yup"
+import { useNavigate } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { upload } from "@testing-library/user-event/dist/cjs/utility/upload.js"
+import { PlusOutlined } from "@ant-design/icons"
+import { Image, Upload, message } from "antd"
+import { clearNotification } from "../../../slices/message/reducer"
+import Select from "react-select"
 
 // CreateBlog
-import { getCreateReview, CreateReview } from "../../../slices/Review/thunk";
+import { getCreateReview, CreateReview } from "../../../slices/Review/thunk"
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = (error) => reject(error)
+  })
 
 const BlogCreate = (props) => {
-  document.title = "Create Blog";
+  document.title = "Create Review"
 
-  const history = useNavigate();
-  const dispatch = useDispatch();
-  const [imageSrcs, setImageSrcs] = useState([]);
+  const history = useNavigate()
+  const dispatch = useDispatch()
+  const [imageSrcs, setImageSrcs] = useState([])
   // const [missingImages, setMissingImages] = useState([]);
 
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
+  const [previewOpen, setPreviewOpen] = useState(false)
+  const [previewImage, setPreviewImage] = useState("")
 
-  const selectBlogCreateState = (state) => state;
+  const selectBlogCreateState = (state) => state
   const blogCreatepageData = createSelector(selectBlogCreateState, (state) => ({
     error: state.Message.error,
     messageError: state.Message.messageError,
     SelectOption: state.Review.SelectOption,
     SelectMovie: state.Review.SelectMovie,
-  }));
+  }))
   const { error, messageError, SelectOption, SelectMovie } =
-    useSelector(blogCreatepageData);
+    useSelector(blogCreatepageData)
 
   useEffect(() => {
     // getReview
-    dispatch(getCreateReview());
-  }, [dispatch]);
+    dispatch(getCreateReview())
+  }, [dispatch])
 
   useEffect(() => {
     if (error) {
       if (messageError != null) {
-        message.error(messageError);
+        message.error(messageError)
       }
     }
-    dispatch(clearNotification());
-  }, [error]);
+    dispatch(clearNotification())
+  }, [error])
 
   const uploadButton = (
     <button
@@ -90,7 +90,7 @@ const BlogCreate = (props) => {
         Upload
       </div>
     </button>
-  );
+  )
 
   const validation = useFormik({
     enableReinitialize: true,
@@ -118,69 +118,69 @@ const BlogCreate = (props) => {
     }),
     onSubmit: (values) => {
       // console.log(values);
-      const formData = new FormData();
-      formData.append("name", values.name);
-      formData.append("type", values.type);
-      formData.append("movieId", values.movie);
-      formData.append("description", values.description);
-      formData.append("file", values.file[0].originFileObj);
+      const formData = new FormData()
+      formData.append("name", values.name)
+      formData.append("type", values.type)
+      formData.append("movieId", values.movie)
+      formData.append("description", values.description)
+      formData.append("file", values.file[0].originFileObj)
       imageSrcs.forEach((image, index) => {
         // console.log("image: ", image);
-        formData.append(`url[${index}]`, image);
-      });
-      dispatch(CreateReview(formData, props.router.navigate));
+        formData.append(`url[${index}]`, image)
+      })
+      dispatch(CreateReview(formData, props.router.navigate))
     },
-  });
+  })
 
   const handleChange = ({ fileList: newFileList }) =>
-    validation.setFieldValue("file", newFileList);
+    validation.setFieldValue("file", newFileList)
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+      file.preview = await getBase64(file.originFileObj)
     }
-    setPreviewImage(file.url || file.preview);
-    setPreviewOpen(true);
-  };
+    setPreviewImage(file.url || file.preview)
+    setPreviewOpen(true)
+  }
 
   function uploadAdapter(loader) {
     return {
       upload: () => {
         return new Promise((resolve, reject) => {
-          const body = new FormData();
+          const body = new FormData()
           loader.file.then((file) => {
-            body.append("upload", file);
-            body.append("type", "blog");
-            fetch("http://localhost:8081/api/admin/v1/file-upload/v1", {
+            body.append("upload", file)
+            body.append("type", "blog")
+            fetch("http://localhost:8081/api/admin/file-upload/v1", {
               method: "POST",
               body: body,
             })
               .then((res) => res.json())
               .then((res) => {
-                resolve({ default: res.url });
+                resolve({ default: res.url })
               })
               .catch((err) => {
-                reject(err);
-              });
-          });
-        });
+                reject(err)
+              })
+          })
+        })
       },
-    };
+    }
   }
 
   function uploadPlugin(editor) {
     editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
-      return uploadAdapter(loader);
-    };
+      return uploadAdapter(loader)
+    }
   }
 
   useEffect(() => {
-    const htmlContent = validation.values.description;
-    const srcs = getImageSrcs(htmlContent);
+    const htmlContent = validation.values.description
+    const srcs = getImageSrcs(htmlContent)
     // const oldImageSrcs = imageSrcs;
-    setImageSrcs(srcs);
+    setImageSrcs(srcs)
     // checkMissingImages(oldImageSrcs, srcs);
-  }, [validation.values.description]);
+  }, [validation.values.description])
 
   // function checkMissingImages(oldSrcs, newSrcs) {
   //   const missing = oldSrcs.filter((src) => !newSrcs.includes(src));
@@ -189,15 +189,15 @@ const BlogCreate = (props) => {
   // }
 
   function getImageSrcs(html) {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
-    const images = doc.querySelectorAll("img");
-    const srcs = [];
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(html, "text/html")
+    const images = doc.querySelectorAll("img")
+    const srcs = []
     images.forEach((img) => {
-      const publicId = img.src.split("/").slice(-2).join("/");
-      srcs.push(publicId);
-    });
-    return srcs;
+      const publicId = img.src.split("/").slice(-2).join("/")
+      srcs.push(publicId)
+    })
+    return srcs
   }
 
   const handleDeleteImage = async (url) => {
@@ -207,27 +207,27 @@ const BlogCreate = (props) => {
         {
           method: "DELETE",
         }
-      );
-      const data = await response.json();
+      )
+      const data = await response.json()
       if (data.result === "ok") {
-        console.log("Image deleted successfully");
+        console.log("Image deleted successfully")
       } else {
-        console.error("Error deleting image");
+        console.error("Error deleting image")
       }
     } catch (error) {
-      console.error("Error deleting image:", error);
+      console.error("Error deleting image:", error)
     }
-  };
+  }
 
   return (
     <div className="page-content">
       <Container fluid>
-        <BreadCrumb title="Blog Create" pageTitle="Blog" />
+        <BreadCrumb title="Review Create" pageTitle="Review" />
         <Form
           onSubmit={(e) => {
-            e.preventDefault();
-            validation.handleSubmit();
-            return false;
+            e.preventDefault()
+            validation.handleSubmit()
+            return false
           }}
         >
           <Row>
@@ -322,7 +322,7 @@ const BlogCreate = (props) => {
                               placeholder="Select type"
                               classNamePrefix="select"
                               onChange={(option) => {
-                                validation.setFieldValue("type", option.value);
+                                validation.setFieldValue("type", option.value)
                               }}
                               onBlur={() =>
                                 validation.setFieldTouched("type", true)
@@ -356,7 +356,7 @@ const BlogCreate = (props) => {
                               placeholder="Select Movie"
                               classNamePrefix="select"
                               onChange={(option) => {
-                                validation.setFieldValue("movie", option.value);
+                                validation.setFieldValue("movie", option.value)
                               }}
                               onBlur={() =>
                                 validation.setFieldTouched("movie", true)
@@ -394,8 +394,8 @@ const BlogCreate = (props) => {
                             onChange={(event, editor) => {
                               // console.log("event: ", event);
                               // console.log("editor: ", editor);
-                              const data = editor.getData();
-                              validation.setFieldValue("description", data);
+                              const data = editor.getData()
+                              validation.setFieldValue("description", data)
                             }}
                             // onReady={(editor) => {
                             //   console.log("Editor is ready to use: ", editor);
@@ -426,7 +426,7 @@ const BlogCreate = (props) => {
         </Form>
       </Container>
     </div>
-  );
-};
+  )
+}
 
-export default withRouter(BlogCreate);
+export default withRouter(BlogCreate)
