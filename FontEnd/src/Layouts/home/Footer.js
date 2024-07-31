@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Col, Container, Row } from "reactstrap";
-import LogoLight from "../../assets/images/logo-light.png";
+// import LogoLight from "../../assets/images/logo-light.png";
+import LogoLight from "../../assets/images/logoPage/logoPage2Light.png";
 
 const Footer = () => {
   return (
@@ -12,7 +13,7 @@ const Footer = () => {
             <Col className="col-lg-4 mt-4">
               <div>
                 <div>
-                  <img src={LogoLight} alt="logo light" height="17" />
+                  <img src={LogoLight} alt="logo light" height="60" />
                 </div>
                 <div className="mt-4 fs-13">
                   <p>elcome to MovieLand</p>

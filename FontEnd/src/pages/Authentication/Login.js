@@ -31,7 +31,7 @@ import { jwtDecode } from "jwt-decode";
 // actions
 import { loginUser, loginWithGoogle } from "../../slices/thunks";
 
-import logoLight from "../../assets/images/logo-light.png";
+import logoLight from "../../assets/images/logoPage/logoPage2Light.png";
 import { createSelector } from "reselect";
 //import images
 
@@ -94,7 +94,7 @@ const Login = (props) => {
                 <div className="text-center mt-sm-5 mb-4 text-white-50">
                   <div>
                     <Link to="/" className="d-inline-block auth-logo">
-                      <img src={logoLight} alt="" height="20" />
+                      <img src={logoLight} alt="" height="70" />
                     </Link>
                   </div>
                   <p className="mt-3 fs-15 fw-medium">Login</p>
