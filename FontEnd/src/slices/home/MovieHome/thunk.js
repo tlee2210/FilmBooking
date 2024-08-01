@@ -14,7 +14,7 @@ export const getHomepage = () => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/home/home/v1`)
     .then((response) => {
-      // console.log(response);
+      console.log(response);
       dispatch(fetchHomeData({ data: response?.data?.result }));
     })
     .catch((error) => {

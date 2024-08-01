@@ -96,9 +96,9 @@ const homepage = (props) => {
   };
 
   const images = [
-    'https://cdn.galaxycine.vn/media/2024/6/27/xummer2024-duatop-digital-2048x682_1719459622629.jpg',
-    'https://cdn.galaxycine.vn/media/2024/7/10/my-boo-2048_1720598615672.jpg',
-    'https://cdn.galaxycine.vn/media/2024/7/12/bup-mang-non-co-bap-nuoc-ngon-6_1720776471984.jpg',
+    "https://cdn.galaxycine.vn/media/2024/6/27/xummer2024-duatop-digital-2048x682_1719459622629.jpg",
+    "https://cdn.galaxycine.vn/media/2024/7/10/my-boo-2048_1720598615672.jpg",
+    "https://cdn.galaxycine.vn/media/2024/7/12/bup-mang-non-co-bap-nuoc-ngon-6_1720776471984.jpg",
   ];
 
   const [isSwiperReady, setIsSwiperReady] = useState(false);
@@ -130,11 +130,40 @@ const homepage = (props) => {
             swiper.update();
           }}
         >
-          {images.map((imgSrc, index) => (
+          {/* {images.map((imgSrc, index) => (
             <SwiperSlide key={index}>
               <div className="swiper-slide  justify-content-center align-items-center">
                 <img src={imgSrc} alt={`Slide ${index}`} className="img-fluid" />
               </div>
+            </SwiperSlide>
+          ))} */}
+          {/* {HomeData && HomeData.movieBlogList */}
+          {HomeData?.slider?.imageMovies?.map((imgSrc, index) => (
+            <SwiperSlide key={index}>
+              <Link to={`/book-tickets/${imgSrc.value}`}>
+                <div className="swiper-slide justify-content-center align-items-center">
+                  <img
+                    src={imgSrc.label}
+                    alt={`Slide ${index}`}
+                    className="img-fluid"
+                    style={{ width: "750px", height: "500px" }}
+                  />
+                </div>
+              </Link>
+            </SwiperSlide>
+          ))}
+          {HomeData?.slider?.imagePromotions?.map((imgSrc, index) => (
+            <SwiperSlide key={index}>
+              <Link to={`/promotion/${imgSrc.value}/details`}>
+                <div className="swiper-slide justify-content-center align-items-center">
+                  <img
+                    src={imgSrc.label}
+                    alt={`Slide ${index}`}
+                    className="img-fluid"
+                    style={{ width: "750px", height: "500px" }}
+                  />
+                </div>
+              </Link>
             </SwiperSlide>
           ))}
         </Swiper>
@@ -163,10 +192,10 @@ const homepage = (props) => {
                       <option value="">Select movie</option>
                       {buyFastTicket && buyFastTicket.movieList
                         ? buyFastTicket?.movieList?.map((item, index) => (
-                          <option key={index} value={item.value}>
-                            {item.label}
-                          </option>
-                        ))
+                            <option key={index} value={item.value}>
+                              {item.label}
+                            </option>
+                          ))
                         : null}
                     </select>
                   </div>
@@ -205,10 +234,10 @@ const homepage = (props) => {
                       <option value="">Select date</option>
                       {buyFastTicket && buyFastTicket.dateList
                         ? buyFastTicket?.dateList?.map((item, index) => (
-                          <option key={index} value={item}>
-                            {item}
-                          </option>
-                        ))
+                            <option key={index} value={item}>
+                              {item}
+                            </option>
+                          ))
                         : null}
                     </select>
                   </div>
@@ -242,8 +271,9 @@ const homepage = (props) => {
                 <Col className="col-md-2">
                   <div className="h-100">
                     <Button
-                      className={`btn submit-btn w-100 h-100 ${selectedTime ? "bg-danger" : ""
-                        }`}
+                      className={`btn submit-btn w-100 h-100 ${
+                        selectedTime ? "bg-danger" : ""
+                      }`}
                       disabled={!selectedTime}
                       onClick={() => handleBooking()}
                     >
@@ -320,47 +350,47 @@ const homepage = (props) => {
                   <Row className="mb-3">
                     {HomeData && HomeData.movieBlogList
                       ? HomeData.movieBlogList.map((item, index) => (
-                        <Col md={6} key={index}>
-                          <Link
-                            to={`/blog-movie/${item.slug}/details`}
-                            className="hover-link-home d-flex align-items-center"
-                            style={{
-                              fontSize: 21,
-                              fontWeight: "bold",
-                              width: "100%",
-                              marginBottom: 10,
-                            }}
-                          >
-                            <div className="d-flex align-items-center mb-2 hover-img-home">
-                              <img
-                                src={item.imagePortrait}
-                                alt={item.name}
-                                style={{
-                                  marginRight: "15px",
-                                  width: "195px",
-                                  height: "130px",
-                                  objectFit: "cover",
-                                  flexShrink: 0,
-                                }}
-                              />
-                              <div>
-                                <div
-                                  to="#"
-                                  className="hover-link-home d-flex align-items-center"
+                          <Col md={6} key={index}>
+                            <Link
+                              to={`/blog-movie/${item.slug}/details`}
+                              className="hover-link-home d-flex align-items-center"
+                              style={{
+                                fontSize: 21,
+                                fontWeight: "bold",
+                                width: "100%",
+                                marginBottom: 10,
+                              }}
+                            >
+                              <div className="d-flex align-items-center mb-2 hover-img-home">
+                                <img
+                                  src={item.imagePortrait}
+                                  alt={item.name}
                                   style={{
-                                    fontSize: 21,
-                                    fontWeight: "bold",
-                                    width: "100%",
-                                    marginBottom: 10,
+                                    marginRight: "15px",
+                                    width: "195px",
+                                    height: "130px",
+                                    objectFit: "cover",
+                                    flexShrink: 0,
                                   }}
-                                >
-                                  {item.name}
+                                />
+                                <div>
+                                  <div
+                                    to="#"
+                                    className="hover-link-home d-flex align-items-center"
+                                    style={{
+                                      fontSize: 21,
+                                      fontWeight: "bold",
+                                      width: "100%",
+                                      marginBottom: 10,
+                                    }}
+                                  >
+                                    {item.name}
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </Link>
-                        </Col>
-                      ))
+                            </Link>
+                          </Col>
+                        ))
                       : null}
                   </Row>
                   <Col>
@@ -380,46 +410,46 @@ const homepage = (props) => {
                   <Row className="mb-3">
                     {HomeData && HomeData.reviewList
                       ? HomeData.reviewList.map((item, index) => (
-                        <Col md={6} key={index}>
-                          <Link
-                            to={`/movie-commentary/${item.slug}/details`}
-                            className="hover-link-home d-flex align-items-center"
-                            style={{
-                              fontSize: 21,
-                              fontWeight: "bold",
-                              width: "100%",
-                              marginBottom: 10,
-                            }}
-                          >
-                            <div className="d-flex align-items-center mb-2 hover-img-home">
-                              <img
-                                src={item.imagePortrait}
-                                alt={item.name}
-                                style={{
-                                  marginRight: "15px",
-                                  width: "195px",
-                                  height: "130px",
-                                  objectFit: "cover",
-                                  flexShrink: 0,
-                                }}
-                              />
-                              <div>
-                                <div
-                                  className="hover-link-home d-flex align-items-center"
+                          <Col md={6} key={index}>
+                            <Link
+                              to={`/movie-commentary/${item.slug}/details`}
+                              className="hover-link-home d-flex align-items-center"
+                              style={{
+                                fontSize: 21,
+                                fontWeight: "bold",
+                                width: "100%",
+                                marginBottom: 10,
+                              }}
+                            >
+                              <div className="d-flex align-items-center mb-2 hover-img-home">
+                                <img
+                                  src={item.imagePortrait}
+                                  alt={item.name}
                                   style={{
-                                    fontSize: 21,
-                                    fontWeight: "bold",
-                                    width: "100%",
-                                    marginBottom: 10,
+                                    marginRight: "15px",
+                                    width: "195px",
+                                    height: "130px",
+                                    objectFit: "cover",
+                                    flexShrink: 0,
                                   }}
-                                >
-                                  {item.name}
+                                />
+                                <div>
+                                  <div
+                                    className="hover-link-home d-flex align-items-center"
+                                    style={{
+                                      fontSize: 21,
+                                      fontWeight: "bold",
+                                      width: "100%",
+                                      marginBottom: 10,
+                                    }}
+                                  >
+                                    {item.name}
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </Link>
-                        </Col>
-                      ))
+                            </Link>
+                          </Col>
+                        ))
                       : null}
                   </Row>
                   <Col>
