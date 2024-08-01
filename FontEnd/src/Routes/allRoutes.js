@@ -76,6 +76,9 @@ const Voucher = lazy(() => import("../pages/dashboard/Voucher/index"));
 const VoucherCreate = lazy(() => import("../pages/dashboard/Voucher/create"));
 const VoucherEdit = lazy(() => import("../pages/dashboard/Voucher/edit"));
 
+// import Booking from "../pages/dashboard/Booking/index";
+const Booking = lazy(() => import("../pages/dashboard/booking/index"));
+
 //home
 //Cinema Coner
 const Actor = lazy(() => import("../pages/Page/CinemaCorner/Actor"));
@@ -98,7 +101,7 @@ import HomeMovieGenreDetails from "../pages/Page/Movie-Genre/Details";
 
 //Rạp Phim
 import CinemaHome from "../pages/Page/Cinema/Index";
-import Booking from "../pages/Page/Booking/index";
+import BookingHome from "../pages/Page/Booking/index";
 //Order
 import BlogMovie from "../pages/Page/BlogMovie";
 import BlogMovieDetails from "../pages/Page/BlogMovie/details";
@@ -118,6 +121,7 @@ import Profile from "../pages/Page/Profile";
 
 //dat ve
 import DatVeXemPhim from "../pages/Page/Dat-Ve-Xem-Phim";
+
 const adminProtectedRoutes = [
   //User Profile
   // { path: "/dashboard/profile", component: <UserProfile /> },
@@ -169,6 +173,8 @@ const adminProtectedRoutes = [
   { path: "/dashboard/voucher", component: <Voucher /> },
   { path: "/dashboard/voucher/create", component: <VoucherCreate /> },
   { path: "/dashboard/voucher/:id/edit", component: <VoucherEdit /> },
+
+  { path: "/dashboard/booking", component: <Booking /> },
 
   // VoucherCreate
   // Voucher
@@ -231,7 +237,7 @@ const homeRoutes = [
 
   { path: "/promotion", component: <PromotionHome /> },
   { path: "/promotion/:slug/details", component: <PromotionDetailsHome /> },
-  
+
   { path: "/auth-404-alt", component: <Alt404 /> },
   { path: "/auth-500", component: <Error500 /> },
   //------------------------------------------
@@ -247,7 +253,7 @@ const homeRoutes = [
 const AuthRoutes = [
   //Profile
   { path: "/profile", component: <Profile /> },
-  { path: "/booking", component: <Booking /> },
+  { path: "/booking", component: <BookingHome /> },
 ];
 
 export { adminProtectedRoutes, publicRoutes, homeRoutes, AuthRoutes };

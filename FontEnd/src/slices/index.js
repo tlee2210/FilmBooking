@@ -22,6 +22,7 @@ import BlogReducer from "./Blog/reducer";
 import ReviewReducer from "./Review/reducer";
 import PromotionReducer from "./Promotion/reducer";
 import VoucherReducer from "./Voucher/reducer";
+import BookingReducer from "./booking/reducer";
 
 //home
 import HomeCelebrityReducer from "./home/CelebrityHome/reducer";
@@ -52,6 +53,7 @@ const rootReducer = combineReducers({
   Review: ReviewReducer,
   Promotion: PromotionReducer,
   Voucher: VoucherReducer,
+  Booking: BookingReducer,
 
   HomeCelebrity: HomeCelebrityReducer,
   BlogOrReview: HomeBlogOrReviewReducer,

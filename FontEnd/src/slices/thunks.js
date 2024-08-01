@@ -19,6 +19,7 @@ export * from "./Blog/thunk";
 export * from "./Review/thunk";
 export * from "./Promotion/thunk";
 export * from "./Voucher/thunk";
+export * from "./booking/thunk";
 
 //home
 export * from "./home/CelebrityHome/thunk";

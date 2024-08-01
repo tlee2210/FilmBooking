@@ -235,7 +235,7 @@ const Navdata = () => {
       id: "bookings",
       label: "bookings Management",
       icon: "ri-bank-card-2-fill",
-      link: "/#",
+      link: "/dashboard/booking",
       stateVariables: isBooking,
       click: function (e) {
         e.preventDefault();
