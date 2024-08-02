@@ -16,7 +16,6 @@ class ReviewPage extends StatelessWidget {
         backgroundColor: const Color(0xff1f1d2b),
       ),
       backgroundColor: const Color(0xff1f1d2b),
-
     );
   }
 }

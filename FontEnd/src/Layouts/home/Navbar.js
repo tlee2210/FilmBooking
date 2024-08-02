@@ -126,7 +126,7 @@ const Navbar = () => {
               src={LogoDark}
               className="card-logo card-logo-dark"
               alt="logo dark"
-              height="50"              
+              height="50"
             />
             <img
               src={LogoLight}
@@ -170,7 +170,7 @@ const Navbar = () => {
               <li className="nav-item">
                 <NavLink
                   className="fs-16"
-                  href="#Movies"
+                  href="/buy-ticket-fast"
                   style={{
                     marginTop: "-5px",
                   }}

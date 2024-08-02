@@ -120,7 +120,7 @@ import PromotionDetailsHome from "../pages/Page/Promotion/Details";
 import Profile from "../pages/Page/Profile";
 
 //dat ve
-import DatVeXemPhim from "../pages/Page/Dat-Ve-Xem-Phim";
+import BuyTicketFast from "../pages/Page/BuyTicketFast/index";
 
 const adminProtectedRoutes = [
   //User Profile
@@ -244,7 +244,7 @@ const homeRoutes = [
   { path: "*", component: <Navigate to="/" /> },
 
   //đặt vế
-  { path: "/dat-ve", component: <DatVeXemPhim /> },
+  { path: "/buy-ticket-fast", component: <BuyTicketFast /> },
   //event
   // { path: "/phim-hay-thang", component: <PhimHayThang /> },
   // { path: "/phim-hay-thang/details", component: <PhimHayThangDetails /> },

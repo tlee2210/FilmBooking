@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 
 import TableContainer from "../../../Components/Common/TableContainerReactTable";
-import { message, Image } from "antd";
+import { message } from "antd";
 
 // import * as Yup from "yup";
 import { useFormik } from "formik";
