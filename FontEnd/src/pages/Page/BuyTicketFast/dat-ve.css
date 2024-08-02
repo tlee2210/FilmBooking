@@ -4,7 +4,7 @@
   }
   
   .selected-overlay {
-    color: orange;
+    color: #ff6600;
     position: absolute;
     top: 46%;
     left: 49%;

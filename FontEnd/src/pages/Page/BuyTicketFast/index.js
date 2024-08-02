@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Booking/css/order.css";
-import "../Dat-Ve-Xem-Phim/dat-ve.css";
+import "../BuyTicketFast/dat-ve.css";
 import {
   Form,
   Row,
@@ -388,98 +388,102 @@ const Booking = (props) => {
                                     className="text-muted"
                                   >
                                     {ticketFast?.bookingShowTimeResponses?.map(
-                                      (item, index) => (
-                                        <TabPane
-                                          tabId={index}
-                                          key={index}
-                                          id="animation-home"
-                                        >
-                                          <Row>
-                                            <Col>
-                                              <Card>
-                                                <CardBody
-                                                  style={{ padding: 0 }}
-                                                >
-                                                  <div className="live-preview">
-                                                    <div className="table-responsive table-striped table-nowrap align-middle mb-0">
-                                                      {item?.cinemaTimeMovies?.map(
-                                                        (cinema, index) => (
-                                                          <Row
-                                                            className="border-Bottom d-flex"
-                                                            key={index}
-                                                          >
-                                                            <Col
-                                                              md={12}
-                                                              className="table-showTime"
+                                      (item, index) =>
+                                        item?.cinemaTimeMovies && (
+                                          <TabPane
+                                            tabId={index}
+                                            key={index}
+                                            id="animation-home"
+                                          >
+                                            <Row>
+                                              <Col>
+                                                <Card>
+                                                  <CardBody
+                                                    style={{ padding: 0 }}
+                                                  >
+                                                    <div className="live-preview">
+                                                      <div className="table-responsive table-striped table-nowrap align-middle mb-0">
+                                                        {item.cinemaTimeMovies.map(
+                                                          (
+                                                            cinema,
+                                                            cinemaIndex
+                                                          ) => (
+                                                            <Row
+                                                              className="border-Bottom d-flex"
+                                                              key={cinemaIndex}
                                                             >
-                                                              <div className="fw-bolder max-width mb-4 mt-3">
-                                                                {cinema.name}
-                                                              </div>
-                                                              <Row className="time-item">
-                                                                {cinema?.movieFormat?.map(
-                                                                  (
-                                                                    format,
-                                                                    formatIndex
-                                                                  ) => (
-                                                                    <Row
-                                                                      className="mb-4"
-                                                                      key={
-                                                                        formatIndex
-                                                                      }
-                                                                    >
-                                                                      <Col
-                                                                        md={2}
-                                                                        className="ms-4"
-                                                                      >
-                                                                        {
-                                                                          format.name
+                                                              <Col
+                                                                md={12}
+                                                                className="table-showTime"
+                                                              >
+                                                                <div className="fw-bolder max-width mb-4 mt-3">
+                                                                  {cinema.name}
+                                                                </div>
+                                                                <Row className="time-item">
+                                                                  {cinema?.movieFormat?.map(
+                                                                    (
+                                                                      format,
+                                                                      formatIndex
+                                                                    ) => (
+                                                                      <Row
+                                                                        className="mb-4"
+                                                                        key={
+                                                                          formatIndex
                                                                         }
-                                                                      </Col>
-                                                                      <Col
-                                                                        md={9}
-                                                                        className="d-flex flex-wrap"
                                                                       >
-                                                                        {format?.times?.map(
-                                                                          (
-                                                                            timeItem,
-                                                                            timeIndex
-                                                                          ) => (
-                                                                            <div
-                                                                              key={
-                                                                                timeIndex
-                                                                              }
-                                                                              className="me-2"
-                                                                              onClick={() =>
-                                                                                handleBooking(
-                                                                                  timeItem.idRoom
-                                                                                )
-                                                                              }
-                                                                            >
-                                                                              <Button className="btn-showTime mb-2">
-                                                                                {formatTime(
-                                                                                  timeItem.time
-                                                                                )}
-                                                                              </Button>
-                                                                            </div>
-                                                                          )
-                                                                        )}
-                                                                      </Col>
-                                                                    </Row>
-                                                                  )
-                                                                )}
-                                                              </Row>
-                                                            </Col>
-                                                          </Row>
-                                                        )
-                                                      )}
+                                                                        <Col
+                                                                          md={2}
+                                                                          className="ms-4"
+                                                                        >
+                                                                          {
+                                                                            format.name
+                                                                          }
+                                                                        </Col>
+                                                                        <Col
+                                                                          md={9}
+                                                                          className="d-flex flex-wrap"
+                                                                        >
+                                                                          {format?.times?.map(
+                                                                            (
+                                                                              timeItem,
+                                                                              timeIndex
+                                                                            ) => (
+                                                                              <div
+                                                                                key={
+                                                                                  timeIndex
+                                                                                }
+                                                                                className="me-2"
+                                                                                onClick={() =>
+                                                                                  handleBooking(
+                                                                                    timeItem.idRoom
+                                                                                  )
+                                                                                }
+                                                                              >
+                                                                                <Button className="btn-showTime mb-2">
+                                                                                  {formatTime(
+                                                                                    timeItem.time
+                                                                                  )}
+                                                                                </Button>
+                                                                              </div>
+                                                                            )
+                                                                          )}
+                                                                        </Col>
+                                                                      </Row>
+                                                                    )
+                                                                  )}
+                                                                </Row>
+                                                              </Col>
+                                                            </Row>
+                                                          )
+                                                        )}
+                                                      </div>
                                                     </div>
-                                                  </div>
-                                                </CardBody>
-                                              </Card>
-                                            </Col>
-                                          </Row>
-                                        </TabPane>
-                                      )
+                                                  </CardBody>
+                                                </Card>
+                                              </Col>
+                                            </Row>
+                                          </TabPane>
+                                        )
                                     )}
                                   </TabContent>
                                 </div>
@@ -515,7 +519,7 @@ const Booking = (props) => {
                             {date ? (
                               <p>
                                 <strong>day: </strong>
-                                {date}
+                                {date || null}
                               </p>
                             ) : null}
                           </div>
