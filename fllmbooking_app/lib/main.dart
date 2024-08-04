@@ -1,6 +1,8 @@
 import 'package:fllmbooking_app/ui/Movie/film.dart';
 import 'package:fllmbooking_app/ui/cinema/cinema.dart';
 import 'package:fllmbooking_app/ui/home/home.dart';
+import 'package:fllmbooking_app/ui/login/SignUpPage.dart';
+import 'package:fllmbooking_app/ui/login/login.dart';
 import 'package:fllmbooking_app/ui/user/user.dart';
 import 'package:flutter/material.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
@@ -23,7 +25,10 @@ class _MyAppState extends State<MyApp> {
     const HomeScreen(),
     const CinemaTab(),
     const FilmTab(),
-    const AccountTab(),
+    // const AccountTab(),
+    LoginPage(),
+    // SignUpPage(),
+
   ];
 
   @override

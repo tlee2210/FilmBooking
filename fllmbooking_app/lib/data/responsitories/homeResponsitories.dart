@@ -10,12 +10,6 @@ class HomeResponsetories implements Responsetories {
 
   @override
   Future<HomeDataModel>? getHomeData() async {
-    // await _homeDataSource.getHomeData()?.then((value) => {
-    //   if(value != null){
-    //
-    //   }
-    // });
-
     try {
       final value = await _homeDataSource.getHomeData();
 
