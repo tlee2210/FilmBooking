@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../data/models/login.dart';
 import '../../data/models/token.dart';
 import '../ProgressBar/getProgressBar.dart';
+import 'SignUpPage.dart';
 import 'forgotPasswordPage.dart';
 import 'loginViewModel.dart';
 
@@ -46,15 +48,18 @@ class _LoginScreenState extends State<LoginPage> {
           //   context,
           //   MaterialPageRoute(builder: (context) => HomePage(token: token)),
           // );
-        } else {
-          setState(() {
-            _errorMessage = 'Login failed';
-          });
         }
       } catch (e) {
-        setState(() {
-          _errorMessage = e.toString().replaceFirst('Exception: ', '');
-        });
+        _errorMessage = e.toString().replaceFirst('Exception: ', '');
+
+        Fluttertoast.showToast(
+          msg: _errorMessage.toString(),
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.TOP,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 18.0,
+        );
       } finally {
         setState(() {
           isLoading = false;
@@ -67,6 +72,13 @@ class _LoginScreenState extends State<LoginPage> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
+    );
+  }
+
+  void _navigateToSignUp() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SignUpPage()),
     );
   }
 
@@ -83,15 +95,7 @@ class _LoginScreenState extends State<LoginPage> {
         backgroundColor: const Color(0xff1f1d2b),
       ),
       backgroundColor: const Color(0xff1f1d2b),
-      body: getBody(),
-    );
-  }
-
-  Widget getBody() {
-    if (isLoading) {
-      return getProgressBar();
-    } else {
-      return Center(
+      body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Form(
@@ -109,14 +113,6 @@ class _LoginScreenState extends State<LoginPage> {
                   ),
                 ),
                 const SizedBox(height: 32),
-                if (_errorMessage != null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16.0),
-                    child: Text(
-                      _errorMessage!,
-                      style: TextStyle(color: Colors.red, fontSize: 16),
-                    ),
-                  ),
                 TextFormField(
                   controller: _emailController,
                   decoration: InputDecoration(
@@ -232,11 +228,40 @@ class _LoginScreenState extends State<LoginPage> {
                     ),
                   ),
                 ),
+                Spacer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'New User!',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    SizedBox(width: 10),
+                    ElevatedButton(
+                      onPressed: _navigateToSignUp,
+                      style: ElevatedButton.styleFrom(
+                        // primary: Colors.orange,
+                        backgroundColor: const Color(0xff12CDD9),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                      ),
+                      child: Text(
+                        'Register',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+                if (isLoading)
+                  const Center(
+                    child: CircularProgressIndicator(),
+                  ),
               ],
             ),
           ),
         ),
-      );
-    }
+      ),
+    );
   }
 }

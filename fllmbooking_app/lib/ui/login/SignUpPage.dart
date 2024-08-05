@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+
+import '../../data/models/signup.dart';
+import 'login.dart';
+import 'loginViewModel.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -7,33 +12,94 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  late LoginViewModel _loginViewModel;
+
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
-  final _phoneController = TextEditingController();
-  final _dateOfBirthController = TextEditingController();
+
+  // final _nameController = TextEditingController();
+  // final _emailController = TextEditingController();
+  // final _passwordController = TextEditingController();
+  // final _confirmPasswordController = TextEditingController();
+  // final _phoneController = TextEditingController();
+  // final _dateOfBirthController = TextEditingController();
+  // String? _selectedGender;
+
+  final _nameController = TextEditingController(text: 'tlee');
+  final _emailController = TextEditingController(text: 'tlee@gmail.com');
+  final _passwordController = TextEditingController(text: 'password123');
+  final _confirmPasswordController = TextEditingController(text: 'password123');
+  final _phoneController = TextEditingController(text: '1234567890');
+  final _dateOfBirthController = TextEditingController(text: '2002-08-05');
+  String? _errorMessage;
+  bool isLoading = false;
+  String? _selectedGender = 'Female';
+
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
-  String? _selectedGender;
 
-  void _submit() {
+  @override
+  void initState() {
+    _loginViewModel = LoginViewModel();
+    super.initState();
+  }
+
+  void _submit() async {
     if (_formKey.currentState?.validate() ?? false) {
-      // Xử lý logic đăng ký ở đây
-      print('Name: ${_nameController.text}');
-      print('Email: ${_emailController.text}');
-      print('Password: ${_passwordController.text}');
-      print('Phone: ${_phoneController.text}');
-      print('Date of Birth: ${_dateOfBirthController.text}');
-      print('Gender: $_selectedGender');
+      setState(() {
+        isLoading = true;
+      });
+
+      SignUp signUp = SignUp(
+        email: _emailController.text ?? '',
+        name: _nameController.text ?? '',
+        phone: _phoneController.text ?? '',
+        gender: _selectedGender ?? 'Unknown',
+        password: _passwordController.text ?? '',
+        dob: _dateOfBirthController.text != null &&
+                _dateOfBirthController.text!.isNotEmpty
+            ? DateTime.parse(_dateOfBirthController.text!)
+            : DateTime(1970, 1, 1),
+      );
+
+      // print('SignUp object: ${signUp.toJson()}');
+
+      try {
+        String? message = await _loginViewModel.signup(signUp);
+        Fluttertoast.showToast(
+          msg: message.toString(),
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.TOP,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 18.0,
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+        );
+      } catch (e) {
+        _errorMessage = e.toString().replaceFirst('Exception: ', '');
+
+        Fluttertoast.showToast(
+          msg: _errorMessage.toString(),
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.TOP,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 18.0,
+        );
+
+      } finally {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime now = DateTime.now();
-    final DateTime initialDate =
-        now.subtract(Duration(days: 365 * 20)); // Giả sử tuổi mặc định là 20
+    final DateTime initialDate = now.subtract(Duration(days: 365 * 20));
     final DateTime firstDate = now.subtract(Duration(days: 365 * 80));
     final DateTime lastDate = now.subtract(Duration(days: 365 * 13));
 
@@ -229,7 +295,8 @@ class _SignUpPageState extends State<SignUpPage> {
                     controller: _confirmPasswordController,
                     decoration: InputDecoration(
                       labelText: 'Confirm Password',
-                      labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
+                      labelStyle:
+                          const TextStyle(color: Colors.white, fontSize: 18),
                       hintText: 'Confirm Password',
                       hintStyle: const TextStyle(color: Colors.grey),
                       filled: true,
@@ -383,7 +450,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     style: const TextStyle(color: Colors.white),
                     dropdownColor: const Color(0xff1f1d2b),
-                    items: ['Male', 'Female', 'Other'].map((gender) {
+                    items: ['Male', 'Female'].map((gender) {
                       return DropdownMenuItem(
                         value: gender,
                         child: Text(gender,
@@ -420,6 +487,10 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                   ),
+                  if (isLoading)
+                    Center(
+                      child: CircularProgressIndicator(),
+                    ),
                 ],
               ),
             ),

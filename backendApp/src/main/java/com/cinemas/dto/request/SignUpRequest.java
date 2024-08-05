@@ -27,7 +27,7 @@ public class SignUpRequest {
 //    @NotEmpty(message = "VALIDATION")
     private Gender gender;
 
-    @Size(min = 5, max = 10, message = "FIELD_TOO_LENGTH")
+    @Size(min = 5, max = 20, message = "FIELD_TOO_LENGTH")
     @NotEmpty(message = "VALIDATION")
     private String password;
 

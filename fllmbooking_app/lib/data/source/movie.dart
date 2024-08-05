@@ -8,7 +8,9 @@ import 'package:http/http.dart' as http;
 
 abstract interface class movieDataSource {
   Future<MovieDataModel> getMovieData();
+
   Future<HomeFilmResponse> getMovieDetail(String slug);
+
   Future<bookTicketsResponse> getTimeForMovie(
       String slug, String city, String cinema);
 }
@@ -50,9 +52,15 @@ class MovieData implements movieDataSource {
   @override
   Future<bookTicketsResponse> getTimeForMovie(
       String slug, String city, String cinema) async {
-    String url =
-        'http://10.0.2.2:8081/api/home/booking/v1?slug=$slug${city.isNotEmpty ? '&city=${city}' : ''}${cinema.isNotEmpty ? '&cinema=$cinema' : ''}';
-    final response = await http.get(Uri.parse(url));
+    final queryParameters = {
+      'slug': slug,
+      if (city.isNotEmpty) 'city': city,
+      if (cinema.isNotEmpty) 'cinema': cinema,
+    };
+
+    final uri =
+        Uri.http('10.0.2.2:8081', '/api/home/booking/v1', queryParameters);
+    final response = await http.get(uri);
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
       if (jsonData['result'] != null) {

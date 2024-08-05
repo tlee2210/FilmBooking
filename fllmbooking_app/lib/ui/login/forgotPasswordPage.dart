@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -8,8 +9,13 @@ class ForgotPasswordPage extends StatelessWidget {
     if (_formKey.currentState?.validate() ?? false) {
       // Xử lý logic
       print('Email: ${_emailController.text}');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Request sent! Please check your email.')),
+      Fluttertoast.showToast(
+        msg: 'Request sent! Please check your email.',
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.TOP,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0,
       );
     }
   }
@@ -80,7 +86,8 @@ class ForgotPasswordPage extends StatelessWidget {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your email';
-                      } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                      } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                          .hasMatch(value)) {
                         return 'Please enter a valid email';
                       }
                       return null;

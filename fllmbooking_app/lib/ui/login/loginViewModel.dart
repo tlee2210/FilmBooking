@@ -1,4 +1,5 @@
 import '../../data/models/login.dart';
+import '../../data/models/signup.dart';
 import '../../data/responsitories/loginResponsitories.dart';
 import '../../data/models/token.dart';
 
@@ -9,6 +10,15 @@ class LoginViewModel {
     try {
       final token = await _repository.signin(login);
       return token;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<String?> signup(SignUp signUp) async {
+    try {
+      final message = await _repository.signup(signUp);
+      return message;
     } catch (e) {
       throw e;
     }
