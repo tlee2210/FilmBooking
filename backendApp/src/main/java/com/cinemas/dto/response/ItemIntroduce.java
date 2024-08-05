@@ -23,6 +23,13 @@ public class ItemIntroduce {
         this.description = description;
     }
 
+    public ItemIntroduce(String slug, String description, String imagePortrait, String name) {
+        this.slug = slug;
+        this.description = description;
+        this.imagePortrait = imagePortrait;
+        this.name = name;
+    }
+
     public ItemIntroduce(Integer id, String name, String slug, String imagePortrait) {
         this.id = id;
         this.name = name;

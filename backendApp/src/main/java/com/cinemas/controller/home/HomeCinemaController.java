@@ -1,6 +1,7 @@
 package com.cinemas.controller.home;
 
 import com.cinemas.dto.response.APIResponse;
+import com.cinemas.dto.response.CinemasResponse;
 import com.cinemas.dto.response.HomeCinemaResponse;
 import com.cinemas.dto.response.SelectOptionCeleb;
 import com.cinemas.entities.Celebrity;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/home/cinema")
@@ -26,6 +29,17 @@ public class HomeCinemaController {
     ) {
         HomeCinemaResponse cinema = homeCinemaService.getCinemaBySlug(slug, city);
         APIResponse<HomeCinemaResponse> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setResult(cinema);
+        return apiResponse;
+    }
+
+    @GetMapping("/v1")
+    public APIResponse<CinemasResponse> getAllCinema(
+            @RequestParam(required = false) String city
+    ) {
+        CinemasResponse cinema = homeCinemaService.getAllCinema(city);
+        APIResponse<CinemasResponse> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(cinema);
         return apiResponse;

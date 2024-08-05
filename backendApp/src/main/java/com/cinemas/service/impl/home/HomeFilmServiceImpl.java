@@ -129,6 +129,7 @@ public class HomeFilmServiceImpl implements HomeFilmService {
         }
 
         movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
+        movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
 
         if (movie == null) throw new AppException(NOT_FOUND);
         HomeFilmResponse homeFilmResponse = new HomeFilmResponse();
@@ -153,8 +154,17 @@ public class HomeFilmServiceImpl implements HomeFilmService {
             item.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(item.getImagePortrait()));
         }
         homeFilmResponse.setReviews(items);
-        homeFilmResponse.setMovieReview(reviewRepository.findTypeByIdMovie(movie.getId(), ReviewType.review));
-        homeFilmResponse.setSubplot(reviewRepository.findTypeByIdMovie(movie.getId(), ReviewType.preview));
+        List<Review> movieReview = reviewRepository.findTypeByIdMovie(movie.getId(), ReviewType.review);
+        movieReview.forEach((review) -> {
+            review.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(review.getThumbnail()));
+        });
+        homeFilmResponse.setMovieReview(movieReview);
+
+        List<Review> subplots = reviewRepository.findTypeByIdMovie(movie.getId(), ReviewType.preview);
+        subplots.forEach((subplot) -> {
+            subplot.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(subplot.getThumbnail()));
+        });
+        homeFilmResponse.setSubplot(subplots);
 
         return homeFilmResponse;
     }

@@ -79,4 +79,36 @@ public class HomeCinemaServiceImpl implements HomeCinemaService {
 
         return homeCinemaResponse;
     }
+
+    @Override
+    public CinemasResponse getAllCinema(String city) {
+        List<Cinema> cinemas = cinemaRespository.findByCity(city);
+
+        cinemas.forEach(cinema -> {
+            cinema.getImages().forEach(cinemaImages ->
+                    cinemaImages.setUrl(fileStorageServiceImpl.getUrlFromPublicId(cinemaImages.getUrl())));
+        });
+
+        List<CinemaResponse> homeCinemaResponses = new ArrayList<>();
+
+        cinemas.forEach(cinema -> {
+            CinemaResponse homeCinemaResponse = new CinemaResponse();
+            homeCinemaResponse.setImages(cinema.getImages().getFirst());
+            ObjectUtils.copyFields(cinema, homeCinemaResponse);
+            homeCinemaResponses.add(homeCinemaResponse);
+        });
+
+        List<String> cityList = cinemaRespository.findByCity();
+
+        List<SelectOptionReponse> options = new ArrayList<>();
+        cityList.forEach(item -> {
+            options.add(new SelectOptionReponse(item, item));
+        });
+
+        CinemasResponse cinemasResponse = new CinemasResponse();
+        cinemasResponse.setCityList(options);
+        cinemasResponse.setCinemas(homeCinemaResponses);
+
+        return cinemasResponse;
+    }
 }

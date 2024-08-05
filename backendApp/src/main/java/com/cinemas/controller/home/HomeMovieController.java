@@ -49,11 +49,10 @@ public class HomeMovieController {
     }
 
     @GetMapping("/v2")
-    public APIResponse<HomeResponse2> getAllMovie2() {
-        HomeResponse2 HomeResponse = homeMovieSerivce.getAllMovie2();
-        APIResponse<HomeResponse2> apiResponse = new APIResponse<>();
+    public APIResponse<List<Movie>> getAllMovie2() {
+        APIResponse<List<Movie>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
-        apiResponse.setResult(HomeResponse);
+        apiResponse.setResult(homeMovieSerivce.getAllMovie2());
 
         return apiResponse;
     }

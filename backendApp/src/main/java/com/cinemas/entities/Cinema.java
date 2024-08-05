@@ -35,7 +35,7 @@ public class Cinema {
     @Column
     private String phone;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column

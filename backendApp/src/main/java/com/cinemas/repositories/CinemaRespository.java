@@ -23,6 +23,9 @@ public interface CinemaRespository extends JpaRepository<Cinema, Integer> {
     @Query("SELECT DISTINCT c.city FROM Cinema AS c")
     List<String> findByCity();
 
+    @Query("SELECT c FROM Cinema c WHERE (:city is null or c.city = :city)")
+    List<Cinema> findByCity(String city);
+
     @Query("SELECT c FROM Cinema AS c " +
             "WHERE (:name is null or c.name LIKE %:name%) " +
             "AND (:status is null or c.status = :status) " +

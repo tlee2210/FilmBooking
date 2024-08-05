@@ -55,11 +55,11 @@ public class HomeBookingServiceImpl implements HomeBookingService {
     @Override
     public bookTicketsResponse getTimeForMovie(String slug, String city, String cinema) {
         List<String> cityList = cinemaRespository.findByCity();
-        List<bookingShowTimeResponse> showtimes = showTimeResponsitory.findDayByMovie_Slug(slug, cinema);
+        List<bookingShowTimeResponse> showtimes = showTimeResponsitory.findDayByMovie_Slug(slug, city, cinema);
         LocalTime currentTimePlus15 = LocalTime.now().plusMinutes(15);
 
         showtimes.forEach(item -> {
-            item.setCinemaTimeMovies(showTimeResponsitory.findByDayAndMovie_Slug(item.getDay(), slug, currentTimePlus15, cinema));
+            item.setCinemaTimeMovies(showTimeResponsitory.findByDayAndMovie_Slug(item.getDay(), slug, currentTimePlus15, city, cinema));
         });
 
         showtimes.forEach(item -> {

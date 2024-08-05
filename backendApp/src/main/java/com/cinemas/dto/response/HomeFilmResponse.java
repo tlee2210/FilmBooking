@@ -23,6 +23,7 @@ public class HomeFilmResponse {
     private String producer;
     private String description;
     private String imagePortrait;
+    private String imageLandscape;
     private String trailer;
     private String rules;
     private String movieFormat;
@@ -32,6 +33,6 @@ public class HomeFilmResponse {
     private LocalDate releaseDate;
     private List<imageDescription> images;
     private List<ItemIntroduce> reviews;
-    private List<ItemIntroduce> Subplot;
-    private List<ItemIntroduce> movieReview;
+    private List<Review> Subplot;
+    private List<Review> movieReview;
 }

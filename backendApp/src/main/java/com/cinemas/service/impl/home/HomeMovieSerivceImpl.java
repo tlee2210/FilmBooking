@@ -3,7 +3,6 @@ package com.cinemas.service.impl.home;
 import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.response.APIResponse;
 import com.cinemas.dto.response.HomeResponse;
-import com.cinemas.dto.response.HomeResponse2;
 import com.cinemas.dto.response.ItemIntroduce;
 import com.cinemas.entities.Movie;
 import com.cinemas.enums.MovieStatus;
@@ -64,23 +63,15 @@ public class HomeMovieSerivceImpl implements HomeMovieSerivce {
     }
 
     @Override
-    public HomeResponse2 getAllMovie2() {
-        List<Movie> movieComingSoom = movieRepository.getMovieForStatus2(MovieStatus.COMING_SOON);
-        List<Movie> movieNowShow = movieRepository.getMovieForStatus2(MovieStatus.NOW_SHOWING);
+    public List<Movie> getAllMovie2() {
+        List<Movie> movies = movieRepository.findAll();
 
-        movieComingSoom.forEach(movie -> {
+        movies.forEach(movie -> {
             movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
 //            movie.setTrailer(movieRepository.findTrailerByid(movie.getId()));
         });
-        movieNowShow.forEach(movie -> {
-            movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
-//            movie.setTrailer(movieRepository.findTrailerByid(movie.getId()));
-        });
-        HomeResponse2 homeResponse = new HomeResponse2();
-        homeResponse.setMovieShowingList(movieNowShow);
 
-        homeResponse.setMovieSoonList(movieComingSoom);
-        return homeResponse;
+        return movies;
     }
 
     @Override
