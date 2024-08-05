@@ -174,10 +174,10 @@ const Booking = (props) => {
                           <Accordion
                             open={openAccordion}
                             toggle={toggleAccordion}
-                            className="custom-accordionwithicon custom-accordion-border accordion-border-box accordion-danger"
+                            className="custom-accordionwithicon custom-accordion-border accordion-border-box "
                             id="accordionBordered"
                           >
-                            <AccordionItem>
+                            <AccordionItem style={{borderColor:"#ff6600"}}>
                               <h1
                                 className="accordion-header"
                                 id="accordionborderedExample1"
@@ -229,7 +229,7 @@ const Booking = (props) => {
                                 </div>
                               </Collapse>
                             </AccordionItem>
-                            <AccordionItem>
+                            <AccordionItem style={{borderColor:"#ff6600"}}>
                               <h2
                                 className="accordion-header"
                                 id="accordionborderedExample2"
@@ -311,7 +311,7 @@ const Booking = (props) => {
                                 </div>
                               </Collapse>
                             </AccordionItem>
-                            <AccordionItem>
+                            <AccordionItem style={{borderColor:"#ff6600"}}>
                               <h2
                                 className="accordion-header"
                                 id="accordionborderedExample3"
