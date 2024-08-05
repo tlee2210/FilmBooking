@@ -1,7 +1,7 @@
+import 'package:fllmbooking_app/ui/MovieDetail/MovieDetail.dart';
 import 'package:flutter/material.dart';
 
 import '../../data/models/item_introduce.dart';
-import '../MovieDetail/movie_detail.dart';
 
 class MovieCard extends StatelessWidget {
   final ItemIntroduce item;
@@ -17,7 +17,7 @@ class MovieCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MovieDetailPage(),
+            builder: (context) => MovieDetailPage(slug: item.slug),
           ),
         );
       },

@@ -1,9 +1,9 @@
+import 'package:fllmbooking_app/ui/MovieDetail/MovieDetail.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 import '../../data/models/select_option.dart';
 import '../../data/models/slider.dart';
-import '../MovieDetail/movie_detail.dart';
 import '../promotionsDetail/promotionsDetail.dart';
 
 class HomeSlider extends StatefulWidget {
@@ -25,8 +25,9 @@ class _HomeSliderState extends State<HomeSlider> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    isMovie ? MovieDetailPage() : PromotionsDetailPage(),
+                builder: (context) => isMovie
+                    ? MovieDetailPage(slug: image.value)
+                    : PromotionsDetailPage(),
               ),
             );
           },
