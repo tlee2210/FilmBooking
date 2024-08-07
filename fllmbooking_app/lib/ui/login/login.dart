@@ -3,7 +3,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../data/models/login.dart';
 import '../../data/models/token.dart';
+import '../../data/responsitories/TokenRepositories.dart';
+import '../../main.dart';
 import '../ProgressBar/getProgressBar.dart';
+import '../home/home.dart';
 import 'SignUpPage.dart';
 import 'forgotPasswordPage.dart';
 import 'loginViewModel.dart';
@@ -15,8 +18,12 @@ class LoginPage extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+
+  // final _emailController = TextEditingController();
+  // final _passwordController = TextEditingController();
+  TokenRepositories tokenRepository = TokenRepositories();
+  final _emailController = TextEditingController(text: 'thienle255@gmail.com');
+  final _passwordController = TextEditingController(text: 'thienle2210');
   bool _obscurePassword = true;
   late LoginViewModel _loginViewModel;
   String? _errorMessage;
@@ -44,9 +51,21 @@ class _LoginScreenState extends State<LoginPage> {
       try {
         LoginToken? token = await _loginViewModel.signin(login);
         if (token != null) {
-          // Navigator.push(
+          print('======================');
+          print('token: ' + token.token.toString());
+          print('======================');
+          var saveToken = token.token.toString();
+          await tokenRepository.saveToken(saveToken);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyApp()),
+          );
+          // Navigator.pushReplacement(
           //   context,
-          //   MaterialPageRoute(builder: (context) => HomePage(token: token)),
+          //   MaterialPageRoute(
+          //     builder: (context) => MyApp(),
+          //     settings: RouteSettings(arguments: 0), // 0 là chỉ số của Home tab
+          //   ),
           // );
         }
       } catch (e) {
@@ -253,10 +272,10 @@ class _LoginScreenState extends State<LoginPage> {
                     ),
                   ],
                 ),
-                if (isLoading)
-                  const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                // if (isLoading)
+                //   const Center(
+                //     child: CircularProgressIndicator(),
+                //   ),
               ],
             ),
           ),

@@ -3,6 +3,7 @@ import 'package:fllmbooking_app/ui/cinema/cinema.dart';
 import 'package:fllmbooking_app/ui/home/home.dart';
 import 'package:fllmbooking_app/ui/login/SignUpPage.dart';
 import 'package:fllmbooking_app/ui/login/login.dart';
+import 'package:fllmbooking_app/ui/user/profile.dart';
 import 'package:fllmbooking_app/ui/user/user.dart';
 import 'package:flutter/material.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
@@ -26,14 +27,13 @@ class _MyAppState extends State<MyApp> {
     const CinemaTab(),
     const FilmTab(),
     // const AccountTab(),
-    LoginPage(),
-    // SignUpPage(),
-
+    ProfileTab(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: '/',
       home: Scaffold(
         backgroundColor: const Color(0xff1f1d2b),
         body: _tabs[_selectedIndex], // Display the current tab

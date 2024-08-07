@@ -41,7 +41,6 @@ class Celebrity {
       view: json['view'],
     );
   }
-
   static List<Celebrity> fromJsonList(List<dynamic> jsonList) {
     return jsonList.map((json) => Celebrity.fromJson(json)).toList();
   }
