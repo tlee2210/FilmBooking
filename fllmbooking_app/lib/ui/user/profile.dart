@@ -6,6 +6,7 @@ import '../../data/models/UserProfile.dart';
 import '../../data/responsitories/TokenRepositories.dart';
 import '../ProgressBar/getProgressBar.dart';
 import '../login/login.dart';
+import 'EditProfile.dart';
 
 class ProfileTab extends StatefulWidget {
   @override
@@ -74,7 +75,8 @@ class _ProfileTabState extends State<ProfileTab>
       appBar: AppBar(
         title: const Text(
           'Profile',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
         ),
         centerTitle: true,
         backgroundColor: const Color(0xFF1F1D2B),
@@ -139,7 +141,7 @@ class _ProfileTabState extends State<ProfileTab>
             ),
             // TabBar
             Container(
-              color: Color(0xFF1F1D2B), // Màu nền của TabBar
+              color: Color(0xFF1F1D2B),
               child: TabBar(
                 controller: _tabController,
                 labelColor: const Color(0xFF12CDD9),
@@ -156,8 +158,11 @@ class _ProfileTabState extends State<ProfileTab>
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  EditProfileScreen(), // Nội dung của tab Thông tin
-                  TransactionTab(), // Nội dung của tab Giao dịch
+                  _userProfile != null
+                      ? EditProfile(userProfile: _userProfile!)
+                      : Center(child: CircularProgressIndicator()),
+                  TransactionTab(),
+                  // Nội dung của tab Giao dịch
                 ],
               ),
             ),
@@ -196,19 +201,6 @@ class _ProfileTabState extends State<ProfileTab>
           ),
         );
       },
-    );
-  }
-}
-
-class EditProfileScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xFF1F1D2B),
-      child: const Center(
-        child:
-            Text('Edit Profile Screen', style: TextStyle(color: Colors.white)),
-      ),
     );
   }
 }
