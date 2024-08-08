@@ -48,12 +48,13 @@ class _LoginScreenState extends State<LoginPage> {
       String password = _passwordController.text;
 
       Login login = Login(email: email, password: password);
+      print('======================');
+      print('email: ' + email);
+      print('password: ' + password);
+      print('======================');
       try {
         LoginToken? token = await _loginViewModel.signin(login);
         if (token != null) {
-          print('======================');
-          print('token: ' + token.token.toString());
-          print('======================');
           var saveToken = token.token.toString();
           await tokenRepository.saveToken(saveToken);
           Navigator.push(

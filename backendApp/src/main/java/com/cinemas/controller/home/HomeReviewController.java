@@ -1,10 +1,7 @@
 package com.cinemas.controller.home;
 
 import com.cinemas.dto.request.SearchReviewRequest;
-import com.cinemas.dto.response.APIResponse;
-import com.cinemas.dto.response.HomeReviewResponse;
-import com.cinemas.dto.response.ItemIntroduce;
-import com.cinemas.dto.response.SelectOptionAndModelReponse;
+import com.cinemas.dto.response.*;
 import com.cinemas.entities.Review;
 import com.cinemas.enums.ReviewType;
 import com.cinemas.service.home.HomeReviewService;
@@ -40,11 +37,11 @@ public class HomeReviewController {
     }
 
     @GetMapping("/v2")
-    public APIResponse<List<Review>> getAllReview(
+    public APIResponse<List<ReviewResponse2>> getAllReview(
             @RequestParam(required = false) String name
     ) {
-        List<Review> reviews = homeReviewService.getAllReviews2(name);
-        APIResponse<List<Review>> apiResponse = new APIResponse<>();
+        List<ReviewResponse2> reviews = homeReviewService.getAllReviews2(name);
+        APIResponse<List<ReviewResponse2>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(reviews);
 
@@ -74,6 +71,16 @@ public class HomeReviewController {
         APIResponse<HomeReviewResponse> apiResponse = new APIResponse();
         apiResponse.setCode(200);
         apiResponse.setResult(review);
+
+
+        return apiResponse;
+    }
+
+    @GetMapping("/v2/{slug}/detail")
+    public APIResponse<ReviewResponse2> getDetailReview2(@PathVariable String slug) {
+        APIResponse<ReviewResponse2 > apiResponse = new APIResponse();
+        apiResponse.setCode(200);
+        apiResponse.setResult(homeReviewService.getReviewDetail2(slug));
 
 
         return apiResponse;

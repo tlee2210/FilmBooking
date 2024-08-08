@@ -26,6 +26,9 @@ class LoginData implements LoginDataSource {
 
       var dataWrapper = jsonDecode(bodyContent) as Map<String, dynamic>;
       var data = dataWrapper['result'] as Map<String, dynamic>;
+      print('======================');
+      print('data: ' + data.toString());
+      print('======================');
       return LoginToken.fromJson(data);
     } else {
       final errorBody = utf8.decode(response.bodyBytes);

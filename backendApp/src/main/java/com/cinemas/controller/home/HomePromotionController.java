@@ -4,12 +4,15 @@ import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.response.APIResponse;
 import com.cinemas.dto.response.HomePromotionResponse;
 import com.cinemas.dto.response.ItemIntroduce;
+import com.cinemas.entities.Promotion;
 import com.cinemas.service.home.HomePromotionService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/home/promotion")
@@ -27,6 +30,18 @@ public class HomePromotionController {
         PaginationHelper paginationHelper = new PaginationHelper(pageNo - 1, pageSize, sort, "id");
         Page<ItemIntroduce> promotions = homePromotionService.getAllPromotion(paginationHelper);
         APIResponse<Page<ItemIntroduce>> apiResponse = new APIResponse<>();
+        apiResponse.setCode(200);
+        apiResponse.setResult(promotions);
+
+        return apiResponse;
+    }
+
+    @GetMapping("/v2")
+    public APIResponse<List<Promotion>> getAllPromotion2(
+            @RequestParam(required = false) String name
+    ) {
+        List<Promotion> promotions = homePromotionService.getAllPromotion2(name);
+        APIResponse<List<Promotion>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(promotions);
 

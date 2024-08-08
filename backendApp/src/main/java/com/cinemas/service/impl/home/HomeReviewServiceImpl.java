@@ -1,11 +1,9 @@
 package com.cinemas.service.impl.home;
 
+import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.dto.request.PaginationHelper;
 import com.cinemas.dto.request.SearchReviewRequest;
-import com.cinemas.dto.response.HomeReviewResponse;
-import com.cinemas.dto.response.ItemIntroduce;
-import com.cinemas.dto.response.SelectOptionAndModelReponse;
-import com.cinemas.dto.response.SelectOptionReponse;
+import com.cinemas.dto.response.*;
 import com.cinemas.entities.Review;
 import com.cinemas.enums.MovieStatus;
 import com.cinemas.enums.ReviewType;
@@ -61,14 +59,21 @@ public class HomeReviewServiceImpl implements HomeReviewService {
     }
 
     @Override
-    public List<Review> getAllReviews2(String name) {
+    public List<ReviewResponse2> getAllReviews2(String name) {
         List<Review> reviewList = reviewRepository.findListByName(name);
 
         reviewList.forEach(item -> {
             item.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(item.getThumbnail()));
         });
 
-        return reviewList;
+        List<ReviewResponse2> reviews = new ArrayList<>();
+        for (Review review : reviewList) {
+            ReviewResponse2 response = new ReviewResponse2();
+            ObjectUtils.copyFields(review, response);
+            reviews.add(response);
+        }
+
+        return reviews;
     }
 
     @Override
@@ -87,5 +92,15 @@ public class HomeReviewServiceImpl implements HomeReviewService {
         });
 
         return homeReviewResponse;
+    }
+
+    @Override
+    public ReviewResponse2 getReviewDetail2(String slug) {
+        Review review = reviewRepository.findBySlug(slug);
+        if (review == null) throw new AppException(NOT_FOUND);
+        review.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(review.getThumbnail()));
+        ReviewResponse2 reviewResponse2 = new ReviewResponse2();
+        ObjectUtils.copyFields(review, reviewResponse2);
+        return reviewResponse2;
     }
 }

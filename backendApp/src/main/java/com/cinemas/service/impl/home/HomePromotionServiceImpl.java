@@ -62,6 +62,15 @@ public class HomePromotionServiceImpl implements HomePromotionService {
     }
 
     @Override
+    public List<Promotion> getAllPromotion2(String name) {
+        List<Promotion> promotions = promotionRepository.searchByName(name);
+        promotions.forEach(promotion -> {
+            promotion.setImage(fileStorageServiceImpl.getUrlFromPublicId(promotion.getImage()));
+        });
+        return promotions;
+    }
+
+    @Override
     public HomePromotionResponse getPromotionDetail(String slug) {
         Promotion promotion = promotionRepository.findBySlug(slug);
 
