@@ -19,6 +19,7 @@ class _EditProfileState extends State<EditProfile> {
   late TextEditingController _dateOfBirthController;
   late String _selectedGender;
   final _formKey = GlobalKey<FormState>();
+  bool _isEditable = true;
 
   @override
   void initState() {
@@ -60,6 +61,7 @@ class _EditProfileState extends State<EditProfile> {
                 children: [
                   TextFormField(
                     controller: _nameController,
+                    readOnly: _isEditable,
                     decoration: const InputDecoration(
                       labelText: 'Full Name',
                       labelStyle: TextStyle(color: Colors.white, fontSize: 18),
@@ -85,7 +87,7 @@ class _EditProfileState extends State<EditProfile> {
                     style: const TextStyle(color: Colors.white),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Vui lòng nhập họ tên';
+                        return 'Please enter your full name';
                       }
                       return null;
                     },
@@ -93,6 +95,7 @@ class _EditProfileState extends State<EditProfile> {
                   const SizedBox(height: 16.0),
                   TextFormField(
                     controller: _emailController,
+                    readOnly: true,
                     decoration: const InputDecoration(
                       labelText: 'Email Address',
                       labelStyle: TextStyle(color: Colors.white, fontSize: 18),
@@ -126,6 +129,7 @@ class _EditProfileState extends State<EditProfile> {
                   const SizedBox(height: 16.0),
                   TextFormField(
                     controller: _phoneController,
+                    readOnly: _isEditable,
                     decoration: const InputDecoration(
                       labelText: 'Phone',
                       labelStyle: TextStyle(color: Colors.white, fontSize: 18),
@@ -159,14 +163,13 @@ class _EditProfileState extends State<EditProfile> {
                   DropdownButtonFormField<String>(
                     value: _selectedGender,
                     decoration: InputDecoration(
-                      labelText: 'Giới tính',
+                      labelText: 'Gender',
                       labelStyle:
                           const TextStyle(color: Colors.white, fontSize: 18),
-                      hintText: 'Chọn giới tính',
+                      hintText: 'Select gender',
                       hintStyle: const TextStyle(color: Colors.grey),
                       filled: true,
                       fillColor: const Color(0xff1f1d2b),
-                      // Đổi màu ở đây
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                         borderSide: const BorderSide(
@@ -184,7 +187,6 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                     style: const TextStyle(color: Colors.white),
                     dropdownColor: const Color(0xff1f1d2b),
-                    // Đổi màu ở đây
                     items: ['Male', 'Female'].map((gender) {
                       return DropdownMenuItem(
                         value: gender,
@@ -192,11 +194,13 @@ class _EditProfileState extends State<EditProfile> {
                             style: const TextStyle(color: Colors.white)),
                       );
                     }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedGender = value!;
-                      });
-                    },
+                    onChanged: !_isEditable
+                        ? (value) {
+                            setState(() {
+                              _selectedGender = value!;
+                            });
+                          }
+                        : null,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please select gender';
@@ -206,7 +210,7 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                   const SizedBox(height: 16.0),
                   GestureDetector(
-                    onTap: () => _selectDate(context),
+                    onTap: !_isEditable ? () => _selectDate(context) : null,
                     child: AbsorbPointer(
                       child: TextFormField(
                         controller: _dateOfBirthController,
@@ -252,33 +256,60 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                   const SizedBox(height: 20),
                   SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState?.validate() ?? false) {
-                          setState(() {
-                            widget.userProfile.name = _nameController.text;
-                            widget.userProfile.email = _emailController.text;
-                            widget.userProfile.phone = _phoneController.text;
-                            widget.userProfile.dob =
-                                _dateOfBirthController.text;
-                            widget.userProfile.gender = _selectedGender;
-                          });
-                        }
-                      },
-                      child: const Text(
-                        'Save',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xff12CDD9),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                  ),
+                      width: double.infinity,
+                      child: _isEditable
+                          ? ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  _isEditable = false;
+                                });
+                              },
+                              child: const Text(
+                                'Edit Profile',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xff12CDD9),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            )
+                          : ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  _isEditable = true;
+                                });
+                                if (_formKey.currentState?.validate() ??
+                                    false) {
+                                  setState(() {
+                                    widget.userProfile.name =
+                                        _nameController.text;
+                                    widget.userProfile.email =
+                                        _emailController.text;
+                                    widget.userProfile.phone =
+                                        _phoneController.text;
+                                    widget.userProfile.dob =
+                                        _dateOfBirthController.text;
+                                    widget.userProfile.gender = _selectedGender;
+                                  });
+                                }
+                              },
+                              child: const Text(
+                                'Save',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xff12CDD9),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            )),
                 ],
               ),
             ),
