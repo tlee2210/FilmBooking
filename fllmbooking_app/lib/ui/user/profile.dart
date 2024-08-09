@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../data/models/UserProfile.dart';
 import '../../data/responsitories/TokenRepositories.dart';
+import '../../main.dart';
 import '../ProgressBar/getProgressBar.dart';
 import '../login/login.dart';
 import 'EditProfile.dart';
@@ -51,9 +52,6 @@ class _ProfileTabState extends State<ProfileTab>
         setState(() {
           _userProfile = userProfile;
         });
-        // print('============================');
-        // print('value: ' + userProfile!.bookingList!.toString());
-        // print('============================');
       });
 
       // _userProfile = UserProfile();
@@ -159,18 +157,31 @@ class _ProfileTabState extends State<ProfileTab>
                 ],
               ),
             ),
-            // TabBarView
+
             Expanded(
               child: TabBarView(
                 controller: _tabController,
                 children: [
                   _userProfile != null
                       ? EditProfile(userProfile: _userProfile!)
-                      : Center(child: CircularProgressIndicator()),
-                  TransactionHistoryPage(
-                      bookingList: _userProfile!.bookingList),
+                      : const Center(child: CircularProgressIndicator()),
+                  _userProfile!.bookingList != null &&
+                          _userProfile!.bookingList.isNotEmpty
+                      ? TransactionHistoryPage(
+                          bookingList: _userProfile!.bookingList,
+                        )
+                      : const Center(
+                          child: Text(
+                            'No transactions available',
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 16.0),
+                          ),
+                        ),
                 ],
               ),
+            ),
+            const SizedBox(
+              height: 10,
             ),
           ],
         ),
@@ -210,7 +221,3 @@ class _ProfileTabState extends State<ProfileTab>
     );
   }
 }
-
-
-
-

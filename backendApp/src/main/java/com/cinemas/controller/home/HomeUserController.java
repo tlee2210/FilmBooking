@@ -33,6 +33,9 @@ public class HomeUserController {
 
     @PutMapping(value = "/v1/update")
     public APIResponse<String> updateUser(@RequestBody ProfileRequest profileRequest) {
+        System.out.println("================");
+        System.out.println(profileRequest);
+        System.out.println("================");
         boolean checkUpdate = userService.updateUser(profileRequest);
         if (checkUpdate) {
             APIResponse<String> apiResponse = new APIResponse();

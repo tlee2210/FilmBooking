@@ -1,7 +1,13 @@
+import 'package:fllmbooking_app/ui/user/userChangePasswor.dart';
+import 'package:fllmbooking_app/ui/user/userViewModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../data/models/UserProfile.dart';
+import '../../data/models/UserProfileResquest.dart';
+import '../../data/responsitories/TokenRepositories.dart';
+import '../../main.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class EditProfile extends StatefulWidget {
   final UserProfile userProfile;
@@ -20,6 +26,11 @@ class _EditProfileState extends State<EditProfile> {
   late String _selectedGender;
   final _formKey = GlobalKey<FormState>();
   bool _isEditable = true;
+  TokenRepositories tokenRepository = TokenRepositories();
+  bool isLoading = false;
+  String? _errorMessage;
+  late UserViewModel userViewModel;
+  late UserProfileRequest userProfileRequest;
 
   @override
   void initState() {
@@ -30,16 +41,57 @@ class _EditProfileState extends State<EditProfile> {
     _dateOfBirthController =
         TextEditingController(text: widget.userProfile.dob);
     _selectedGender = widget.userProfile.gender;
+    userViewModel = UserViewModel();
   }
 
-  void updateUserProfile() {
-    print('=========================');
-    print('name: ' + _nameController.text);
-    print('email: ' + _emailController.text);
-    print('phone: ' + _phoneController.text);
-    print('dob: ' + _dateOfBirthController.text);
-    print('gender: ' + _selectedGender);
-    print('=========================');
+  Future<String?> updateUserProfile() async {
+    // print('=========================');
+    // print('name: ' + _nameController.text);
+    // print('email: ' + _emailController.text);
+    // print('phone: ' + _phoneController.text);
+    // print('dob: ' + _dateOfBirthController.text);
+    // print('gender: ' + _selectedGender);
+    // print('=========================');
+
+    userProfileRequest = UserProfileRequest(
+      name: _nameController.text,
+      email: _emailController.text,
+      phone: _phoneController.text,
+      dob: _dateOfBirthController.text,
+      gender: _selectedGender,
+    );
+
+    try {
+      String? message = await userViewModel.updateProfile(userProfileRequest);
+      Fluttertoast.showToast(
+        msg: message.toString(),
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.TOP,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 18.0,
+      );
+
+      setState(() {
+        _isEditable = true;
+      });
+
+    } catch (e) {
+      _errorMessage = await e.toString().replaceFirst('Exception: ', '');
+
+      Fluttertoast.showToast(
+        msg: _errorMessage.toString(),
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.TOP,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 18.0,
+      );
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -55,6 +107,23 @@ class _EditProfileState extends State<EditProfile> {
             DateFormat('yyyy-MM-dd').format(selectedDate);
       });
     }
+  }
+
+  void _logout(BuildContext context) async {
+    await tokenRepository.deleteToken();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => MyApp()),
+    ); // Example navigation
+  }
+
+  void _ChangePasswordPage(BuildContext context) async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChangePasswordPage(),
+      ),
+    );
   }
 
   @override
@@ -265,6 +334,35 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                   ),
                   const SizedBox(height: 20),
+                  TextButton(
+                    onPressed: () => _ChangePasswordPage(context),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 15.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    child: RichText(
+                      text: const TextSpan(
+                        text: 'Change ',
+                        style: TextStyle(
+                          color: Colors.blue, // Text color
+                          fontSize: 18.0, // Text size
+                          fontWeight: FontWeight.normal,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'password',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
                   SizedBox(
                       width: double.infinity,
                       child: _isEditable
@@ -289,9 +387,6 @@ class _EditProfileState extends State<EditProfile> {
                             )
                           : ElevatedButton(
                               onPressed: () {
-                                setState(() {
-                                  _isEditable = true;
-                                });
                                 if (_formKey.currentState?.validate() ??
                                     false) {
                                   if (_formKey.currentState?.validate() ??
@@ -313,6 +408,29 @@ class _EditProfileState extends State<EditProfile> {
                                 ),
                               ),
                             )),
+                  const SizedBox(height: 10),
+                  TextButton(
+                    onPressed: () => _logout(context),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50.0, vertical: 20.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(10.0), // Rounded corners
+                      ),
+
+                      backgroundColor:
+                          Colors.transparent, // Transparent background
+                    ),
+                    child: const Text(
+                      'Log Out',
+                      style: TextStyle(
+                        color: Colors.orange, // Text color
+                        fontSize: 18.0, // Text size
+                        fontWeight: FontWeight.bold, // Font weight
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
