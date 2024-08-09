@@ -25,8 +25,11 @@ class ProfileData implements profileDataSource {
         var dataWrapper = jsonDecode(bodyContent) as Map<String, dynamic>;
         var data = dataWrapper['result'] as Map<String, dynamic>;
         return UserProfile.fromJson(data);
+      } else if (response.statusCode == 401) {
+        await tokenRepository.deleteToken();
       }
     } else {
+      await tokenRepository.deleteToken();
       return null;
     }
   }

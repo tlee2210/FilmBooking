@@ -1,3 +1,5 @@
+import 'package:fllmbooking_app/data/models/Booking.dart';
+import 'package:fllmbooking_app/ui/user/userTransactionHistory.dart';
 import 'package:fllmbooking_app/ui/user/userViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -49,7 +51,11 @@ class _ProfileTabState extends State<ProfileTab>
         setState(() {
           _userProfile = userProfile;
         });
+        // print('============================');
+        // print('value: ' + userProfile!.bookingList!.toString());
+        // print('============================');
       });
+
       // _userProfile = UserProfile();
     }
   }
@@ -147,9 +153,9 @@ class _ProfileTabState extends State<ProfileTab>
                 labelColor: const Color(0xFF12CDD9),
                 unselectedLabelColor: Colors.grey,
                 indicatorColor: const Color(0xFF12CDD9),
-                tabs: [
-                  Tab(icon: Icon(Icons.info), text: 'Thông tin'),
-                  Tab(icon: Icon(Icons.history), text: 'Giao dịch'),
+                tabs: const [
+                  Tab(icon: Icon(Icons.info), text: 'Information'),
+                  Tab(icon: Icon(Icons.history), text: 'Transaction History'),
                 ],
               ),
             ),
@@ -161,8 +167,8 @@ class _ProfileTabState extends State<ProfileTab>
                   _userProfile != null
                       ? EditProfile(userProfile: _userProfile!)
                       : Center(child: CircularProgressIndicator()),
-                  TransactionTab(),
-                  // Nội dung của tab Giao dịch
+                  TransactionHistoryPage(
+                      bookingList: _userProfile!.bookingList),
                 ],
               ),
             ),
@@ -205,14 +211,6 @@ class _ProfileTabState extends State<ProfileTab>
   }
 }
 
-class TransactionTab extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Color(0xFF1F1D2B),
-      child: Center(
-        child: Text('Transaction Tab', style: TextStyle(color: Colors.white)),
-      ),
-    );
-  }
-}
+
+
+

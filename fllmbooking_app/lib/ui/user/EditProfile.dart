@@ -32,6 +32,16 @@ class _EditProfileState extends State<EditProfile> {
     _selectedGender = widget.userProfile.gender;
   }
 
+  void updateUserProfile() {
+    print('=========================');
+    print('name: ' + _nameController.text);
+    print('email: ' + _emailController.text);
+    print('phone: ' + _phoneController.text);
+    print('dob: ' + _dateOfBirthController.text);
+    print('gender: ' + _selectedGender);
+    print('=========================');
+  }
+
   Future<void> _selectDate(BuildContext context) async {
     DateTime? selectedDate = await showDatePicker(
       context: context,
@@ -284,17 +294,10 @@ class _EditProfileState extends State<EditProfile> {
                                 });
                                 if (_formKey.currentState?.validate() ??
                                     false) {
-                                  setState(() {
-                                    widget.userProfile.name =
-                                        _nameController.text;
-                                    widget.userProfile.email =
-                                        _emailController.text;
-                                    widget.userProfile.phone =
-                                        _phoneController.text;
-                                    widget.userProfile.dob =
-                                        _dateOfBirthController.text;
-                                    widget.userProfile.gender = _selectedGender;
-                                  });
+                                  if (_formKey.currentState?.validate() ??
+                                      false) {
+                                    updateUserProfile();
+                                  }
                                 }
                               },
                               child: const Text(
