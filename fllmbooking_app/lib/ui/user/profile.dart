@@ -108,7 +108,7 @@ class _ProfileTabState extends State<ProfileTab>
                         CircleAvatar(
                           radius: 50,
                           backgroundImage: _userProfile != null
-                              ? NetworkImage(_userProfile!.avatar)
+                              ? NetworkImage(_userProfile!.avatar ?? _imageUrl!)
                               : NetworkImage(_imageUrl!),
                         ),
                         Positioned(
