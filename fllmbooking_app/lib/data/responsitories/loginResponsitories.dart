@@ -18,7 +18,7 @@ class LoginResponsitories implements LoginRespoinsitory {
     if (value != null) {
       return value;
     } else {
-      return null;
+      throw Exception();
     }
   }
 

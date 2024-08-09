@@ -9,7 +9,7 @@ class UserProfile {
   String phone;
   String gender;
   String role;
-  String avatar;
+  String? avatar;
   List<Booking> bookingList;
   String dob;
 

@@ -2,7 +2,7 @@ class User {
   String name;
   String email;
   String role;
-  String avatar;
+  String? avatar;
 
   User(
       {required this.name,

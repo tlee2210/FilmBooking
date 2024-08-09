@@ -33,7 +33,6 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/',
       home: Scaffold(
         backgroundColor: const Color(0xff1f1d2b),
         body: _tabs[_selectedIndex], // Display the current tab
