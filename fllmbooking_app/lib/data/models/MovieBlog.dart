@@ -1,7 +1,7 @@
 import 'package:fllmbooking_app/data/models/NewsItemModel.dart';
 import 'package:fllmbooking_app/data/models/movie_model.dart';
 
-class Review implements NewsItemModel {
+class MovieBlog implements NewsItemModel {
   int? id;
   String? name;
   String? slug;
@@ -10,7 +10,7 @@ class Review implements NewsItemModel {
   int? view;
   Movie? movie;
 
-  Review({
+  MovieBlog({
     this.id,
     this.name,
     this.slug,
@@ -20,8 +20,8 @@ class Review implements NewsItemModel {
     this.movie,
   });
 
-  factory Review.fromJson(Map<String, dynamic> json) {
-    return Review(
+  factory MovieBlog.fromJson(Map<String, dynamic> json) {
+    return MovieBlog(
       id: json['id'],
       name: json['name'],
       slug: json['slug'],
@@ -32,7 +32,7 @@ class Review implements NewsItemModel {
     );
   }
 
-  static List<Review> fromJsonList(List<dynamic> jsonList) {
-    return jsonList.map((json) => Review.fromJson(json)).toList();
+  static List<MovieBlog> fromJsonList(List<dynamic> jsonList) {
+    return jsonList.map((json) => MovieBlog.fromJson(json)).toList();
   }
 }

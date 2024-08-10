@@ -1,3 +1,8 @@
+import 'package:fllmbooking_app/data/models/MovieBlog.dart';
+import 'package:fllmbooking_app/data/models/review.dart';
+import 'package:fllmbooking_app/data/responsitories/BlogRepositories.dart';
+import 'package:fllmbooking_app/data/responsitories/ReviewRepositories.dart';
+import 'package:fllmbooking_app/ui/News/NewsDetail.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../../data/models/item_introduce.dart';
@@ -21,61 +26,72 @@ class _BlogSliderState extends State<BlogSlider> {
 
   List<Widget> createImageWidgets(List<ItemIntroduce> data, bool isBlog) {
     return data.map((item) {
-      return InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  isBlog ? BlogDetailPage() : ReviewDetailPage(),
-            ),
-          );
-        },
-        child: Stack(
-          children: [
-            Container(
-              margin: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(item.imagePortrait),
-                  fit: BoxFit.cover,
-                  onError: (error, stackTrace) {
-                    // Handle image load error
-                  },
+      return FutureBuilder(
+        future: isBlog
+            ? BlogRepository().getBlogDetail(item.slug)
+            : ReviewRepository().getReviewDetail(item.slug),
+        builder: (context, snapshot) {
+          // if (snapshot.connectionState == ConnectionState.waiting) {
+          //   return CircularProgressIndicator();
+          // } else {
+
+          // }
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NewsDetailPage(item: snapshot.data!),
                 ),
-                borderRadius: BorderRadius.circular(25),
-              ),
-              height: 200,
-            ),
-            Positioned(
-              bottom: 20,
-              left: 4,
-              right: 4,
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.5),
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(25),
-                    bottomRight: Radius.circular(25),
+              );
+            },
+            child: Stack(
+              children: [
+                Container(
+                  margin: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(item.imagePortrait),
+                      fit: BoxFit.cover,
+                      onError: (error, stackTrace) {
+                        // Handle image load error
+                      },
+                    ),
+                    borderRadius: BorderRadius.circular(25),
                   ),
+                  height: 200,
                 ),
-                child: Center(
-                  child: Text(
-                    item.name,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      // Text color
+                Positioned(
+                  bottom: 20,
+                  left: 4,
+                  right: 4,
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.5),
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(25),
+                        bottomRight: Radius.circular(25),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        item.name,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          // Text color
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       );
     }).toList();
   }

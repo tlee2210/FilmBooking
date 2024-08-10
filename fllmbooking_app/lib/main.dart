@@ -1,4 +1,5 @@
 import 'package:fllmbooking_app/ui/Movie/film.dart';
+import 'package:fllmbooking_app/ui/News/NewsList.dart';
 import 'package:fllmbooking_app/ui/cinema/cinema.dart';
 import 'package:fllmbooking_app/ui/home/home.dart';
 import 'package:fllmbooking_app/ui/user/profile.dart';
@@ -22,7 +23,8 @@ class _MyAppState extends State<MyApp> {
   final List<Widget> _tabs = [
     const HomeScreen(),
     const CinemaTab(),
-    const FilmTab(),
+    const Newslist(),
+    // const FilmTab(),
     // const AccountTab(),
     ProfileTab(),
   ];
@@ -55,7 +57,7 @@ class _MyAppState extends State<MyApp> {
             ),
             SalomonBottomBarItem(
               icon: const Icon(Icons.movie),
-              title: const Text("Film"),
+              title: const Text("News"),
               selectedColor: Colors.cyanAccent,
               unselectedColor: Colors.grey,
             ),
