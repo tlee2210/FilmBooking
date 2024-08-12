@@ -55,7 +55,7 @@ export const getRoomForShowTime = (id) => async (dispatch) => {
 
 export const getMovieForShowTime = (id) => async (dispatch) => {
   await axios
-    .get(`http://localhost:8081/api/admin/v1/movie/${id}`)
+    .get(`http://localhost:8081/api/admin/movie/v1/${id}`)
     .then((response) => {
       // console.log(response);
       dispatch(setMovieItem(response?.data?.result));

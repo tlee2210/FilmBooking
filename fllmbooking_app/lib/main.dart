@@ -1,6 +1,5 @@
-import 'package:fllmbooking_app/ui/Movie/film.dart';
 import 'package:fllmbooking_app/ui/News/NewsList.dart';
-import 'package:fllmbooking_app/ui/cinema/cinema.dart';
+import 'package:fllmbooking_app/ui/booking/SeatSelection.dart';
 import 'package:fllmbooking_app/ui/home/home.dart';
 import 'package:fllmbooking_app/ui/user/profile.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +21,8 @@ class _MyAppState extends State<MyApp> {
 
   final List<Widget> _tabs = [
     const HomeScreen(),
-    const CinemaTab(),
+    // const CinemaTab(),
+    SeatSelectionScreen(),
     const Newslist(),
     // const FilmTab(),
     // const AccountTab(),
