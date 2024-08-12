@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:fllmbooking_app/data/models/NewsItemModel.dart';
+import 'package:fllmbooking_app/ui/MovieDetail/MovieDetail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -75,7 +76,17 @@ class NewsDetailPage<T extends NewsItemModel> extends StatelessWidget {
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w600),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  if (item.movie != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            MovieDetailPage(slug: item.movie!.slug!),
+                      ),
+                    );
+                  }
+                },
               ),
             )
           : null,

@@ -154,35 +154,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       isBlog: false,
                     ),
             ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          _blogTabIndex == 0 ? BlogPage() : ReviewPage(),
-                    ),
-                  );
-                },
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.transparent),
-                  side: MaterialStateProperty.all<BorderSide>(
-                      const BorderSide(color: Colors.white)),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                ),
-                child: const Text('See More',
-                    style: TextStyle(color: Colors.white)),
-              ),
-            ),
-          ),
           const SliverToBoxAdapter(
             child: SizedBox(height: 15),
           ),

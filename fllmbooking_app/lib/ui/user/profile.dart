@@ -2,6 +2,7 @@ import 'package:fllmbooking_app/data/models/Booking.dart';
 import 'package:fllmbooking_app/ui/user/userTransactionHistory.dart';
 import 'package:fllmbooking_app/ui/user/userViewModel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../data/models/UserProfile.dart';
@@ -22,6 +23,7 @@ class _ProfileTabState extends State<ProfileTab>
   final ImagePicker _picker = ImagePicker();
   String? _imageUrl = 'https://via.placeholder.com/150';
   TokenRepositories tokenRepository = TokenRepositories();
+  var token = null;
 
   late UserViewModel _userViewModel;
   UserProfile? _userProfile;
@@ -36,16 +38,11 @@ class _ProfileTabState extends State<ProfileTab>
 
   Future<void> _checkTokenAndFetchProfile() async {
     // await tokenRepository.deleteToken();
-    var token = await tokenRepository.getToken();
+    token = await tokenRepository.getToken();
     // print('======================');
     // print('token: $token');
     // print('======================');
-    if (token == null) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
-      );
-    } else {
+    if (token != null) {
       _userViewModel = UserViewModel();
       _userViewModel.getprofile();
       _userViewModel.profileStream.listen((UserProfile userProfile) {
@@ -53,8 +50,6 @@ class _ProfileTabState extends State<ProfileTab>
           _userProfile = userProfile;
         });
       });
-
-      // _userProfile = UserProfile();
     }
   }
 
@@ -75,18 +70,26 @@ class _ProfileTabState extends State<ProfileTab>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Profile',
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
+    return checkBody();
+  }
+
+  Widget checkBody() {
+    if (token == null) {
+      return LoginPage();
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Profile',
+            style: TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
+          ),
+          centerTitle: true,
+          backgroundColor: const Color(0xFF1F1D2B),
         ),
-        centerTitle: true,
-        backgroundColor: const Color(0xFF1F1D2B),
-      ),
-      body: getBody(),
-    );
+        body: getBody(),
+      );
+    }
   }
 
   Widget getBody() {

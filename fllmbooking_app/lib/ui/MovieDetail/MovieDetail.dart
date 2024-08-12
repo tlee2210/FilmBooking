@@ -197,17 +197,17 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                                             vertical: 2,
                                           ),
                                           decoration: BoxDecoration(
-                                            color: Colors.cyanAccent,
+                                            color: Colors.yellow,
                                             borderRadius:
                                                 BorderRadius.circular(4),
                                             border: Border.all(
-                                              color: Colors.cyanAccent,
+                                              color: Colors.yellow,
                                             ),
                                           ),
                                           child: Text(
                                             "T${movie.rules}",
                                             style: const TextStyle(
-                                              fontWeight: FontWeight.w600,
+                                              fontWeight: FontWeight.bold,
                                             ),
                                           ),
                                         )
@@ -288,7 +288,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                           ],
                         ),
                         const SizedBox(
-                          height: 10.0,
+                          height: 14.0,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -319,7 +319,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                           }),
                         ),
                         const SizedBox(
-                          height: 10.0,
+                          height: 14.0,
                         ),
                         _content,
                       ],

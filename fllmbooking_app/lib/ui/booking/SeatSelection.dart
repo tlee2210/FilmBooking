@@ -72,8 +72,8 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
                     border: Border.all(color: Colors.black),
                   ),
                   // child: Center(child: Text(seatLabel)),
-                  child: Center(child: Container()), // Giữ ô trắng mà không có nội dung
-
+                  child: Center(
+                      child: Container()), // Giữ ô trắng mà không có nội dung
                 ),
               );
             },
@@ -111,7 +111,8 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
                     border: Border.all(color: Colors.black),
                   ),
                   // child: Center(child: Text(seatLabel)),
-                  child: Center(child: Container()), // Giữ ô trắng mà không có nội dung
+                  child: Center(
+                      child: Container()), // Giữ ô trắng mà không có nội dung
                 ),
               );
             },

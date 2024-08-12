@@ -46,12 +46,14 @@ dependencies:
   shared_preferences: ^2.0.6
   image_picker: ^0.8.4+4
   flutter_html: ^3.0.0-beta.2
+  book_my_seat: ^1.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   google_fonts: ^6.2.0
   font_awesome_flutter: ^10.7.0
+  flutter_svg: ^1.1.5
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -75,6 +77,10 @@ flutter:
   assets:
     - assets/image/
     - assets/image/TabBar/
+    - assets/seats/svg_disabled_bus_seat.svg
+    - assets/seats/svg_selected_bus_seats.svg
+    - assets/seats/svg_sold_bus_seat.svg
+    - assets/seats/svg_unselected_bus_seat.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
