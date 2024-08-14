@@ -102,7 +102,7 @@ public class HomeCelebServiceImpl implements HomeCelebService {
     @Override
     public CelebResponse getDetailCeleb(String slug) {
         Celebrity celebrity = celebrityRepository.findBySlug(slug);
-        incrementViewCount(slug);
+//        incrementViewCount(slug);
         if (celebrity == null) throw new AppException(NOT_FOUND);
 
         celebrity.setImage(fileStorageServiceImpl.getUrlFromPublicId(celebrity.getImage()));
@@ -122,7 +122,7 @@ public class HomeCelebServiceImpl implements HomeCelebService {
         for (Movie movie : movieList) {
             MovieCelebResponse movieCelebResponse = new MovieCelebResponse();
             ObjectUtils.copyFields(movie, movieCelebResponse);
-            movieCelebResponse.setImage(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
+            movieCelebResponse.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
             movieCelebList.add(movieCelebResponse);
         }
         celebResponse.setMovieList(movieCelebList);

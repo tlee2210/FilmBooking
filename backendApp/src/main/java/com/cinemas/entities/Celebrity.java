@@ -34,10 +34,10 @@ public class Celebrity {
     @Column
     private Integer view = 0;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String biography;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column

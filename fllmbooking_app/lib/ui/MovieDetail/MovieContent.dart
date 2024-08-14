@@ -56,17 +56,18 @@ class _MovieContentState extends State<MovieContent> {
                       : TextOverflow.ellipsis,
                 ),
               ),
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    showFullContent = !showFullContent;
-                  });
-                },
-                child: Text(
-                  showFullContent ? 'Collapse' : 'Read more',
-                  style: const TextStyle(color: Colors.orange),
+              if (movie.description!.length > 255)
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      showFullContent = !showFullContent;
+                    });
+                  },
+                  child: Text(
+                    showFullContent ? 'Collapse' : 'Read more',
+                    style: const TextStyle(color: Colors.orange),
+                  ),
                 ),
-              ),
               const SizedBox(height: 10),
               const Text(
                 "Actors",

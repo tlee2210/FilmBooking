@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class MovieCelebResponse {
     private String name;
     private String slug;
-    private String image;
+    private String imageLandscape;
 }
