@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart' show SvgPicture;
+import 'package:book_my_seat/book_my_seat.dart';
+
+import 'Seat.dart';
 
 class SeatSelectionScreen extends StatefulWidget {
   @override
@@ -6,27 +10,62 @@ class SeatSelectionScreen extends StatefulWidget {
 }
 
 class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
-  int seatColumns = 14; // Số cột của ghế đơn
-  int seatRows = 7; // Số hàng của ghế đơn
+  Set<SeatNumber> selectedSeats = Set();
+
+  int seatColumns = 14; // Tổng số cột trong bố cục ghế
+  int seatRows = 7; // Tổng số hàng trong bố cục ghế
+  int totalColumns = 2; // Số cột dành cho khoảng cách không có ghế
   int doubleSeatColumns = 7; // Số cặp ghế đôi
   int doubleSeatRows = 2; // Số hàng của ghế đôi
-  int totalColumns = 3; // Chia số cột ghế chia ra làm ba bên
 
-  // Kích thước ghế đơn
-  double seatHeight = 40.0;
-  double seatWidth = 40.0;
-
-  // Tạo một lưới ghế ngồi
-  List<List<bool>> seats = [];
-  List<List<bool>> doubleSeats = [];
+  late List<int> splitIndices;
+  late List<List<SeatState>> currentSeatsState;
+  late List<List<SeatState>> currentDoubleSeatsState;
 
   @override
   void initState() {
     super.initState();
-    seats = List.generate(
-        seatRows, (i) => List.generate(seatColumns, (j) => false));
-    doubleSeats = List.generate(
-        doubleSeatRows, (i) => List.generate(doubleSeatColumns, (j) => false));
+
+    int splitInterval = (seatColumns / (totalColumns)).floor();
+    int remainingSeats = seatColumns % (totalColumns);
+
+    splitIndices = [];
+    int currentPosition = splitInterval;
+
+    for (int i = 0; i < totalColumns; i++) {
+      splitIndices.add(currentPosition + i);
+      currentPosition += splitInterval + (remainingSeats > 0 ? 1 : 0);
+      remainingSeats = remainingSeats > 0 ? remainingSeats - 1 : remainingSeats;
+    }
+
+    currentSeatsState = List.generate(
+      seatRows,
+      (row) => List.generate(
+        seatColumns + totalColumns, // Tổng số cột bao gồm cả khoảng cách
+        (col) {
+          if (splitIndices.contains(col)) {
+            return SeatState.empty; // Khoảng cách giữa các ghế
+          } else {
+            return SeatState.unselected; // Ghế chưa được chọn
+          }
+          if (splitIndices.contains(col) || splitIndices.contains(col - 1)) {
+            return SeatState.empty;
+          } else {
+            return SeatState.unselected; // Ghế chưa được chọn
+          }
+        },
+      ),
+    );
+
+    currentDoubleSeatsState = List.generate(
+      doubleSeatRows, // Số hàng
+      (row) => List.generate(
+        doubleSeatColumns, // Số cột
+        (col) {
+          return SeatState.unselected; // Ghế chưa được chọn
+        },
+      ),
+    );
   }
 
   @override
@@ -34,184 +73,111 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Chọn Ghế'),
+        centerTitle: true,
       ),
-      body: Column(
-        children: [
-          // Render ghế đôi trước
-          GridView.builder(
-            shrinkWrap: true,
-            padding: EdgeInsets.all(4),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: doubleSeatColumns, // Số cột cho ghế đôi
-              mainAxisSpacing: 4,
-              crossAxisSpacing: 4,
-              childAspectRatio: 2, // Đảm bảo ghế đôi rộng gấp đôi ghế đơn
-            ),
-            itemCount: doubleSeatRows * doubleSeatColumns,
-            itemBuilder: (context, idx) {
-              int row = idx ~/ doubleSeatColumns;
-              int col = idx % doubleSeatColumns;
-
-              // Xác định nhãn ghế đôi dựa trên index
-              // String seatLabel = 'G${idx * 2 + 1}-${idx * 2 + 2}';
-              // String seatLabel = '${String.fromCharCode(65 + (seatRows +seatColumns - 1 - row))}${col + 1}';
-              String seatLabel =
-                  '${String.fromCharCode(65 + seatRows + row)}${col * 2 + 1}-${col * 2 + 2}';
-
-              return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    doubleSeats[row][col] = !doubleSeats[row][col];
-                  });
-                },
-                child: Container(
-                  height: seatHeight, // Chiều cao ghế đôi bằng ghế đơn
-                  width: seatWidth, // Chiều rộng ghế đôi gấp đôi ghế đơn
-                  decoration: BoxDecoration(
-                    color: doubleSeats[row][col] ? Colors.blue : Colors.white,
-                    border: Border.all(color: Colors.black),
-                  ),
-                  // child: Center(child: Text(seatLabel)),
-                  child: Center(
-                      child: Container()), // Giữ ô trắng mà không có nội dung
-                ),
-              );
-            },
-          ),
-          // Render ghế đơn
-          GridView.builder(
-            shrinkWrap: true,
-            padding: EdgeInsets.all(4),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: seatColumns, // Số cột cho ghế đôi
-              mainAxisSpacing: 4,
-              crossAxisSpacing: 4,
-              childAspectRatio: 2, // Đảm bảo ghế đôi rộng gấp đôi ghế đơn
-            ),
-            itemCount: seatRows * seatColumns,
-            itemBuilder: (context, idx) {
-              int row = idx ~/ seatColumns;
-              int col = idx % seatColumns;
-
-              // Xác định nhãn ghế đôi dựa trên index
-              // String seatLabel = '${idx * 2 + 1}-${idx * 2 + 2}';
-              String seatLabel =
-                  '${String.fromCharCode(65 + (seatRows - 1 - row))}${col + 1}';
-              return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    seats[row][col] = !seats[row][col];
-                  });
-                },
-                child: Container(
-                  height: seatHeight, // Chiều cao ghế đôi bằng ghế đơn
-                  width: seatWidth, // Chiều rộng ghế đôi gấp đôi ghế đơn
-                  decoration: BoxDecoration(
-                    color: seats[row][col] ? Colors.orange : Colors.white,
-                    border: Border.all(color: Colors.black),
-                  ),
-                  // child: Center(child: Text(seatLabel)),
-                  child: Center(
-                      child: Container()), // Giữ ô trắng mà không có nội dung
-                ),
-              );
-            },
-          ),
-          // Expanded(
-          //   child: Center(
-          //     child: GridView.builder(
-          //       shrinkWrap: true,
-          //       padding: EdgeInsets.all(4),
-          //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          //         crossAxisCount: seatColumns ~/ totalColumns, // Chia cột ghế đơn ra làm 3 phần
-          //         mainAxisSpacing: 4,
-          //         crossAxisSpacing: 4,
-          //         childAspectRatio: 1, // Đảm bảo tỷ lệ chiều cao/chiều rộng cho ghế đơn
-          //       ),
-          //       itemCount: seatRows * seatColumns,
-          //       itemBuilder: (context, idx) {
-          //         int row = idx ~/ seatColumns;
-          //         int col = idx % seatColumns;
-          //
-          //         // Sử dụng cùng một index để in nhãn ghế đơn
-          //         String seatLabel = '${String.fromCharCode(65 + (seatRows - 1 - row))}${col + 1}';
-          //
-          //         return GestureDetector(
-          //           onTap: () {
-          //             setState(() {
-          //               seats[row][col] = !seats[row][col];
-          //             });
-          //           },
-          //           child: Container(
-          //             height: seatHeight, // Chiều cao ghế đơn
-          //             width: seatWidth, // Chiều rộng ghế đơn
-          //             decoration: BoxDecoration(
-          //               color: seats[row][col] ? Colors.orange : Colors.white,
-          //               border: Border.all(color: Colors.black),
-          //             ),
-          //             child: Center(child: Text(seatLabel)),
-          //           ),
-          //         );
-          //       },
-          //     ),
-          //   ),
-          // ),
-          Padding(
-            padding: EdgeInsets.all(16),
-            child: ElevatedButton(
-              onPressed: () {
-                // Tạo danh sách để lưu tên các ghế đã chọn
-                List<String> selectedSeatNames = [];
-
-// Đếm và lưu tên ghế đơn đã chọn
-                for (int i = 0; i < seats.length; i++) {
-                  for (int j = 0; j < seats[i].length; j++) {
-                    if (seats[i][j]) {
-                      String seatLabel =
-                          '${String.fromCharCode(65 + (seatRows - 1 - i))}${j + 1}';
-                      selectedSeatNames.add(seatLabel);
-                    }
-                  }
-                }
-
-// Đếm và lưu tên ghế đôi đã chọn
-                for (int i = 0; i < doubleSeats.length; i++) {
-                  for (int j = 0; j < doubleSeats[i].length; j++) {
-                    if (doubleSeats[i][j]) {
-                      String seatLabel = 'G${j * 2 + 1}-${j * 2 + 2}';
-                      selectedSeatNames.add(seatLabel);
-                    }
-                  }
-                }
-
-// Hiển thị tên các ghế đã chọn
-                String selectedSeatsMessage = selectedSeatNames.isNotEmpty
-                    ? 'Bạn đã chọn các ghế: ${selectedSeatNames.join(", ")}.'
-                    : 'Bạn chưa chọn ghế nào.';
-
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: Text('Ghế đã chọn'),
-                      content: Text(selectedSeatsMessage),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text('OK'),
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SeatLayoutWidget(
+                    onSeatStateChanged: (rowI, colI, seatState) {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: seatState == SeatState.selected
+                              ? Text("Selected Seat[$rowI][$colI]")
+                              : Text("De-selected Seat[$rowI][$colI]"),
                         ),
-                      ],
-                    );
-                  },
-                );
-              },
-              child: Text('Tiếp tục'),
-            ),
+                      );
+                      if (seatState == SeatState.selected) {
+                        selectedSeats.add(SeatNumber(rowI: rowI, colI: colI));
+                      } else {
+                        selectedSeats
+                            .remove(SeatNumber(rowI: rowI, colI: colI));
+                      }
+                    },
+                    stateModel: SeatLayoutStateModel(
+                      pathDisabledSeat:
+                          'assets/seats/svg_disabled_bus_seat.svg',
+                      pathSelectedSeat:
+                          'assets/seats/svg_selected_bus_seats.svg',
+                      pathSoldSeat: 'assets/seats/svg_sold_bus_seat.svg',
+                      pathUnSelectedSeat:
+                          'assets/seats/svg_unselected_bus_seat.svg',
+                      rows: seatRows,
+                      cols: seatColumns + totalColumns,
+                      seatSvgSize: 20,
+                      currentSeatsState: currentSeatsState,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SeatLayoutWidget(
+                    onSeatStateChanged: (rowI, colI, seatState) {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: seatState == SeatState.selected
+                              ? Text("Selected Seat[$rowI][$colI]")
+                              : Text("De-selected Seat[$rowI][$colI]"),
+                        ),
+                      );
+                      if (seatState == SeatState.selected) {
+                        selectedSeats.add(SeatNumber(rowI: rowI, colI: colI));
+                      } else {
+                        selectedSeats
+                            .remove(SeatNumber(rowI: rowI, colI: colI));
+                      }
+                    },
+                    stateModel: SeatLayoutStateModel(
+                      pathDisabledSeat:
+                          'assets/seats/svg_couple_disabled_bus_seat.svg',
+                      pathSelectedSeat:
+                          'assets/seats/svg_couple_selected_bus_seats.svg',
+                      pathSoldSeat: 'assets/seats/svg_couple_sold_bus_seat.svg',
+                      pathUnSelectedSeat:
+                          'assets/seats/svg_couple_unselected_bus_seat.svg',
+                      rows: doubleSeatRows,
+                      cols: doubleSeatColumns,
+                      seatSvgSize: 20,
+                      currentSeatsState: currentDoubleSeatsState,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
+  }
+}
+
+class SeatNumber {
+  final int rowI;
+  final int colI;
+
+  const SeatNumber({required this.rowI, required this.colI});
+
+  @override
+  bool operator ==(Object other) {
+    return rowI == (other as SeatNumber).rowI &&
+        colI == (other as SeatNumber).colI;
+  }
+
+  @override
+  int get hashCode => rowI.hashCode;
+
+  @override
+  String toString() {
+    return '[$rowI][$colI]';
   }
 }

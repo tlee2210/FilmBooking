@@ -15,8 +15,8 @@ public class VoucherTasks {
     @Autowired
     private VoucherRepository voucherRepository;
 
-    //    @Scheduled(cron = "0 0 0 * * *")
-    @Scheduled(cron = "*/10 * * * * *")
+        @Scheduled(cron = "0 0 0 * * *")
+//    @Scheduled(cron = "*/10 * * * * *")
     public void checkVoucher() {
         List<Voucher> vouchers = voucherRepository.findAll();
         vouchers.forEach(voucher -> {

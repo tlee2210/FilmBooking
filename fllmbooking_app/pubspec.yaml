@@ -77,6 +77,7 @@ flutter:
   assets:
     - assets/image/
     - assets/image/TabBar/
+    - assets/seats/
     - assets/seats/svg_disabled_bus_seat.svg
     - assets/seats/svg_selected_bus_seats.svg
     - assets/seats/svg_sold_bus_seat.svg
