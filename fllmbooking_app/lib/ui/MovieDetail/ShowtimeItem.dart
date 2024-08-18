@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 
+import '../../main.dart';
+import '../booking/SeatSelection.dart';
+
 class ShowtimeItem extends StatelessWidget {
   final CinemaTimeMovie cinema;
   final bool isExpanded;
@@ -70,7 +73,27 @@ class ShowtimeItem extends StatelessWidget {
                       itemCount: timeString.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
-                          onTap: () => onHourSelected(key, index),
+                          onTap: () {
+                            onHourSelected(key, index);
+                            final idRoom = format.times?[index].idRoom;
+                            if (idRoom != null) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SeatSelectionScreen(
+                                    id: idRoom,
+                                  ),
+                                ),
+                              );
+                            }
+
+                            // print('======');
+                            // print('Time: ${timeString[index]}');
+                            // print(
+                            //     'Room ID: ${format.times?[index].idRoom.toString()}');
+                            // print('======');
+                          },
+                          // onTap: () => onHourSelected(key, index),
                           child: Container(
                             alignment: Alignment.center,
                             padding: const EdgeInsets.symmetric(horizontal: 16),

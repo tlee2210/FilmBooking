@@ -10,19 +10,27 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  final int selectedIndex;
+
+  const MyApp({super.key, this.selectedIndex = 0});
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.selectedIndex;
+  }
 
   final List<Widget> _tabs = [
     const HomeScreen(),
     // const CinemaTab(),
-    SeatSelectionScreen(),
+    SeatSelectionScreen(id: 118,),
     const Newslist(),
     // const FilmTab(),
     // const AccountTab(),

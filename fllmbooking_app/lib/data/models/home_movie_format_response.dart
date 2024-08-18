@@ -16,4 +16,16 @@ class HomeMovieFormatResponse {
           : null,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'times': times?.map((time) => time.toJson()).toList(),
+    };
+  }
+
+  @override
+  String toString() {
+    return 'HomeMovieFormatResponse{name: $name, times: $times}';
+  }
 }

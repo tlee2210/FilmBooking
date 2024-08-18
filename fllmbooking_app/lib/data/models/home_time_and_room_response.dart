@@ -17,4 +17,16 @@ class HomeTimeAndRoomResponse {
     final format = DateFormat.Hms();
     return format.parse(timeString);
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'idRoom': idRoom,
+      'time': time != null ? DateFormat.Hms().format(time!) : null,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'HomeTimeAndRoomResponse{idRoom: $idRoom, time: $time}';
+  }
 }
