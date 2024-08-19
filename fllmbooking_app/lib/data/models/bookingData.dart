@@ -10,7 +10,7 @@ class ShowTimeTableResponse {
   final String movieName;
   final String roomName;
   final String image;
-  final double price;
+  late final double price;
   final Room room;
   final String movieFormat;
   final List<HomeMovieFormatResponse> movieformats;

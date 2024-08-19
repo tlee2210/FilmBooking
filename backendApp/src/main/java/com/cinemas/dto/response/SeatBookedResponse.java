@@ -8,6 +8,5 @@ import java.util.List;
 @Data
 public class SeatBookedResponse {
     private String seatBooked;
-
     private List<WaterCorn> waterCorns;
 }
