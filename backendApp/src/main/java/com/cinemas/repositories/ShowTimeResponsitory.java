@@ -26,7 +26,7 @@ public interface ShowTimeResponsitory extends JpaRepository<Showtimes, Integer> 
     @Query("SELECT s.date FROM Showtimes s WHERE s.cinema.slug = :slugCinema AND (:slugMovie IS NULL OR s.movie.slug = :slugMovie) AND s.date >= CURDATE() GROUP BY s.date")
     List<LocalDate> findDates(String slugCinema, String slugMovie);
 
-    @Query("SELECT DISTINCT new com.cinemas.dto.response.HomeShowtimeResponse(s.date) FROM Showtimes s " + "WHERE s.cinema.slug = :slug " + "AND (s.date <> CURRENT_DATE OR s.time >= :timeNow) ORDER BY s.date ASC LIMIT 7")
+    @Query("SELECT DISTINCT new com.cinemas.dto.response.HomeShowtimeResponse(s.date) FROM Showtimes s " + "WHERE s.cinema.slug = :slug " + "AND s.date >= CURRENT_DATE AND (s.date <> CURRENT_DATE OR s.time >= :timeNow) ORDER BY s.date ASC LIMIT 7")
     List<HomeShowtimeResponse> getDates(String slug, LocalTime timeNow);
 
     @Query("SELECT DISTINCT NEW com.cinemas.dto.response.bookingShowTimeResponse(s.date) FROM Showtimes s WHERE " + "(:cinema_Slug IS NULL OR s.cinema.slug = :cinema_Slug)" + " AND (:city IS NULL OR s.cinema.city = :city)" + "AND s.movie.slug = :slug_movie " + "AND s.date >= CURRENT_DATE " + "ORDER BY s.date ASC LIMIT 7")
@@ -61,7 +61,7 @@ public interface ShowTimeResponsitory extends JpaRepository<Showtimes, Integer> 
     @Query("SELECT DISTINCT s.movieFormat FROM Showtimes s " + "WHERE s.movie.slug = :slugMovie " + "AND s.cinema.slug = :slugCinema " + "AND s.date = :date AND " + "(s.date <> CURRENT_DATE OR s.time >= :time)")
     List<MovieFormat> getMovieFormatName(String slugMovie, String slugCinema, LocalDate date, LocalTime time);
 
-    @Query("SELECT DISTINCT new com.cinemas.dto.response.MovieAndShowtimeResponse(s.movie.name, s.movie.imagePortrait) FROM Showtimes s " + "WHERE s.cinema.slug = :slug " + "AND s.date = :date AND (s.date <> CURRENT_DATE OR s.time >= :timeNow)")
+    @Query("SELECT DISTINCT new com.cinemas.dto.response.MovieAndShowtimeResponse(s.movie.name, s.movie.imagePortrait, s.movie.rules, s.movie.duration_movie, s.movie.releaseDate) FROM Showtimes s " + "WHERE s.cinema.slug = :slug " + "AND s.date = :date AND (s.date <> CURRENT_DATE OR s.time >= :timeNow)")
     List<MovieAndShowtimeResponse> findMovieOfDay(String slug, LocalTime timeNow, LocalDate date);
 
     @Query("SELECT new com.cinemas.dto.response.HomeTimeAndRoomResponse(s.id,s.time ) FROM Showtimes s WHERE s.movie.name = :name AND s.cinema.slug = :slug AND s.date = :date AND s.movieFormat = :movieFormat AND (s.date <> CURRENT_DATE OR s.time >= :timeNow)")

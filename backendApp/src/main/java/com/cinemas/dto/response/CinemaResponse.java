@@ -20,4 +20,10 @@ public class CinemaResponse {
     private String address;
 
     private CinemaImages images;
+
+    private String lat;
+
+    private String lng;
+
+    private String phone;
 }
