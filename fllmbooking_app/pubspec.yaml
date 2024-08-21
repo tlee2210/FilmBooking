@@ -51,6 +51,10 @@ dependencies:
   location: ^6.0.2
   app_settings: ^5.1.1
   url_launcher: ^6.3.0
+  webview_flutter: ^4.8.0
+  webview_flutter_wkwebview: ^3.14.0
+  flutter_spinkit: ^5.2.1
+  http_auth: ^1.0.4
 
 dev_dependencies:
   flutter_test:

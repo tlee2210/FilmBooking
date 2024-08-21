@@ -5,13 +5,18 @@ import 'package:flutter_html/flutter_html.dart';
 import '../../data/models/BookingWaterRequest.dart';
 import '../../data/models/PaymentRequest.dart';
 import '../../data/models/WaterCorn.dart';
+import '../../data/models/bookingData.dart';
+import 'Transaction.dart';
 
 class ComboSelectionScreen extends StatefulWidget {
   final List<WaterCorn> waterCorndata;
   final PaymentRequest paymentRequest;
+  final ShowTimeTableResponse showTime;
 
   ComboSelectionScreen(
-      {required this.waterCorndata, required this.paymentRequest});
+      {required this.waterCorndata,
+      required this.paymentRequest,
+      required this.showTime});
 
   @override
   _ComboSelectionScreenState createState() => _ComboSelectionScreenState();
@@ -154,6 +159,18 @@ class _ComboSelectionScreenState extends State<ComboSelectionScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
+
+                    // selectedCombos
+                    paymentRequestData.quantityWater = selectedCombos;
+                    // Transaction
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Transaction(
+                        waterCorndata: widget.waterCorndata,
+                        showTime: widget.showTime,
+                        paymentRequest: paymentRequestData,
+                      )),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange,

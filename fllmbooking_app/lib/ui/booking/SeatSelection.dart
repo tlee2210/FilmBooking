@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:book_my_seat/book_my_seat.dart';
-
-// import 'package:flutter_svg/flutter_svg.dart' show SvgPicture;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
@@ -29,7 +27,7 @@ class SeatSelectionScreen extends StatefulWidget {
 class _SeatSelectionScreen extends State<SeatSelectionScreen> {
   late BookingViewModel _bookingViewModel;
 
-  String _selectedTime = "10:30";
+  late String _selectedTime;
   String soldSeats = 'A1, A2, A3, H1-H2, H3-H4';
   late Set<String> soldSeatsSet;
   Set<String> quantitySeat = Set();
@@ -54,7 +52,7 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
     _checkToken(widget.id);
   }
 
-  Future<void> _checkToken(id) async {
+  Future<void> _checkToken(int id) async {
     tokenRepository = TokenRepositories();
     try {
       token = await tokenRepository.getToken();
@@ -66,6 +64,7 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
             .listen((ShowTimeTableResponse BookingViewModel) {
           setState(() {
             _showTimeTableResponse = BookingViewModel;
+            _selectedTime = BookingViewModel.time;
           });
           _bookingViewModel.getSeatBooked(id);
           _bookingViewModel.waterCornStream.listen((waterCorns) {
@@ -101,7 +100,7 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
       return;
     } else {
       int splitInterval = (_showTimeTableResponse!.room.seatColumns /
-              (_showTimeTableResponse!.room.totalColumn))
+          (_showTimeTableResponse!.room.totalColumn))
           .floor();
       int remainingSeats = _showTimeTableResponse!.room.seatColumns %
           (_showTimeTableResponse!.room.totalColumn);
@@ -113,17 +112,17 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
         splitIndices.add(currentPosition + i);
         currentPosition += splitInterval + (remainingSeats > 0 ? 1 : 0);
         remainingSeats =
-            remainingSeats > 0 ? remainingSeats - 1 : remainingSeats;
+        remainingSeats > 0 ? remainingSeats - 1 : remainingSeats;
       }
 
       soldSeatsSet = soldSeats.split(', ').toSet();
 
       currentSeatsState = List.generate(
         _showTimeTableResponse!.room.seatRows,
-        (row) => List.generate(
+            (row) => List.generate(
           _showTimeTableResponse!.room.seatColumns +
               _showTimeTableResponse!.room.totalColumn,
-          (col) {
+              (col) {
             String seatLabel =
                 '${String.fromCharCode(65 + row)}${col + 1}'; // Tạo ghế như A1, B2,...
             if (splitIndices.contains(col)) {
@@ -139,9 +138,9 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
 
       currentDoubleSeatsState = List.generate(
         _showTimeTableResponse!.room.doubleSeatColumns,
-        (row) => List.generate(
+            (row) => List.generate(
           _showTimeTableResponse!.room.doubleSeatRows,
-          (col) {
+              (col) {
             int baseCol = col * 2 + 1;
             String seatLabel =
                 '${String.fromCharCode(65 + row + _showTimeTableResponse!.room.seatRows)}$baseCol-${String.fromCharCode(65 + row + _showTimeTableResponse!.room.seatRows)}${baseCol + 1}';
@@ -173,27 +172,24 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                   style: const TextStyle(color: Colors.white),
                 ),
                 children: format.times
-                        ?.map<Widget>((HomeTimeAndRoomResponse timeAndRoom) {
-                      return ListTile(
-                        title: Text(
-                          DateFormat.Hm().format(timeAndRoom.time!),
-                          style: const TextStyle(color: Colors.white),
+                    ?.map<Widget>((HomeTimeAndRoomResponse timeAndRoom) {
+                  return ListTile(
+                    title: Text(
+                      DateFormat.Hm().format(timeAndRoom.time!),
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SeatSelectionScreen(
+                            id: timeAndRoom.idRoom!,
+                          ),
                         ),
-                        onTap: () {
-                          setState(() {
-                            isLoading = true;
-                            // quantitySeat.clear();
-                            // quantityDoubleSeat.clear();
-                            // _showTimeTableResponse?.price = 0;
-                            _selectedTime =
-                                DateFormat.Hm().format(timeAndRoom.time!);
-                          });
-
-                          _checkToken(timeAndRoom.idRoom);
-                          Navigator.pop(context);
-                        },
                       );
-                    }).toList() ??
+                    },
+                  );
+                }).toList() ??
                     [],
               );
             },
@@ -309,7 +305,7 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                   ),
                   Padding(
                     padding:
-                        EdgeInsets.symmetric(horizontal: 8.0, vertical: 40),
+                    EdgeInsets.symmetric(horizontal: 8.0, vertical: 40),
                     child: Text(
                       'Screen',
                       style: TextStyle(
@@ -340,11 +336,11 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                             onSeatStateChanged: (rowI, colI, seatState) {
                               if (seatState == SeatState.selected &&
                                   quantitySeat.length +
-                                          quantityDoubleSeat.length >=
+                                      quantityDoubleSeat.length >=
                                       8) {
                                 Fluttertoast.showToast(
                                   msg:
-                                      'You can only select a maximum of 8 seats!',
+                                  'You can only select a maximum of 8 seats!',
                                   toastLength: Toast.LENGTH_LONG,
                                   gravity: ToastGravity.TOP,
                                   backgroundColor: Colors.red,
@@ -360,7 +356,7 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                                 setState(() {
                                   if (seatState == SeatState.selected &&
                                       quantitySeat.length +
-                                              quantityDoubleSeat.length <
+                                          quantityDoubleSeat.length <
                                           8) {
                                     paymentRequest.totalPrice =
                                         (paymentRequest.totalPrice ?? 0) +
@@ -382,13 +378,13 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                             },
                             stateModel: SeatLayoutStateModel(
                               pathDisabledSeat:
-                                  'assets/seats/svg_disabled_bus_seat.svg',
+                              'assets/seats/svg_disabled_bus_seat.svg',
                               pathSelectedSeat:
-                                  'assets/seats/svg_selected_bus_seats.svg',
+                              'assets/seats/svg_selected_bus_seats.svg',
                               pathSoldSeat:
-                                  'assets/seats/svg_sold_bus_seat.svg',
+                              'assets/seats/svg_sold_bus_seat.svg',
                               pathUnSelectedSeat:
-                                  'assets/seats/svg_unselected_bus_seat.svg',
+                              'assets/seats/svg_unselected_bus_seat.svg',
                               rows: _showTimeTableResponse!.room.seatRows,
                               cols: _showTimeTableResponse!.room.seatColumns +
                                   _showTimeTableResponse!.room.totalColumn,
@@ -409,11 +405,11 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                             onSeatStateChanged: (rowI, colI, seatState) {
                               if (seatState == SeatState.selected &&
                                   quantitySeat.length +
-                                          quantityDoubleSeat.length >=
+                                      quantityDoubleSeat.length >=
                                       8) {
                                 Fluttertoast.showToast(
                                   msg:
-                                      'You can only select a maximum of 8 seats!',
+                                  'You can only select a maximum of 8 seats!',
                                   toastLength: Toast.LENGTH_LONG,
                                   gravity: ToastGravity.TOP,
                                   backgroundColor: Colors.red,
@@ -434,7 +430,7 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                                       _showTimeTableResponse!.room.seatRows;
                                   if (seatState == SeatState.selected &&
                                       quantitySeat.length +
-                                              quantityDoubleSeat.length <
+                                          quantityDoubleSeat.length <
                                           8) {
                                     quantityDoubleSeat.add(seatLabel);
                                     paymentRequest.totalPrice =
@@ -456,13 +452,13 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                             },
                             stateModel: SeatLayoutStateModel(
                               pathDisabledSeat:
-                                  'assets/seats/svg_couple_disabled_bus_seat.svg',
+                              'assets/seats/svg_couple_disabled_bus_seat.svg',
                               pathSelectedSeat:
-                                  'assets/seats/svg_couple_selected_bus_seats.svg',
+                              'assets/seats/svg_couple_selected_bus_seats.svg',
                               pathSoldSeat:
-                                  'assets/seats/svg_couple_sold_bus_seat.svg',
+                              'assets/seats/svg_couple_sold_bus_seat.svg',
                               pathUnSelectedSeat:
-                                  'assets/seats/svg_couple_unselected_bus_seat.svg',
+                              'assets/seats/svg_couple_unselected_bus_seat.svg',
                               rows: _showTimeTableResponse!
                                   .room.doubleSeatColumns,
                               cols: _showTimeTableResponse!.room.doubleSeatRows,
@@ -524,17 +520,29 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      paymentRequest.quantityDoubleSeat =
-                          quantityDoubleSeat.toList();
-                      paymentRequest.quantitySeat = quantitySeat.toList();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ComboSelectionScreen(
-                                  waterCorndata: waterCorndata,
-                                  paymentRequest: paymentRequest,
-                                )),
-                      );
+                      if (quantitySeat.length + quantityDoubleSeat.length > 0) {
+                        paymentRequest.quantityDoubleSeat =
+                            quantityDoubleSeat.toList();
+                        paymentRequest.quantitySeat = quantitySeat.toList();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ComboSelectionScreen(
+                                waterCorndata: waterCorndata,
+                                paymentRequest: paymentRequest,
+                                showTime: _showTimeTableResponse!,
+                              )),
+                        );
+                      } else {
+                        Fluttertoast.showToast(
+                          msg: 'Please select at least one seat!',
+                          toastLength: Toast.LENGTH_LONG,
+                          gravity: ToastGravity.TOP,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0,
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.orange,
