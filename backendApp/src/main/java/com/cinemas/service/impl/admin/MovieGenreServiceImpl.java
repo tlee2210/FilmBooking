@@ -67,7 +67,7 @@ public class MovieGenreServiceImpl implements MovieGenreService {
         MovieGenre addMovieGenre = new MovieGenre();
 
         ObjectUtils.copyFields(movieGenre, addMovieGenre);
-        addMovieGenre.setSlug(movieGenre.getName().toLowerCase().replaceAll("\\s+", "-"));
+        addMovieGenre.setSlug(movieGenre.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
         movieGenreRepository.save(addMovieGenre);
 
         return true;
@@ -84,7 +84,7 @@ public class MovieGenreServiceImpl implements MovieGenreService {
         }
 
         ObjectUtils.copyFields(movieGenre, movie);
-        String slug = movieGenre.getName().toLowerCase().replaceAll("\\s+", "-");
+        String slug = movieGenre.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-");
         movie.setSlug(slug);
 
         movieGenreRepository.save(movie);

@@ -119,7 +119,7 @@ public class CinemaServiceImpl implements CinemaService {
         }
 
         ObjectUtils.copyFields(cinemaRequest, cinema);
-        cinema.setSlug(cinemaRequest.getName().toLowerCase().replaceAll("\\s+", "-"));
+        cinema.setSlug(cinemaRequest.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
 
         List<CinemaImages> cinemaImages = cinemaImageRespository.findCinemaImagesByCinema_Id(cinema.getId());
 
@@ -187,7 +187,7 @@ public class CinemaServiceImpl implements CinemaService {
 
         Cinema cinema = new Cinema();
         ObjectUtils.copyFields(cinemaRequest, cinema);
-        cinema.setSlug(cinemaRequest.getName().toLowerCase().replaceAll("\\s+", "-"));
+        cinema.setSlug(cinemaRequest.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
         cinema.setStatus(StatusCinema.ACTIVE);
 
         cinemaRespository.save(cinema);
