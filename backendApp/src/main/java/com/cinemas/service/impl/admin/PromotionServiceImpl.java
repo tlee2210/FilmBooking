@@ -72,7 +72,7 @@ public class PromotionServiceImpl implements PromotionService {
 
         ObjectUtils.copyFields(promotionRequest, promotion);
 
-        promotion.setSlug(promotionRequest.getName().toLowerCase().replaceAll("\\s+", "-"));
+        promotion.setSlug(promotionRequest.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
 
         List<imageDescription> imageDescriptionList = new ArrayList<>();
 

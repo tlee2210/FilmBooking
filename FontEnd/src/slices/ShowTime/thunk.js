@@ -4,6 +4,7 @@ import {
   setRoomItem,
   fetchSuccess,
   setShowTime,
+  clearMovieItem,
 } from "./reducer";
 import { Success, Error } from "../message/reducer";
 
@@ -71,6 +72,7 @@ export const createShowTime = (formData, history) => async (dispatch) => {
     .post(`http://localhost:8081/api/admin/show-time/v1/create`, formData)
     .then((response) => {
       // console.log(response);
+      dispatch(clearMovieItem());
       dispatch(Success(response?.data?.message));
       history("/dashboard/show-time");
     })
@@ -116,7 +118,7 @@ export const updateShowTimeEdit = (formData, history) => async (dispatch) => {
   await axios
     .put(`http://localhost:8081/api/admin/show-time/v1/update`, formData, {
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "multipart/form-data",
       },
     })
     .then((response) => {

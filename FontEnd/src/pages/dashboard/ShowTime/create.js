@@ -20,7 +20,7 @@ import { createSelector } from "reselect";
 import filmImageDefaut from "../../../assets/images/film.jpg";
 import { message } from "antd";
 import { clearNotification } from "../../../slices/message/reducer";
-
+import { clearMovieItem } from "../../../slices/ShowTime/reducer";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 
@@ -37,6 +37,7 @@ const ShowTimeCreate = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(clearMovieItem());
     dispatch(getMovieAndCinema());
   }, [dispatch]);
   // ShowTime

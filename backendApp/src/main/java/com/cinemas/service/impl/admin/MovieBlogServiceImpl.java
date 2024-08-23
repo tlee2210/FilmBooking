@@ -71,7 +71,7 @@ public class MovieBlogServiceImpl implements MovieBlogService {
         blog.setThumbnail(fileStorageServiceImpl.uploadFile(movieBlogRequest.getFile(), "blogThumbnail"));
         ObjectUtils.copyFields(movieBlogRequest, blog);
 
-        blog.setSlug(movieBlogRequest.getName().toLowerCase().replaceAll("\\s+", "-"));
+        blog.setSlug(movieBlogRequest.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
 
         List<imageDescription> imageDescriptionList = new ArrayList<>();
 

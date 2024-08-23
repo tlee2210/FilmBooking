@@ -128,11 +128,17 @@ const BlogEdit = (props) => {
       formData.append("id", item.id)
       formData.append("name", values.name)
       formData.append("movieId", values.movie)
-      formData.append("type", values.type)
+      // formData.append("type", values.type)
       formData.append("description", values.description)
 
       if (values.file[0].originFileObj) {
         formData.append("file", values.file[0].originFileObj)
+      }
+
+      if(values.type === 'Preview'){
+      formData.append("type", 'preview')
+      } else{
+      formData.append("type", 'review')
       }
 
       imageSrcs.forEach((image, index) => {

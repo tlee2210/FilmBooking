@@ -117,7 +117,6 @@ const BlogCreate = (props) => {
         .min(1, "Please upload at least one Image"),
     }),
     onSubmit: (values) => {
-      // console.log(values);
       const formData = new FormData()
       formData.append("name", values.name)
       formData.append("type", values.type)
