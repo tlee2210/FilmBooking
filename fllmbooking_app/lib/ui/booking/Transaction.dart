@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../data/models/PaymentRequest.dart';
 import '../../data/models/WaterCorn.dart';
@@ -292,46 +293,45 @@ class _TransactionState extends State<Transaction> {
                   TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
             ),
             RadioListTile(
-              title: const Text(
-                "HSBC/Payoo - ATM/VISA/MASTER/JCB/QR CODE",
-                style: TextStyle(color: Colors.white),
+              title: Row(
+                children: [
+                  Image.asset(
+                    'assets/image/Icon-VNPAY-QR.jpg',
+                    width: 30,
+                    height: 30,
+                  ),
+                  const SizedBox(width: 10),
+                  // Khoảng cách giữa hình ảnh và văn bản
+                  const Text(
+                    "VNPAY",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
               ),
-              value: "HSBC",
-              groupValue: _selectedPaymentMethod,
-              onChanged: (value) {
-                setState(() {
-                  _selectedPaymentMethod = value as String?;
-                });
-              },
-            ),
-            RadioListTile(
-              title: const Text(
-                "Ví ShopeePay - Nhập mã: SPPCINE08 Giảm 10K cho đơn từ 100K",
-                style: TextStyle(color: Colors.white),),
-              value: "ShopeePay",
-              groupValue: _selectedPaymentMethod,
-              onChanged: (value) {
-                setState(() {
-                  _selectedPaymentMethod = value as String?;
-                });
-              },
-            ),
-            RadioListTile(
-              title: const Text(
-                "Zalopay - Bạn mới Zalopay nhập mã GLX50 - Giảm 50k cho đơn từ 200k",
-                style: TextStyle(color: Colors.white),),
-              value: "Zalopay",
-              groupValue: _selectedPaymentMethod,
-              onChanged: (value) {
-                setState(() {
-                  _selectedPaymentMethod = value as String?;
-                });
-              },
-            ),
-            RadioListTile(
-              title: Text("VNPAY",
-                style: TextStyle(color: Colors.white),),
               value: "VNPAY",
+              groupValue: _selectedPaymentMethod,
+              onChanged: (value) {
+                setState(() {
+                  _selectedPaymentMethod = value as String?;
+                });
+              },
+            ),
+            RadioListTile(
+              title: Row(
+                children: [
+                  Image.asset(
+                    'assets/image/Icon-Paypal.jpg',
+                    width: 30,
+                    height: 30,
+                  ),
+                  const SizedBox(width: 10),
+                  const Text(
+                    "PayPal",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+              value: "PayPal",
               groupValue: _selectedPaymentMethod,
               onChanged: (value) {
                 setState(() {
@@ -341,8 +341,30 @@ class _TransactionState extends State<Transaction> {
             ),
             Spacer(),
             ElevatedButton(
-              onPressed: () {},
-              child: Text("Thanh toán"),
+              onPressed: () {
+                // print('===========');
+                // print('_selectedPaymentMethod: ' +
+                //     _selectedPaymentMethod.toString());
+                // print('===========');
+                if(_selectedPaymentMethod != null && _selectedPaymentMethod!.isNotEmpty){
+                  if (_selectedPaymentMethod!.contains('PayPal')) {
+                    print("Người dùng đã chọn PayPal");
+                  }
+                  if (_selectedPaymentMethod!.contains('VNPAY')) {
+                    print("Người dùng đã chọn VNPAY");
+                  }
+                } else {
+                  Fluttertoast.showToast(
+                    msg: 'Please select payment method!',
+                    toastLength: Toast.LENGTH_LONG,
+                    gravity: ToastGravity.TOP,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0,
+                  );
+                }
+              },
+              child: Text("Pay"),
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 50),
               ),

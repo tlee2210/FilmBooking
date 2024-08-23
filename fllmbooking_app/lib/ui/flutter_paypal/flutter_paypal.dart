@@ -5,8 +5,10 @@ import 'package:fllmbooking_app/ui/flutter_paypal/src/screens/complete_payment.d
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
 // Import for Android features.
 import 'package:webview_flutter_android/webview_flutter_android.dart';
+
 // Import for iOS features.
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
@@ -18,6 +20,7 @@ class UsePaypal extends StatefulWidget {
   final String returnURL, cancelURL, note, clientId, secretKey;
   final List transactions;
   final bool sandboxMode;
+
   const UsePaypal({
     Key? key,
     required this.onSuccess,
@@ -84,7 +87,7 @@ class UsePaypalState extends State<UsePaypal> {
             pageLoading = false;
             loadingError = false;
           });
-        _controller.loadRequest(Uri.parse(checkoutUrl));
+          _controller.loadRequest(Uri.parse(checkoutUrl));
         } else {
           widget.onError(res);
           setState(() {
@@ -179,6 +182,15 @@ class UsePaypalState extends State<UsePaypal> {
               return NavigationDecision.prevent;
             }
             if (request.url.contains(widget.returnURL)) {
+              print('========================');
+              print('========================');
+              print('========================');
+              print('request.url: ' + request.url);
+              print('========================');
+              print('========================');
+              print('========================');
+              print('========================');
+
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -198,7 +210,9 @@ class UsePaypalState extends State<UsePaypal> {
               // ignore: use_build_context_synchronously
               Navigator.of(context).pop();
             }
+
             debugPrint('allowing navigation to ${request.url}');
+
             return NavigationDecision.navigate;
           },
           onUrlChange: (UrlChange change) {
