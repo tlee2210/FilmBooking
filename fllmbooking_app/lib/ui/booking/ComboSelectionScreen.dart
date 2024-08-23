@@ -26,6 +26,7 @@ class _ComboSelectionScreenState extends State<ComboSelectionScreen> {
   List<BookingWaterRequest> selectedCombos = [];
   late List<WaterCorn> waterCorndata;
   late PaymentRequest paymentRequestData;
+  double price = 0;
 
   @override
   void initState() {
@@ -93,9 +94,7 @@ class _ComboSelectionScreenState extends State<ComboSelectionScreen> {
                           icon: const Icon(Icons.close, color: Colors.red),
                           onPressed: () {
                             setState(() {
-                              paymentRequestData.totalPrice =
-                                  (paymentRequestData.totalPrice ?? 0) -
-                                      waterCorn.price * combo.quantity!;
+                              price = price - waterCorn.price * combo.quantity!;
                               selectedCombos.remove(combo);
                             });
                           },
@@ -147,7 +146,7 @@ class _ComboSelectionScreenState extends State<ComboSelectionScreen> {
                           ),
                         ),
                       Text(
-                        'Total: ${paymentRequestData.totalPrice?.toStringAsFixed(2) ?? '0.00'} VND',
+                        'Total: ${(paymentRequestData.totalPrice! + price).toStringAsFixed(2)} VND',
                         style: const TextStyle(
                           fontSize: 16,
                           color: Colors.orange,
@@ -159,17 +158,19 @@ class _ComboSelectionScreenState extends State<ComboSelectionScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-
                     // selectedCombos
                     paymentRequestData.quantityWater = selectedCombos;
+                    paymentRequestData.totalPrice =
+                        paymentRequestData.totalPrice! + price;
                     // Transaction
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Transaction(
-                        waterCorndata: widget.waterCorndata,
-                        showTime: widget.showTime,
-                        paymentRequest: paymentRequestData,
-                      )),
+                      MaterialPageRoute(
+                          builder: (context) => Transaction(
+                                waterCorndata: widget.waterCorndata,
+                                showTime: widget.showTime,
+                                paymentRequest: paymentRequestData,
+                              )),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -254,9 +255,7 @@ class _ComboSelectionScreenState extends State<ComboSelectionScreen> {
                           setState(() {
                             selectedCombo.quantity =
                                 selectedCombo.quantity! - 1;
-                            paymentRequestData.totalPrice =
-                                (paymentRequestData.totalPrice ?? 0) -
-                                    waterCorn.price;
+                            price = price - waterCorn.price;
                             if (selectedCombo.quantity == 0) {
                               selectedCombos.remove(selectedCombo);
                             }
@@ -277,9 +276,7 @@ class _ComboSelectionScreenState extends State<ComboSelectionScreen> {
                             selectedCombos.add(selectedCombo);
                           }
                           // paymentRequestData.totalPrice += waterCorn.price;
-                          paymentRequestData.totalPrice =
-                              (paymentRequestData.totalPrice ?? 0) +
-                                  waterCorn.price;
+                          price = price + waterCorn.price;
                         });
                       },
                     ),

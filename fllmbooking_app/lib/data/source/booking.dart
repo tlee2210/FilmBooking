@@ -102,6 +102,9 @@ class BookingData implements BookingDataSource {
     } else {
       final errorBody = utf8.decode(response.bodyBytes);
       final errorData = jsonDecode(errorBody) as Map<String, dynamic>;
+      // print('===============');
+      // print(errorData['message']);
+      // print('===============');
       throw Exception(errorData['message']);
     }
   }

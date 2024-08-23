@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../data/models/PaymentRequest.dart';
 import '../../data/models/WaterCorn.dart';
 import '../../data/models/bookingData.dart';
+import 'bookingViewModel.dart';
 
 class Transaction extends StatefulWidget {
   final ShowTimeTableResponse showTime;
@@ -23,19 +24,23 @@ class Transaction extends StatefulWidget {
 }
 
 class _TransactionState extends State<Transaction> {
+  late BookingViewModel _bookingViewModel;
+
   late ShowTimeTableResponse _showTimeTableResponse;
   late PaymentRequest paymentRequestData;
   late List<WaterCorn> waterCorndata;
-
+  double calculateDiscount = 0;
   final TextEditingController promotionController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   String? _selectedPaymentMethod;
   String? _errorMessage;
-  Future<VoucherResponse?>? voucherAdd;
+  late VoucherResponse voucherAdd = VoucherResponse(); // Hoặc một giá trị mặc định khác
+
 
   @override
   void initState() {
+    _bookingViewModel = BookingViewModel();
     _showTimeTableResponse = widget.showTime;
     paymentRequestData = widget.paymentRequest;
     waterCorndata = widget.waterCorndata;
@@ -43,11 +48,46 @@ class _TransactionState extends State<Transaction> {
   }
 
   Future<void> handleVoucher(VoucherRequest code) async {
-    try{
-      Future<VoucherResponse?> result = BookingResponsitoties().applyVoucher(code);
-      voucherAdd = result;
-    }
-    catch(e){
+    try {
+      VoucherResponse? result = await _bookingViewModel.applyVoucher(code);
+      // VoucherResponse? result = await _bookingViewModel.applyVoucher(code);
+      if (result != null) {
+        if (result.discountType == "PERCENTAGE" &&
+            result.discountValue != null) {
+          var discount =
+              (paymentRequestData.totalPrice! * result.discountValue!) / 100;
+          if (discount > result.maxDiscount!) {
+            discount = result.maxDiscount!;
+          }
+          setState(() {
+            // paymentRequestData.totalPrice =
+            //     paymentRequestData.totalPrice! + calculateDiscount - discount;
+            calculateDiscount = discount;
+            voucherAdd = result;
+          });
+        } else if (result.discountType == "FIXED") {
+          var discount = result.discountValue!;
+          setState(() {
+            // paymentRequestData.totalPrice =
+            //     paymentRequestData.totalPrice! + calculateDiscount - discount;
+            calculateDiscount = discount;
+
+            voucherAdd = result;
+          });
+        }
+
+        Navigator.of(context).pop();
+      } else {
+        Fluttertoast.showToast(
+          msg: 'Voucher application failed!',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.TOP,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      }
+    } catch (e) {
       _errorMessage = e.toString().replaceFirst('Exception: ', '');
 
       Fluttertoast.showToast(
@@ -59,6 +99,9 @@ class _TransactionState extends State<Transaction> {
         fontSize: 18.0,
       );
     }
+    // finally {
+    //   Navigator.of(context).pop();
+    // }
   }
 
   void _showInputPromotion() {
@@ -68,70 +111,81 @@ class _TransactionState extends State<Transaction> {
           return Scaffold(
             backgroundColor: const Color(0xff1f1d2b),
             appBar: AppBar(
-              title: const Text("Promotion", style: TextStyle(color: Colors.white),),
-              backgroundColor:  const Color(0xff1f1d2b),
+              title: const Text(
+                "Apply Voucher",
+                style: TextStyle(color: Colors.white),
+              ),
+              backgroundColor: const Color(0xff1f1d2b),
               iconTheme: const IconThemeData(color: Colors.white),
               centerTitle: true,
             ),
-            body: Form(
-              key: formKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: promotionController,
-                    decoration: const InputDecoration(
-                      labelText: 'Code input',
-                      labelStyle: TextStyle(color: Colors.white, fontSize: 18),
-                      hintStyle: TextStyle(color: Colors.grey),
-                      filled: true,
-                      fillColor: Color(0xff1f1d2b),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                        borderSide: BorderSide(
-                          color: Color(0xFF00D0F1),
-                          width: 1.0,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                        borderSide: BorderSide(
-                          color: Color(0xFF00D0F1),
-                          width: 2.0,
-                        ),
-                      ),
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 10,
                     ),
-                    style: const TextStyle(color: Colors.white),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter code';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  TextButton(
-                    onPressed: () => handleVoucher(VoucherRequest(code: promotionController.text)),
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 50.0, vertical: 20.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                        BorderRadius.circular(10.0), // Rounded corners
+                    TextFormField(
+                      controller: promotionController,
+                      decoration: const InputDecoration(
+                        labelText: 'Code input',
+                        labelStyle:
+                            TextStyle(color: Colors.white, fontSize: 18),
+                        hintStyle: TextStyle(color: Colors.grey),
+                        filled: true,
+                        fillColor: Color(0xff1f1d2b),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                          borderSide: BorderSide(
+                            color: Color(0xFF00D0F1),
+                            width: 1.0,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                          borderSide: BorderSide(
+                            color: Color(0xFF00D0F1),
+                            width: 2.0,
+                          ),
+                        ),
                       ),
+                      style: const TextStyle(color: Colors.white),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter code';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    TextButton(
+                      onPressed: () => handleVoucher(
+                          VoucherRequest(code: promotionController.text)),
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 50.0, vertical: 20.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(10.0), // Rounded corners
+                        ),
 
-                      backgroundColor:
-                      Colors.transparent, // Transparent background
-                    ),
-                    child: const Text(
-                      'Apply',
-                      style: TextStyle(
-                        color: Colors.orange, // Text color
-                        fontSize: 18.0, // Text size
-                        fontWeight: FontWeight.bold, // Font weight
+                        backgroundColor:
+                            Colors.transparent, // Transparent background
+                      ),
+                      child: const Text(
+                        'Apply',
+                        style: TextStyle(
+                          color: Colors.orange, // Text color
+                          fontSize: 18.0, // Text size
+                          fontWeight: FontWeight.bold, // Font weight
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );
@@ -178,25 +232,21 @@ class _TransactionState extends State<Transaction> {
                       const SizedBox(height: 5),
                       Text(
                         _showTimeTableResponse.movieFormat,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                         ),
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        _showTimeTableResponse.cinemaName +
-                            ' - ' +
-                            _showTimeTableResponse.roomName,
-                        style: TextStyle(
+                        '${_showTimeTableResponse.cinemaName} - ${_showTimeTableResponse.roomName}',
+                        style: const TextStyle(
                           color: Colors.white,
                         ),
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        _showTimeTableResponse.time +
-                            ' - ' +
-                            _showTimeTableResponse.date,
-                        style: TextStyle(
+                        '${_showTimeTableResponse.time} - ${_showTimeTableResponse.date}',
+                        style: const TextStyle(
                           color: Colors.white,
                         ),
                       ),
@@ -351,11 +401,64 @@ class _TransactionState extends State<Transaction> {
                 ),
               ),
             ],
+            //here
+            if (voucherAdd != null &&
+                voucherAdd.discountType != null &&
+                voucherAdd.discountValue != null) ...[
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Voucher Discount:',
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        if (voucherAdd.discountType == 'PERCENTAGE')
+                          Text(
+                            '(${voucherAdd.discountValue} %) ${calculateDiscount} VND',
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.orange),
+                          ),
+                        if (voucherAdd.discountType == 'FIXED')
+                          Text(
+                            '${calculateDiscount} VND',
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.orange),
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(
+                color: Colors.grey,
+                thickness: 1,
+                indent: 8,
+                endIndent: 8,
+              ),
+            ],
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton.icon(
                   onPressed: () {
+                    setState(() {
+                      promotionController.text = "";
+                    });
                     _showInputPromotion();
                   },
                   icon: Icon(Icons.local_offer, color: Colors.orange),
@@ -377,7 +480,7 @@ class _TransactionState extends State<Transaction> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.white)),
                     Text(
-                      '${paymentRequestData.totalPrice} VND',
+                      '${paymentRequestData.totalPrice! - calculateDiscount} VND',
                       style: const TextStyle(
                           fontSize: 16,
                           color: Colors.orange,
@@ -448,7 +551,8 @@ class _TransactionState extends State<Transaction> {
                 // print('_selectedPaymentMethod: ' +
                 //     _selectedPaymentMethod.toString());
                 // print('===========');
-                if(_selectedPaymentMethod != null && _selectedPaymentMethod!.isNotEmpty){
+                if (_selectedPaymentMethod != null &&
+                    _selectedPaymentMethod!.isNotEmpty) {
                   if (_selectedPaymentMethod!.contains('PayPal')) {
                     print("Người dùng đã chọn PayPal");
                   }

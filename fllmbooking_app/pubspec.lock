@@ -89,14 +89,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.18.0"
-  convert:
-    dependency: transitive
-    description:
-      name: convert
-      sha256: "0f08b14755d163f6e2134cb58222dd25ea2a2ee8a195e53983d57c075324d592"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.1"
   cross_file:
     dependency: transitive
     description:
@@ -129,6 +121,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.8"
+  dio:
+    dependency: transitive
+    description:
+      name: dio
+      sha256: "0dfb6b6a1979dac1c1245e17cef824d7b452ea29bd33d3467269f9bef3715fb0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.6.0"
+  dio_web_adapter:
+    dependency: transitive
+    description:
+      name: dio_web_adapter
+      sha256: "33259a9276d6cea88774a0000cfae0d861003497755969c92faa223108620dc8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   equatable:
     dependency: transitive
     description:
@@ -238,6 +246,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.0"
+  flutter_paypal_payment:
+    dependency: "direct main"
+    description:
+      name: flutter_paypal_payment
+      sha256: ba5c10e4c9aa20a13ff3e05ed57012d01dbb8836684fe1ed8f32112a6595d2a2
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.6"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -312,14 +328,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.2"
-  http_auth:
-    dependency: "direct main"
-    description:
-      name: http_auth
-      sha256: b7625acba2987fa69140d9600c679819f33227d665f525fbb2f394e08cf917d1
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.4"
   http_parser:
     dependency: transitive
     description:

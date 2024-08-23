@@ -7,10 +7,10 @@ class VoucherResponse {
   double? maxDiscount = null;
 
   VoucherResponse({
-    required this.id,
-    required this.discountType,
-    required this.discountValue,
-    required this.maxDiscount,
+    this.id,
+    this.discountType,
+    this.discountValue,
+    this.maxDiscount,
   });
 
   factory VoucherResponse.fromJson(Map<String, dynamic> json) {
@@ -20,5 +20,10 @@ class VoucherResponse {
       discountValue: json['discountValue'],
       maxDiscount: json['maxDiscount'],
     );
+  }
+
+  @override
+  String toString() {
+    return 'VoucherResponse{id: $id, discountType: $discountType, discountValue: $discountValue, maxDiscount: $maxDiscount}';
   }
 }

@@ -48,7 +48,10 @@ class BookingResponsitoties implements Responsetories {
       final value = await _bookingDataSource.applyVoucher(code);
       return value;
     } catch (e) {
-      throw Exception();
+      // print('=============');
+      // print(e);
+      // print('=============');
+      throw e;
     }
   }
 }

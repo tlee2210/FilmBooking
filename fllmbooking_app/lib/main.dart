@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
   final List<Widget> _tabs = [
     const HomeScreen(),
     // const CinemaTab(),
-    MyHomePage(title: '123',),
+    PaypalPaymentDemo(),
     const Newslist(),
     // const FilmTab(),
     // const AccountTab(),
