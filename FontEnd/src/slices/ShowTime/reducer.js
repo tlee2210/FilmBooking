@@ -35,6 +35,9 @@ const ShowTimeSlice = createSlice({
     clear(state) {
       state.item = null;
     },
+    clearMovieItem(state) {
+      state.movieItem = {};
+    },
   },
 });
 
@@ -45,6 +48,7 @@ export const {
   setRoomItem,
   fetchSuccess,
   setShowTime,
+  clearMovieItem,
 } = ShowTimeSlice.actions;
 
 export default ShowTimeSlice.reducer;

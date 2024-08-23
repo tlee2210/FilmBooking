@@ -160,7 +160,7 @@ const promotionEdit = (props) => {
           loader.file.then((file) => {
             body.append("upload", file);
             body.append("type", "Promotion");
-            fetch("http://localhost:8081/api/admin/v1/file-upload/v1", {
+            fetch("http://localhost:8081/api/admin/file-upload/v1", {
               method: "POST",
               body: body,
             })

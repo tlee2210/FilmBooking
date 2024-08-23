@@ -18,7 +18,7 @@ import java.util.List;
 public class ReviewRequest {
     private int id;
 
-    @NotEmpty(message = "VALIDATION")
+//    @NotEmpty(message = "VALIDATION")
     private String name;
 
     @NotEmpty
