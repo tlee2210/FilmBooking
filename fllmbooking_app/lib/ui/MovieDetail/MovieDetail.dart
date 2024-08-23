@@ -1,3 +1,5 @@
+import 'dart:convert' show utf8;
+
 import 'package:fllmbooking_app/data/models/home_film_response.dart';
 import 'package:fllmbooking_app/data/responsitories/movieResponsitories.dart';
 import 'package:fllmbooking_app/ui/MovieDetail/MovieContent.dart';
@@ -77,11 +79,14 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
             return const Center(child: Text('No data available'));
           } else {
             final movie = snapshot.data!;
-            final genreText =
-                movie.categories?.map((genre) => genre.name ?? '').join(', ') ??
-                    '';
-            final celebText =
-                movie.actor?.map((celeb) => celeb.name ?? '').join(', ') ?? '';
+            final genreText = movie.categories
+                    ?.map((genre) => utf8.decode(genre.name!.codeUnits))
+                    .join(', ') ??
+                '';
+            final celebText = movie.actor
+                    ?.map((celeb) => utf8.decode(celeb.name!.codeUnits))
+                    .join(', ') ??
+                '';
 
             return CustomScrollView(
               slivers: [
@@ -146,7 +151,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    movie.name ?? '',
+                                    utf8.decode(movie.name!.codeUnits),
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 20,
@@ -248,7 +253,8 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                                       ),
                                       Expanded(
                                         child: Text(
-                                          movie.producer ?? '',
+                                          utf8.decode(
+                                              movie.producer!.codeUnits),
                                           style: const TextStyle(
                                             color: Colors.white,
                                           ),

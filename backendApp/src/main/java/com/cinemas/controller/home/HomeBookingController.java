@@ -53,6 +53,7 @@ public class HomeBookingController {
 
     @PostMapping("/v1/apply-voucher")
     public APIResponse<VoucherResponse> applyVoucher(@RequestBody VoucherApplyRequest code){
+        System.out.println(code);
         APIResponse<VoucherResponse> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(homeBookingService.findByCode(code));

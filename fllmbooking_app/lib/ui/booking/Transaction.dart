@@ -1,3 +1,6 @@
+import 'package:fllmbooking_app/data/models/VoucherRequest.dart';
+import 'package:fllmbooking_app/data/models/VoucherResponse.dart';
+import 'package:fllmbooking_app/data/responsitories/bookingResponsitories.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -24,7 +27,12 @@ class _TransactionState extends State<Transaction> {
   late PaymentRequest paymentRequestData;
   late List<WaterCorn> waterCorndata;
 
+  final TextEditingController promotionController = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   String? _selectedPaymentMethod;
+  String? _errorMessage;
+  Future<VoucherResponse?>? voucherAdd;
 
   @override
   void initState() {
@@ -32,6 +40,102 @@ class _TransactionState extends State<Transaction> {
     paymentRequestData = widget.paymentRequest;
     waterCorndata = widget.waterCorndata;
     super.initState();
+  }
+
+  Future<void> handleVoucher(VoucherRequest code) async {
+    try{
+      Future<VoucherResponse?> result = BookingResponsitoties().applyVoucher(code);
+      voucherAdd = result;
+    }
+    catch(e){
+      _errorMessage = e.toString().replaceFirst('Exception: ', '');
+
+      Fluttertoast.showToast(
+        msg: _errorMessage.toString(),
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.TOP,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 18.0,
+      );
+    }
+  }
+
+  void _showInputPromotion() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Scaffold(
+            backgroundColor: const Color(0xff1f1d2b),
+            appBar: AppBar(
+              title: const Text("Promotion", style: TextStyle(color: Colors.white),),
+              backgroundColor:  const Color(0xff1f1d2b),
+              iconTheme: const IconThemeData(color: Colors.white),
+              centerTitle: true,
+            ),
+            body: Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: promotionController,
+                    decoration: const InputDecoration(
+                      labelText: 'Code input',
+                      labelStyle: TextStyle(color: Colors.white, fontSize: 18),
+                      hintStyle: TextStyle(color: Colors.grey),
+                      filled: true,
+                      fillColor: Color(0xff1f1d2b),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                        borderSide: BorderSide(
+                          color: Color(0xFF00D0F1),
+                          width: 1.0,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                        borderSide: BorderSide(
+                          color: Color(0xFF00D0F1),
+                          width: 2.0,
+                        ),
+                      ),
+                    ),
+                    style: const TextStyle(color: Colors.white),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter code';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  TextButton(
+                    onPressed: () => handleVoucher(VoucherRequest(code: promotionController.text)),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50.0, vertical: 20.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                        BorderRadius.circular(10.0), // Rounded corners
+                      ),
+
+                      backgroundColor:
+                      Colors.transparent, // Transparent background
+                    ),
+                    child: const Text(
+                      'Apply',
+                      style: TextStyle(
+                        color: Colors.orange, // Text color
+                        fontSize: 18.0, // Text size
+                        fontWeight: FontWeight.bold, // Font weight
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   @override
@@ -252,9 +356,7 @@ class _TransactionState extends State<Transaction> {
               children: [
                 ElevatedButton.icon(
                   onPressed: () {
-                    print('========');
-                    print('ok');
-                    print('========');
+                    _showInputPromotion();
                   },
                   icon: Icon(Icons.local_offer, color: Colors.orange),
                   label: Text(
