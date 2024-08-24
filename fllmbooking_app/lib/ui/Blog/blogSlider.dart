@@ -31,17 +31,12 @@ class _BlogSliderState extends State<BlogSlider> {
             ? BlogRepository().getBlogDetail(item.slug)
             : ReviewRepository().getReviewDetail(item.slug),
         builder: (context, snapshot) {
-          // if (snapshot.connectionState == ConnectionState.waiting) {
-          //   return CircularProgressIndicator();
-          // } else {
-
-          // }
           return InkWell(
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NewsDetailPage(item: snapshot.data!),
+                  builder: (context) => NewsDetailPage(slug: snapshot.data!.slug!, type: isBlog ? 'Blog' : 'Review',),
                 ),
               );
             },

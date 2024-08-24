@@ -77,6 +77,8 @@ public class HomePromotionServiceImpl implements HomePromotionService {
         if (promotion == null) throw new AppException(NOT_FOUND);
 
         promotion.setImage(fileStorageServiceImpl.getUrlFromPublicId(promotion.getImage()));
+        promotion.setView(promotion.getView() + 1);
+        promotionRepository.save(promotion);
 
         HomePromotionResponse homePromotionResponse = new HomePromotionResponse();
         homePromotionResponse.setPromotion(promotion);

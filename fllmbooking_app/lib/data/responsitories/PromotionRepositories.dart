@@ -6,7 +6,7 @@ abstract interface class Repositories {
   Future<Promotion?> getPromotionDetail(String slug);
 }
 
-class PromtionRepository implements Repositories {
+class PromotionRepository implements Repositories {
   final PromotionData _promotionData = PromotionData();
   @override
   Future<List<Promotion>?> getAllPromotion() async {
