@@ -17,8 +17,8 @@ public class MovieTasks {
     @Autowired
     private MovieRepository movieRepository;
 
-//    @Scheduled(cron = "0 0 0 * * *")
-    @Scheduled(cron = "*/10 * * * * *")
+    @Scheduled(cron = "0 0 0 * * *")
+//    @Scheduled(cron = "*/10 * * * * *")
     public void checkMovieCurrentTime(){
         List<Movie> movieCommingSoon = movieRepository.getMovieForStatus2(MovieStatus.COMING_SOON);
         movieCommingSoon.forEach(movie -> {
@@ -32,8 +32,8 @@ public class MovieTasks {
 
     }
 
-//    @Scheduled(cron = "0 0 0 * * *")
-    @Scheduled(cron = "*/10 * * * * *")
+    @Scheduled(cron = "0 0 0 * * *")
+//    @Scheduled(cron = "*/10 * * * * *")
     public void checkMovieNowShowing(){
         List<Movie> movieNowShowing = movieRepository.getMovieForStatus2(MovieStatus.NOW_SHOWING);
         movieNowShowing.forEach(movie -> {
