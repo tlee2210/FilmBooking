@@ -27,7 +27,7 @@ class PromotionData implements PromotionDataSource {
 
   @override
   Future<Promotion?> getPromotionDetail(String slug) async {
-    String url = 'http://localhost:8081/api/home/promotion/v1/detail/$slug';
+    String url = 'http://10.0.2.2:8081/api/home/promotion/v1/detail/$slug';
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);

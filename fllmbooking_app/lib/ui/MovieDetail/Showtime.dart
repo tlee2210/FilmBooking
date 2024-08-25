@@ -20,7 +20,9 @@ class ShowtimeWidget extends StatefulWidget {
 class _ShowtimeWidgetState extends State<ShowtimeWidget> {
   late Future<bookTicketsResponse?> item = Future.value(
       bookTicketsResponse(bookingShowTimeResponses: [], city: [], cinema: []));
-  List<SelectOptionReponse> cities = [];
+  List<SelectOptionReponse> cities = [
+    SelectOptionReponse(label: 'All', value: 'All')
+  ];
 
   late String cityValue;
   late String cinemaValue;
@@ -38,8 +40,8 @@ class _ShowtimeWidgetState extends State<ShowtimeWidget> {
     super.initState();
     selectedDateIndex = 0;
     selectedHourIndex = -1;
-    cityValue = '';
     cinemaValue = '';
+    cityValue = '';
     expandedIndex = 0;
     selectedHour = {};
     _fetchInitialData();
@@ -50,20 +52,19 @@ class _ShowtimeWidgetState extends State<ShowtimeWidget> {
       final response =
           await MovieResponsetories().getTimeForMovie(widget.slug, '', '');
       setState(() {
-        cities = response!.city!.map((city) {
+        cities.addAll(response!.city!.map((city) {
           return SelectOptionReponse(
               value: parse(utf8.decode(city.value!.codeUnits)).body!.text,
               label: parse(utf8.decode(city.label!.codeUnits)).body!.text);
-        }).toList();
+        }).toList());
 
-        if (cities.isNotEmpty) {
-          cityValue = cities.first.value;
+        cityValue = cities.first.value;
+        if (cityValue == 'All') {
+          item = MovieResponsetories()
+              .getTimeForMovie(widget.slug, '', cinemaValue);
+        } else {
           item = MovieResponsetories()
               .getTimeForMovie(widget.slug, cityValue, cinemaValue);
-        } else {
-          cityValue = '';
-          item = Future.value(bookTicketsResponse(
-              bookingShowTimeResponses: [], city: [], cinema: []));
         }
       });
     } catch (e) {
@@ -101,9 +102,9 @@ class _ShowtimeWidgetState extends State<ShowtimeWidget> {
                 label: parse(utf8.decode(cine.label!.codeUnits)).body!.text);
           }).toList();
 
-          if (cityValue.isEmpty && cities.isNotEmpty) {
-            cityValue = cities.first.value;
-          }
+          // if (cityValue.isEmpty && cities.isNotEmpty) {
+          //   cityValue = cities.first.value;
+          // }
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,8 +124,7 @@ class _ShowtimeWidgetState extends State<ShowtimeWidget> {
                           onChanged: (String? newValue) {
                             setState(() {
                               cinemaValue = '';
-                              cityValue =
-                                  newValue ?? snapshot.data!.city!.first.value;
+                              cityValue = (newValue! == 'All') ? '' : newValue;
                               item = MovieResponsetories().getTimeForMovie(
                                   widget.slug, cityValue, cinemaValue);
                             });

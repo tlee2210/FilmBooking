@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:fllmbooking_app/data/models/NewsItemModel.dart';
 import 'package:fllmbooking_app/data/responsitories/BlogRepositories.dart';
 import 'package:fllmbooking_app/data/responsitories/PromotionRepositories.dart';
@@ -15,6 +17,7 @@ class Newslist extends StatefulWidget {
 
 class _NewslistState extends State<Newslist> {
   late Future<List<NewsItemModel>> _items;
+  late var type;
   final List<String> tabs = ['Review', 'Blog', 'Promotion'];
   int tabIndex = 0;
 
@@ -30,16 +33,19 @@ class _NewslistState extends State<Newslist> {
         _items = ReviewRepository()
             .getAllReview()
             .then((data) => data as List<NewsItemModel>);
+        type = 'Review';
         break;
       case 1:
         _items = BlogRepository()
             .getAllMovieBlog()
             .then((data) => data as List<NewsItemModel>);
+        type = 'Blog';
         break;
       case 2:
-        _items = PromtionRepository()
+        _items = PromotionRepository()
             .getAllPromotion()
             .then((data) => data as List<NewsItemModel>);
+        type = 'Promotion';
         break;
       default:
         _items = Future.value([]);
@@ -122,16 +128,20 @@ class _NewslistState extends State<Newslist> {
                     itemBuilder: (BuildContext context, int index) {
                       final item = items[index];
                       return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
+                        onTap: () async {
+                          await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) {
-                                return NewsDetailPage<NewsItemModel>(
-                                    item: item);
+                                return NewsDetailPage(
+                                    slug: utf8.decode(item.slug!.codeUnits), type: type);
                               },
                             ),
                           );
+
+                          setState(() {
+                            _loadItems();
+                          });
                         },
                         child: NewsItem(item: item),
                       );

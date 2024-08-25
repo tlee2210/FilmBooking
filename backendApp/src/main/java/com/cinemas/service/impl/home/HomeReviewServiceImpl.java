@@ -82,6 +82,8 @@ public class HomeReviewServiceImpl implements HomeReviewService {
         Review review = reviewRepository.findBySlug(slug);
 
         if (review == null) throw new AppException(NOT_FOUND);
+        review.setView(review.getView() + 1);
+        reviewRepository.save(review);
 
         HomeReviewResponse homeReviewResponse = new HomeReviewResponse();
         homeReviewResponse.setReview(review);
@@ -99,6 +101,8 @@ public class HomeReviewServiceImpl implements HomeReviewService {
         Review review = reviewRepository.findBySlug(slug);
         if (review == null) throw new AppException(NOT_FOUND);
         review.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(review.getThumbnail()));
+        review.setView(review.getView() + 1);
+        reviewRepository.save(review);
         ReviewResponse2 reviewResponse2 = new ReviewResponse2();
         ObjectUtils.copyFields(review, reviewResponse2);
         return reviewResponse2;
