@@ -67,7 +67,7 @@ class _MovieState extends State<Movie> {
   Widget getBody() {
     if (_dataModel == null ||
         _dataModel!.movieShowingList.isEmpty ||
-        _dataModel!.movieSoonList.isEmpty) {
+        _dataModel!.movieSoonList!.isEmpty) {
       return getProgressBar();
     } else {
       return CustomScrollView(
@@ -89,7 +89,7 @@ class _MovieState extends State<Movie> {
           MovieGrid(
             tabIndex: _movieTabIndex,
             movieShowingList: _dataModel!.movieShowingList,
-            movieSoonList: _dataModel!.movieSoonList,
+            movieSoonList: _dataModel!.movieSoonList!,
           ),
         ],
       );

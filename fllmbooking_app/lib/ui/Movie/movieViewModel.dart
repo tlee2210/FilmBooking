@@ -11,6 +11,9 @@ class MovieViewModel {
 
   void loadMovieData() {
     final response = MovieResponsetories();
+    print('==================');
+    print('response: ' + response.toString());
+    print('==================');
     response.getMovieData()?.then((value) async {
       if (value != null) {
         _movieStreamController.add(value);

@@ -3,14 +3,15 @@ import '../../data/models/item_introduce.dart';
 import '../home/home_card.dart';
 
 class MovieGrid extends StatefulWidget {
-  List<ItemIntroduce> movieShowingList;
-  List<ItemIntroduce> movieSoonList;
+  final List<ItemIntroduce> movieShowingList;
+  final List<ItemIntroduce>? movieSoonList; // Nullable list
   final int tabIndex;
 
-  MovieGrid(
-      {required this.tabIndex,
-      required this.movieSoonList,
-      required this.movieShowingList});
+  MovieGrid({
+    required this.tabIndex,
+    required this.movieSoonList,
+    required this.movieShowingList,
+  });
 
   @override
   _MovieGridState createState() => _MovieGridState();
@@ -19,6 +20,11 @@ class MovieGrid extends StatefulWidget {
 class _MovieGridState extends State<MovieGrid> {
   @override
   Widget build(BuildContext context) {
+    // Choose the appropriate list based on tabIndex
+    final movieList = widget.tabIndex == 0
+        ? widget.movieShowingList
+        : widget.movieSoonList ?? []; // Fallback to an empty list if null
+
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -27,15 +33,11 @@ class _MovieGridState extends State<MovieGrid> {
         childAspectRatio: 0.6,
       ),
       delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          final movie = widget.tabIndex == 0
-              ? widget.movieShowingList[index]
-              : widget.movieSoonList[index];
+            (context, index) {
+          final movie = movieList[index];
           return MovieCard(item: movie);
         },
-        childCount: widget.tabIndex == 0
-            ? widget.movieShowingList.length
-            : widget.movieSoonList.length,
+        childCount: movieList.length,
       ),
     );
   }
