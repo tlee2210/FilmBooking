@@ -28,7 +28,7 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
   late BookingViewModel _bookingViewModel;
 
   late String _selectedTime;
-  String soldSeats = 'A1, A2, A3, H1-H2, H3-H4';
+  String soldSeats = '';
   late Set<String> soldSeatsSet;
   Set<String> quantitySeat = Set();
   Set<String> quantityDoubleSeat = Set();
@@ -49,6 +49,9 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
   @override
   void initState() {
     super.initState();
+    soldSeatsSet = {};
+    currentSeatsState = [[]];
+    currentDoubleSeatsState = [[]];
     _checkToken(widget.id);
   }
 
@@ -66,13 +69,23 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
             _showTimeTableResponse = BookingViewModel;
             _selectedTime = BookingViewModel.time;
           });
+
           _bookingViewModel.getSeatBooked(id);
+
           _bookingViewModel.waterCornStream.listen((waterCorns) {
             setState(() {
               waterCorndata = waterCorns;
             });
           });
-          _initializeSeats();
+
+          _bookingViewModel.SeatBooked.listen((seatBooked) {
+            setState(() {
+              soldSeats = seatBooked;
+              soldSeatsSet = seatBooked.split(', ').toSet();
+            });
+
+            _initializeSeats();
+          });
         });
       } else {
         Navigator.push(
@@ -100,7 +113,7 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
       return;
     } else {
       int splitInterval = (_showTimeTableResponse!.room.seatColumns /
-          (_showTimeTableResponse!.room.totalColumn))
+              (_showTimeTableResponse!.room.totalColumn))
           .floor();
       int remainingSeats = _showTimeTableResponse!.room.seatColumns %
           (_showTimeTableResponse!.room.totalColumn);
@@ -112,19 +125,16 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
         splitIndices.add(currentPosition + i);
         currentPosition += splitInterval + (remainingSeats > 0 ? 1 : 0);
         remainingSeats =
-        remainingSeats > 0 ? remainingSeats - 1 : remainingSeats;
+            remainingSeats > 0 ? remainingSeats - 1 : remainingSeats;
       }
-
-      soldSeatsSet = soldSeats.split(', ').toSet();
 
       currentSeatsState = List.generate(
         _showTimeTableResponse!.room.seatRows,
-            (row) => List.generate(
+        (row) => List.generate(
           _showTimeTableResponse!.room.seatColumns +
               _showTimeTableResponse!.room.totalColumn,
-              (col) {
-            String seatLabel =
-                '${String.fromCharCode(65 + row)}${col + 1}'; // Tạo ghế như A1, B2,...
+          (col) {
+            String seatLabel = '${String.fromCharCode(65 + row)}${col + 1}';
             if (splitIndices.contains(col)) {
               return SeatState.empty;
             } else if (soldSeatsSet.contains(seatLabel)) {
@@ -138,9 +148,9 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
 
       currentDoubleSeatsState = List.generate(
         _showTimeTableResponse!.room.doubleSeatColumns,
-            (row) => List.generate(
+        (row) => List.generate(
           _showTimeTableResponse!.room.doubleSeatRows,
-              (col) {
+          (col) {
             int baseCol = col * 2 + 1;
             String seatLabel =
                 '${String.fromCharCode(65 + row + _showTimeTableResponse!.room.seatRows)}$baseCol-${String.fromCharCode(65 + row + _showTimeTableResponse!.room.seatRows)}${baseCol + 1}';
@@ -172,24 +182,24 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                   style: const TextStyle(color: Colors.white),
                 ),
                 children: format.times
-                    ?.map<Widget>((HomeTimeAndRoomResponse timeAndRoom) {
-                  return ListTile(
-                    title: Text(
-                      DateFormat.Hm().format(timeAndRoom.time!),
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SeatSelectionScreen(
-                            id: timeAndRoom.idRoom!,
-                          ),
+                        ?.map<Widget>((HomeTimeAndRoomResponse timeAndRoom) {
+                      return ListTile(
+                        title: Text(
+                          DateFormat.Hm().format(timeAndRoom.time!),
+                          style: const TextStyle(color: Colors.white),
                         ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SeatSelectionScreen(
+                                id: timeAndRoom.idRoom!,
+                              ),
+                            ),
+                          );
+                        },
                       );
-                    },
-                  );
-                }).toList() ??
+                    }).toList() ??
                     [],
               );
             },
@@ -214,125 +224,154 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
   }
 
   Widget getBody() {
-    if (_showTimeTableResponse != null) {
+    if (isLoading) {
+      return const Scaffold(
+        backgroundColor: Color(0xff1f1d2b),
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    if (_showTimeTableResponse == null) {
       return Scaffold(
         appBar: AppBar(
-          title: Text(
-            _showTimeTableResponse!.cinemaName,
-            style: const TextStyle(color: Colors.white),
+          title: const Text(
+            'No Show Time Data',
+            style: TextStyle(color: Colors.white),
           ),
           centerTitle: true,
           iconTheme: const IconThemeData(color: Colors.white),
           backgroundColor: const Color(0xff1f1d2b),
         ),
         backgroundColor: const Color(0xff1f1d2b),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                _showTimeTableResponse!.movieName,
-                style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
+        body: const Center(
+          child: Text(
+            'No data available for the selected show time.',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      );
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          _showTimeTableResponse!.cinemaName,
+          style: const TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: const Color(0xff1f1d2b),
+      ),
+      backgroundColor: const Color(0xff1f1d2b),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              _showTimeTableResponse!.movieName,
+              style: const TextStyle(
+                  fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      _showTimeTableResponse!.movieFormat,
+                      style: const TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: Colors.orange,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        _showTimeTableResponse!.rules,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                OutlinedButton(
+                  onPressed: () {
+                    _showSelectModal(_showTimeTableResponse!.movieformats);
+                  },
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: Colors.grey),
+                    backgroundColor: const Color(0xff1f1d2b),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(_showTimeTableResponse!.movieFormat,
-                          style: const TextStyle(
-                              fontSize: 16, color: Colors.white)),
-                      const SizedBox(width: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 6, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: Colors.orange,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Text(
-                          _showTimeTableResponse!.rules,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                      Text(
+                        _selectedTime,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      const Icon(
+                        Icons.arrow_drop_down,
+                        color: Colors.grey,
                       ),
                     ],
                   ),
-                  OutlinedButton(
-                    onPressed: () {
-                      _showSelectModal(_showTimeTableResponse!.movieformats);
-                    },
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Colors.grey),
-                      backgroundColor: const Color(0xff1f1d2b),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          '$_selectedTime',
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                        const Icon(
-                          Icons.arrow_drop_down,
-                          color: Colors.grey,
-                        ),
-                      ],
-                    ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            const Divider(),
+            const Row(
+              children: <Widget>[
+                Expanded(
+                  child: Divider(
+                    color: Colors.orange,
+                    thickness: 2,
                   ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              const Divider(),
-              const Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Divider(
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 40),
+                  child: Text(
+                    'Screen',
+                    style: TextStyle(
                       color: Colors.orange,
-                      thickness: 2,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
+                ),
+                Expanded(
+                  child: Divider(
+                    color: Colors.orange,
+                    thickness: 2,
+                  ),
+                ),
+              ],
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 10),
                   Padding(
-                    padding:
-                    EdgeInsets.symmetric(horizontal: 8.0, vertical: 40),
-                    child: Text(
-                      'Screen',
-                      style: TextStyle(
-                        color: Colors.orange,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Divider(
-                      color: Colors.orange,
-                      thickness: 2,
-                    ),
-                  ),
-                ],
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 10),
-                    Row(
+                    padding: EdgeInsets.only(left: 15),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Align(
-                          alignment: Alignment.center,
-                          child: SeatLayoutWidget(
+                        if (currentSeatsState.isNotEmpty &&
+                            currentSeatsState[0].isNotEmpty)
+                          SeatLayoutWidget(
                             onSeatStateChanged: (rowI, colI, seatState) {
                               if (seatState == SeatState.selected &&
                                   quantitySeat.length +
@@ -359,8 +398,7 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                                           quantityDoubleSeat.length <
                                           8) {
                                     paymentRequest.totalPrice =
-                                        (paymentRequest.totalPrice ?? 0) +
-                                            price;
+                                        (paymentRequest.totalPrice ?? 0) + price;
                                     quantitySeat.add(seatLabel);
                                   } else {
                                     if ((paymentRequest.totalPrice ?? 0) >=
@@ -381,8 +419,7 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                               'assets/seats/svg_disabled_bus_seat.svg',
                               pathSelectedSeat:
                               'assets/seats/svg_selected_bus_seats.svg',
-                              pathSoldSeat:
-                              'assets/seats/svg_sold_bus_seat.svg',
+                              pathSoldSeat: 'assets/seats/svg_sold_bus_seat.svg',
                               pathUnSelectedSeat:
                               'assets/seats/svg_unselected_bus_seat.svg',
                               rows: _showTimeTableResponse!.room.seatRows,
@@ -392,13 +429,15 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                               currentSeatsState: currentSeatsState,
                             ),
                           ),
-                        ),
                       ],
                     ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (currentDoubleSeatsState.isNotEmpty &&
+                          currentDoubleSeatsState[0].isNotEmpty)
                         Align(
                           alignment: Alignment.center,
                           child: SeatLayoutWidget(
@@ -467,104 +506,103 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const Divider(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (quantitySeat.isNotEmpty)
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Text(
-                              '${quantitySeat.length}x Seat: ${quantitySeat.map((seat) => seat.toString()).join(', ')}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        const SizedBox(height: 4),
-                        if (quantityDoubleSeat.isNotEmpty)
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Text(
-                              '${quantityDoubleSeat.length}x DoubleSeat: ${quantityDoubleSeat.map((seat) => seat.toString()).join(', ')}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                              softWrap: false,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        Text(
-                          'Total: ${paymentRequest.totalPrice?.toStringAsFixed(2) ?? '0.00'} VND',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.orange,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (quantitySeat.length + quantityDoubleSeat.length > 0) {
-                        paymentRequest.quantityDoubleSeat =
-                            quantityDoubleSeat.toList();
-                        paymentRequest.quantitySeat = quantitySeat.toList();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ComboSelectionScreen(
-                                waterCorndata: waterCorndata,
-                                paymentRequest: paymentRequest,
-                                showTime: _showTimeTableResponse!,
-                              )),
-                        );
-                      } else {
-                        Fluttertoast.showToast(
-                          msg: 'Please select at least one seat!',
-                          toastLength: Toast.LENGTH_LONG,
-                          gravity: ToastGravity.TOP,
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          fontSize: 16.0,
-                        );
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 12),
-                      textStyle: const TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                    child: const Text(
-                      'Continue',
-                      style: TextStyle(color: Colors.white),
-                    ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
+            ),
+            const Divider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (quantitySeat.isNotEmpty)
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Text(
+                            '${quantitySeat.length}x Seat: ${quantitySeat.map((seat) => seat.toString()).join(', ')}',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      const SizedBox(height: 4),
+                      if (quantityDoubleSeat.isNotEmpty)
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Text(
+                            '${quantityDoubleSeat.length}x DoubleSeat: ${quantityDoubleSeat.map((seat) => seat.toString()).join(', ')}',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                            softWrap: false,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      Text(
+                        'Total: ${paymentRequest.totalPrice?.toStringAsFixed(2) ?? '0.00'} VND',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.orange,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (quantitySeat.length + quantityDoubleSeat.length > 0) {
+                      paymentRequest.quantityDoubleSeat =
+                          quantityDoubleSeat.toList();
+                      paymentRequest.quantitySeat = quantitySeat.toList();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ComboSelectionScreen(
+                            waterCorndata: waterCorndata,
+                            paymentRequest: paymentRequest,
+                            showTime: _showTimeTableResponse!,
+                          ),
+                        ),
+                      );
+                    } else {
+                      Fluttertoast.showToast(
+                        msg: 'Please select at least one seat!',
+                        toastLength: Toast.LENGTH_LONG,
+                        gravity: ToastGravity.TOP,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    textStyle: const TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  child: const Text(
+                    'Continue',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
-      );
-    } else {
-      return getProgressBar();
-    }
+      ),
+    );
   }
+
 }

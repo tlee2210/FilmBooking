@@ -3,6 +3,7 @@ package com.cinemas.controller.home;
 import com.cinemas.dto.request.BookingWaterRequest;
 import com.cinemas.dto.request.PaymentRequest;
 import com.cinemas.dto.response.APIResponse;
+import com.cinemas.dto.response.BookingSuccessInfo;
 import com.cinemas.enums.PaymentType;
 import com.cinemas.exception.AppException;
 import com.cinemas.service.home.PaymentService;
@@ -33,12 +34,13 @@ public class PaymentController {
     }
 
     @PostMapping("/v1/booking_paypal")
-    public APIResponse<String> bookingPaypal(@RequestBody PaymentRequest paymentRequest) {
-        boolean checkSuccess = paymentService.bookingPaypal(paymentRequest, PaymentType.PAYPAL);
-        if (checkSuccess) {
-            APIResponse<String> apiResponse = new APIResponse();
+    public APIResponse<BookingSuccessInfo> bookingPaypal(@RequestBody PaymentRequest paymentRequest) {
+        BookingSuccessInfo checkSuccess = paymentService.bookingPaypal(paymentRequest, PaymentType.PAYPAL);
+        if (checkSuccess != null) {
+            APIResponse<BookingSuccessInfo> apiResponse = new APIResponse();
             apiResponse.setCode(200);
             apiResponse.setMessage("Checkout successfully");
+            apiResponse.setResult(checkSuccess);
 
             return apiResponse;
         }

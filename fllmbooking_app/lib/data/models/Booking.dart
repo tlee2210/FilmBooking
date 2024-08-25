@@ -8,10 +8,10 @@ class Booking {
   String cinemaName;
   String roomName;
   String paymentType;
-  dynamic quantitySeat;
-  String quantityDoubleSeat;
+  String? quantitySeat;
+  String? quantityDoubleSeat;
   double totalPrice;
-  List<BookingWaterCorn> bookingWaterCorn;
+  List<BookingWaterCorn>? bookingWaterCorn;
   String bookingDate;
   String image;
   String showTime;
@@ -26,9 +26,9 @@ class Booking {
     required this.roomName,
     required this.paymentType,
     this.quantitySeat,
-    required this.quantityDoubleSeat,
+    this.quantityDoubleSeat,
     required this.totalPrice,
-    required this.bookingWaterCorn,
+    this.bookingWaterCorn,
     required this.bookingDate,
     required this.image,
     required this.showTime,
@@ -47,7 +47,9 @@ class Booking {
       quantitySeat: json['quantitySeat'],
       quantityDoubleSeat: json['quantityDoubleSeat'],
       totalPrice: json['totalPrice'],
-      bookingWaterCorn: List<BookingWaterCorn>.from(json['bookingWaterCorn'].map((x) => BookingWaterCorn.fromJson(x))),
+      bookingWaterCorn: (json['bookingWaterCorn'] as List?)
+          ?.map((x) => BookingWaterCorn.fromJson(x))
+          .toList(),
       bookingDate: json['bookingDate'],
       image: json['image'],
       showTime: json['showTime'],
@@ -67,7 +69,9 @@ class Booking {
       'quantitySeat': quantitySeat,
       'quantityDoubleSeat': quantityDoubleSeat,
       'totalPrice': totalPrice,
-      'bookingWaterCorn': List<dynamic>.from(bookingWaterCorn.map((x) => x.toJson())),
+      'bookingWaterCorn': bookingWaterCorn
+          ?.map((x) => x.toJson())
+          .toList(),
       'bookingDate': bookingDate,
       'image': image,
       'showTime': showTime,

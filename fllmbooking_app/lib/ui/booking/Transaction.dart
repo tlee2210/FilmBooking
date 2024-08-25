@@ -1,12 +1,16 @@
 import 'package:fllmbooking_app/data/models/VoucherRequest.dart';
 import 'package:fllmbooking_app/data/models/VoucherResponse.dart';
-import 'package:fllmbooking_app/data/responsitories/bookingResponsitories.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_paypal_payment/flutter_paypal_payment.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:developer';
 
+import '../../data/models/BookingSuccessInfo.dart';
 import '../../data/models/PaymentRequest.dart';
 import '../../data/models/WaterCorn.dart';
 import '../../data/models/bookingData.dart';
+import '../ProgressBar/getProgressBar.dart';
+import 'TransactionSuccessPage.dart';
 import 'bookingViewModel.dart';
 
 class Transaction extends StatefulWidget {
@@ -32,11 +36,10 @@ class _TransactionState extends State<Transaction> {
   double calculateDiscount = 0;
   final TextEditingController promotionController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
+  bool isloading = false;
   String? _selectedPaymentMethod;
   String? _errorMessage;
-  late VoucherResponse voucherAdd = VoucherResponse(); // Hoặc một giá trị mặc định khác
-
+  late VoucherResponse voucherAdd = VoucherResponse();
 
   @override
   void initState() {
@@ -102,6 +105,39 @@ class _TransactionState extends State<Transaction> {
     // finally {
     //   Navigator.of(context).pop();
     // }
+  }
+
+  Future<void> bookingPaypal(PaymentRequest paymentRequest) async {
+    try {
+
+      setState(() {
+        isloading = true;
+      });
+
+      BookingSuccessInfo? result =
+          await _bookingViewModel.bookingPaypal(paymentRequestData);
+
+      // TransactionSuccessPage
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TransactionSuccessPage(
+            bookingSuccessInfo: result!,
+          ),
+        ),
+      );
+    } catch (e) {
+      _errorMessage = e.toString().replaceFirst('Exception: ', '');
+
+      Fluttertoast.showToast(
+        msg: _errorMessage.toString(),
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.TOP,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 18.0,
+      );
+    }
   }
 
   void _showInputPromotion() {
@@ -194,6 +230,13 @@ class _TransactionState extends State<Transaction> {
 
   @override
   Widget build(BuildContext context) {
+    if (isloading) {
+      return getProgressBar();
+    }
+    return getBody();
+  }
+
+  Widget getBody() {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -462,7 +505,7 @@ class _TransactionState extends State<Transaction> {
                     _showInputPromotion();
                   },
                   icon: Icon(Icons.local_offer, color: Colors.orange),
-                  label: Text(
+                  label: const Text(
                     "Promotion",
                     style: TextStyle(color: Colors.orange),
                   ),
@@ -545,34 +588,132 @@ class _TransactionState extends State<Transaction> {
               },
             ),
             Spacer(),
-            ElevatedButton(
-              onPressed: () {
-                // print('===========');
-                // print('_selectedPaymentMethod: ' +
-                //     _selectedPaymentMethod.toString());
-                // print('===========');
-                if (_selectedPaymentMethod != null &&
-                    _selectedPaymentMethod!.isNotEmpty) {
-                  if (_selectedPaymentMethod!.contains('PayPal')) {
-                    print("Người dùng đã chọn PayPal");
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  // print('===========');
+                  // print('_selectedPaymentMethod: ' +
+                  //     _selectedPaymentMethod.toString());
+                  // print('===========');
+                  if (_selectedPaymentMethod != null &&
+                      _selectedPaymentMethod!.isNotEmpty) {
+                    if (_selectedPaymentMethod!.contains('PayPal')) {
+                      double exchangeRateVNDToUSD = 0.000042;
+                      double totalPriceVND = paymentRequestData.totalPrice!;
+                      final double totalPriceUSD =
+                          totalPriceVND * exchangeRateVNDToUSD;
+
+                      final String totalPriceUSDString =
+                          totalPriceUSD.toStringAsFixed(2);
+
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => PaypalCheckoutView(
+                          sandboxMode: true,
+                          // clientId: "YOUR CLIENT ID",
+                          // secretKey: "YOUR SECRET KEY",
+                          clientId:
+                              "AdjeY1YkcgIWMTbos5WNR6jUkJvsq-u-noGd5XkxcfOihm7HtY9CeV4usR3jTXFPaaCFr180mKmn79G_",
+                          secretKey:
+                              "EMyVX9iJI3pv7i0jEpsloiUVkLwPL4BxMPf6Kmp_6MijSzjJMnhs4qr1kau7Qa9Bf5RYuDRUhrtIwadD",
+                          transactions: [
+                            {
+                              "amount": {
+                                "total": totalPriceUSDString,
+                                "currency": "USD",
+                                "details": {
+                                  "subtotal": totalPriceUSDString,
+                                  "shipping": '0',
+                                  "shipping_discount": 0
+                                }
+                              },
+                              "description":
+                                  "The payment transaction description.",
+                              "payment_options": const {
+                                "allowed_payment_method":
+                                    "INSTANT_FUNDING_SOURCE"
+                              },
+                              // "item_list": {
+                              //   "items": [
+                              //     {
+                              //       "name": "Apple",
+                              //       "quantity": 4,
+                              //       "price": '10',
+                              //       "currency": "USD"
+                              //     },
+                              //     {
+                              //       "name": "Pineapple",
+                              //       "quantity": 5,
+                              //       "price": '12',
+                              //       "currency": "USD"
+                              //     }
+                              //   ],
+                              //
+                              // }
+                            }
+                          ],
+                          note: "Contact us for any questions on your order.",
+                          onSuccess: (Map params) async {
+                            log("onSuccess: $params");
+                            String fullPaymentId = params['data']['id'];
+                            String orderId = params['data']['cart'];
+                            String paymentId = fullPaymentId.split('-').last;
+                            paymentRequestData.totalPrice =
+                                paymentRequestData.totalPrice! -
+                                    calculateDiscount;
+                            paymentRequestData.orderId = orderId;
+                            paymentRequestData.paymentId = paymentId;
+                            paymentRequestData.showtimeId =
+                                _showTimeTableResponse.id;
+                            if (voucherAdd != null) {
+                              paymentRequestData.voucherId = voucherAdd.id;
+                            }
+
+                            bookingPaypal(paymentRequestData);
+                            Navigator.pop(context);
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => MyApp(),
+                            //   ),
+                            // );
+                          },
+                          onError: (error) {
+                            log("onError: $error");
+                            Navigator.pop(context);
+                          },
+                          onCancel: () {
+                            print('cancelled:');
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ));
+                    }
+                    if (_selectedPaymentMethod!.contains('VNPAY')) {
+                      print("Người dùng đã chọn VNPAY");
+                    }
+                  } else {
+                    Fluttertoast.showToast(
+                      msg: 'Please select payment method!',
+                      toastLength: Toast.LENGTH_LONG,
+                      gravity: ToastGravity.TOP,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+                    );
                   }
-                  if (_selectedPaymentMethod!.contains('VNPAY')) {
-                    print("Người dùng đã chọn VNPAY");
-                  }
-                } else {
-                  Fluttertoast.showToast(
-                    msg: 'Please select payment method!',
-                    toastLength: Toast.LENGTH_LONG,
-                    gravity: ToastGravity.TOP,
-                    backgroundColor: Colors.red,
-                    textColor: Colors.white,
-                    fontSize: 16.0,
-                  );
-                }
-              },
-              child: Text("Pay"),
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(double.infinity, 50),
+                },
+                child: Text(
+                  'Payment',
+                  style: TextStyle(color: Colors.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xff12CDD9),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
               ),
             ),
           ],

@@ -1,5 +1,6 @@
 import 'package:fllmbooking_app/ui/News/NewsList.dart';
 import 'package:fllmbooking_app/ui/booking/PaypalPlugin.dart';
+import 'package:fllmbooking_app/ui/booking/TransactionSuccessPage.dart';
 import 'package:fllmbooking_app/ui/cinema/CinemaTab.dart';
 import 'package:fllmbooking_app/ui/home/home.dart';
 import 'package:fllmbooking_app/ui/user/profile.dart';
@@ -30,11 +31,9 @@ class _MyAppState extends State<MyApp> {
 
   final List<Widget> _tabs = [
     const HomeScreen(),
-    // const CinemaTab(),
-    PaypalPaymentDemo(),
+    CinemaTab(),
+    // TransactionSuccessPage(),
     const Newslist(),
-    // const FilmTab(),
-    // const AccountTab(),
     ProfileTab(),
   ];
 

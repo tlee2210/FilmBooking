@@ -121,6 +121,7 @@ class TransactionCardDetail extends StatelessWidget {
                         ],
                       ),
                     ),
+                    if(booking.quantityDoubleSeat != null)
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Row(
@@ -137,8 +138,10 @@ class TransactionCardDetail extends StatelessWidget {
                         ],
                       ),
                     ),
+                    if(booking.quantitySeat != null)
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
+
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -147,7 +150,7 @@ class TransactionCardDetail extends StatelessWidget {
                                   color: Colors.grey,
                                   fontWeight: FontWeight.bold)),
                           Text(
-                            booking.quantitySeat != null && booking.quantitySeat > 0
+                            booking.quantitySeat != null
                                 ? booking.quantitySeat.toString()
                                 : '',
                             style: const TextStyle(

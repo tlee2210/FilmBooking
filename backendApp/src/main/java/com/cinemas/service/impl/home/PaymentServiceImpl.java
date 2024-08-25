@@ -4,6 +4,8 @@ import com.cinemas.Utils.ObjectUtils;
 import com.cinemas.configuration.ConfigVNPAY;
 import com.cinemas.dto.request.BookingWaterRequest;
 import com.cinemas.dto.request.PaymentRequest;
+import com.cinemas.dto.response.BookingSuccessInfo;
+import com.cinemas.dto.response.waterCornBookingResponse;
 import com.cinemas.entities.Booking;
 import com.cinemas.entities.BookingWaterCorn;
 import com.cinemas.entities.User;
@@ -22,6 +24,9 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -163,7 +168,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public boolean bookingPaypal(PaymentRequest paymentRequest, PaymentType type) {
+    public BookingSuccessInfo bookingPaypal(PaymentRequest paymentRequest, PaymentType type) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         User user = userRepository
@@ -173,14 +178,20 @@ public class PaymentServiceImpl implements PaymentService {
         ObjectUtils.copyFields(paymentRequest, booking);
         booking.setPaymentType(type);
         booking.setCreateAt(LocalDate.now());
-        booking.setQuantityDoubleSeat(paymentRequest.getQuantityDoubleSeat() != null ? String.join(", ", paymentRequest.getQuantityDoubleSeat()) : null);
-        booking.setQuantitySeat(paymentRequest.getQuantitySeat() != null ? String.join(", ", paymentRequest.getQuantitySeat()) : null);
+        if (!paymentRequest.getQuantityDoubleSeat().isEmpty()) {
+            booking.setQuantityDoubleSeat(paymentRequest.getQuantityDoubleSeat() != null ? String.join(", ", paymentRequest.getQuantityDoubleSeat()) : null);
+        }
+        if (!paymentRequest.getQuantitySeat().isEmpty()) {
+            booking.setQuantitySeat(paymentRequest.getQuantitySeat() != null ? String.join(", ", paymentRequest.getQuantitySeat()) : null);
+        }
+
         booking.setShowtime(showTimeResponsitory.findById(paymentRequest.getShowtimeId()).get());
         booking.setVoucher(paymentRequest.getVoucherId() != null ? voucherRepository.findById(paymentRequest.getVoucherId()).get() : null);
         booking.setUser(user);
         bookingRepository.save(booking);
 
         List<BookingWaterCorn> waterCorns = new ArrayList<>();
+        List<waterCornBookingResponse> cornBookingResponseList = new ArrayList<>();
         if (paymentRequest.getQuantityWater() != null) {
             paymentRequest.getQuantityWater().forEach(item -> {
                 BookingWaterCorn waterCorn = new BookingWaterCorn();
@@ -189,11 +200,33 @@ public class PaymentServiceImpl implements PaymentService {
                 waterCorn.setBooking(booking);
                 bookingWaterRepository.save(waterCorn);
                 waterCorns.add(waterCorn);
+
+                waterCornBookingResponse cornBookingResponse = new waterCornBookingResponse();
+                cornBookingResponse.setId(waterCorn.getId());
+                cornBookingResponse.setName(waterCorn.getWaterCorn().getName());
+                cornBookingResponse.setQuantity(item.getQuantity());
+                cornBookingResponseList.add(cornBookingResponse);
             });
         }
         booking.setBookingWaterCorn(waterCorns);
         bookingRepository.save(booking);
-        return true;
+
+        BookingSuccessInfo bookingSuccessInfo = new BookingSuccessInfo();
+        bookingSuccessInfo.setId(booking.getId());
+        bookingSuccessInfo.setOrderId(booking.getOrderId());
+        bookingSuccessInfo.setPaymentId(booking.getPaymentId());
+        bookingSuccessInfo.setCinemaName(booking.getShowtime().getCinema().getName());
+        bookingSuccessInfo.setMovieName(booking.getShowtime().getMovie().getName());
+        bookingSuccessInfo.setRoomName(booking.getShowtime().getRoom().getName());
+        bookingSuccessInfo.setTime(LocalTime.parse(booking.getShowtime().getTime().toString(), DateTimeFormatter.ofPattern("HH:mm")));
+        bookingSuccessInfo.setDate(LocalDate.parse(booking.getShowtime().getDate().toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        bookingSuccessInfo.setQuantitySeat(booking.getQuantitySeat());
+        bookingSuccessInfo.setQuantityDoubleSeat(booking.getQuantityDoubleSeat());
+        bookingSuccessInfo.setMovieFormat(booking.getShowtime().getMovieFormat());
+        bookingSuccessInfo.setTotalPrice(booking.getTotalPrice());
+        bookingSuccessInfo.setBookingWaterCorn(cornBookingResponseList);
+
+        return bookingSuccessInfo;
     }
 
     @Override

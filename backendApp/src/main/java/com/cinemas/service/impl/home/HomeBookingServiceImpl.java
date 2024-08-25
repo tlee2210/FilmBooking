@@ -193,10 +193,10 @@ public class HomeBookingServiceImpl implements HomeBookingService {
         String seat = "";
         if (bookings != null) {
             for (Booking booking : bookings) {
-                if (booking.getQuantitySeat() != null) {
+                if (booking.getQuantitySeat() != null && !booking.getQuantitySeat().isEmpty()) {
                     seat = seat.concat(booking.getQuantitySeat()).concat(", ");
                 }
-                if (booking.getQuantityDoubleSeat() != null) {
+                if (booking.getQuantityDoubleSeat() != null && !booking.getQuantityDoubleSeat().isEmpty()) {
                     seat = seat.concat(booking.getQuantityDoubleSeat()).concat(", ");
                 }
             }
