@@ -65,7 +65,7 @@ class _TransactionState extends State<Transaction> {
             result.discountValue != null) {
           var discount =
               (paymentRequestData.totalPrice! * result.discountValue!) / 100;
-          if (discount > result.maxDiscount!) {
+          if (result.maxDiscount != null && discount > result.maxDiscount!) {
             discount = result.maxDiscount!;
           }
           setState(() {
