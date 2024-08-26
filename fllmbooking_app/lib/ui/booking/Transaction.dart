@@ -3,6 +3,7 @@ import 'package:fllmbooking_app/data/models/VoucherResponse.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_paypal_payment/flutter_paypal_payment.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'dart:developer';
 
 import '../../data/models/BookingSuccessInfo.dart';
@@ -10,6 +11,7 @@ import '../../data/models/PaymentRequest.dart';
 import '../../data/models/WaterCorn.dart';
 import '../../data/models/bookingData.dart';
 import '../ProgressBar/getProgressBar.dart';
+import '../VnpayCheckoutView/PaymentService.dart';
 import 'TransactionSuccessPage.dart';
 import 'bookingViewModel.dart';
 
@@ -40,6 +42,8 @@ class _TransactionState extends State<Transaction> {
   String? _selectedPaymentMethod;
   String? _errorMessage;
   late VoucherResponse voucherAdd = VoucherResponse();
+  late DateTime parsedTime;
+  late DateTime parsedDate;
 
   @override
   void initState() {
@@ -47,6 +51,8 @@ class _TransactionState extends State<Transaction> {
     _showTimeTableResponse = widget.showTime;
     paymentRequestData = widget.paymentRequest;
     waterCorndata = widget.waterCorndata;
+    parsedTime = DateFormat('HH:mm:ss').parse(_showTimeTableResponse.time!);
+    parsedDate = DateFormat('dd-MM-yyyy').parse(_showTimeTableResponse.date!);
     super.initState();
   }
 
@@ -109,7 +115,6 @@ class _TransactionState extends State<Transaction> {
 
   Future<void> bookingPaypal(PaymentRequest paymentRequest) async {
     try {
-
       setState(() {
         isloading = true;
       });
@@ -196,27 +201,22 @@ class _TransactionState extends State<Transaction> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 10),
-                    TextButton(
-                      onPressed: () => handleVoucher(
-                          VoucherRequest(code: promotionController.text)),
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 50.0, vertical: 20.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(10.0), // Rounded corners
+                    const SizedBox(height: 30),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () => handleVoucher(
+                            VoucherRequest(code: promotionController.text)),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xff12CDD9),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                         ),
-
-                        backgroundColor:
-                            Colors.transparent, // Transparent background
-                      ),
-                      child: const Text(
-                        'Apply',
-                        style: TextStyle(
-                          color: Colors.orange, // Text color
-                          fontSize: 18.0, // Text size
-                          fontWeight: FontWeight.bold, // Font weight
+                        child: const Text(
+                          'Apply',
+                          style: TextStyle(color: Colors.white),
                         ),
                       ),
                     ),
@@ -288,7 +288,7 @@ class _TransactionState extends State<Transaction> {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        '${_showTimeTableResponse.time} - ${_showTimeTableResponse.date}',
+                        '${DateFormat('HH:mm').format(parsedTime)} - Day:  ${_showTimeTableResponse.date}',
                         style: const TextStyle(
                           color: Colors.white,
                         ),
@@ -504,13 +504,14 @@ class _TransactionState extends State<Transaction> {
                     });
                     _showInputPromotion();
                   },
-                  icon: Icon(Icons.local_offer, color: Colors.orange),
+                  icon: Icon(Icons.local_offer, color: Colors.white),
                   label: const Text(
                     "Promotion",
-                    style: TextStyle(color: Colors.orange),
+                    style: TextStyle(color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
-                    side: BorderSide(color: Colors.orange),
+                    backgroundColor: Color(0xff1f1d2b),
+                    side: BorderSide(color: Colors.white),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
@@ -523,7 +524,7 @@ class _TransactionState extends State<Transaction> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.white)),
                     Text(
-                      '${paymentRequestData.totalPrice! - calculateDiscount} VND',
+                      '${(paymentRequestData.totalPrice! - calculateDiscount).toStringAsFixed(2)} VND',
                       style: const TextStyle(
                           fontSize: 16,
                           color: Colors.orange,
@@ -690,7 +691,22 @@ class _TransactionState extends State<Transaction> {
                       ));
                     }
                     if (_selectedPaymentMethod!.contains('VNPAY')) {
-                      print("Người dùng đã chọn VNPAY");
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => VnPaymentService(
+                          paymentRequest: paymentRequestData,
+                          onSuccess: (Map params) async {
+                            log("onSuccess: $params");
+                          },
+                          onError: (error) {
+                            log("onError: $error");
+                            Navigator.pop(context);
+                          },
+                          onCancel: () {
+                            print('cancelled:');
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ));
                     }
                   } else {
                     Fluttertoast.showToast(

@@ -29,7 +29,6 @@ public class PaymentController {
     public APIResponse<String> createpaymentVnpay(@RequestBody PaymentRequest paymentRequest) throws UnsupportedEncodingException {
         APIResponse<String> apiResponse = new APIResponse<>();
         apiResponse.setResult(paymentService.createpaymentVnpay(paymentRequest));
-
         return apiResponse;
     }
 

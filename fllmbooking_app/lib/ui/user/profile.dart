@@ -23,6 +23,7 @@ class _ProfileTabState extends State<ProfileTab>
   final ImagePicker _picker = ImagePicker();
   String? _imageUrl = 'https://via.placeholder.com/150';
   TokenRepositories tokenRepository = TokenRepositories();
+  bool isloading = true;
   var token = null;
 
   late UserViewModel _userViewModel;
@@ -37,11 +38,10 @@ class _ProfileTabState extends State<ProfileTab>
   }
 
   Future<void> _checkTokenAndFetchProfile() async {
-    // await tokenRepository.deleteToken();
     token = await tokenRepository.getToken();
-    // print('======================');
-    // print('token: $token');
-    // print('======================');
+    setState(() {
+      isloading = false;
+    });
     if (token != null) {
       _userViewModel = UserViewModel();
       _userViewModel.getprofile();
@@ -70,7 +70,11 @@ class _ProfileTabState extends State<ProfileTab>
 
   @override
   Widget build(BuildContext context) {
-    return checkBody();
+    if (isloading) {
+      return getProgressBar();
+    } else {
+      return checkBody();
+    }
   }
 
   Widget checkBody() {

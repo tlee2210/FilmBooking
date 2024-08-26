@@ -99,6 +99,8 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
       }
     } catch (e) {
       print('Error fetching token: $e');
+      await e.toString().replaceFirst('Exception: ', '');
+
     } finally {
       setState(() {
         isLoading = false;

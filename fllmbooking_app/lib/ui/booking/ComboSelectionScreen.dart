@@ -13,26 +13,32 @@ class ComboSelectionScreen extends StatefulWidget {
   final PaymentRequest paymentRequest;
   final ShowTimeTableResponse showTime;
 
-  ComboSelectionScreen(
-      {required this.waterCorndata,
-      required this.paymentRequest,
-      required this.showTime});
+  ComboSelectionScreen({required this.waterCorndata,
+    required this.paymentRequest,
+    required this.showTime});
 
   @override
   _ComboSelectionScreenState createState() => _ComboSelectionScreenState();
 }
 
 class _ComboSelectionScreenState extends State<ComboSelectionScreen> {
-  List<BookingWaterRequest> selectedCombos = [];
+  late List<BookingWaterRequest> selectedCombos;
   late List<WaterCorn> waterCorndata;
+  late ShowTimeTableResponse showTime;
   late PaymentRequest paymentRequestData;
   double price = 0;
 
   @override
   void initState() {
     super.initState();
-    waterCorndata = widget.waterCorndata; // Lấy dữ liệu từ widget
-    paymentRequestData = widget.paymentRequest; // Lấy payment request từ widget
+    waterCorndata = widget.waterCorndata;
+    showTime = widget.showTime;
+    paymentRequestData = widget.paymentRequest;
+    paymentRequestData.quantityWater = [];
+    paymentRequestData.totalPrice =
+        paymentRequestData.quantitySeat!.length * showTime.price! +
+            paymentRequestData.quantityDoubleSeat!.length *(showTime.price * 2) * 1.1;
+    selectedCombos = [];
   }
 
   @override
@@ -69,7 +75,7 @@ class _ComboSelectionScreenState extends State<ComboSelectionScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: selectedCombos.map((combo) {
                   final waterCorn =
-                      waterCorndata.firstWhere((item) => item.id == combo.id);
+                  waterCorndata.firstWhere((item) => item.id == combo.id);
                   return Container(
                     margin: const EdgeInsets.only(right: 10),
                     child: Row(
@@ -94,7 +100,7 @@ class _ComboSelectionScreenState extends State<ComboSelectionScreen> {
                           icon: const Icon(Icons.close, color: Colors.red),
                           onPressed: () {
                             setState(() {
-                              price = price - waterCorn.price * combo.quantity!;
+                              paymentRequestData.totalPrice = paymentRequestData.totalPrice! - waterCorn.price * combo.quantity!;
                               selectedCombos.remove(combo);
                             });
                           },
@@ -121,7 +127,9 @@ class _ComboSelectionScreenState extends State<ComboSelectionScreen> {
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Text(
-                            '${paymentRequestData.quantitySeat!.length}x Seat: ${paymentRequestData.quantitySeat!.join(', ')}',
+                            '${paymentRequestData.quantitySeat!
+                                .length}x Seat: ${paymentRequestData
+                                .quantitySeat!.join(', ')}',
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -135,7 +143,9 @@ class _ComboSelectionScreenState extends State<ComboSelectionScreen> {
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Text(
-                            '${paymentRequestData.quantityDoubleSeat!.length}x DoubleSeat: ${paymentRequestData.quantityDoubleSeat!.join(', ')}',
+                            '${paymentRequestData.quantityDoubleSeat!
+                                .length}x DoubleSeat: ${paymentRequestData
+                                .quantityDoubleSeat!.join(', ')}',
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -146,7 +156,8 @@ class _ComboSelectionScreenState extends State<ComboSelectionScreen> {
                           ),
                         ),
                       Text(
-                        'Total: ${(paymentRequestData.totalPrice! + price).toStringAsFixed(2)} VND',
+                        'Total: ${(paymentRequestData.totalPrice! + price)
+                            .toStringAsFixed(2)} VND',
                         style: const TextStyle(
                           fontSize: 16,
                           color: Colors.orange,
@@ -166,7 +177,8 @@ class _ComboSelectionScreenState extends State<ComboSelectionScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => Transaction(
+                          builder: (context) =>
+                              Transaction(
                                 waterCorndata: widget.waterCorndata,
                                 showTime: widget.showTime,
                                 paymentRequest: paymentRequestData,
@@ -198,7 +210,7 @@ class _ComboSelectionScreenState extends State<ComboSelectionScreen> {
   Widget comboCard(WaterCorn waterCorn) {
     // Tìm xem combo này đã được chọn chưa
     BookingWaterRequest? selectedCombo = selectedCombos.firstWhere(
-        (combo) => combo.id == waterCorn.id,
+            (combo) => combo.id == waterCorn.id,
         orElse: () => BookingWaterRequest(id: waterCorn.id, quantity: 0));
 
     return Card(
@@ -255,7 +267,7 @@ class _ComboSelectionScreenState extends State<ComboSelectionScreen> {
                           setState(() {
                             selectedCombo.quantity =
                                 selectedCombo.quantity! - 1;
-                            price = price - waterCorn.price;
+                            paymentRequestData.totalPrice = paymentRequestData.totalPrice! - waterCorn.price;
                             if (selectedCombo.quantity == 0) {
                               selectedCombos.remove(selectedCombo);
                             }
@@ -276,7 +288,7 @@ class _ComboSelectionScreenState extends State<ComboSelectionScreen> {
                             selectedCombos.add(selectedCombo);
                           }
                           // paymentRequestData.totalPrice += waterCorn.price;
-                          price = price + waterCorn.price;
+                          paymentRequestData.totalPrice = paymentRequestData.totalPrice! + waterCorn.price;
                         });
                       },
                     ),

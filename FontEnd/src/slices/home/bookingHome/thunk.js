@@ -87,7 +87,7 @@ export const getPaymentVnpayMethods = (formData) => async (dispatch) => {
   await axios
     .post(`http://localhost:8081/api/payment/v1/create_payment_vnpay`, formData)
     .then((response) => {
-      // console.log(response);
+      console.log(response);
       window.location.href = response?.data?.result;
     })
     .catch((error) => {
