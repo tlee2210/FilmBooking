@@ -138,7 +138,7 @@ const PromotionIndex = (props) => {
   const columns = useMemo(
     () => [
       {
-        header: "thumbnail",
+        header: "Thumbnail",
         accessorKey: "image",
         cell: (cell) => {
           return (
@@ -226,7 +226,7 @@ const PromotionIndex = (props) => {
                             type="text"
                             name="name"
                             className="form-control"
-                            placeholder="Search for name..."
+                            placeholder="Search For Name..."
                             onChange={searchForm.handleChange}
                             onBlur={searchForm.handleBlur}
                             value={searchForm.values.name || ""}

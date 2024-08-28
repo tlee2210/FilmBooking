@@ -112,7 +112,7 @@ const VoucherCreate = (props) => {
   return (
     <div className="page-content">
       <Container fluid>
-        <BreadCrumb title="promotion Management" pageTitle="Voucher Create" />{" "}
+        <BreadCrumb title="Promotion Management" pageTitle="Voucher Create" />{" "}
         <Row>
           <Col md={12}>
             <Form
@@ -169,13 +169,13 @@ const VoucherCreate = (props) => {
                           onChange={validation.handleChange}
                           invalid={
                             validation.errors.usageLimit &&
-                            validation.touched.usageLimit
+                              validation.touched.usageLimit
                               ? true
                               : false
                           }
                         />
                         {validation.errors.usageLimit &&
-                        validation.touched.usageLimit ? (
+                          validation.touched.usageLimit ? (
                           <FormFeedback type="invalid">
                             {validation.errors.usageLimit}
                           </FormFeedback>
@@ -199,13 +199,13 @@ const VoucherCreate = (props) => {
                           onChange={validation.handleChange}
                           invalid={
                             validation.errors.minSpend &&
-                            validation.touched.minSpend
+                              validation.touched.minSpend
                               ? true
                               : false
                           }
                         />
                         {validation.errors.minSpend &&
-                        validation.touched.minSpend ? (
+                          validation.touched.minSpend ? (
                           <FormFeedback type="invalid">
                             {validation.errors.minSpend}
                           </FormFeedback>
@@ -228,13 +228,13 @@ const VoucherCreate = (props) => {
                           onChange={validation.handleChange}
                           invalid={
                             validation.errors.discountValue &&
-                            validation.touched.discountValue
+                              validation.touched.discountValue
                               ? true
                               : false
                           }
                         />
                         {validation.errors.discountValue &&
-                        validation.touched.discountValue ? (
+                          validation.touched.discountValue ? (
                           <FormFeedback type="invalid">
                             {validation.errors.discountValue}
                           </FormFeedback>
@@ -265,7 +265,7 @@ const VoucherCreate = (props) => {
                           )}
                         />
                         {validation.errors.discountType &&
-                        validation.touched.discountType ? (
+                          validation.touched.discountType ? (
                           <FormFeedback type="invalid">
                             {validation.errors.discountType}
                           </FormFeedback>
@@ -289,7 +289,7 @@ const VoucherCreate = (props) => {
                           }}
                         />
                         {validation.errors.expirationDate &&
-                        validation.touched.expirationDate ? (
+                          validation.touched.expirationDate ? (
                           <div className="text-danger">
                             {validation.errors.expirationDate}
                           </div>

@@ -101,8 +101,8 @@ const BlogEdit = (props) => {
         : [],
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Please Enter name"),
-      description: Yup.string().required("Please Enter description"),
+      name: Yup.string().required("Please enter name"),
+      description: Yup.string().required("Please enter description"),
       file: Yup.array()
         .of(
           Yup.mixed().test(
@@ -113,7 +113,7 @@ const BlogEdit = (props) => {
               (value.originFileObj && value.type.startsWith("image/"))
           )
         )
-        .min(1, "Please upload at least one Image"),
+        .min(1, "Please upload at least one image"),
     }),
     onSubmit: (values) => {
       // console.log(values);
@@ -222,7 +222,7 @@ const BlogEdit = (props) => {
                     <Col md={2}>
                       <div className="mb-3">
                         <Label className="form-label" htmlFor="name">
-                          thumbnail
+                          Thumbnail
                         </Label>
                         <div className="justify-content-center align-items-center d-flex">
                           <Upload

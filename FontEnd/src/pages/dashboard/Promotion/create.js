@@ -206,7 +206,7 @@ const promotionCreate = (props) => {
                     <Col md={2}>
                       <div className="mb-3">
                         <Label className="form-label" htmlFor="name">
-                          thumbnail
+                          Thumbnail
                         </Label>
                         <div className="justify-content-center align-items-center d-flex">
                           <Upload
@@ -299,7 +299,7 @@ const promotionCreate = (props) => {
                             }
                           />
                           {validation.touched.description &&
-                          validation.errors.description ? (
+                            validation.errors.description ? (
                             <div className="invalid-feedback d-block">
                               {validation.errors.description}
                             </div>

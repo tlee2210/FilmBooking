@@ -205,7 +205,7 @@ const promotionEdit = (props) => {
   return (
     <div className="page-content">
       <Container fluid>
-        <BreadCrumb title="Blog management" pageTitle="Blog Edit" />
+        <BreadCrumb title="Promotion edit" pageTitle="Blog Edit" />
         <Form
           onSubmit={(e) => {
             e.preventDefault();
@@ -221,7 +221,7 @@ const promotionEdit = (props) => {
                     <Col md={2}>
                       <div className="mb-3">
                         <Label className="form-label" htmlFor="name">
-                          thumbnail
+                          Thumbnail
                         </Label>
                         <div className="justify-content-center align-items-center d-flex">
                           <Upload
@@ -272,7 +272,7 @@ const promotionEdit = (props) => {
                           type="text"
                           className="form-control"
                           id="product-title-input"
-                          placeholder="Enter name"
+                          placeholder="Enter Name"
                           name="name"
                           value={validation.values.name || ""}
                           onBlur={validation.handleBlur}
@@ -314,7 +314,7 @@ const promotionEdit = (props) => {
                             }
                           />
                           {validation.touched.description &&
-                          validation.errors.description ? (
+                            validation.errors.description ? (
                             <div className="invalid-feedback d-block">
                               {validation.errors.description}
                             </div>

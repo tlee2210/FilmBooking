@@ -75,16 +75,16 @@ const WaterCornEdit = (props) => {
       Description: item.description || "",
       file: item.image
         ? [
-            {
-              uid: item.image,
-              url: item.image,
-            },
-          ]
+          {
+            uid: item.image,
+            url: item.image,
+          },
+        ]
         : [],
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Please Enter a name"),
-      price: Yup.string().required("Please Enter price"),
+      name: Yup.string().required("Please Enter a Title"),
+      price: Yup.string().required("Please Enter Price"),
       Description: Yup.string().required("Please Enter Description"),
       file: Yup.array()
         .of(
@@ -157,7 +157,7 @@ const WaterCornEdit = (props) => {
   return (
     <div className="page-content">
       <Container fluid>
-        <BreadCrumb title="Cinemas Management" pageTitle="Water Corn Create" />
+        <BreadCrumb title="Cinemas Management" pageTitle="Water Corn Edit" />
         <Row>
           <Form
             onSubmit={(e) => {
@@ -169,7 +169,7 @@ const WaterCornEdit = (props) => {
             <Col md={12}>
               <Card>
                 <CardHeader>
-                  <h5 className="card-title mb-0">water corn</h5>
+                  <h5 className="card-title mb-0">Water Corn Edit</h5>
                 </CardHeader>
                 <CardBody>
                   <Row>
@@ -179,13 +179,13 @@ const WaterCornEdit = (props) => {
                           className="form-label"
                           htmlFor="product-title-input"
                         >
-                          Name
+                          Title
                         </Label>
                         <Input
                           type="text"
                           className="form-control"
                           id="product-title-input"
-                          placeholder="Enter name"
+                          placeholder="Enter Title"
                           name="name"
                           value={validation.values.name || ""}
                           onBlur={validation.handleBlur}
@@ -295,7 +295,7 @@ const WaterCornEdit = (props) => {
                             }
                           />
                           {validation.touched.Description &&
-                          validation.errors.Description ? (
+                            validation.errors.Description ? (
                             <div className="invalid-feedback d-block">
                               {validation.errors.Description}
                             </div>
