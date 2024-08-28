@@ -142,7 +142,7 @@ const WaterCorn = (props) => {
         enableColumnFilter: false,
       },
       {
-        header: "price",
+        header: "Price",
         accessorKey: "price",
         enableColumnFilter: false,
       },
@@ -190,7 +190,7 @@ const WaterCorn = (props) => {
                   <Row className="g-4 align-items-center">
                     <div className="col-sm">
                       <div>
-                        <h5 className="card-title mb-0">Room Cinema Manager</h5>
+                        <h5 className="card-title mb-0">Water And Corn Manager</h5>
                       </div>
                     </div>
                     <div className="col-sm-auto">
@@ -220,7 +220,7 @@ const WaterCorn = (props) => {
                             type="text"
                             name="name"
                             className="form-control"
-                            placeholder="Search for name..."
+                            placeholder="Search For Name..."
                             onChange={searchForm.handleChange}
                             onBlur={searchForm.handleBlur}
                             value={searchForm.values.name}

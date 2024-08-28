@@ -156,7 +156,7 @@ const ShowTime = (props) => {
       //   enableColumnFilter: false,
       // },
       {
-        header: "used",
+        header: "Used",
         accessorKey: "usedCount",
         enableColumnFilter: false,
         cell: (cell) => {
@@ -197,7 +197,7 @@ const ShowTime = (props) => {
         },
       },
       {
-        header: "status",
+        header: "Status",
         accessorKey: "statusVoucher",
         enableColumnFilter: false,
         cell: (cell) => {

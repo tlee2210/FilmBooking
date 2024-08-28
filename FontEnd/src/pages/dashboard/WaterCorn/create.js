@@ -60,8 +60,8 @@ const WaterCornCreate = (props) => {
       file: [],
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Please Enter a name"),
-      price: Yup.string().required("Please Enter price"),
+      name: Yup.string().required("Please Enter a Title"),
+      price: Yup.string().required("Please Enter Price"),
       Description: Yup.string().required("Please Enter Description"),
       file: Yup.array()
         .of(
@@ -138,7 +138,7 @@ const WaterCornCreate = (props) => {
             <Col md={12}>
               <Card>
                 <CardHeader>
-                  <h5 className="card-title mb-0">water corn</h5>
+                  <h5 className="card-title mb-0">Water Corn Create</h5>
                 </CardHeader>
                 <CardBody>
                   <Row>
@@ -148,13 +148,13 @@ const WaterCornCreate = (props) => {
                           className="form-label"
                           htmlFor="product-title-input"
                         >
-                          Name
+                          Title
                         </Label>
                         <Input
                           type="text"
                           className="form-control"
                           id="product-title-input"
-                          placeholder="Enter name"
+                          placeholder="Enter Title"
                           name="name"
                           value={validation.values.name || ""}
                           onBlur={validation.handleBlur}
@@ -264,7 +264,7 @@ const WaterCornCreate = (props) => {
                             }
                           />
                           {validation.touched.Description &&
-                          validation.errors.Description ? (
+                            validation.errors.Description ? (
                             <div className="invalid-feedback d-block">
                               {validation.errors.Description}
                             </div>
