@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react"
 import {
   Container,
   Row,
@@ -10,104 +10,104 @@ import {
   Button,
   Form,
   Input,
-} from "reactstrap";
+} from "reactstrap"
 
-import TableContainer from "../../../Components/Common/TableContainerReactTable";
-import { message, Image } from "antd";
+import TableContainer from "../../../Components/Common/TableContainerReactTable"
+import { message, Image } from "antd"
 
 // import * as Yup from "yup";
-import { useFormik } from "formik";
+import { useFormik } from "formik"
 
-import withRouter from "../../../Components/Common/withRouter";
-import { Link, useSearchParams } from "react-router-dom";
+import withRouter from "../../../Components/Common/withRouter"
+import { Link, useSearchParams } from "react-router-dom"
 //Import Breadcrumb
-import BreadCrumb from "../../../Components/Common/BreadCrumb";
-import { clearNotification } from "../../../slices/message/reducer";
+import BreadCrumb from "../../../Components/Common/BreadCrumb"
+import { clearNotification } from "../../../slices/message/reducer"
 
-import Select from "react-select";
+import Select from "react-select"
 //redux
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux"
 
-import "react-toastify/dist/ReactToastify.css";
-import { createSelector } from "reselect";
+import "react-toastify/dist/ReactToastify.css"
+import { createSelector } from "reselect"
 
-import { celebrity, deleteCelebrity } from "../../../slices/Celebrity/thunk";
+import { celebrity, deleteCelebrity } from "../../../slices/Celebrity/thunk"
 
 const Celebrity = (props) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
-  const [modal_detele, setmodal_detele] = useState(false);
-  const [modal_togFirst, setmodal_togFirst] = useState(false);
-  const [slug, setSlug] = useState("");
+  const [modal_detele, setmodal_detele] = useState(false)
+  const [modal_togFirst, setmodal_togFirst] = useState(false)
+  const [slug, setSlug] = useState("")
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams()
   const [searchname, setSearch] = useState(
     searchParams.get("searchname") || null
-  );
-  const [role, setRole] = useState(searchParams.get("role") || null);
+  )
+  const [role, setRole] = useState(searchParams.get("role") || null)
   const [pageNo, setPageNo] = useState(
     parseInt(searchParams.get("pageNo"), 10) || 1
-  );
+  )
   const [pageSize, setPageSize] = useState(
     parseInt(searchParams.get("pageSize"), 10) || 15
-  );
+  )
 
-  const CelebrityState = (state) => state;
+  const CelebrityState = (state) => state
   const CelebrityStateData = createSelector(CelebrityState, (state) => ({
     success: state.Message.success,
     error: state.Message.error,
     messageSuccess: state.Message.messageSuccess,
     messageError: state.Message.messageError,
     Celebrity: state.Celebrity.data,
-  }));
+  }))
   // Inside your component
   const { error, success, messageSuccess, messageError, Celebrity } =
-    useSelector(CelebrityStateData);
+    useSelector(CelebrityStateData)
 
   useEffect(() => {
     if (success) {
       if (messageSuccess != null) {
-        message.success(messageSuccess);
+        message.success(messageSuccess)
       }
     }
     if (error) {
       if (messageError != null) {
-        message.error(messageError);
+        message.error(messageError)
       }
     }
-    dispatch(clearNotification());
-  }, [dispatch, success, error]);
+    dispatch(clearNotification())
+  }, [dispatch, success, error])
 
   useEffect(() => {
-    let params = {};
+    let params = {}
     if (searchname && searchname !== null && searchname !== undefined) {
-      params.searchname = searchname;
+      params.searchname = searchname
     }
 
     if (role && role !== null && role !== undefined) {
-      params.role = role;
+      params.role = role
     }
 
-    params.pageNo = pageNo;
-    params.pageSize = pageSize;
+    params.pageNo = pageNo
+    params.pageSize = pageSize
 
-    setSearchParams(params);
+    setSearchParams(params)
 
-    dispatch(celebrity(searchname, role, pageNo, pageSize));
-  }, [dispatch, searchname, role, pageNo, pageSize]);
+    dispatch(celebrity(searchname, role, pageNo, pageSize))
+  }, [dispatch, searchname, role, pageNo, pageSize])
 
   const handlePagination = (page) => {
-    const newPageNo = page + 1;
-    setPageNo(newPageNo);
+    const newPageNo = page + 1
+    setPageNo(newPageNo)
 
-    setSearchParams({ searchname, role, pageNo: newPageNo, pageSize });
-  };
+    setSearchParams({ searchname, role, pageNo: newPageNo, pageSize })
+  }
 
   const handlenumberOfElements = (elements) => {
-    setPageSize(elements);
-    setPageNo(1);
-    setSearchParams({ searchname, role, pageNo, pageSize: elements });
-  };
+    setPageSize(elements)
+    setPageNo(1)
+    setSearchParams({ searchname, role, pageNo, pageSize: elements })
+  }
 
   const searchForm = useFormik({
     enableReinitialize: true,
@@ -118,31 +118,31 @@ const Celebrity = (props) => {
     },
     onSubmit: (values) => {
       // console.log(values);
-      setSearch(values.name);
-      setRole(values.role);
-      setPageNo(1);
+      setSearch(values.name)
+      setRole(values.role)
+      setPageNo(1)
     },
-  });
+  })
 
   function tog_togdelete(slug) {
-    setmodal_detele(!modal_togFirst);
+    setmodal_detele(!modal_togFirst)
     // console.log(id);
     if (slug) {
-      setSlug(slug);
+      setSlug(slug)
     }
   }
 
   function deleteitem(slug) {
     // console.log("delete : " + id);
     if (slug) {
-      dispatch(deleteCelebrity(slug));
+      dispatch(deleteCelebrity(slug))
     }
   }
 
   const statusOption = [
     { label: "Actor", value: "ACTOR" },
     { label: "Director", value: "DIRECTOR" },
-  ];
+  ]
 
   const columns = useMemo(
     () => [
@@ -152,7 +152,7 @@ const Celebrity = (props) => {
         cell: (cell) => {
           return (
             <Image width={70} src={cell.getValue()} alt={cell.getValue()} />
-          );
+          )
         },
         enableColumnFilter: false,
       },
@@ -167,15 +167,15 @@ const Celebrity = (props) => {
         enableColumnFilter: false,
       },
       {
-        header: "nationality",
+        header: "Nationality",
         accessorKey: "country",
         cell: (cell) => {
-          return <span>{cell.getValue()?.name}</span>;
+          return <span>{cell.getValue()?.name}</span>
         },
         enableColumnFilter: false,
       },
       {
-        header: "role",
+        header: "Role",
         enableColumnFilter: false,
         accessorKey: "role",
         cell: (cell) => {
@@ -186,14 +186,14 @@ const Celebrity = (props) => {
                   {" "}
                   {cell.getValue()}
                 </span>
-              );
+              )
             case "DIRECTOR":
               return (
                 <span className="badge bg-warning-subtle  text-warning text-uppercase">
                   {" "}
                   {cell.getValue()}
                 </span>
-              );
+              )
           }
         },
       },
@@ -218,15 +218,15 @@ const Celebrity = (props) => {
                 <i className="ri-delete-bin-5-line"></i>
               </span>
             </React.Fragment>
-          );
+          )
         },
         className: "sticky-right",
       },
     ],
     []
-  );
+  )
 
-  document.title = "Actors and Directors Manager";
+  document.title = "Actors and Directors Manager"
   return (
     <React.Fragment>
       <div className="page-content">
@@ -261,9 +261,9 @@ const Celebrity = (props) => {
                   </Row>
                   <Form
                     onSubmit={(e) => {
-                      e.preventDefault();
-                      searchForm.handleSubmit();
-                      return false;
+                      e.preventDefault()
+                      searchForm.handleSubmit()
+                      return false
                     }}
                     action="#"
                   >
@@ -291,9 +291,9 @@ const Celebrity = (props) => {
                             placeholder="Select Role"
                             classNamePrefix="select"
                             onChange={(option) => {
-                              const roleValue = option ? option.value : null;
-                              searchForm.setFieldValue("role", roleValue);
-                              searchForm.setFieldTouched("role", true);
+                              const roleValue = option ? option.value : null
+                              searchForm.setFieldValue("role", roleValue)
+                              searchForm.setFieldTouched("role", true)
                             }}
                             onBlur={() =>
                               searchForm.setFieldTouched("role", true)
@@ -341,7 +341,7 @@ const Celebrity = (props) => {
       <Modal
         isOpen={modal_detele}
         toggle={() => {
-          tog_togdelete();
+          tog_togdelete()
         }}
         id="firstmodal"
         centered
@@ -369,8 +369,8 @@ const Celebrity = (props) => {
                 color="danger"
                 type="submit"
                 onClick={() => {
-                  deleteitem(slug);
-                  setmodal_detele(false);
+                  deleteitem(slug)
+                  setmodal_detele(false)
                 }}
               >
                 Yes, Delete
@@ -380,7 +380,7 @@ const Celebrity = (props) => {
         </ModalBody>
       </Modal>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default withRouter(Celebrity);
+export default withRouter(Celebrity)

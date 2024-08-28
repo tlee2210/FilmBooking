@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react"
 import {
   Container,
   Row,
@@ -10,70 +10,70 @@ import {
   Button,
   Form,
   Input,
-} from "reactstrap";
+} from "reactstrap"
 
-import TableContainer from "../../../Components/Common/TableContainerReactTable";
-import { message, Image } from "antd";
+import TableContainer from "../../../Components/Common/TableContainerReactTable"
+import { message, Image } from "antd"
 
-import withRouter from "../../../Components/Common/withRouter";
-import { Link, useSearchParams } from "react-router-dom";
+import withRouter from "../../../Components/Common/withRouter"
+import { Link, useSearchParams } from "react-router-dom"
 //Import Breadcrumb
-import BreadCrumb from "../../../Components/Common/BreadCrumb";
-import { useFormik } from "formik";
-import { clearNotification } from "../../../slices/message/reducer";
+import BreadCrumb from "../../../Components/Common/BreadCrumb"
+import { useFormik } from "formik"
+import { clearNotification } from "../../../slices/message/reducer"
 
 //redux
-import { useSelector, useDispatch } from "react-redux";
-import Select from "react-select";
+import { useSelector, useDispatch } from "react-redux"
+import Select from "react-select"
 
-import "react-toastify/dist/ReactToastify.css";
-import { createSelector } from "reselect";
+import "react-toastify/dist/ReactToastify.css"
+import { createSelector } from "reselect"
 
-import { getCinema, deleteCinema } from "../../../slices/Cinemas/thunk";
+import { getCinema, deleteCinema } from "../../../slices/Cinemas/thunk"
 
 const Cinema = (props) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
-  const [modal_detele, setmodal_detele] = useState(false);
-  const [modal_togFirst, setmodal_togFirst] = useState(false);
-  const [slug, setSlug] = useState("");
+  const [modal_detele, setmodal_detele] = useState(false)
+  const [modal_togFirst, setmodal_togFirst] = useState(false)
+  const [slug, setSlug] = useState("")
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams()
   const [searchname, setSearch] = useState(
     searchParams.get("searchname") || null
-  );
-  const [status, setStatus] = useState(searchParams.get("status") || null);
-  const [city, setCity] = useState(searchParams.get("city") || null);
+  )
+  const [status, setStatus] = useState(searchParams.get("status") || null)
+  const [city, setCity] = useState(searchParams.get("city") || null)
   const [pageNo, setPageNo] = useState(
     parseInt(searchParams.get("pageNo"), 10) || 1
-  );
+  )
   const [pageSize, setPageSize] = useState(
     parseInt(searchParams.get("pageSize"), 10) || 15
-  );
+  )
 
   useEffect(() => {
-    let params = {};
+    let params = {}
     if (searchname && searchname !== null && searchname !== undefined) {
-      params.searchname = searchname;
+      params.searchname = searchname
     }
 
     if (status && status !== null && status !== undefined) {
-      params.status = status;
+      params.status = status
     }
 
     if (city && city !== null && city !== undefined) {
-      params.city = city;
+      params.city = city
     }
 
-    params.pageNo = pageNo;
-    params.pageSize = pageSize;
+    params.pageNo = pageNo
+    params.pageSize = pageSize
 
-    setSearchParams(params);
+    setSearchParams(params)
 
-    dispatch(getCinema(searchname, status, city, pageNo, pageSize));
-  }, [dispatch, searchname, city, status, pageNo, pageSize]);
+    dispatch(getCinema(searchname, status, city, pageNo, pageSize))
+  }, [dispatch, searchname, city, status, pageNo, pageSize])
 
-  const CinemaState = (state) => state;
+  const CinemaState = (state) => state
   const CinemaStateData = createSelector(CinemaState, (state) => ({
     success: state.Message.success,
     error: state.Message.error,
@@ -81,37 +81,37 @@ const Cinema = (props) => {
     messageError: state.Message.messageError,
     Cinema: state.Cinema.data,
     item: state.Cinema.item,
-  }));
+  }))
   // Inside your component
   const { error, success, messageSuccess, messageError, Cinema, item } =
-    useSelector(CinemaStateData);
+    useSelector(CinemaStateData)
 
   useEffect(() => {
     if (success) {
       if (messageSuccess != null) {
-        message.success(messageSuccess);
+        message.success(messageSuccess)
       }
     }
     if (error) {
       if (messageError != null) {
-        message.error(messageError);
+        message.error(messageError)
       }
     }
-    dispatch(clearNotification());
-  }, [dispatch, success, error]);
+    dispatch(clearNotification())
+  }, [dispatch, success, error])
 
   const handlePagination = (page) => {
-    const newPageNo = page + 1;
-    setPageNo(newPageNo);
+    const newPageNo = page + 1
+    setPageNo(newPageNo)
 
-    setSearchParams({ searchname, status, city, pageNo: newPageNo, pageSize });
-  };
+    setSearchParams({ searchname, status, city, pageNo: newPageNo, pageSize })
+  }
 
   const handlenumberOfElements = (elements) => {
-    setPageSize(elements);
-    setPageNo(1);
-    setSearchParams({ searchname, status, city, pageNo, pageSize: elements });
-  };
+    setPageSize(elements)
+    setPageNo(1)
+    setSearchParams({ searchname, status, city, pageNo, pageSize: elements })
+  }
 
   const searchForm = useFormik({
     enableReinitialize: true,
@@ -122,33 +122,33 @@ const Cinema = (props) => {
       city: city ? city : null,
     },
     onSubmit: (values) => {
-      console.log(values);
-      setSearch(values.name);
-      setStatus(values.status);
-      setCity(values.city);
-      setPageNo(1);
+      console.log(values)
+      setSearch(values.name)
+      setStatus(values.status)
+      setCity(values.city)
+      setPageNo(1)
     },
-  });
+  })
 
   function tog_togdelete(slug) {
-    setmodal_detele(!modal_togFirst);
+    setmodal_detele(!modal_togFirst)
     // console.log(slug);
     if (slug) {
-      setSlug(slug);
+      setSlug(slug)
     }
   }
 
   function deleteitem(slug) {
     // console.log("delete : " + slug);
     if (slug) {
-      dispatch(deleteCinema(slug));
+      dispatch(deleteCinema(slug))
     }
   }
 
   const statusOption = [
     { label: "Active", value: "ACTIVE" },
     { label: "Inactive", value: "INACTIVE" },
-  ];
+  ]
 
   const columns = useMemo(
     () => [
@@ -156,7 +156,7 @@ const Cinema = (props) => {
         header: "Image",
         accessorKey: "images",
         cell: (cell) => {
-          const imageUrls = cell.getValue()?.map((item) => item.url);
+          const imageUrls = cell.getValue()?.map((item) => item.url)
           return (
             <>
               <Image.PreviewGroup items={imageUrls}>
@@ -166,7 +166,7 @@ const Cinema = (props) => {
                 />
               </Image.PreviewGroup>
             </>
-          );
+          )
         },
         enableColumnFilter: false,
       },
@@ -186,19 +186,19 @@ const Cinema = (props) => {
         enableColumnFilter: false,
       },
       {
-        header: "city",
+        header: "City",
         accessorKey: "city",
         cell: (cell) => {
-          return <span>{cell.getValue()}</span>;
+          return <span>{cell.getValue()}</span>
         },
         enableColumnFilter: false,
       },
       {
-        header: "status",
+        header: "Status",
         accessorKey: "status",
         enableColumnFilter: false,
         cell: (cell) => {
-          const value = cell.getValue();
+          const value = cell.getValue()
           return (
             <React.Fragment>
               {value === "ACTIVE" ? (
@@ -211,7 +211,7 @@ const Cinema = (props) => {
                 </span>
               )}
             </React.Fragment>
-          );
+          )
         },
       },
       {
@@ -235,15 +235,15 @@ const Cinema = (props) => {
                 <i className="ri-delete-bin-5-line"></i>
               </span>
             </React.Fragment>
-          );
+          )
         },
         className: "sticky-right",
       },
     ],
     []
-  );
+  )
 
-  document.title = "Cinema Manager";
+  document.title = "Cinema Manager"
   return (
     <React.Fragment>
       <div className="page-content">
@@ -273,9 +273,9 @@ const Cinema = (props) => {
                   </Row>
                   <Form
                     onSubmit={(e) => {
-                      e.preventDefault();
-                      searchForm.handleSubmit();
-                      return false;
+                      e.preventDefault()
+                      searchForm.handleSubmit()
+                      return false
                     }}
                     action="#"
                   >
@@ -303,9 +303,9 @@ const Cinema = (props) => {
                             placeholder="Select city"
                             classNamePrefix="select"
                             onChange={(option) => {
-                              const status = option ? option.value : null;
-                              searchForm.setFieldValue("city", status);
-                              searchForm.setFieldTouched("city", true);
+                              const status = option ? option.value : null
+                              searchForm.setFieldValue("city", status)
+                              searchForm.setFieldTouched("city", true)
                             }}
                             onBlur={() =>
                               searchForm.setFieldTouched("city", true)
@@ -322,12 +322,12 @@ const Cinema = (props) => {
                             name="status"
                             options={statusOption}
                             isClearable={true}
-                            placeholder="Select Status"
+                            placeholder="Select status"
                             classNamePrefix="select"
                             onChange={(option) => {
-                              const status = option ? option.value : null;
-                              searchForm.setFieldValue("status", status);
-                              searchForm.setFieldTouched("status", true);
+                              const status = option ? option.value : null
+                              searchForm.setFieldValue("status", status)
+                              searchForm.setFieldTouched("status", true)
                             }}
                             onBlur={() =>
                               searchForm.setFieldTouched("status", true)
@@ -379,7 +379,7 @@ const Cinema = (props) => {
       <Modal
         isOpen={modal_detele}
         toggle={() => {
-          tog_togdelete();
+          tog_togdelete()
         }}
         id="firstmodal"
         centered
@@ -401,8 +401,8 @@ const Cinema = (props) => {
                 color="danger"
                 type="submit"
                 onClick={() => {
-                  deleteitem(slug);
-                  setmodal_detele(false);
+                  deleteitem(slug)
+                  setmodal_detele(false)
                 }}
               >
                 Yes, Delete
@@ -412,7 +412,7 @@ const Cinema = (props) => {
         </ModalBody>
       </Modal>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default withRouter(Cinema);
+export default withRouter(Cinema)

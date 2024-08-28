@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react"
 import {
   Container,
   Row,
@@ -10,69 +10,69 @@ import {
   Button,
   Form,
   Input,
-} from "reactstrap";
+} from "reactstrap"
 
-import TableContainer from "../../../Components/Common/TableContainerReactTable";
-import { message, Image } from "antd";
+import TableContainer from "../../../Components/Common/TableContainerReactTable"
+import { message, Image } from "antd"
 
-import withRouter from "../../../Components/Common/withRouter";
-import { Link, useSearchParams } from "react-router-dom";
+import withRouter from "../../../Components/Common/withRouter"
+import { Link, useSearchParams } from "react-router-dom"
 //Import Breadcrumb
-import BreadCrumb from "../../../Components/Common/BreadCrumb";
-import { useFormik } from "formik";
-import { clearNotification } from "../../../slices/message/reducer";
+import BreadCrumb from "../../../Components/Common/BreadCrumb"
+import { useFormik } from "formik"
+import { clearNotification } from "../../../slices/message/reducer"
 
 //redux
-import { useSelector, useDispatch } from "react-redux";
-import Select from "react-select";
+import { useSelector, useDispatch } from "react-redux"
+import Select from "react-select"
 
-import "react-toastify/dist/ReactToastify.css";
-import { createSelector } from "reselect";
+import "react-toastify/dist/ReactToastify.css"
+import { createSelector } from "reselect"
 
-import { getMovie, deleteMovie } from "../../../slices/Movie/thunk";
+import { getMovie, deleteMovie } from "../../../slices/Movie/thunk"
 const Movies = (props) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
-  const [modal_detele, setmodal_detele] = useState(false);
-  const [modal_togFirst, setmodal_togFirst] = useState(false);
-  const [slug, setSlug] = useState("");
+  const [modal_detele, setmodal_detele] = useState(false)
+  const [modal_togFirst, setmodal_togFirst] = useState(false)
+  const [slug, setSlug] = useState("")
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams()
   const [searchname, setSearch] = useState(
     searchParams.get("searchname") || null
-  );
-  const [status, setStatus] = useState(searchParams.get("status") || null);
-  const [country, setCountry] = useState(searchParams.get("country") || null);
+  )
+  const [status, setStatus] = useState(searchParams.get("status") || null)
+  const [country, setCountry] = useState(searchParams.get("country") || null)
   const [pageNo, setPageNo] = useState(
     parseInt(searchParams.get("pageNo"), 10) || 1
-  );
+  )
   const [pageSize, setPageSize] = useState(
     parseInt(searchParams.get("pageSize"), 10) || 15
-  );
+  )
 
   useEffect(() => {
-    let params = {};
+    let params = {}
     if (searchname && searchname !== null && searchname !== undefined) {
-      params.searchname = searchname;
+      params.searchname = searchname
     }
 
     if (status && status !== null && status !== undefined) {
-      params.status = status;
+      params.status = status
     }
 
     if (country && country !== null && country !== undefined) {
-      params.country = country;
+      params.country = country
     }
 
-    params.pageNo = pageNo;
-    params.pageSize = pageSize;
+    params.pageNo = pageNo
+    params.pageSize = pageSize
 
-    setSearchParams(params);
+    setSearchParams(params)
 
-    dispatch(getMovie(searchname, status, country, pageNo, pageSize));
-  }, [dispatch, searchname, country, status, pageNo, pageSize]);
+    dispatch(getMovie(searchname, status, country, pageNo, pageSize))
+  }, [dispatch, searchname, country, status, pageNo, pageSize])
 
-  const MovieState = (state) => state;
+  const MovieState = (state) => state
   const MovieStateData = createSelector(MovieState, (state) => ({
     success: state.Message.success,
     error: state.Message.error,
@@ -81,7 +81,7 @@ const Movies = (props) => {
     Movie: state.Movie.data,
     selectStatus: state.Movie.selectStatus,
     selectcountry: state.Movie.selectcountry,
-  }));
+  }))
   // Inside your component
   const {
     error,
@@ -91,25 +91,25 @@ const Movies = (props) => {
     Movie,
     selectStatus,
     selectcountry,
-  } = useSelector(MovieStateData);
+  } = useSelector(MovieStateData)
 
   useEffect(() => {
     if (success) {
       if (messageSuccess != null) {
-        message.success(messageSuccess);
+        message.success(messageSuccess)
       }
     }
     if (error) {
       if (messageError != null) {
-        message.error(messageError);
+        message.error(messageError)
       }
     }
-    dispatch(clearNotification());
-  }, [dispatch, success, error]);
+    dispatch(clearNotification())
+  }, [dispatch, success, error])
 
   const handlePagination = (page) => {
-    const newPageNo = page + 1;
-    setPageNo(newPageNo);
+    const newPageNo = page + 1
+    setPageNo(newPageNo)
 
     setSearchParams({
       searchname,
@@ -117,20 +117,20 @@ const Movies = (props) => {
       country,
       pageNo: newPageNo,
       pageSize,
-    });
-  };
+    })
+  }
 
   const handlenumberOfElements = (elements) => {
-    setPageSize(elements);
-    setPageNo(1);
+    setPageSize(elements)
+    setPageNo(1)
     setSearchParams({
       searchname,
       status,
       country,
       pageNo,
       pageSize: elements,
-    });
-  };
+    })
+  }
 
   const searchForm = useFormik({
     enableReinitialize: true,
@@ -142,25 +142,25 @@ const Movies = (props) => {
     },
     onSubmit: (values) => {
       // console.log(values);
-      setSearch(values.name);
-      setStatus(values.status);
-      setCountry(values.country);
-      setPageNo(1);
+      setSearch(values.name)
+      setStatus(values.status)
+      setCountry(values.country)
+      setPageNo(1)
     },
-  });
+  })
 
   function tog_togdelete(slug) {
-    setmodal_detele(!modal_togFirst);
+    setmodal_detele(!modal_togFirst)
     // console.log(slug);
     if (slug) {
-      setSlug(slug);
+      setSlug(slug)
     }
   }
 
   function deleteitem(slug) {
     // console.log("delete : " + slug);
     if (slug) {
-      dispatch(deleteMovie(slug));
+      dispatch(deleteMovie(slug))
     }
   }
 
@@ -174,7 +174,7 @@ const Movies = (props) => {
             <>
               <Image width={70} src={cell.getValue()} />
             </>
-          );
+          )
         },
         enableColumnFilter: false,
       },
@@ -184,37 +184,37 @@ const Movies = (props) => {
         enableColumnFilter: false,
       },
       {
-        header: "release Date movie",
+        header: "Movie release date",
         accessorKey: "releaseDate",
         enableColumnFilter: false,
       },
       {
-        header: "end Date movie",
+        header: "Movie end date",
         accessorKey: "endDate",
         enableColumnFilter: false,
       },
       {
-        header: "country",
+        header: "Country",
         accessorKey: "country",
         cell: (cell) => {
           return (
             <>
               <span>{cell.getValue()?.name}</span>
             </>
-          );
+          )
         },
         enableColumnFilter: false,
       },
       {
-        header: "duration movie",
+        header: "Duration movie",
         accessorKey: "duration_movie",
         cell: (cell) => {
-          return <span>{cell.getValue()} minutes</span>;
+          return <span>{cell.getValue()} minutes</span>
         },
         enableColumnFilter: false,
       },
       {
-        header: "categories",
+        header: "Categories",
         accessorKey: "categories",
         cell: (cell) => {
           return (
@@ -227,10 +227,10 @@ const Movies = (props) => {
                   >
                     {item.name}
                   </span>
-                );
+                )
               })}
             </span>
-          );
+          )
         },
         enableColumnFilter: false,
       },
@@ -282,11 +282,11 @@ const Movies = (props) => {
       //   enableColumnFilter: false,
       // },
       {
-        header: "status",
+        header: "Status",
         accessorKey: "status",
         enableColumnFilter: false,
         cell: (cell) => {
-          const value = cell.getValue();
+          const value = cell.getValue()
           return (
             <React.Fragment>
               {value === "Coming Soon" ? (
@@ -316,7 +316,7 @@ const Movies = (props) => {
                 </span>
               )}
             </React.Fragment>
-          );
+          )
         },
       },
       {
@@ -340,15 +340,15 @@ const Movies = (props) => {
                 <i className="ri-delete-bin-5-line"></i>
               </span>
             </React.Fragment>
-          );
+          )
         },
         className: "sticky-right",
       },
     ],
     []
-  );
+  )
 
-  document.title = "Cinema Manager";
+  document.title = "Cinema Manager"
   return (
     <React.Fragment>
       <div className="page-content">
@@ -378,9 +378,9 @@ const Movies = (props) => {
                   </Row>
                   <Form
                     onSubmit={(e) => {
-                      e.preventDefault();
-                      searchForm.handleSubmit();
-                      return false;
+                      e.preventDefault()
+                      searchForm.handleSubmit()
+                      return false
                     }}
                     action="#"
                   >
@@ -408,9 +408,9 @@ const Movies = (props) => {
                             placeholder="Select country"
                             classNamePrefix="select"
                             onChange={(option) => {
-                              const status = option ? option.value : null;
-                              searchForm.setFieldValue("country", status);
-                              searchForm.setFieldTouched("country", true);
+                              const status = option ? option.value : null
+                              searchForm.setFieldValue("country", status)
+                              searchForm.setFieldTouched("country", true)
                             }}
                             onBlur={() =>
                               searchForm.setFieldTouched("country", true)
@@ -427,12 +427,12 @@ const Movies = (props) => {
                             name="status"
                             options={selectStatus}
                             isClearable={true}
-                            placeholder="Select Status"
+                            placeholder="Select status"
                             classNamePrefix="select"
                             onChange={(option) => {
-                              const status = option ? option.value : null;
-                              searchForm.setFieldValue("status", status);
-                              searchForm.setFieldTouched("status", true);
+                              const status = option ? option.value : null
+                              searchForm.setFieldValue("status", status)
+                              searchForm.setFieldTouched("status", true)
                             }}
                             onBlur={() =>
                               searchForm.setFieldTouched("status", true)
@@ -480,7 +480,7 @@ const Movies = (props) => {
       <Modal
         isOpen={modal_detele}
         toggle={() => {
-          tog_togdelete();
+          tog_togdelete()
         }}
         id="firstmodal"
         centered
@@ -502,8 +502,8 @@ const Movies = (props) => {
                 color="danger"
                 type="submit"
                 onClick={() => {
-                  deleteitem(slug);
-                  setmodal_detele(false);
+                  deleteitem(slug)
+                  setmodal_detele(false)
                 }}
               >
                 Yes, Delete
@@ -513,7 +513,7 @@ const Movies = (props) => {
         </ModalBody>
       </Modal>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default withRouter(Movies);
+export default withRouter(Movies)

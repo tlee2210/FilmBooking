@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import BreadCrumb from "../../../Components/Common/BreadCrumb";
-import { createSelector } from "reselect";
-import withRouter from "../../../Components/Common/withRouter";
-import { GoogleApiWrapper, Map, Marker } from "google-maps-react";
-import axios from "axios";
+import React, { useState, useEffect } from "react"
+import BreadCrumb from "../../../Components/Common/BreadCrumb"
+import { createSelector } from "reselect"
+import withRouter from "../../../Components/Common/withRouter"
+import { GoogleApiWrapper, Map, Marker } from "google-maps-react"
+import axios from "axios"
 
 import {
   Card,
@@ -16,91 +16,91 @@ import {
   Label,
   FormFeedback,
   Form,
-} from "reactstrap";
-import { PlusOutlined } from "@ant-design/icons";
-import { Image, Upload, message } from "antd";
+} from "reactstrap"
+import { PlusOutlined } from "@ant-design/icons"
+import { Image, Upload, message } from "antd"
 
 const mapStyles = {
   width: "100%",
   height: "100%",
-};
+}
 
 // Redux
-import { useDispatch, useSelector } from "react-redux";
-import { GetEditCinema, UpdateCinema } from "../../../slices/Cinemas/thunk";
-import { clearNotification } from "../../../slices/message/reducer";
+import { useDispatch, useSelector } from "react-redux"
+import { GetEditCinema, UpdateCinema } from "../../../slices/Cinemas/thunk"
+import { clearNotification } from "../../../slices/message/reducer"
 
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { Link, useNavigate } from "react-router-dom";
+import { CKEditor } from "@ckeditor/ckeditor5-react"
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic"
+import { Link, useNavigate } from "react-router-dom"
 //formik
-import { useFormik } from "formik";
-import * as Yup from "yup";
+import { useFormik } from "formik"
+import * as Yup from "yup"
 
-import Select from "react-select";
+import Select from "react-select"
 
 const getLatLng = async (address) => {
   try {
     const response = await axios.get(
       `https://api.opencagedata.com/geocode/v1/json?q=${address}&key=23c35984bc6f42268abd8516ce6529d2`
-    );
-    return response;
+    )
+    return response
   } catch (error) {
     // console.error("Error fetching latitude and longitude:", error);
     // throw error;
-    return null;
+    return null
   }
-};
+}
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = (error) => reject(error)
+  })
 
 const CinemaEdit = (props) => {
-  const slug = props.router.params.slug;
+  const slug = props.router.params.slug
   // console.log(slug);
-  document.title = "Edit Cinema";
+  document.title = "Edit Cinema"
 
-  const history = useNavigate();
-  const dispatch = useDispatch();
+  const history = useNavigate()
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(GetEditCinema(slug, props.router.navigate));
-    validation.resetForm();
-  }, []);
+    dispatch(GetEditCinema(slug, props.router.navigate))
+    validation.resetForm()
+  }, [])
 
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
+  const [previewOpen, setPreviewOpen] = useState(false)
+  const [previewImage, setPreviewImage] = useState("")
 
-  const selectCinemaEditState = (state) => state;
+  const selectCinemaEditState = (state) => state
 
   const CinemaEditpageData = createSelector(selectCinemaEditState, (state) => ({
     SelectOption: state.Cinema.SelectOption,
     item: state.Cinema.item,
     error: state.Message.error,
     messageError: state.Message.messageError,
-  }));
+  }))
 
   const statusOption = [
     { value: "ACTIVE", label: "ACTIVE" },
     { value: "INACTIVE", label: "INACTIVE" },
-  ];
+  ]
 
   const { SelectOption, item, error, messageError } =
-    useSelector(CinemaEditpageData);
+    useSelector(CinemaEditpageData)
 
   useEffect(() => {
     if (error) {
       if (messageError != null) {
-        message.error(messageError);
+        message.error(messageError)
       }
     }
-    dispatch(clearNotification());
-  }, [error]);
+    dispatch(clearNotification())
+  }, [error])
 
   // const [files, setFiles] = useState([]);
 
@@ -119,14 +119,14 @@ const CinemaEdit = (props) => {
       status: item.status,
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Please Enter a Cinema name"),
-      address: Yup.string().required("Please Enter a address"),
-      status: Yup.string().required("Please Enter a status"),
+      name: Yup.string().required("Please enter cinema name"),
+      address: Yup.string().required("Please enter address"),
+      status: Yup.string().required("Please select status"),
       phone: Yup.string()
-        .required("Please Enter a phone")
-        .matches(/^\d{10}$/, "phone must be exactly 10 digits"),
-      Description: Yup.string().required("Please Enter a Description"),
-      City: Yup.string().required("address does not exist"),
+        .required("Please enter phone number")
+        .matches(/^\d{10}$/, "Phone must be exactly 10 digits"),
+      Description: Yup.string().required("Please enter description"),
+      City: Yup.string().required("Address does not exist"),
       fileList: Yup.array()
         .of(
           Yup.mixed().test(
@@ -137,40 +137,40 @@ const CinemaEdit = (props) => {
               (value.originFileObj && value.type.startsWith("image/"))
           )
         )
-        .min(1, "Please upload at least one Image"),
+        .min(1, "Please upload at least one image"),
     }),
     onSubmit: (values) => {
       // console.log(values);
-      const formData = new FormData();
-      formData.append("id", item.id);
-      formData.append("name", values.name);
-      formData.append("description", values.Description);
-      formData.append("address", values.address);
-      formData.append("city", values.City);
-      formData.append("phone", values.phone);
-      formData.append("lat", values.lat);
-      formData.append("lng", values.lng);
-      formData.append("status", values.status);
+      const formData = new FormData()
+      formData.append("id", item.id)
+      formData.append("name", values.name)
+      formData.append("description", values.Description)
+      formData.append("address", values.address)
+      formData.append("city", values.City)
+      formData.append("phone", values.phone)
+      formData.append("lat", values.lat)
+      formData.append("lng", values.lng)
+      formData.append("status", values.status)
       // formData.append("files", values.fileList);
-      let fileIndex = 0;
-      let imageIndex = 0;
+      let fileIndex = 0
+      let imageIndex = 0
 
       values.fileList.forEach((file) => {
         if (file.originFileObj) {
-          formData.append(`files[${fileIndex}]`, file.originFileObj);
-          fileIndex += 1;
+          formData.append(`files[${fileIndex}]`, file.originFileObj)
+          fileIndex += 1
         } else {
-          formData.append(`images[${imageIndex}]`, file.uid);
-          imageIndex += 1;
+          formData.append(`images[${imageIndex}]`, file.uid)
+          imageIndex += 1
         }
-      });
+      })
 
       // const formDataEntries = Array.from(formData.entries());
 
       // console.table("FormData entries:", formDataEntries);
-      dispatch(UpdateCinema(formData, props.router.navigate));
+      dispatch(UpdateCinema(formData, props.router.navigate))
     },
-  });
+  })
 
   // useEffect(() => {
   //   console.log("Current validation errors:", validation.errors);
@@ -179,46 +179,46 @@ const CinemaEdit = (props) => {
   const fetchLatLng = async (address) => {
     if (address != item.address) {
       try {
-        validation.setFieldValue("City", "");
+        validation.setFieldValue("City", "")
 
-        const location = await getLatLng(address);
+        const location = await getLatLng(address)
         if (!location?.data?.results || location.data.results.length < 0) {
-          validation.setFieldError("address", "address does not exist");
+          validation.setFieldError("address", "address does not exist")
         } else {
-          console.log(location);
+          console.log(location)
           validation.setFieldValue(
             "lat",
             location?.data?.results[0]?.geometry?.lat
-          );
+          )
           validation.setFieldValue(
             "lng",
             location?.data?.results[0]?.geometry?.lng
-          );
+          )
 
           let city =
             location?.data?.results[0]?.components?.city ||
-            location?.data?.results[0]?.components?.state;
+            location?.data?.results[0]?.components?.state
           // console.log(city + ": city");
-          validation.setFieldValue("City", city);
+          validation.setFieldValue("City", city)
         }
       } catch (error) {
-        console.error("Error fetching lat/lng:", error);
-        validation.setFieldError("address", "address does not exist");
+        console.error("Error fetching lat/lng:", error)
+        validation.setFieldError("address", "address does not exist")
       }
     }
-  };
+  }
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+      file.preview = await getBase64(file.originFileObj)
     }
-    setPreviewImage(file.url || file.preview);
-    setPreviewOpen(true);
-  };
+    setPreviewImage(file.url || file.preview)
+    setPreviewOpen(true)
+  }
 
   const handleChange = ({ fileList: newFileList }) => {
-    validation.setFieldValue("fileList", newFileList);
-  };
+    validation.setFieldValue("fileList", newFileList)
+  }
 
   const uploadButton = (
     <button
@@ -237,7 +237,7 @@ const CinemaEdit = (props) => {
         Upload
       </div>
     </button>
-  );
+  )
 
   return (
     <div className="page-content">
@@ -246,9 +246,9 @@ const CinemaEdit = (props) => {
 
         <Form
           onSubmit={(e) => {
-            e.preventDefault();
-            validation.handleSubmit();
-            return false;
+            e.preventDefault()
+            validation.handleSubmit()
+            return false
           }}
         >
           <Row>
@@ -268,7 +268,7 @@ const CinemaEdit = (props) => {
                           type="text"
                           className="form-control"
                           id="product-title-input"
-                          placeholder="Enter Cinema name"
+                          placeholder="Enter cinema name"
                           name="name"
                           value={validation.values.name || ""}
                           onBlur={validation.handleBlur}
@@ -292,7 +292,7 @@ const CinemaEdit = (props) => {
                           className="form-label"
                           htmlFor="product-title-input"
                         >
-                          phone
+                          Phone
                         </Label>
                         <Input
                           type="text"
@@ -322,7 +322,7 @@ const CinemaEdit = (props) => {
                           className="form-label"
                           htmlFor="product-title-input"
                         >
-                          address
+                          Address
                         </Label>
                         <Input
                           type="text"
@@ -332,8 +332,8 @@ const CinemaEdit = (props) => {
                           name="address"
                           value={validation.values.address || ""}
                           onBlur={(e) => {
-                            validation.handleBlur(e);
-                            fetchLatLng(validation.values.address);
+                            validation.handleBlur(e)
+                            fetchLatLng(validation.values.address)
                           }}
                           onChange={validation.handleChange}
                           invalid={
@@ -375,8 +375,8 @@ const CinemaEdit = (props) => {
                           placeholder="Select Status"
                           classNamePrefix="select"
                           onChange={(option) => {
-                            validation.setFieldValue("status", option.value);
-                            validation.setFieldTouched("status", true);
+                            validation.setFieldValue("status", option.value)
+                            validation.setFieldTouched("status", true)
                           }}
                           onBlur={() =>
                             validation.setFieldTouched("status", true)
@@ -426,7 +426,7 @@ const CinemaEdit = (props) => {
             <Col md={4}>
               <Card>
                 <CardHeader>
-                  <h5 className="card-title mb-0">image</h5>
+                  <h5 className="card-title mb-0">Image</h5>
                 </CardHeader>
                 <CardBody>
                   {" "}
@@ -474,8 +474,8 @@ const CinemaEdit = (props) => {
                     editor={ClassicEditor}
                     data={validation.values.Description}
                     onChange={(event, editor) => {
-                      const data = editor.getData();
-                      validation.setFieldValue("Description", data);
+                      const data = editor.getData()
+                      validation.setFieldValue("Description", data)
                     }}
                     onBlur={() =>
                       validation.setFieldTouched("Description", true)
@@ -532,16 +532,16 @@ const CinemaEdit = (props) => {
         </Form>
       </Container>
     </div>
-  );
-};
+  )
+}
 
 // export default withRouter(CinemaEdit);
-const LoadingContainer = () => <div>Loading...</div>;
+const LoadingContainer = () => <div>Loading...</div>
 
 const WrappedComponent = GoogleApiWrapper({
   apiKey: "AIzaSyDFP-fyihmScYjgRGuxmgMoX5Mj1Nvv7bY",
   LoadingContainer: LoadingContainer,
   v: "3",
-})(CinemaEdit);
+})(CinemaEdit)
 
-export default withRouter(WrappedComponent);
+export default withRouter(WrappedComponent)

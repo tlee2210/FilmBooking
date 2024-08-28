@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"
 import {
   Card,
   CardBody,
@@ -10,100 +10,100 @@ import {
   FormFeedback,
   FormGroup,
   Form,
-} from "reactstrap";
-import BreadCrumb from "../../../Components/Common/BreadCrumb";
-import { createSelector } from "reselect";
+} from "reactstrap"
+import BreadCrumb from "../../../Components/Common/BreadCrumb"
+import { createSelector } from "reselect"
 
-import { message } from "antd";
-import Dropzone from "react-dropzone";
+import { message } from "antd"
+import Dropzone from "react-dropzone"
 
 // import { clearNotificationMessage } from "../../../slices/message/reducer";
-import { FilePond, registerPlugin } from "react-filepond";
+import { FilePond, registerPlugin } from "react-filepond"
 
 // Import FilePond styles
-import "filepond/dist/filepond.min.css";
-import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
-import FilePondPluginImagePreview from "filepond-plugin-image-preview";
-import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import "filepond/dist/filepond.min.css"
+import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation"
+import FilePondPluginImagePreview from "filepond-plugin-image-preview"
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
 
 // Register the plugins
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview)
 // Redux
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux"
 // import { addNewProduct as onAddNewProduct } from "../../../slices/thunks";
 
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { Link, useNavigate } from "react-router-dom";
+import { CKEditor } from "@ckeditor/ckeditor5-react"
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic"
+import { Link, useNavigate } from "react-router-dom"
 //formik
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import withRouter from "../../../Components/Common/withRouter";
+import { useFormik } from "formik"
+import * as Yup from "yup"
+import withRouter from "../../../Components/Common/withRouter"
 
 import {
   GetEditCelebrity,
   UpdateCelebrity,
-} from "../../../slices/Celebrity/thunk";
-import { clearNotification } from "../../../slices/message/reducer";
+} from "../../../slices/Celebrity/thunk"
+import { clearNotification } from "../../../slices/message/reducer"
 
-import Flatpickr from "react-flatpickr";
-import Select from "react-select";
+import Flatpickr from "react-flatpickr"
+import Select from "react-select"
 
 const EditActorsOrDirectors = (props) => {
-  const slug = props.router.params.slug;
+  const slug = props.router.params.slug
   // console.log(id);
 
-  document.title = "Create Actors Or Directors";
+  document.title = "Create Actors Or Directors"
 
-  const history = useNavigate();
-  const dispatch = useDispatch();
+  const history = useNavigate()
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(GetEditCelebrity(slug, props.router.navigate));
-  }, [slug]);
+    dispatch(GetEditCelebrity(slug, props.router.navigate))
+  }, [slug])
 
-  const selectState = (state) => state;
+  const selectState = (state) => state
   const CelebrityProperties = createSelector(selectState, (state) => ({
     SelectOption: state.Celebrity.SelectOption,
     error: state.Message.error,
     item: state.Celebrity.item,
     messageError: state.Message.messageError,
-  }));
+  }))
   const { SelectOption, error, messageError, item } =
-    useSelector(CelebrityProperties);
+    useSelector(CelebrityProperties)
 
   useEffect(() => {
     if (error) {
       if (messageError != null) {
-        message.error(messageError);
+        message.error(messageError)
       }
     }
-    dispatch(clearNotification());
-  }, [error]);
+    dispatch(clearNotification())
+  }, [error])
 
   const roleOption = [
     { value: "ACTOR", label: "ACTOR" },
     { value: "DIRECTOR", label: "DIRECTOR" },
-  ];
+  ]
 
-  const [selectedFiles, setselectedFiles] = useState([]);
+  const [selectedFiles, setselectedFiles] = useState([])
   function handleAcceptedFiles(files) {
     files.map((file) =>
       Object.assign(file, {
         preview: URL.createObjectURL(file),
         formattedSize: formatBytes(file.size),
       })
-    );
-    setselectedFiles(files);
+    )
+    setselectedFiles(files)
   }
   function formatBytes(bytes, decimals = 2) {
-    if (bytes === 0) return "0 Bytes";
-    const k = 1024;
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    if (bytes === 0) return "0 Bytes"
+    const k = 1024
+    const dm = decimals < 0 ? 0 : decimals
+    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
 
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
   }
 
   const validation = useFormik({
@@ -120,9 +120,9 @@ const EditActorsOrDirectors = (props) => {
       files: [],
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Please Enter a faculty Title"),
-      nationality: Yup.string().required("Please Enter an nationality"),
-      Role: Yup.string().required("Please Enter an Role"),
+      name: Yup.string().required("Please enter name"),
+      nationality: Yup.string().required("Please select a nationality"),
+      Role: Yup.string().required("Please select a role"),
       dateOfBirth: Yup.date()
         .max(
           new Date(new Date().setFullYear(new Date().getFullYear() - 8)),
@@ -132,9 +132,9 @@ const EditActorsOrDirectors = (props) => {
           new Date(new Date().setFullYear(new Date().getFullYear() - 90)),
           "Maximum age is 90 years"
         )
-        .required("Please select a date of birth"),
-      biography: Yup.string().required("Please Enter a biography"),
-      Description: Yup.string().required("Please Enter a Description"),
+        .required("Please select date of birth"),
+      biography: Yup.string().required("Please enter biography"),
+      Description: Yup.string().required("Please enter description"),
       files: Yup.array().of(
         Yup.mixed().test(
           "fileType",
@@ -145,23 +145,23 @@ const EditActorsOrDirectors = (props) => {
     }),
     onSubmit: (values) => {
       // console.log(values);
-      const formData = new FormData();
-      formData.append("id", item.id);
-      formData.append("name", values.name);
-      formData.append("nationality", values.nationality);
+      const formData = new FormData()
+      formData.append("id", item.id)
+      formData.append("name", values.name)
+      formData.append("nationality", values.nationality)
       const formattedDate = new Date(values.dateOfBirth)
         .toISOString()
-        .split("T")[0];
-      formData.append("dateOfBirth", formattedDate);
-      formData.append("biography", values.biography);
-      formData.append("Description", values.Description);
-      formData.append("role", values.Role);
+        .split("T")[0]
+      formData.append("dateOfBirth", formattedDate)
+      formData.append("biography", values.biography)
+      formData.append("Description", values.Description)
+      formData.append("role", values.Role)
       if (values.files[0]) {
-        formData.append("file", values.files[0]);
+        formData.append("file", values.files[0])
       }
-      dispatch(UpdateCelebrity(formData, props.router.navigate));
+      dispatch(UpdateCelebrity(formData, props.router.navigate))
     },
-  });
+  })
 
   return (
     <React.Fragment>
@@ -176,9 +176,9 @@ const EditActorsOrDirectors = (props) => {
             <Col md={12}>
               <Form
                 onSubmit={(e) => {
-                  e.preventDefault();
-                  validation.handleSubmit();
-                  return false;
+                  e.preventDefault()
+                  validation.handleSubmit()
+                  return false
                 }}
               >
                 <Card>
@@ -220,7 +220,7 @@ const EditActorsOrDirectors = (props) => {
                             className="form-label"
                             htmlFor="product-title-input"
                           >
-                            nationality
+                            Nationality
                           </Label>
                           <Select
                             name="nationality"
@@ -231,8 +231,8 @@ const EditActorsOrDirectors = (props) => {
                               validation.setFieldValue(
                                 "nationality",
                                 option.value
-                              );
-                              validation.setFieldTouched("nationality", true);
+                              )
+                              validation.setFieldTouched("nationality", true)
                             }}
                             onBlur={() =>
                               validation.setFieldTouched("nationality", true)
@@ -275,7 +275,7 @@ const EditActorsOrDirectors = (props) => {
                               validation.setFieldValue(
                                 "dateOfBirth",
                                 selectedDate
-                              );
+                              )
                             }}
                             options={{
                               minDate: new Date().fp_incr(-90 * 365),
@@ -307,8 +307,8 @@ const EditActorsOrDirectors = (props) => {
                             placeholder="Enter nationality"
                             classNamePrefix="select"
                             onChange={(option) => {
-                              validation.setFieldValue("Role", option.value);
-                              validation.setFieldTouched("Role", true);
+                              validation.setFieldValue("Role", option.value)
+                              validation.setFieldTouched("Role", true)
                             }}
                             onBlur={() =>
                               validation.setFieldTouched("Role", true)
@@ -331,14 +331,14 @@ const EditActorsOrDirectors = (props) => {
                         </div>
                       </Col>
                       <Col md={6}>
-                        <Label>biography</Label>
+                        <Label>Biography</Label>
                         <CKEditor
                           editor={ClassicEditor}
                           placeholder="biography"
                           data={validation.values.biography}
                           onChange={(event, editor) => {
-                            const data = editor.getData();
-                            validation.setFieldValue("biography", data);
+                            const data = editor.getData()
+                            validation.setFieldValue("biography", data)
                           }}
                           onBlur={() =>
                             validation.setFieldTouched("biography", true)
@@ -359,8 +359,8 @@ const EditActorsOrDirectors = (props) => {
                           placeholder="Description"
                           data={validation.values.Description}
                           onChange={(event, editor) => {
-                            const data = editor.getData();
-                            validation.setFieldValue("Description", data);
+                            const data = editor.getData()
+                            validation.setFieldValue("Description", data)
                           }}
                           onBlur={() =>
                             validation.setFieldTouched("Description", true)
@@ -376,11 +376,11 @@ const EditActorsOrDirectors = (props) => {
                     </Row>
                     <Col md="4" className="mt-2">
                       <FormGroup className="mb-3">
-                        <Label htmlFor="validationCustom02">avatar</Label>
+                        <Label htmlFor="validationCustom02">Avatar</Label>
                         <Dropzone
                           onDrop={(acceptedFiles) => {
-                            handleAcceptedFiles(acceptedFiles);
-                            validation.setFieldValue("files", acceptedFiles);
+                            handleAcceptedFiles(acceptedFiles)
+                            validation.setFieldValue("files", acceptedFiles)
                           }}
                         >
                           {({ getRootProps, getInputProps }) => (
@@ -392,7 +392,7 @@ const EditActorsOrDirectors = (props) => {
                                 <div className="mb-3">
                                   <i className="display-4 text-muted ri-upload-cloud-2-fill" />
                                 </div>
-                                <h4>upload Image</h4>
+                                <h4>Upload Image</h4>
                               </div>
                             </div>
                           )}
@@ -435,7 +435,7 @@ const EditActorsOrDirectors = (props) => {
                                     </Row>
                                   </div>
                                 </Card>
-                              );
+                              )
                             })
                           ) : (
                             <Card
@@ -486,7 +486,7 @@ const EditActorsOrDirectors = (props) => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default withRouter(EditActorsOrDirectors);
+export default withRouter(EditActorsOrDirectors)

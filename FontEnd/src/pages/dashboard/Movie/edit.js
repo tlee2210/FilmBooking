@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import BreadCrumb from "../../../Components/Common/BreadCrumb";
-import { createSelector } from "reselect";
-import withRouter from "../../../Components/Common/withRouter";
+import React, { useState, useEffect } from "react"
+import BreadCrumb from "../../../Components/Common/BreadCrumb"
+import { createSelector } from "reselect"
+import withRouter from "../../../Components/Common/withRouter"
 
 // import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 
@@ -18,50 +18,50 @@ import {
   Form,
   FormGroup,
   Button,
-} from "reactstrap";
-import { PlusOutlined } from "@ant-design/icons";
-import { Image, Upload, message } from "antd";
-import Flatpickr from "react-flatpickr";
+} from "reactstrap"
+import { PlusOutlined } from "@ant-design/icons"
+import { Image, Upload, message } from "antd"
+import Flatpickr from "react-flatpickr"
 
 // Redux
-import { useDispatch, useSelector } from "react-redux";
-import { GetEditMovie, UpdateMovie } from "../../../slices/Movie/thunk";
-import { clearNotification } from "../../../slices/message/reducer";
+import { useDispatch, useSelector } from "react-redux"
+import { GetEditMovie, UpdateMovie } from "../../../slices/Movie/thunk"
+import { clearNotification } from "../../../slices/message/reducer"
 
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { Link, useNavigate } from "react-router-dom";
+import { CKEditor } from "@ckeditor/ckeditor5-react"
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic"
+import { Link, useNavigate } from "react-router-dom"
 //formik
-import { useFormik } from "formik";
-import * as Yup from "yup";
+import { useFormik } from "formik"
+import * as Yup from "yup"
 
-import Select from "react-select";
+import Select from "react-select"
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = (error) => reject(error)
+  })
 
 const MovieEdit = (props) => {
-  const slug = props.router.params.slug;
-  document.title = "Edit Movie";
+  const slug = props.router.params.slug
+  document.title = "Edit Movie"
 
-  const history = useNavigate();
-  const dispatch = useDispatch();
+  const history = useNavigate()
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(GetEditMovie(slug, props.router.navigate));
-  }, [dispatch, slug, props.router.navigate]);
+    dispatch(GetEditMovie(slug, props.router.navigate))
+  }, [dispatch, slug, props.router.navigate])
 
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
-  const [fileLandscape, setFileLandscape] = useState([]);
-  const [filePortrait, setFilePortrait] = useState([]);
+  const [previewOpen, setPreviewOpen] = useState(false)
+  const [previewImage, setPreviewImage] = useState("")
+  const [fileLandscape, setFileLandscape] = useState([])
+  const [filePortrait, setFilePortrait] = useState([])
 
-  const selectMovieCreateState = (state) => state;
+  const selectMovieCreateState = (state) => state
 
   const movieCreatepageData = createSelector(
     selectMovieCreateState,
@@ -75,7 +75,7 @@ const MovieEdit = (props) => {
       selectcountry: state.Movie.selectcountry,
       item: state.Movie.item,
     })
-  );
+  )
 
   const {
     error,
@@ -86,37 +86,35 @@ const MovieEdit = (props) => {
     selectStatus,
     selectcountry,
     item,
-  } = useSelector(movieCreatepageData);
+  } = useSelector(movieCreatepageData)
 
   useEffect(() => {
     if (item.imagePortrait) {
-      setFilePortrait([{ uid: item.imagePortrait, url: item.imagePortrait }]);
+      setFilePortrait([{ uid: item.imagePortrait, url: item.imagePortrait }])
     }
-  }, [item.imagePortrait]);
+  }, [item.imagePortrait])
 
   useEffect(() => {
     if (item.imageLandscape) {
-      setFileLandscape([
-        { uid: item.imageLandscape, url: item.imageLandscape },
-      ]);
+      setFileLandscape([{ uid: item.imageLandscape, url: item.imageLandscape }])
     }
-  }, [item.imageLandscape]);
+  }, [item.imageLandscape])
 
   useEffect(() => {
     if (error) {
       if (messageError != null) {
-        message.error(messageError);
+        message.error(messageError)
       }
     }
-    dispatch(clearNotification());
-  }, [error]);
+    dispatch(clearNotification())
+  }, [error])
 
   const customStyles = {
     multiValue: (styles, { data }) => {
       return {
         ...styles,
         backgroundColor: "#126f8c",
-      };
+      }
     },
     multiValueLabel: (styles, { data }) => ({
       ...styles,
@@ -132,13 +130,13 @@ const MovieEdit = (props) => {
         color: "white",
       },
     }),
-  };
+  }
   const DirectoryStyles = {
     multiValue: (styles, { data }) => {
       return {
         ...styles,
         backgroundColor: "#81ce40",
-      };
+      }
     },
     multiValueLabel: (styles, { data }) => ({
       ...styles,
@@ -154,13 +152,13 @@ const MovieEdit = (props) => {
         color: "white",
       },
     }),
-  };
+  }
   const CategoryStyles = {
     multiValue: (styles, { data }) => {
       return {
         ...styles,
         backgroundColor: "#d36d38",
-      };
+      }
     },
     multiValueLabel: (styles, { data }) => ({
       ...styles,
@@ -176,12 +174,12 @@ const MovieEdit = (props) => {
         color: "white",
       },
     }),
-  };
+  }
 
   const removePrice = (index) => {
-    const newPrices = validation.values.prices.filter((_, i) => i !== index);
-    validation.setFieldValue("prices", newPrices);
-  };
+    const newPrices = validation.values.prices.filter((_, i) => i !== index)
+    validation.setFieldValue("prices", newPrices)
+  }
 
   const validation = useFormik({
     enableReinitialize: true,
@@ -212,37 +210,37 @@ const MovieEdit = (props) => {
         : [],
       Category:
         item?.categories?.map((cat) => {
-          return cat.id;
+          return cat.id
         }) || [],
       Actor:
         item?.actor?.map((act) => {
-          return act.id;
+          return act.id
         }) || [],
       Directory:
         item?.director?.map((dir) => {
-          return dir.id;
+          return dir.id
         }) || [],
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Please Enter a Movie name"),
-      trailer: Yup.string().required("Please Enter Link trailer"),
-      producer: Yup.string().required("Please Enter a Movie producer"),
-      status: Yup.string().required("Please Enter a Movie status"),
-      language: Yup.string().required("Please Enter a Movie language"),
+      name: Yup.string().required("Please enter movie name"),
+      trailer: Yup.string().required("Please enter trailer link"),
+      producer: Yup.string().required("Please enter movie producer"),
+      status: Yup.string().required("Please select movie status"),
+      language: Yup.string().required("Please enter language of movie"),
       duration_movie: Yup.number()
-        .required("Please Enter a duration movie")
+        .required("Please enter movie duration")
         .min(60, "Duration must be at least 60 minutes")
         .max(200, "Duration cannot exceed 200 minutes"),
-      price: Yup.number().required("Please Enter a price movie"),
+      price: Yup.number().required("Please enter price"),
       rules: Yup.number()
         .min(12, "Age must be at least 12")
         .max(18, "Age cannot exceed 18"),
-      country: Yup.string().required("Please Enter a Movie country"),
-      Description: Yup.string().required("Please Enter Description"),
-      Category: Yup.array().min(1, "Please select at least one Category"),
-      Actor: Yup.array().min(1, "Please select at least one Actor"),
-      Directory: Yup.array().min(1, "Please select at least one Director"),
-      releaseDate: Yup.date().required("Please enter a release date"),
+      country: Yup.string().required("Please select country"),
+      Description: Yup.string().required("Please enter description"),
+      Category: Yup.array().min(1, "Please select at least one category"),
+      Actor: Yup.array().min(1, "Please select at least one actor"),
+      Directory: Yup.array().min(1, "Please select at least one director"),
+      releaseDate: Yup.date().required("Please select release date"),
       // .min(
       //   new Date(new Date().getTime() + 15 * 24 * 60 * 60 * 1000),
       //   "The release date cannot be less than 15 days from the current date"
@@ -252,7 +250,7 @@ const MovieEdit = (props) => {
           Yup.ref("releaseDate"),
           "The end date must be at least 30 days after the release date"
         )
-        .required("Please enter an end date"),
+        .required("Please select end date"),
       fileLandscape: Yup.array()
         .of(
           Yup.mixed().test(
@@ -263,7 +261,7 @@ const MovieEdit = (props) => {
               (value.originFileObj && value.type.startsWith("image/"))
           )
         )
-        .min(1, "Please upload at least one Image"),
+        .min(1, "Please upload at least one image"),
       filePortrait: Yup.array()
         .of(
           Yup.mixed().test(
@@ -274,94 +272,91 @@ const MovieEdit = (props) => {
               (value.originFileObj && value.type.startsWith("image/"))
           )
         )
-        .min(1, "Please upload at least one Image"),
+        .min(1, "Please upload at least one image"),
       prices: Yup.array().of(
         Yup.object().shape({
-          price: Yup.number().required("Please Enter a price"),
+          price: Yup.number().required("Please enter a price"),
           date: Yup.date()
-            .required("Please Enter a date")
+            .required("Please enter a date")
             .test("duplicateDate", "Dates must be unique", function (value) {
-              const { prices } = this.parent;
-              if (!prices) return true;
-              const dates = prices.map((price) => price.date);
-              const uniqueDates = [...new Set(dates)];
-              return uniqueDates.length === dates.length;
+              const { prices } = this.parent
+              if (!prices) return true
+              const dates = prices.map((price) => price.date)
+              const uniqueDates = [...new Set(dates)]
+              return uniqueDates.length === dates.length
             }),
         })
       ),
     }),
     onSubmit: (values) => {
       // console.log(values);
-      const formData = new FormData();
-      formData.append("id", item.id);
-      formData.append("name", values.name);
-      formData.append("duration_movie", values.duration_movie);
-      formData.append("countryId", values.country);
-      formData.append("language", values.language);
-      formData.append("producer", values.producer);
-      formData.append("status", values.status);
-      formData.append("description", values.Description);
+      const formData = new FormData()
+      formData.append("id", item.id)
+      formData.append("name", values.name)
+      formData.append("duration_movie", values.duration_movie)
+      formData.append("countryId", values.country)
+      formData.append("language", values.language)
+      formData.append("producer", values.producer)
+      formData.append("status", values.status)
+      formData.append("description", values.Description)
       if (values.fileLandscape[0].originFileObj) {
-        formData.append(
-          "imageLandscape",
-          values.fileLandscape[0].originFileObj
-        );
+        formData.append("imageLandscape", values.fileLandscape[0].originFileObj)
       }
       if (values.filePortrait[0].originFileObj) {
-        formData.append("imagePortrait", values.filePortrait[0].originFileObj);
+        formData.append("imagePortrait", values.filePortrait[0].originFileObj)
       }
-      formData.append("trailer", values.trailer);
-      formData.append("rules", values.rules);
-      formData.append("price", values.price);
+      formData.append("trailer", values.trailer)
+      formData.append("rules", values.rules)
+      formData.append("price", values.price)
       formData.append(
         "releaseDate",
         new Date(values.releaseDate).toISOString().split("T")[0]
-      );
+      )
       formData.append(
         "endDate",
         new Date(values.endDate).toISOString().split("T")[0]
-      );
+      )
       values.Category.forEach((item, index) => {
-        formData.append(`categoriesIds[${index}]`, item);
-      });
+        formData.append(`categoriesIds[${index}]`, item)
+      })
 
       values.Actor.forEach((item, index) => {
-        formData.append(`actorId[${index}]`, item);
-      });
+        formData.append(`actorId[${index}]`, item)
+      })
 
       values.Directory.forEach((item, index) => {
-        formData.append(`directorId[${index}]`, item);
-      });
+        formData.append(`directorId[${index}]`, item)
+      })
 
       values.prices.forEach((item, index) => {
-        formData.append(`prices[${index}].price`, item.price);
+        formData.append(`prices[${index}].price`, item.price)
         formData.append(
           `prices[${index}].date`,
           item.date.toISOString().split("T")[0]
-        );
-      });
+        )
+      })
 
-      dispatch(UpdateMovie(formData, props.router.navigate));
+      dispatch(UpdateMovie(formData, props.router.navigate))
     },
-  });
+  })
   // console.log(validation.values);
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+      file.preview = await getBase64(file.originFileObj)
     }
-    setPreviewImage(file.url || file.preview);
-    setPreviewOpen(true);
-  };
+    setPreviewImage(file.url || file.preview)
+    setPreviewOpen(true)
+  }
   const handleChangePortrait = ({ fileList: newFileList }) => {
-    setFilePortrait(newFileList);
-    validation.setFieldValue("filePortrait", newFileList);
-  };
+    setFilePortrait(newFileList)
+    validation.setFieldValue("filePortrait", newFileList)
+  }
 
   const handleChangeLandscape = ({ fileList: newFileList }) => {
-    setFileLandscape(newFileList);
-    validation.setFieldValue("fileLandscape", newFileList);
-  };
+    setFileLandscape(newFileList)
+    validation.setFieldValue("fileLandscape", newFileList)
+  }
 
   const uploadButton = (
     <button
@@ -380,7 +375,7 @@ const MovieEdit = (props) => {
         Upload
       </div>
     </button>
-  );
+  )
 
   return (
     <div className="page-content">
@@ -389,9 +384,9 @@ const MovieEdit = (props) => {
 
         <Form
           onSubmit={(e) => {
-            e.preventDefault();
-            validation.handleSubmit();
-            return false;
+            e.preventDefault()
+            validation.handleSubmit()
+            return false
           }}
         >
           <Row>
@@ -409,7 +404,7 @@ const MovieEdit = (props) => {
                             className="form-label"
                             htmlFor="product-title-input"
                           >
-                            name
+                            Name
                           </Label>
                           <Input
                             type="text"
@@ -439,7 +434,7 @@ const MovieEdit = (props) => {
                             className="form-label"
                             htmlFor="product-title-input"
                           >
-                            trailer Link
+                            Trailer link
                           </Label>
                           <Input
                             type="text"
@@ -471,7 +466,7 @@ const MovieEdit = (props) => {
                             className="form-label"
                             htmlFor="product-title-input"
                           >
-                            producer
+                            Producer
                           </Label>
                           <Input
                             type="text"
@@ -503,13 +498,13 @@ const MovieEdit = (props) => {
                             className="form-label"
                             htmlFor="product-title-input"
                           >
-                            Duration Movie
+                            Movie duration
                           </Label>
                           <Input
                             type="number"
                             className="form-control"
                             id="product-title-input"
-                            placeholder="Enter Duration"
+                            placeholder="Enter duration"
                             name="duration_movie"
                             value={validation.values.duration_movie || ""}
                             onBlur={validation.handleBlur}
@@ -543,7 +538,7 @@ const MovieEdit = (props) => {
                               validation.setFieldValue(
                                 "Category",
                                 option.map((item) => item.value)
-                              );
+                              )
                             }}
                             onBlur={() =>
                               validation.setFieldTouched("Category", true)
@@ -583,7 +578,7 @@ const MovieEdit = (props) => {
                               validation.setFieldValue(
                                 "Actor",
                                 option.map((item) => item.value)
-                              );
+                              )
                             }}
                             onBlur={() =>
                               validation.setFieldTouched("Actor", true)
@@ -612,7 +607,7 @@ const MovieEdit = (props) => {
                       </Col>
                       <Col md={6}>
                         <FormGroup className="mb-3">
-                          <Label htmlFor="validationCustom02">Directory</Label>
+                          <Label htmlFor="validationCustom02">Director</Label>
                           <Select
                             name="Directory"
                             isMulti={true}
@@ -623,7 +618,7 @@ const MovieEdit = (props) => {
                               validation.setFieldValue(
                                 "Directory",
                                 option.map((item) => item.value)
-                              );
+                              )
                             }}
                             onBlur={() =>
                               validation.setFieldTouched("Directory", true)
@@ -656,13 +651,13 @@ const MovieEdit = (props) => {
                             className="form-label"
                             htmlFor="product-title-input"
                           >
-                            language
+                            Language
                           </Label>
                           <Input
                             type="text"
                             className="form-control"
                             id="product-title-input"
-                            placeholder="Enter language Movies"
+                            placeholder="Enter language of movie"
                             name="language"
                             value={validation.values.language || ""}
                             onBlur={validation.handleBlur}
@@ -689,7 +684,7 @@ const MovieEdit = (props) => {
                             className="form-label"
                             htmlFor="product-title-input"
                           >
-                            Age Limit
+                            Age limit
                           </Label>
                           <Input
                             type="number"
@@ -721,7 +716,7 @@ const MovieEdit = (props) => {
                             className="form-label"
                             htmlFor="product-title-input"
                           >
-                            price
+                            Price
                           </Label>
                           <Input
                             type="number"
@@ -758,10 +753,10 @@ const MovieEdit = (props) => {
                           <Select
                             name="status"
                             options={selectStatus}
-                            placeholder="Select Status"
+                            placeholder="Select status"
                             classNamePrefix="select"
                             onChange={(option) => {
-                              validation.setFieldValue("status", option.value);
+                              validation.setFieldValue("status", option.value)
                             }}
                             value={selectStatus.find(
                               (opt) => opt.value === validation.values.status
@@ -795,7 +790,7 @@ const MovieEdit = (props) => {
                             placeholder="Select country"
                             classNamePrefix="select"
                             onChange={(option) => {
-                              validation.setFieldValue("country", option.value);
+                              validation.setFieldValue("country", option.value)
                             }}
                             value={selectcountry.find(
                               (opt) => opt.value === validation.values.country
@@ -819,7 +814,7 @@ const MovieEdit = (props) => {
                       <Col md={6}>
                         <div className="mb-3">
                           <Label className="form-label" htmlFor="releaseDate">
-                            Release Date
+                            Release date
                           </Label>
                           <Flatpickr
                             className="form-control"
@@ -829,7 +824,7 @@ const MovieEdit = (props) => {
                               validation.setFieldValue(
                                 "releaseDate",
                                 selectedDate
-                              );
+                              )
                             }}
                             // options={{
                             //   minDate: new Date(
@@ -848,14 +843,14 @@ const MovieEdit = (props) => {
                       <Col md={6}>
                         <div className="mb-3">
                           <Label className="form-label" htmlFor="endDate">
-                            End Date
+                            End date
                           </Label>
                           <Flatpickr
                             className="form-control"
                             placeholder="Enter End Date"
                             value={validation.values.endDate}
                             onChange={([selectedDate]) => {
-                              validation.setFieldValue("endDate", selectedDate);
+                              validation.setFieldValue("endDate", selectedDate)
                             }}
                             options={{
                               minDate: validation.values.releaseDate
@@ -891,8 +886,8 @@ const MovieEdit = (props) => {
                       editor={ClassicEditor}
                       data={validation.values.Description}
                       onChange={(event, editor) => {
-                        const data = editor.getData();
-                        validation.setFieldValue("Description", data);
+                        const data = editor.getData()
+                        validation.setFieldValue("Description", data)
                       }}
                       onBlur={() =>
                         validation.setFieldTouched("Description", true)
@@ -915,7 +910,7 @@ const MovieEdit = (props) => {
                 <Col md={6}>
                   <Card>
                     <CardHeader>
-                      <h5 className="card-title mb-0">image Landscape</h5>
+                      <h5 className="card-title mb-0">Image Landscape</h5>
                     </CardHeader>
                     <CardBody>
                       <div className="justify-content-center align-items-center d-flex">
@@ -958,7 +953,7 @@ const MovieEdit = (props) => {
                 <Col md={6}>
                   <Card>
                     <CardHeader>
-                      <h5 className="card-title mb-0">image Portrait</h5>
+                      <h5 className="card-title mb-0">Image Portrait</h5>
                     </CardHeader>
                     <CardBody>
                       <div className="justify-content-center align-items-center d-flex">
@@ -1033,7 +1028,7 @@ const MovieEdit = (props) => {
                               validation.setFieldValue(
                                 `prices.${index}.date`,
                                 selectedDate
-                              );
+                              )
                             }}
                             options={{
                               // minDate: new Date(
@@ -1067,9 +1062,9 @@ const MovieEdit = (props) => {
                       color="secondary"
                       outline
                       onClick={() => {
-                        const newPrices = [...(validation.values.prices || [])];
-                        newPrices.push({ price: "", date: "" });
-                        validation.setFieldValue("prices", newPrices);
+                        const newPrices = [...(validation.values.prices || [])]
+                        newPrices.push({ price: "", date: "" })
+                        validation.setFieldValue("prices", newPrices)
                       }}
                     >
                       Add
@@ -1087,7 +1082,7 @@ const MovieEdit = (props) => {
         </Form>
       </Container>
     </div>
-  );
-};
+  )
+}
 
-export default withRouter(MovieEdit);
+export default withRouter(MovieEdit)

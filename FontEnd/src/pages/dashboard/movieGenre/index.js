@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { createSelector } from "reselect";
+import React, { useEffect, useMemo, useState } from "react"
+import { createSelector } from "reselect"
 // import { findCoursesById, clearCourses } from "../../../slices/Courses/reducer";
 //redux
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux"
 import {
   Button,
   Card,
@@ -16,54 +16,54 @@ import {
   Row,
   Form,
   FormFeedback,
-} from "reactstrap";
-import { message } from "antd";
-import withRouter from "../../../Components/Common/withRouter";
+} from "reactstrap"
+import { message } from "antd"
+import withRouter from "../../../Components/Common/withRouter"
 
 // Formik validation
-import * as Yup from "yup";
-import { useFormik } from "formik";
-import { clearNotification } from "../../../slices/message/reducer";
-import { clear } from "../../../slices/MovieGenre/reducer";
+import * as Yup from "yup"
+import { useFormik } from "formik"
+import { clearNotification } from "../../../slices/message/reducer"
+import { clear } from "../../../slices/MovieGenre/reducer"
 import {
   getMovieGenre,
   CreateMovieGenre,
   deleteMovieGenre,
   GetEditMovieGenre,
   UpdateMovieGenre,
-} from "../../../slices/MovieGenre/thunk";
+} from "../../../slices/MovieGenre/thunk"
 
-import BreadCrumb from "../../../Components/Common/BreadCrumb";
-import { Link, useSearchParams } from "react-router-dom";
-import TableContainer from "../../../Components/Common/TableContainerReactTable";
+import BreadCrumb from "../../../Components/Common/BreadCrumb"
+import { Link, useSearchParams } from "react-router-dom"
+import TableContainer from "../../../Components/Common/TableContainerReactTable"
 
 const MovieGenre = (props) => {
-  const dispatch = useDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const dispatch = useDispatch()
+  const [searchParams, setSearchParams] = useSearchParams()
 
-  const [searchname, setSearch] = useState(searchParams.get("search") || null);
+  const [searchname, setSearch] = useState(searchParams.get("search") || null)
   const [pageNo, setPageNo] = useState(
     parseInt(searchParams.get("pageNo"), 10) || 1
-  );
+  )
   const [pageSize, setPageSize] = useState(
     parseInt(searchParams.get("pageSize"), 10) || 15
-  );
+  )
 
   useEffect(() => {
     searchname && searchname !== null && searchname !== undefined
       ? setSearchParams({ searchname, pageNo, pageSize })
-      : setSearchParams({ pageNo, pageSize });
+      : setSearchParams({ pageNo, pageSize })
 
-    dispatch(getMovieGenre(searchname, pageNo, pageSize));
-  }, [dispatch, searchname, pageNo, pageSize]);
+    dispatch(getMovieGenre(searchname, pageNo, pageSize))
+  }, [dispatch, searchname, pageNo, pageSize])
 
-  const [formcheck, setformcheck] = useState(false);
-  const [slug, setSlug] = useState("");
-  const [modal_togFirst, setmodal_togFirst] = useState(false);
-  const [modal_togtitle, setmodal_togtitle] = useState("Create New Courses");
-  const [modal_detele, setmodal_detele] = useState(false);
+  const [formcheck, setformcheck] = useState(false)
+  const [slug, setSlug] = useState("")
+  const [modal_togFirst, setmodal_togFirst] = useState(false)
+  const [modal_togtitle, setmodal_togtitle] = useState("Create New Courses")
+  const [modal_detele, setmodal_detele] = useState(false)
 
-  const selectCityState = (state) => state;
+  const selectCityState = (state) => state
 
   const CitypageData = createSelector(selectCityState, (state) => ({
     MovieGenreData: state.MovieGenre.data,
@@ -72,26 +72,26 @@ const MovieGenre = (props) => {
     error: state.Message.error,
     messageSuccess: state.Message.messageSuccess,
     messageError: state.Message.messageError,
-  }));
+  }))
 
   const { error, success, messageSuccess, messageError, MovieGenreData, item } =
-    useSelector(CitypageData);
+    useSelector(CitypageData)
 
   useEffect(() => {
     if (success) {
       if (messageSuccess != null) {
-        message.success(messageSuccess);
-        setmodal_togFirst(false);
-        searchForm.resetForm();
+        message.success(messageSuccess)
+        setmodal_togFirst(false)
+        searchForm.resetForm()
       }
     }
     if (error) {
       if (messageError != null) {
-        message.error(messageError);
+        message.error(messageError)
       }
     }
-    dispatch(clearNotification());
-  }, [dispatch, success, error]);
+    dispatch(clearNotification())
+  }, [dispatch, success, error])
 
   const validation = useFormik({
     enableReinitialize: true,
@@ -105,19 +105,19 @@ const MovieGenre = (props) => {
 
     onSubmit: (values) => {
       // console.log(values);
-      const formData = new FormData();
-      formData.append("name", values.name);
+      const formData = new FormData()
+      formData.append("name", values.name)
 
       if (formcheck) {
         // console.log("edit: ", values);
-        formData.append("id", item?.id);
-        dispatch(UpdateMovieGenre(formData));
+        formData.append("id", item?.id)
+        dispatch(UpdateMovieGenre(formData))
       } else {
         // console.log("create: ", values);
-        dispatch(CreateMovieGenre(formData));
+        dispatch(CreateMovieGenre(formData))
       }
     },
-  });
+  })
   const searchForm = useFormik({
     enableReinitialize: true,
 
@@ -126,15 +126,15 @@ const MovieGenre = (props) => {
     },
     onSubmit: (values) => {
       // console.log(values);
-      setSearch(values.name);
-      setPageNo(1);
+      setSearch(values.name)
+      setPageNo(1)
     },
-  });
+  })
 
   const columns = useMemo(
     () => [
       {
-        header: "id",
+        header: "Id",
         accessorKey: "id",
         enableColumnFilter: false,
       },
@@ -154,9 +154,9 @@ const MovieGenre = (props) => {
               <span
                 className="bg-gradient me-3 fs-4 text-info"
                 onClick={() => {
-                  getedit(cell.getValue());
-                  setformcheck(true);
-                  settitle(false);
+                  getedit(cell.getValue())
+                  setformcheck(true)
+                  settitle(false)
                 }}
               >
                 <i className="ri-edit-2-fill"></i>
@@ -169,61 +169,61 @@ const MovieGenre = (props) => {
                 <i className="ri-delete-bin-5-line"></i>
               </span>
             </React.Fragment>
-          );
+          )
         },
         className: "sticky-right",
       },
     ],
     []
-  );
+  )
 
   const handlePagination = (page) => {
-    const newPageNo = page + 1;
-    setPageNo(newPageNo);
-    setSearchParams({ searchname, pageNo: newPageNo, pageSize });
-  };
+    const newPageNo = page + 1
+    setPageNo(newPageNo)
+    setSearchParams({ searchname, pageNo: newPageNo, pageSize })
+  }
   const handlenumberOfElements = (elements) => {
-    setPageSize(elements);
-    setPageNo(1);
-    setSearchParams({ searchname, pageNo, pageSize: elements });
-  };
+    setPageSize(elements)
+    setPageNo(1)
+    setSearchParams({ searchname, pageNo, pageSize: elements })
+  }
 
   function settitle(type) {
     if (!type) {
-      setmodal_togtitle("Edit City");
+      setmodal_togtitle("Edit City")
     } else {
-      setmodal_togtitle("Create New Movie Genre");
+      setmodal_togtitle("Create New Movie Genre")
       // dispatch(clearNotificationMessage());
-      dispatch(clear());
-      validation.resetForm();
+      dispatch(clear())
+      validation.resetForm()
     }
   }
 
   function deleteitem(slug) {
     // console.log(slug);
     if (slug) {
-      dispatch(deleteMovieGenre(slug));
+      dispatch(deleteMovieGenre(slug))
     }
   }
 
   function tog_togFirst() {
-    validation.resetForm();
-    setmodal_togFirst(!modal_togFirst);
+    validation.resetForm()
+    setmodal_togFirst(!modal_togFirst)
   }
 
   const getedit = (slug) => {
     // console.log(id);
-    dispatch(GetEditMovieGenre(slug));
-    setmodal_togFirst(!modal_togFirst);
-  };
+    dispatch(GetEditMovieGenre(slug))
+    setmodal_togFirst(!modal_togFirst)
+  }
 
   function tog_togdelete(slug) {
-    setmodal_detele(!modal_togFirst);
+    setmodal_detele(!modal_togFirst)
     if (slug) {
-      setSlug(slug);
+      setSlug(slug)
     }
   }
-  document.title = "Movie Genre Manager";
+  document.title = "Movie Genre Manager"
 
   return (
     <React.Fragment>
@@ -250,9 +250,9 @@ const MovieGenre = (props) => {
                               className="btn btn-success add-btn"
                               to="#"
                               onClick={() => {
-                                tog_togFirst();
-                                setformcheck(false);
-                                settitle(true);
+                                tog_togFirst()
+                                setformcheck(false)
+                                settitle(true)
                               }}
                             >
                               <i className="ri-add-line align-bottom me-1"></i>
@@ -263,9 +263,9 @@ const MovieGenre = (props) => {
                       </Row>
                       <Form
                         onSubmit={(e) => {
-                          e.preventDefault();
-                          searchForm.handleSubmit();
-                          return false;
+                          e.preventDefault()
+                          searchForm.handleSubmit()
+                          return false
                         }}
                         action="#"
                       >
@@ -321,7 +321,7 @@ const MovieGenre = (props) => {
           <Modal
             isOpen={modal_togFirst}
             toggle={() => {
-              tog_togFirst();
+              tog_togFirst()
             }}
             centered
           >
@@ -331,9 +331,9 @@ const MovieGenre = (props) => {
             <ModalBody>
               <Form
                 onSubmit={(e) => {
-                  e.preventDefault();
-                  validation.handleSubmit();
-                  return false;
+                  e.preventDefault()
+                  validation.handleSubmit()
+                  return false
                 }}
                 action="#"
               >
@@ -385,7 +385,7 @@ const MovieGenre = (props) => {
           <Modal
             isOpen={modal_detele}
             toggle={() => {
-              tog_togdelete();
+              tog_togdelete()
             }}
             id="firstmodal"
             centered
@@ -413,8 +413,8 @@ const MovieGenre = (props) => {
                     color="danger"
                     type="submit"
                     onClick={() => {
-                      deleteitem(slug);
-                      setmodal_detele(false);
+                      deleteitem(slug)
+                      setmodal_detele(false)
                     }}
                   >
                     Yes, Delete
@@ -426,7 +426,7 @@ const MovieGenre = (props) => {
         </Col>
       </Row>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default withRouter(MovieGenre);
+export default withRouter(MovieGenre)
