@@ -153,7 +153,7 @@ const User = (props) => {
         enableColumnFilter: false,
       },
       {
-        header: "role",
+        header: "Role",
         enableColumnFilter: false,
         accessorKey: "role",
         cell: (cell) => {
@@ -240,7 +240,7 @@ const User = (props) => {
                             type="text"
                             name="name"
                             className="form-control"
-                            placeholder="Search for name..."
+                            placeholder="Search For Name..."
                             onChange={searchForm.handleChange}
                             onBlur={searchForm.handleBlur}
                             value={searchForm.values.name}

@@ -73,9 +73,9 @@ const EditUser = (props) => {
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Please Enter a Name"),
-      phone: Yup.string().required("Please Enter a phone"),
-      role: Yup.string().required("Please Enter a role"),
-      dateOfBirth: Yup.date().required("Please select a date of birth"),
+      phone: Yup.string().required("Please Enter a Phone"),
+      role: Yup.string().required("Please Enter a Role"),
+      dateOfBirth: Yup.date().required("Please select a Date of Birth"),
       email: Yup.string()
         .email("Invalid email address")
         .required("Please Enter Your Email"),
@@ -162,20 +162,20 @@ const EditUser = (props) => {
                             disabled
                             name="email"
                             className="form-control"
-                            placeholder="Enter email address"
+                            placeholder="Enter Email Address"
                             type="email"
                             onChange={validation.handleChange}
                             onBlur={validation.handleBlur}
                             value={validation.values.email || ""}
                             invalid={
                               validation.touched.email &&
-                              validation.errors.email
+                                validation.errors.email
                                 ? true
                                 : false
                             }
                           />
                           {validation.touched.email &&
-                          validation.errors.email ? (
+                            validation.errors.email ? (
                             <FormFeedback type="invalid">
                               <div>{validation.errors.email}</div>
                             </FormFeedback>
@@ -214,25 +214,25 @@ const EditUser = (props) => {
                       <Col sm={6}>
                         <div className="mb-3">
                           <Label htmlFor="username" className="form-label">
-                            phone number
+                            Phone Number
                           </Label>
                           <Input
                             name="phone"
                             type="text"
                             disabled
-                            placeholder="Enter username"
+                            placeholder="Enter Your Phone"
                             onChange={validation.handleChange}
                             onBlur={validation.handleBlur}
                             value={validation.values.phone || ""}
                             invalid={
                               validation.touched.phone &&
-                              validation.errors.phone
+                                validation.errors.phone
                                 ? true
                                 : false
                             }
                           />
                           {validation.touched.phone &&
-                          validation.errors.phone ? (
+                            validation.errors.phone ? (
                             <FormFeedback type="invalid">
                               <div>{validation.errors.phone}</div>
                             </FormFeedback>
@@ -256,13 +256,13 @@ const EditUser = (props) => {
                             onChange={validation.handleChange}
                             invalid={
                               validation.errors.Gender &&
-                              validation.touched.Gender
+                                validation.touched.Gender
                                 ? true
                                 : false
                             }
                           />
                           {validation.errors.Gender &&
-                          validation.touched.Gender ? (
+                            validation.touched.Gender ? (
                             <FormFeedback type="invalid">
                               {validation.errors.Gender}
                             </FormFeedback>
@@ -272,27 +272,27 @@ const EditUser = (props) => {
                       <Col sm={6}>
                         <div className="mb-3">
                           <Label htmlFor="username" className="form-label">
-                            date Of Birth
+                            Date Of Birth
                           </Label>
                           <Input
                             type="text"
                             className="form-control"
                             id="Gender"
                             disabled
-                            placeholder="Enter Gender"
+                            placeholder="Enter Date Of Birth"
                             name="Gender"
                             value={validation.values.dateOfBirth || ""}
                             onBlur={validation.handleBlur}
                             onChange={validation.handleChange}
                             invalid={
                               validation.errors.dateOfBirth &&
-                              validation.touched.dateOfBirth
+                                validation.touched.dateOfBirth
                                 ? true
                                 : false
                             }
                           />
                           {validation.errors.dateOfBirth &&
-                          validation.touched.dateOfBirth ? (
+                            validation.touched.dateOfBirth ? (
                             <div className="text-danger">
                               {validation.errors.dateOfBirth}
                             </div>
