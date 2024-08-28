@@ -459,7 +459,8 @@ public class PaymentServiceImpl implements PaymentService {
         placeholders.put("quantityDoubleSeat", bookingSuccessInfo.getQuantityDoubleSeat());
         placeholders.put("movieFormat", bookingSuccessInfo.getMovieFormat());
         placeholders.put("bookingWaterCorn", bookingSuccessInfo.getBookingWaterCorn());
-        placeholders.put("totalPrice", bookingSuccessInfo.getTotalPrice());
+
+        placeholders.put("totalPrice", bookingSuccessInfo.getTotalPrice().toString());
 
         MailBody mailBody = MailBody.builder()
                 .to(user.getEmail())

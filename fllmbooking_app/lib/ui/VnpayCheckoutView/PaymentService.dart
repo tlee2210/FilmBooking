@@ -104,6 +104,7 @@ class _VnPaymentServiceState extends State<VnPaymentService> {
                 if (!isHandled &&
                     url.toString().contains(
                         'http://10.0.2.2:8081/api/payment/v2/booking_vnpay')) {
+
                   isHandled = true;
                   var token = await tokenRepository.getToken();
                   final response = await http.get(
@@ -118,12 +119,6 @@ class _VnPaymentServiceState extends State<VnPaymentService> {
                   var dataWrapper =
                       jsonDecode(bodyContent) as Map<String, dynamic>;
 
-                  // print('=================');
-                  // print('=================');
-                  // print('statusCode: ' + response.statusCode.toString());
-                  // print('dataWrapper: ' + dataWrapper.toString());
-                  // print('=================');
-                  // print('=================');
 
                   BookingSuccessInfo bookingSuccessInfo= BookingSuccessInfo.fromJson(dataWrapper['result']);
 

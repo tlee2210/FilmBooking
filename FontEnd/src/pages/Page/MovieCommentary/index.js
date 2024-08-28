@@ -227,7 +227,7 @@ const MovieCommentary = () => {
                                     {item.name}
                                   </h1>
                                   <span className="badge bg-primary-subtle text-primary">
-                                    View: {item.views}
+                                    View: {item.view}
                                   </span>
                                 </CardHeader>
                                 <CardBody>

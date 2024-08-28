@@ -80,17 +80,16 @@ const ProfileDropdown = () => {
           {role !== "USER" ? (
             <React.Fragment>
               <DropdownItem className="p-0">
-                <Link to="/dashboard" className="dropdown-item">
+                <Link to="/dashboard/users" className="dropdown-item">
                   {/* <i className="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i>{" "} */}
                   <span className="align-middle">Dashboard</span>
                 </Link>
               </DropdownItem>
-              <DropdownItem className="p-0">
+              {/* <DropdownItem className="p-0">
                 <Link to="/" className="dropdown-item">
-                  {/* <i className="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i>{" "} */}
                   <span className="align-middle">Home</span>
                 </Link>
-              </DropdownItem>
+              </DropdownItem> */}
             </React.Fragment>
           ) : null}
           {/* <DropdownItem className="p-0">

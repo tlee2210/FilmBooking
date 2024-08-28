@@ -266,7 +266,7 @@ const Profile = (props) => {
               {/* <p className="profile-stars-tai-khoan">0 Stars</p> */}
             </div>
           </div>
-          <div className="spending-info-tai-khoan">
+          {/* <div className="spending-info-tai-khoan">
             <h6 className="spending-title-tai-khoan">Tổng chi tiêu 2024</h6>
             <p className="spending-amount-tai-khoan">0 đ</p>
             <div className="spending-scale-tai-khoan">
@@ -280,7 +280,7 @@ const Profile = (props) => {
                 style={{ width: "25%" }}
               ></div>
             </div>
-          </div>
+          </div> */}
           {/* <div className="contact-info-tai-khoan">
             <p>HOTLINE hỗ trợ: 19002224 (9:00 - 22:00)</p>
             <p>Email: hotro@galaxystudio.vn</p>

@@ -128,9 +128,6 @@ public class ReviewController {
      */
     @PutMapping(value = "/v1/update")
     public APIResponse<String> updateReview(@ModelAttribute ReviewRequest reviewRequest) throws IOException {
-        System.out.println("=================");
-        System.out.println(reviewRequest);
-        System.out.println("=================");
         boolean checkUpdate = reviewService.updateReview(reviewRequest);
         if (checkUpdate) {
             APIResponse<String> apiResponse = new APIResponse();

@@ -60,7 +60,7 @@ const MovieCommentaryDetails = (props) => {
                     {item.name}{" "}
                   </p>
                   <span className="badge bg-primary-subtle text-primary mb-3">
-                    <i className="ri-eye-fill"></i>: {item.views}
+                    <i className="ri-eye-fill"></i>: {item.view}
                   </span>
                 </Col>
               </Row>

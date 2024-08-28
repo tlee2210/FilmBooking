@@ -46,7 +46,7 @@ export const getHomeReview = (type, pageNo, pageSize) => async (dispatch) => {
       params: { type, pageNo, pageSize },
     })
     .then((response) => {
-      // console.log(response);
+      console.log(response);
       dispatch(fetchSuccessReview({ data: response?.data?.result }));
     })
     .catch((error) => {

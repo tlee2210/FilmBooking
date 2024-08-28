@@ -94,7 +94,7 @@ public class ReviewServiceImp implements ReviewService {
         }
 
         imageDescriptionRespository.saveAll(imageDescriptionList);
-
+        addReview.setView(0);
         reviewRepository.save(addReview);
 
         return true;

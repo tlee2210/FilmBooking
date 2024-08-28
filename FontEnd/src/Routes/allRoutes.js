@@ -125,7 +125,7 @@ import BuyTicketFast from "../pages/Page/BuyTicketFast/index";
 const adminProtectedRoutes = [
   //User Profile
   // { path: "/dashboard/profile", component: <UserProfile /> },
-  { path: "/dashboard", component: <Dashboard /> },
+  // { path: "/dashboard", component: <Dashboard /> },
 
   { path: "/dashboard/celebrity", component: <Celebrity /> },
   { path: "/dashboard/celebrity/:slug/edit", component: <CelebrityEdit /> },
