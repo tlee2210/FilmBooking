@@ -222,7 +222,7 @@ class _LoginScreenState extends State<LoginPage> {
                   alignment: Alignment.centerRight,
                   child: GestureDetector(
                     onTap: _navigateToForgotPassword,
-                    child: Text(
+                    child: const Text(
                       'Forgot Password ?',
                       style: TextStyle(color: Color(0xff12CDD9)),
                     ),
@@ -233,16 +233,16 @@ class _LoginScreenState extends State<LoginPage> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: _login,
-                    child: Text(
-                      'Login',
-                      style: TextStyle(color: Colors.white),
-                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xff12CDD9),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
+                    ),
+                    child: const Text(
+                      'Login',
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),

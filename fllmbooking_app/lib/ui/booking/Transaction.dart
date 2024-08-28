@@ -669,7 +669,6 @@ class _TransactionState extends State<Transaction> {
                             if (voucherAdd != null) {
                               paymentRequestData.voucherId = voucherAdd.id;
                             }
-
                             bookingPaypal(paymentRequestData);
                             Navigator.pop(context);
                             // Navigator.push(
@@ -691,6 +690,8 @@ class _TransactionState extends State<Transaction> {
                       ));
                     }
                     if (_selectedPaymentMethod!.contains('VNPAY')) {
+                      paymentRequestData.showtimeId =
+                          _showTimeTableResponse.id;
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) => VnPaymentService(
                           paymentRequest: paymentRequestData,

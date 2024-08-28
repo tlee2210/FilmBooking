@@ -12,7 +12,8 @@ import java.util.*;
 
 public class ConfigVNPAY {
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static String vnp_ReturnUrl = "http://localhost:8081/api/payment/booking_vnpay";
+    public static String vnp_ReturnUrl = "http://localhost:8081/api/payment/v1/booking_vnpay";
+    public static String vnp_ReturnUrl2 = "http://10.0.2.2:8081/api/payment/v2/booking_vnpay";
     public static String vnp_TmnCode = "H86JQR1I";
     public static String vnp_Version = "2.1.0";
     public static String vnp_Command = "pay";
