@@ -71,8 +71,8 @@ const CreateUser = () => {
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Please Enter a Name"),
-      phone: Yup.string().required("Please Enter a phone"),
-      role: Yup.string().required("Please Enter a role"),
+      phone: Yup.string().required("Please Enter a Phone"),
+      role: Yup.string().required("Please Enter a Role"),
       dateOfBirth: Yup.date()
         .min(new Date().fp_incr(-65 * 365), "Minimum age is 65 years")
         .max(new Date().fp_incr(-12 * 365), "Maximum age is 12 years")
@@ -247,20 +247,20 @@ const CreateUser = () => {
                             id="email"
                             name="email"
                             className="form-control"
-                            placeholder="Enter email address"
+                            placeholder="Enter Email Address"
                             type="email"
                             onChange={validation.handleChange}
                             onBlur={validation.handleBlur}
                             value={validation.values.email || ""}
                             invalid={
                               validation.touched.email &&
-                              validation.errors.email
+                                validation.errors.email
                                 ? true
                                 : false
                             }
                           />
                           {validation.touched.email &&
-                          validation.errors.email ? (
+                            validation.errors.email ? (
                             <FormFeedback type="invalid">
                               <div>{validation.errors.email}</div>
                             </FormFeedback>
@@ -299,24 +299,24 @@ const CreateUser = () => {
                       <Col sm={4}>
                         <div className="mb-3">
                           <Label htmlFor="username" className="form-label">
-                            phone number
+                            Phone Number
                           </Label>
                           <Input
                             name="phone"
                             type="text"
-                            placeholder="Enter username"
+                            placeholder="Enter Your Phone"
                             onChange={validation.handleChange}
                             onBlur={validation.handleBlur}
                             value={validation.values.phone || ""}
                             invalid={
                               validation.touched.phone &&
-                              validation.errors.phone
+                                validation.errors.phone
                                 ? true
                                 : false
                             }
                           />
                           {validation.touched.phone &&
-                          validation.errors.phone ? (
+                            validation.errors.phone ? (
                             <FormFeedback type="invalid">
                               <div>{validation.errors.phone}</div>
                             </FormFeedback>
@@ -339,13 +339,13 @@ const CreateUser = () => {
                             onChange={validation.handleChange}
                             invalid={
                               validation.errors.Gender &&
-                              validation.touched.Gender
+                                validation.touched.Gender
                                 ? true
                                 : false
                             }
                           />
                           {validation.errors.Gender &&
-                          validation.touched.Gender ? (
+                            validation.touched.Gender ? (
                             <FormFeedback type="invalid">
                               {validation.errors.Gender}
                             </FormFeedback>
@@ -355,11 +355,11 @@ const CreateUser = () => {
                       <Col sm={6}>
                         <div className="mb-3">
                           <Label htmlFor="username" className="form-label">
-                            date Of Birth
+                            Date Of Birth
                           </Label>
                           <Flatpickr
                             className="form-control"
-                            placeholder="date Of Birth"
+                            placeholder="Date Of Birth"
                             value={validation.values.dateOfBirth}
                             onChange={([selectedDate]) => {
                               validation.setFieldValue(
@@ -373,7 +373,7 @@ const CreateUser = () => {
                             }}
                           />
                           {validation.errors.dateOfBirth &&
-                          validation.touched.dateOfBirth ? (
+                            validation.touched.dateOfBirth ? (
                             <div className="text-danger">
                               {validation.errors.dateOfBirth}
                             </div>
@@ -394,13 +394,13 @@ const CreateUser = () => {
                             value={validation.values.password || ""}
                             invalid={
                               validation.touched.password &&
-                              validation.errors.password
+                                validation.errors.password
                                 ? true
                                 : false
                             }
                           />
                           {validation.touched.password &&
-                          validation.errors.password ? (
+                            validation.errors.password ? (
                             <FormFeedback type="invalid">
                               <div>{validation.errors.password}</div>
                             </FormFeedback>
