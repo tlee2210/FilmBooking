@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react"
 import {
   Container,
   Row,
@@ -10,97 +10,97 @@ import {
   Button,
   Form,
   Input,
-} from "reactstrap";
+} from "reactstrap"
 
-import TableContainer from "../../../Components/Common/TableContainerReactTable";
-import { message, Image } from "antd";
+import TableContainer from "../../../Components/Common/TableContainerReactTable"
+import { message, Image } from "antd"
 
-import withRouter from "../../../Components/Common/withRouter";
-import { Link, useSearchParams } from "react-router-dom";
+import withRouter from "../../../Components/Common/withRouter"
+import { Link, useSearchParams } from "react-router-dom"
 //Import Breadcrumb
-import BreadCrumb from "../../../Components/Common/BreadCrumb";
-import { useFormik } from "formik";
-import { clearNotification } from "../../../slices/message/reducer";
+import BreadCrumb from "../../../Components/Common/BreadCrumb"
+import { useFormik } from "formik"
+import { clearNotification } from "../../../slices/message/reducer"
 
 //redux
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux"
 // import Select from "react-select";
 
-import "react-toastify/dist/ReactToastify.css";
-import { createSelector } from "reselect";
+import "react-toastify/dist/ReactToastify.css"
+import { createSelector } from "reselect"
 
-import { getBlog, deleteBlog } from "../../../slices/Blog/thunk";
+import { getBlog, deleteBlog } from "../../../slices/Blog/thunk"
 
 const BlogIndex = (props) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
-  const [modal_detele, setmodal_detele] = useState(false);
-  const [modal_togFirst, setmodal_togFirst] = useState(false);
-  const [slug, setSlug] = useState("");
+  const [modal_detele, setmodal_detele] = useState(false)
+  const [modal_togFirst, setmodal_togFirst] = useState(false)
+  const [slug, setSlug] = useState("")
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams()
   const [searchname, setSearch] = useState(
     searchParams.get("searchname") || null
-  );
+  )
   const [pageNo, setPageNo] = useState(
     parseInt(searchParams.get("pageNo"), 10) || 1
-  );
+  )
   const [pageSize, setPageSize] = useState(
     parseInt(searchParams.get("pageSize"), 10) || 15
-  );
+  )
 
   useEffect(() => {
-    let params = {};
+    let params = {}
     if (searchname && searchname !== null && searchname !== undefined) {
-      params.searchname = searchname;
+      params.searchname = searchname
     }
 
-    params.pageNo = pageNo;
-    params.pageSize = pageSize;
+    params.pageNo = pageNo
+    params.pageSize = pageSize
 
-    setSearchParams(params);
+    setSearchParams(params)
 
-    dispatch(getBlog(searchname, pageNo, pageSize));
-  }, [dispatch, searchname, pageNo, pageSize]);
+    dispatch(getBlog(searchname, pageNo, pageSize))
+  }, [dispatch, searchname, pageNo, pageSize])
 
-  const BlogState = (state) => state;
+  const BlogState = (state) => state
   const BlogStateData = createSelector(BlogState, (state) => ({
     success: state.Message.success,
     error: state.Message.error,
     messageSuccess: state.Message.messageSuccess,
     messageError: state.Message.messageError,
     Blog: state.Blog.data,
-  }));
+  }))
   // Inside your component
   const { error, success, messageSuccess, messageError, Blog } =
-    useSelector(BlogStateData);
+    useSelector(BlogStateData)
 
   useEffect(() => {
     if (success) {
       if (messageSuccess != null) {
-        message.success(messageSuccess);
+        message.success(messageSuccess)
       }
     }
     if (error) {
       if (messageError != null) {
-        message.error(messageError);
+        message.error(messageError)
       }
     }
-    dispatch(clearNotification());
-  }, [dispatch, success, error]);
+    dispatch(clearNotification())
+  }, [dispatch, success, error])
 
   const handlePagination = (page) => {
-    const newPageNo = page + 1;
-    setPageNo(newPageNo);
+    const newPageNo = page + 1
+    setPageNo(newPageNo)
 
-    setSearchParams({ searchname, pageNo: newPageNo, pageSize });
-  };
+    setSearchParams({ searchname, pageNo: newPageNo, pageSize })
+  }
 
   const handlenumberOfElements = (elements) => {
-    setPageSize(elements);
-    setPageNo(1);
-    setSearchParams({ searchname, pageNo, pageSize: elements });
-  };
+    setPageSize(elements)
+    setPageNo(1)
+    setSearchParams({ searchname, pageNo, pageSize: elements })
+  }
 
   const searchForm = useFormik({
     enableReinitialize: true,
@@ -110,42 +110,42 @@ const BlogIndex = (props) => {
     },
     onSubmit: (values) => {
       //   console.log(values);
-      setSearch(values.name);
-      setPageNo(1);
+      setSearch(values.name)
+      setPageNo(1)
     },
-  });
+  })
 
   function tog_togdelete(slug) {
-    setmodal_detele(!modal_togFirst);
+    setmodal_detele(!modal_togFirst)
     // console.log(slug);
     if (slug) {
-      setSlug(slug);
+      setSlug(slug)
     }
   }
 
   function deleteitem(slug) {
     // console.log("delete : " + slug);
     if (slug) {
-      dispatch(deleteBlog(slug));
+      dispatch(deleteBlog(slug))
     }
   }
 
   const statusOption = [
     { label: "Active", value: "ACTIVE" },
     { label: "Inactive", value: "INACTIVE" },
-  ];
+  ]
 
   const columns = useMemo(
     () => [
       {
-        header: "thumbnail",
+        header: "Thumbnail",
         accessorKey: "thumbnail",
         cell: (cell) => {
           return (
             <>
               <Image width={70} src={cell.getValue() ? cell.getValue() : ""} />
             </>
-          );
+          )
         },
         enableColumnFilter: false,
       },
@@ -155,11 +155,11 @@ const BlogIndex = (props) => {
         enableColumnFilter: false,
       },
       {
-        header: "view",
+        header: "View",
         accessorKey: "view",
         enableColumnFilter: false,
         cell: (cell) => {
-          const value = cell.getValue();
+          const value = cell.getValue()
           return (
             <React.Fragment>
               {value === 0 ? (
@@ -181,7 +181,7 @@ const BlogIndex = (props) => {
                 </span>
               )}
             </React.Fragment>
-          );
+          )
         },
       },
       {
@@ -205,15 +205,15 @@ const BlogIndex = (props) => {
                 <i className="ri-delete-bin-5-line"></i>
               </span>
             </React.Fragment>
-          );
+          )
         },
         className: "sticky-right",
       },
     ],
     []
-  );
+  )
 
-  document.title = "Blog Manager";
+  document.title = "Blog Manager"
   return (
     <React.Fragment>
       <div className="page-content">
@@ -243,9 +243,9 @@ const BlogIndex = (props) => {
                   </Row>
                   <Form
                     onSubmit={(e) => {
-                      e.preventDefault();
-                      searchForm.handleSubmit();
-                      return false;
+                      e.preventDefault()
+                      searchForm.handleSubmit()
+                      return false
                     }}
                     action="#"
                   >
@@ -305,7 +305,7 @@ const BlogIndex = (props) => {
       <Modal
         isOpen={modal_detele}
         toggle={() => {
-          tog_togdelete();
+          tog_togdelete()
         }}
         id="firstmodal"
         centered
@@ -327,8 +327,8 @@ const BlogIndex = (props) => {
                 color="danger"
                 type="submit"
                 onClick={() => {
-                  deleteitem(slug);
-                  setmodal_detele(false);
+                  deleteitem(slug)
+                  setmodal_detele(false)
                 }}
               >
                 Yes, Delete
@@ -338,7 +338,7 @@ const BlogIndex = (props) => {
         </ModalBody>
       </Modal>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default withRouter(BlogIndex);
+export default withRouter(BlogIndex)
