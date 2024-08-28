@@ -102,10 +102,10 @@ const BlogCreate = (props) => {
       file: [],
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Please Enter name"),
-      movie: Yup.string().required("Please Enter movie"),
-      type: Yup.string().required("Please Enter type"),
-      description: Yup.string().required("Please Enter description"),
+      name: Yup.string().required("Please Enter Title"),
+      movie: Yup.string().required("Please Enter Movie"),
+      type: Yup.string().required("Please Enter Type"),
+      description: Yup.string().required("Please Enter Description"),
       file: Yup.array()
         .of(
           Yup.mixed().test(
@@ -237,7 +237,7 @@ const BlogCreate = (props) => {
                     <Col md={3}>
                       <div className="mb-3">
                         <Label className="form-label" htmlFor="name">
-                          thumbnail
+                          Thumbnail
                         </Label>
                         <div className="justify-content-center align-items-center d-flex">
                           <Upload
@@ -284,26 +284,26 @@ const BlogCreate = (props) => {
                         <Col md={12}>
                           <div className="mb-3">
                             <Label className="form-label" htmlFor="name">
-                              Name
+                              Title
                             </Label>
                             <Input
                               type="text"
                               className="form-control"
                               id="product-title-input"
-                              placeholder="Enter name"
+                              placeholder="Enter Title"
                               name="name"
                               value={validation.values.name || ""}
                               onBlur={validation.handleBlur}
                               onChange={validation.handleChange}
                               invalid={
                                 validation.errors.name &&
-                                validation.touched.name
+                                  validation.touched.name
                                   ? true
                                   : false
                               }
                             />
                             {validation.errors.name &&
-                            validation.touched.name ? (
+                              validation.touched.name ? (
                               <FormFeedback type="invalid">
                                 {validation.errors.name}
                               </FormFeedback>
@@ -331,13 +331,13 @@ const BlogCreate = (props) => {
                               )}
                               className={
                                 validation.errors.movie &&
-                                validation.touched.movie
+                                  validation.touched.movie
                                   ? "is-invalid"
                                   : ""
                               }
                             />
                             {validation.errors.type &&
-                            validation.touched.type ? (
+                              validation.touched.type ? (
                               <FormFeedback type="invalid">
                                 {validation.errors.type}
                               </FormFeedback>
@@ -365,13 +365,13 @@ const BlogCreate = (props) => {
                               )}
                               className={
                                 validation.errors.movie &&
-                                validation.touched.movie
+                                  validation.touched.movie
                                   ? "is-invalid"
                                   : ""
                               }
                             />
                             {validation.errors.movie &&
-                            validation.touched.movie ? (
+                              validation.touched.movie ? (
                               <FormFeedback type="invalid">
                                 {validation.errors.movie}
                               </FormFeedback>
@@ -404,7 +404,7 @@ const BlogCreate = (props) => {
                             }
                           />
                           {validation.touched.description &&
-                          validation.errors.description ? (
+                            validation.errors.description ? (
                             <div className="invalid-feedback d-block">
                               {validation.errors.description}
                             </div>

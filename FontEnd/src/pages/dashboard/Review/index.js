@@ -141,7 +141,7 @@ const BlogIndex = (props) => {
   const columns = useMemo(
     () => [
       {
-        header: "thumbnail",
+        header: "Thumbnail",
         accessorKey: "thumbnail",
         cell: (cell) => {
           return (
@@ -158,7 +158,7 @@ const BlogIndex = (props) => {
         enableColumnFilter: false,
       },
       {
-        header: "view",
+        header: "View",
         accessorKey: "views",
         enableColumnFilter: false,
         cell: (cell) => {
@@ -280,7 +280,7 @@ const BlogIndex = (props) => {
                             type="text"
                             name="name"
                             className="form-control"
-                            placeholder="Search for name..."
+                            placeholder="Search For Name..."
                             onChange={searchForm.handleChange}
                             onBlur={searchForm.handleBlur}
                             value={searchForm.values.name || ""}
@@ -293,7 +293,7 @@ const BlogIndex = (props) => {
                           name="type"
                           options={SelectOption}
                           isClearable={true}
-                          placeholder="Select type"
+                          placeholder="Select Type"
                           classNamePrefix="select"
                           onChange={(option) => {
                             const status = option ? option.value : null;
