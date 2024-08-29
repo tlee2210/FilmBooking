@@ -94,17 +94,17 @@ public class PaymentServiceImpl implements PaymentService {
         String vnp_ReturnUrl = ConfigVNPAY.vnp_ReturnUrl;
 
         vnp_ReturnUrl += "?showtimeId=" + String.valueOf(paymentRequest.getShowtimeId());
-        if (paymentRequest.getQuantitySeat() != null & !paymentRequest.getQuantitySeat().isEmpty()) {
+        if (paymentRequest.getQuantitySeat() != null) {
             vnp_ReturnUrl += "&quantitySeat=" + String.join(",", paymentRequest.getQuantitySeat());
         }
-        if (paymentRequest.getQuantityDoubleSeat() != null & !paymentRequest.getQuantityDoubleSeat().isEmpty()) {
+        if (paymentRequest.getQuantityDoubleSeat() != null) {
             vnp_ReturnUrl += "&quantityDoubleSeat=" + String.join(",", paymentRequest.getQuantityDoubleSeat());
         }
         if (paymentRequest.getVoucherId() != null) {
             vnp_ReturnUrl += "&voucherId=" + String.valueOf(paymentRequest.getVoucherId());
         }
 
-        if (paymentRequest.getQuantityWater() != null && !paymentRequest.getQuantityWater().isEmpty()) {
+        if (paymentRequest.getQuantityWater() != null) {
             List<BookingWaterCorn> waterCorns = new ArrayList<>();
 
             paymentRequest.getQuantityWater().forEach(item -> {

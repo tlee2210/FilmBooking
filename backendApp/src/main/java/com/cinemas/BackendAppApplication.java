@@ -40,6 +40,6 @@ public class BackendAppApplication implements CommandLineRunner {
 //        cinemaDataInitializer.initCinemas();
 //        reviewDataInitializer.initReviewData();
 //        blogDataInitializer.initBlogData();
-//        roomDataInitializer.initRoomData();
+        roomDataInitializer.initRoomData();
     }
 }
