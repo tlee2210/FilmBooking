@@ -348,7 +348,7 @@ const Navbar = () => {
                   <DropdownMenu>
                     <SimpleBar
                       // forceVisible="y"
-                      style={{ maxHeight: "200px", width: "220px" }}
+                      style={{ maxHeight: "200px", width: "250px" }}
                       className="px-3"
                     >
                       {navbarData &&
