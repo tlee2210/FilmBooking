@@ -16,20 +16,20 @@ class _SignUpPageState extends State<SignUpPage> {
 
   final _formKey = GlobalKey<FormState>();
 
-  // final _nameController = TextEditingController();
-  // final _emailController = TextEditingController();
-  // final _passwordController = TextEditingController();
-  // final _confirmPasswordController = TextEditingController();
-  // final _phoneController = TextEditingController();
-  // final _dateOfBirthController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _dateOfBirthController = TextEditingController();
   // String? _selectedGender;
 
-  final _nameController = TextEditingController(text: 'tlee');
-  final _emailController = TextEditingController(text: 'tlee@gmail.com');
-  final _passwordController = TextEditingController(text: 'password123');
-  final _confirmPasswordController = TextEditingController(text: 'password123');
-  final _phoneController = TextEditingController(text: '1234567890');
-  final _dateOfBirthController = TextEditingController(text: '2002-08-05');
+  // final _nameController = TextEditingController(text: 'tlee');
+  // final _emailController = TextEditingController(text: 'tlee@gmail.com');
+  // final _passwordController = TextEditingController(text: 'password123');
+  // final _confirmPasswordController = TextEditingController(text: 'password123');
+  // final _phoneController = TextEditingController(text: '1234567890');
+  // final _dateOfBirthController = TextEditingController(text: '2002-08-05');
   String? _errorMessage;
   bool isLoading = false;
   String? _selectedGender = 'Female';

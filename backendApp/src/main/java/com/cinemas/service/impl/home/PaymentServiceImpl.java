@@ -298,12 +298,14 @@ public class PaymentServiceImpl implements PaymentService {
         ObjectUtils.copyFields(paymentRequest, booking);
         booking.setPaymentType(type);
         booking.setCreateAt(LocalDate.now());
-        if (!paymentRequest.getQuantityDoubleSeat().isEmpty()) {
-            booking.setQuantityDoubleSeat(paymentRequest.getQuantityDoubleSeat() != null ? String.join(", ", paymentRequest.getQuantityDoubleSeat()) : null);
-        }
-        if (!paymentRequest.getQuantitySeat().isEmpty()) {
-            booking.setQuantitySeat(paymentRequest.getQuantitySeat() != null ? String.join(", ", paymentRequest.getQuantitySeat()) : null);
-        }
+
+        booking.setQuantityDoubleSeat(paymentRequest.getQuantityDoubleSeat() != null && !paymentRequest.getQuantityDoubleSeat().isEmpty()
+                ? String.join(", ", paymentRequest.getQuantityDoubleSeat())
+                : "");
+
+        booking.setQuantitySeat(paymentRequest.getQuantitySeat() != null && !paymentRequest.getQuantitySeat().isEmpty()
+                ? String.join(", ", paymentRequest.getQuantitySeat())
+                : "");
 
         booking.setShowtime(showTimeResponsitory.findById(paymentRequest.getShowtimeId()).get());
         booking.setVoucher(paymentRequest.getVoucherId() != null ? voucherRepository.findById(paymentRequest.getVoucherId()).get() : null);
@@ -343,7 +345,7 @@ public class PaymentServiceImpl implements PaymentService {
         bookingSuccessInfo.setQuantitySeat(booking.getQuantitySeat());
         bookingSuccessInfo.setQuantityDoubleSeat(booking.getQuantityDoubleSeat());
         bookingSuccessInfo.setMovieFormat(booking.getShowtime().getMovieFormat());
-        bookingSuccessInfo.setTotalPrice(booking.getTotalPrice());
+        bookingSuccessInfo.setTotalPrice(paymentRequest.getTotalPrice());
         bookingSuccessInfo.setBookingWaterCorn(cornBookingResponseList);
 
         sendEmail(bookingSuccessInfo, user);
@@ -460,7 +462,7 @@ public class PaymentServiceImpl implements PaymentService {
         placeholders.put("movieFormat", bookingSuccessInfo.getMovieFormat());
         placeholders.put("bookingWaterCorn", bookingSuccessInfo.getBookingWaterCorn());
 
-        placeholders.put("totalPrice", bookingSuccessInfo.getTotalPrice().toString());
+//        placeholders.put("totalPrice", bookingSuccessInfo.getTotalPrice().toString());
 
         MailBody mailBody = MailBody.builder()
                 .to(user.getEmail())
