@@ -100,7 +100,6 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
     } catch (e) {
       print('Error fetching token: $e');
       await e.toString().replaceFirst('Exception: ', '');
-
     } finally {
       setState(() {
         isLoading = false;
@@ -276,7 +275,9 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
             Text(
               _showTimeTableResponse!.movieName,
               style: const TextStyle(
-                  fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
             const SizedBox(height: 8),
             Row(
@@ -289,21 +290,23 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                       style: const TextStyle(fontSize: 16, color: Colors.white),
                     ),
                     const SizedBox(width: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: Colors.orange,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        _showTimeTableResponse!.rules,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+                    if (_showTimeTableResponse!.rules != null &&
+                        _showTimeTableResponse!.rules.isNotEmpty)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.orange,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          _showTimeTableResponse!.rules,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
                   ],
                 ),
                 OutlinedButton(
@@ -377,11 +380,11 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                             onSeatStateChanged: (rowI, colI, seatState) {
                               if (seatState == SeatState.selected &&
                                   quantitySeat.length +
-                                      quantityDoubleSeat.length >=
+                                          quantityDoubleSeat.length >=
                                       8) {
                                 Fluttertoast.showToast(
                                   msg:
-                                  'You can only select a maximum of 8 seats!',
+                                      'You can only select a maximum of 8 seats!',
                                   toastLength: Toast.LENGTH_LONG,
                                   gravity: ToastGravity.TOP,
                                   backgroundColor: Colors.red,
@@ -397,10 +400,11 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                                 setState(() {
                                   if (seatState == SeatState.selected &&
                                       quantitySeat.length +
-                                          quantityDoubleSeat.length <
+                                              quantityDoubleSeat.length <
                                           8) {
                                     paymentRequest.totalPrice =
-                                        (paymentRequest.totalPrice ?? 0) + price;
+                                        (paymentRequest.totalPrice ?? 0) +
+                                            price;
                                     quantitySeat.add(seatLabel);
                                   } else {
                                     if ((paymentRequest.totalPrice ?? 0) >=
@@ -418,12 +422,13 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                             },
                             stateModel: SeatLayoutStateModel(
                               pathDisabledSeat:
-                              'assets/seats/svg_disabled_bus_seat.svg',
+                                  'assets/seats/svg_disabled_bus_seat.svg',
                               pathSelectedSeat:
-                              'assets/seats/svg_selected_bus_seats.svg',
-                              pathSoldSeat: 'assets/seats/svg_sold_bus_seat.svg',
+                                  'assets/seats/svg_selected_bus_seats.svg',
+                              pathSoldSeat:
+                                  'assets/seats/svg_sold_bus_seat.svg',
                               pathUnSelectedSeat:
-                              'assets/seats/svg_unselected_bus_seat.svg',
+                                  'assets/seats/svg_unselected_bus_seat.svg',
                               rows: _showTimeTableResponse!.room.seatRows,
                               cols: _showTimeTableResponse!.room.seatColumns +
                                   _showTimeTableResponse!.room.totalColumn,
@@ -446,11 +451,11 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                             onSeatStateChanged: (rowI, colI, seatState) {
                               if (seatState == SeatState.selected &&
                                   quantitySeat.length +
-                                      quantityDoubleSeat.length >=
+                                          quantityDoubleSeat.length >=
                                       8) {
                                 Fluttertoast.showToast(
                                   msg:
-                                  'You can only select a maximum of 8 seats!',
+                                      'You can only select a maximum of 8 seats!',
                                   toastLength: Toast.LENGTH_LONG,
                                   gravity: ToastGravity.TOP,
                                   backgroundColor: Colors.red,
@@ -471,7 +476,7 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                                       _showTimeTableResponse!.room.seatRows;
                                   if (seatState == SeatState.selected &&
                                       quantitySeat.length +
-                                          quantityDoubleSeat.length <
+                                              quantityDoubleSeat.length <
                                           8) {
                                     quantityDoubleSeat.add(seatLabel);
                                     paymentRequest.totalPrice =
@@ -493,13 +498,13 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                             },
                             stateModel: SeatLayoutStateModel(
                               pathDisabledSeat:
-                              'assets/seats/svg_couple_disabled_bus_seat.svg',
+                                  'assets/seats/svg_couple_disabled_bus_seat.svg',
                               pathSelectedSeat:
-                              'assets/seats/svg_couple_selected_bus_seats.svg',
+                                  'assets/seats/svg_couple_selected_bus_seats.svg',
                               pathSoldSeat:
-                              'assets/seats/svg_couple_sold_bus_seat.svg',
+                                  'assets/seats/svg_couple_sold_bus_seat.svg',
                               pathUnSelectedSeat:
-                              'assets/seats/svg_couple_unselected_bus_seat.svg',
+                                  'assets/seats/svg_couple_unselected_bus_seat.svg',
                               rows: _showTimeTableResponse!
                                   .room.doubleSeatColumns,
                               cols: _showTimeTableResponse!.room.doubleSeatRows,
@@ -588,8 +593,8 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange,
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
                     textStyle: const TextStyle(
                       fontSize: 16,
                     ),
@@ -606,5 +611,4 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
       ),
     );
   }
-
 }

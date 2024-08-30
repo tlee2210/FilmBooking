@@ -171,7 +171,7 @@ const Booking = (props) => {
           <div className="seat-row" key={row}>
             {[...Array(numCols).keys()].map((i) => {
               const seatNumber = isDouble
-                ? `${row}${i * 2 + 1}-${i * 2 + 2}`
+                ? `${row}${i * 2 + 1}-${row}${i * 2 + 2}`
                 : `${row}${i + 1}`;
               const applyMargin =
                 totalColumns !== 1 && i !== 0 && (i + 1) % seatsPerPart === 0;

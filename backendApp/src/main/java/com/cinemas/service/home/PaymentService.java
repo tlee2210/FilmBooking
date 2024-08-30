@@ -16,7 +16,7 @@ public interface PaymentService {
 
     BookingSuccessInfo bookingPaypal(PaymentRequest paymentRequest, PaymentType type) throws MessagingException;
 
-    boolean bookingVnpay(PaymentRequest paymentRequest, PaymentType type, String userId);
+    boolean bookingVnpay(PaymentRequest paymentRequest, PaymentType type, String userId) throws MessagingException;
 
     BookingSuccessInfo bookingVnpay2(PaymentRequest paymentRequest, PaymentType type, String userId) throws MessagingException;
 

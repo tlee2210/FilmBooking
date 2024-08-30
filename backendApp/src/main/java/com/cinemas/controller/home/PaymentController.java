@@ -66,7 +66,7 @@ public class PaymentController {
             @RequestParam(required = false) Integer voucherId,
             @RequestParam(required = false) String quantityWater,
             @RequestParam(required = false) String userId
-    ) {
+    ) throws MessagingException {
 
         List<String> quantitySeats = quantitySeat != null ? Arrays.asList(quantitySeat.split(",")) : null;
         List<String> quantityDoubleSeats = quantityDoubleSeat != null ? Arrays.asList(quantityDoubleSeat.split(",")) : null;
