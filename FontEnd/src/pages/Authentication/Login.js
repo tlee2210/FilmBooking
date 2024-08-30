@@ -97,7 +97,7 @@ const Login = (props) => {
                       <img src={logoLight} alt="" height="70" />
                     </Link>
                   </div>
-                  <p className="mt-3 fs-15 fw-medium">Login</p>
+                  <p className="mt-3 fs-15 fw-medium" style={{color:"white",fontWeight:'bold'}}> Sign in</p>
                 </div>
               </Col>
             </Row>

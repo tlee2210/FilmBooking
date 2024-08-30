@@ -107,7 +107,7 @@ const ForgetPasswordPage = (props) => {
                     <img src={logoLight} alt="" height="70" />
                   </Link>
                 </div>
-                <p className="mt-3 fs-15 fw-medium">Reset Password</p>
+                <p className="mt-3 fs-15 fw-medium" style={{color:'white'}}>Reset Password</p>
               </div>
             </Col>
           </Row>
