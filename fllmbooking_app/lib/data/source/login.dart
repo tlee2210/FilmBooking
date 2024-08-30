@@ -4,11 +4,14 @@ import 'dart:convert';
 import '../models/login.dart';
 import '../models/signup.dart';
 import '../models/token.dart';
+import '../models/verifyMailrequest.dart';
 
 abstract class LoginDataSource {
   Future<LoginToken?> signin(Login login);
 
   Future<String?> signup(SignUp signUp);
+
+  Future<String?> resetPassword(verifyMailrequest email);
 }
 
 class LoginData implements LoginDataSource {
@@ -54,6 +57,31 @@ class LoginData implements LoginDataSource {
       final bodyContent = utf8.decode(response.bodyBytes);
       var message = jsonDecode(bodyContent) as Map<String, dynamic>;
 
+      return message['message'];
+    } else {
+      final errorBody = utf8.decode(response.bodyBytes);
+      final errorData = jsonDecode(errorBody) as Map<String, dynamic>;
+      throw Exception(errorData['message']);
+    }
+  }
+
+  @override
+  Future<String?> resetPassword(verifyMailrequest email) async {
+    const url = 'http://10.0.2.2:8081/api/auth/v1/verifyMail';
+    final uri = Uri.parse(url);
+
+    final response = await http.post(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'accept': '*/*',
+      },
+      body: jsonEncode(email.toJson()),
+    );
+
+    if (response.statusCode == 200) {
+      final bodyContent = utf8.decode(response.bodyBytes);
+      var message = jsonDecode(bodyContent) as Map<String, dynamic>;
       return message['message'];
     } else {
       final errorBody = utf8.decode(response.bodyBytes);

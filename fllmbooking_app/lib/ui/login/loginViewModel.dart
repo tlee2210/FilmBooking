@@ -1,5 +1,6 @@
 import '../../data/models/login.dart';
 import '../../data/models/signup.dart';
+import '../../data/models/verifyMailrequest.dart';
 import '../../data/responsitories/loginResponsitories.dart';
 import '../../data/models/token.dart';
 
@@ -18,6 +19,15 @@ class LoginViewModel {
   Future<String?> signup(SignUp signUp) async {
     try {
       final message = await _repository.signup(signUp);
+      return message;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<String?> resetPassword(verifyMailrequest email) async {
+    try {
+      final message = await _repository.resetPassword(email);
       return message;
     } catch (e) {
       throw e;

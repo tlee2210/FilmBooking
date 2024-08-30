@@ -115,7 +115,7 @@ public class PaymentServiceImpl implements PaymentService {
                 waterCorns.add(waterCorn);
             });
             bookingWaterRepository.saveAll(waterCorns);
-            vnp_ReturnUrl += "?quantityWater=" + String.join(",", waterCorns.stream()
+            vnp_ReturnUrl += "&quantityWater=" + String.join(",", waterCorns.stream()
                     .map(item -> item.getWaterCorn().getId().toString())
                     .collect(Collectors.toList()));
         }
@@ -226,7 +226,7 @@ public class PaymentServiceImpl implements PaymentService {
                 waterCorns.add(waterCorn);
             });
             bookingWaterRepository.saveAll(waterCorns);
-            vnp_ReturnUrl += "?quantityWater=" + String.join(",", waterCorns.stream()
+            vnp_ReturnUrl += "&quantityWater=" + String.join(",", waterCorns.stream()
                     .map(item -> item.getWaterCorn().getId().toString())
                     .collect(Collectors.toList()));
         }
@@ -238,8 +238,6 @@ public class PaymentServiceImpl implements PaymentService {
 
         vnp_ReturnUrl += "&userId=" + String.valueOf(user.getId());
 
-
-//        vnp_ReturnUrl += "?quantityWater=" + String.join(",", quantityWater);
 
         vnp_Params.put("vnp_ReturnUrl", vnp_ReturnUrl);
         vnp_Params.put("vnp_IpAddr", request.getRemoteAddr());
@@ -354,7 +352,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public boolean bookingVnpay(PaymentRequest paymentRequest, PaymentType type, String userId) {
+    public boolean bookingVnpay(PaymentRequest paymentRequest, PaymentType type, String userId) throws MessagingException {
         User user = userRepository.getById(Integer.valueOf(userId));
 
         Booking booking = new Booking();
@@ -369,16 +367,35 @@ public class PaymentServiceImpl implements PaymentService {
         bookingRepository.save(booking);
 
         List<BookingWaterCorn> waterCorns = new ArrayList<>();
+        List<waterCornBookingResponse> cornBookingResponseList = new ArrayList<>();
         if (paymentRequest.getQuantityWater() != null) {
             paymentRequest.getQuantityWater().forEach(item -> {
                 BookingWaterCorn waterCorn = bookingWaterRepository.getById(item.getId());
                 waterCorn.setBooking(booking);
                 bookingWaterRepository.save(waterCorn);
                 waterCorns.add(waterCorn);
+                cornBookingResponseList.add(new waterCornBookingResponse(item.getId(), waterCorn.getWaterCorn().getName(), item.getQuantity()));
             });
         }
         booking.setBookingWaterCorn(waterCorns);
         bookingRepository.save(booking);
+
+        BookingSuccessInfo bookingSuccessInfo = new BookingSuccessInfo();
+        bookingSuccessInfo.setId(booking.getId());
+        bookingSuccessInfo.setOrderId(booking.getOrderId());
+        bookingSuccessInfo.setPaymentId(booking.getPaymentId());
+        bookingSuccessInfo.setCinemaName(booking.getShowtime().getCinema().getName());
+        bookingSuccessInfo.setMovieName(booking.getShowtime().getMovie().getName());
+        bookingSuccessInfo.setRoomName(booking.getShowtime().getRoom().getName());
+        bookingSuccessInfo.setTime(LocalTime.parse(booking.getShowtime().getTime().toString(), DateTimeFormatter.ofPattern("HH:mm")));
+        bookingSuccessInfo.setDate(LocalDate.parse(booking.getShowtime().getDate().toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        bookingSuccessInfo.setQuantitySeat(booking.getQuantitySeat());
+        bookingSuccessInfo.setQuantityDoubleSeat(booking.getQuantityDoubleSeat());
+        bookingSuccessInfo.setMovieFormat(booking.getShowtime().getMovieFormat());
+        bookingSuccessInfo.setTotalPrice(booking.getTotalPrice());
+        bookingSuccessInfo.setBookingWaterCorn(cornBookingResponseList);
+
+        sendEmail(bookingSuccessInfo, user);
 
         return true;
     }
