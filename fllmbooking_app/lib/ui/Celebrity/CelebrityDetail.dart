@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:fllmbooking_app/data/models/CelebResponse.dart';
 import 'package:fllmbooking_app/data/responsitories/CelebrityRepositories.dart';
+import 'package:fllmbooking_app/ui/MovieDetail/MovieDetail.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 
@@ -124,41 +125,54 @@ class _CelebDetailPageState extends State<CelebDetailPage> {
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 8.0, horizontal: 8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(8.0),
-                                child: Image.network(
-                                  item.movieList![i].imageLandscape!,
-                                  fit: BoxFit.cover,
-                                  height: 100,
-                                  width: 150,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return MovieDetailPage(
+                                        slug: utf8.decode(item.movieList![i].slug!.codeUnits));
+                                  },
                                 ),
-                              ),
-                              const SizedBox(
-                                width: 8.0,
-                              ),
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      item.movieList![i].name!,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
+                              );
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: Image.network(
+                                    item.movieList![i].imageLandscape!,
+                                    fit: BoxFit.cover,
+                                    height: 100,
+                                    width: 150,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 8.0,
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        item.movieList![i].name!,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         )
                   ],
