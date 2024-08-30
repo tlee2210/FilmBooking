@@ -7,7 +7,6 @@ class ForgotPasswordPage extends StatelessWidget {
 
   void _submit(BuildContext context) {
     if (_formKey.currentState?.validate() ?? false) {
-      // Xử lý logic
       print('Email: ${_emailController.text}');
       Fluttertoast.showToast(
         msg: 'Request sent! Please check your email.',
