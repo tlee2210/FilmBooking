@@ -1,0 +1,71 @@
+server:
+  port: 8081
+  error:
+    include-message: always
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/springboot?useSSL=false&serverTimezone=UTC
+    username: your username
+    password: your password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: your username
+    password: your password
+    #    password: "ubqz zirl ujff qucr"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: your key
+            client-secret: your key
+            redirect-uri: your key
+          scope:
+            - email
+            - profile
+#          facebook:
+#            client-id: 1148701826164560
+#            client-secret: 3b49c6590a9f69daff5cacb97c7d68f5
+#          github:
+#            client-id: ed1e84c160343a83a2a2
+#            client-secret: be00bec73417d1df5ef0a3fd8d21b6c3f947d598
+
+openapi:
+  service:
+    api-docs: api-service
+    server: http://localhost:8081
+    title: API Service
+    version: 1.0.0
+
+cors:
+  allowed-origins:
+    - "http://localhost:3000"
+    - "http://localhost:3000/celebrity"
+  allowed-methods:
+    - "GET"
+    - "POST"
+    - "PUT"
+    - "DELETE"
+    - "PATCH"
+  allowed-headers:
+    - "*"
+  allow-credentials: true
+
+cloudinary:
+  Cloud-name: your key
+  API-key: your key
+  API-secret: your key
