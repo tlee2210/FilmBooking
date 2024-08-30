@@ -79,6 +79,16 @@ class _VnPaymentServiceState extends State<VnPaymentService> {
               },
               shouldOverrideUrlLoading: (controller, navigationAction) async {
                 var uri = navigationAction.request.url;
+                print("Navigating to URI: ${uri.toString()}");
+
+                if (uri != null &&
+                    uri.toString().contains(
+                        'http://10.0.2.2:8081/api/payment/v2/booking_vnpay')) {
+                  print('Blocked URL: ${uri.toString()}');
+                  executePayment(uri, context);
+                  return NavigationActionPolicy.CANCEL;
+                }
+
                 if (uri != null) {
                   if (uri.queryParameters.containsKey("vnp_ResponseCode")) {
                     String responseCode =
@@ -97,37 +107,20 @@ class _VnPaymentServiceState extends State<VnPaymentService> {
                 }
                 return NavigationActionPolicy.ALLOW;
               },
+              initialOptions: InAppWebViewGroupOptions(
+                crossPlatform: InAppWebViewOptions(
+                  useShouldOverrideUrlLoading: true,
+                ),
+              ),
               onLoadStart: (controller, url) async {
-
                 print("Start loading: $url");
-                
                 if (!isHandled &&
                     url.toString().contains(
                         'http://10.0.2.2:8081/api/payment/v2/booking_vnpay')) {
-
                   isHandled = true;
-                  var token = await tokenRepository.getToken();
-                  final response = await http.get(
-                    Uri.parse(url.toString()),
-                    headers: {
-                      'Content-Type': 'application/json',
-                      'Authorization': 'Bearer $token'
-                    },
-                  );
+                  executePayment(url, context);
 
-                  final bodyContent = utf8.decode(response.bodyBytes);
-                  var dataWrapper =
-                      jsonDecode(bodyContent) as Map<String, dynamic>;
-
-
-                  BookingSuccessInfo bookingSuccessInfo= BookingSuccessInfo.fromJson(dataWrapper['result']);
-
-                  if (response.statusCode == 200) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => TransactionSuccessPage(bookingSuccessInfo: bookingSuccessInfo!,)),
-                    );
-                  }
+                  Navigator.pop(context);
                 }
               },
               onLoadStop: (controller, url) async {
@@ -151,5 +144,16 @@ class _VnPaymentServiceState extends State<VnPaymentService> {
         },
       ),
     );
+  }
+
+  void executePayment(Uri? url, BuildContext context) {
+    if (url != null) {
+      Map<String, String> urlMap = {
+        'url': url.toString(),
+      };
+      widget.onSuccess(urlMap);
+    } else {
+      widget.onError("Invalid URL");
+    }
   }
 }

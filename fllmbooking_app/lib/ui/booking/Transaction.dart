@@ -5,11 +5,14 @@ import 'package:flutter_paypal_payment/flutter_paypal_payment.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'dart:developer';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import '../../data/models/BookingSuccessInfo.dart';
 import '../../data/models/PaymentRequest.dart';
 import '../../data/models/WaterCorn.dart';
 import '../../data/models/bookingData.dart';
+import '../../data/responsitories/TokenRepositories.dart';
 import '../ProgressBar/getProgressBar.dart';
 import '../VnpayCheckoutView/PaymentService.dart';
 import 'TransactionSuccessPage.dart';
@@ -44,6 +47,7 @@ class _TransactionState extends State<Transaction> {
   late VoucherResponse voucherAdd = VoucherResponse();
   late DateTime parsedTime;
   late DateTime parsedDate;
+  TokenRepositories tokenRepository = TokenRepositories();
 
   @override
   void initState() {
@@ -690,13 +694,39 @@ class _TransactionState extends State<Transaction> {
                       ));
                     }
                     if (_selectedPaymentMethod!.contains('VNPAY')) {
-                      paymentRequestData.showtimeId =
-                          _showTimeTableResponse.id;
+                      paymentRequestData.showtimeId = _showTimeTableResponse.id;
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) => VnPaymentService(
                           paymentRequest: paymentRequestData,
                           onSuccess: (Map params) async {
                             log("onSuccess: $params");
+                            // onSuccess: {url:
+                            String url = params['url'];
+                            var token = await tokenRepository.getToken();
+                            final response = await http.get(
+                              Uri.parse(url.toString()),
+                              headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer $token'
+                              },
+                            );
+                            final bodyContent = utf8.decode(response.bodyBytes);
+                            var dataWrapper =
+                                jsonDecode(bodyContent) as Map<String, dynamic>;
+                            BookingSuccessInfo bookingSuccessInfo =
+                                BookingSuccessInfo.fromJson(
+                                    dataWrapper['result']);
+                            if (response.statusCode == 200) {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        TransactionSuccessPage(
+                                          bookingSuccessInfo:
+                                              bookingSuccessInfo!,
+                                        )),
+                              );
+                            }
                           },
                           onError: (error) {
                             log("onError: $error");

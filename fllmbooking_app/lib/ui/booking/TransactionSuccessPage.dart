@@ -32,8 +32,8 @@ class _TransactionSuccessPageState extends State<TransactionSuccessPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 30),
-              Text(
+              const SizedBox(height: 30),
+              const Text(
                 'Confirm transaction',
                 style: TextStyle(
                   fontSize: 24,
@@ -46,7 +46,7 @@ class _TransactionSuccessPageState extends State<TransactionSuccessPage> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       color: Colors.black12,
                       blurRadius: 10,
@@ -54,16 +54,16 @@ class _TransactionSuccessPageState extends State<TransactionSuccessPage> {
                     )
                   ],
                 ),
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.check_circle,
                       color: Colors.blue,
                       size: 60,
                     ),
-                    SizedBox(height: 20),
-                    Text(
+                    const SizedBox(height: 20),
+                    const Text(
                       'Ticket booking successful',
                       style: TextStyle(
                         fontSize: 22,
@@ -71,20 +71,21 @@ class _TransactionSuccessPageState extends State<TransactionSuccessPage> {
                         color: Colors.blue,
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     CustomPaint(
-                      size: Size(double.infinity, 1),
+                      size: const Size(double.infinity, 1),
                       painter: DottedLinePainter(),
                     ),
-                    SizedBox(height: 20),
-                    _buildInfoRow('Payment Id', '${_bookingSuccessInfo.paymentId}'),
+                    const SizedBox(height: 20),
+                    _buildInfoRow(
+                        'Payment Id', '${_bookingSuccessInfo.paymentId}'),
                     _buildInfoRow('Order Id', '${_bookingSuccessInfo.orderId}'),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     CustomPaint(
                       size: Size(double.infinity, 1),
                       painter: DottedLinePainter(),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     _buildInfoRow(
                         'Movie name', _bookingSuccessInfo.movieName.toString()),
                     _buildInfoRow(
@@ -97,8 +98,8 @@ class _TransactionSuccessPageState extends State<TransactionSuccessPage> {
                         _bookingSuccessInfo.quantityDoubleSeat!.isNotEmpty)
                       _buildInfoRow('Double Seat',
                           _bookingSuccessInfo.quantityDoubleSeat.toString()),
-                    _buildInfoRow(
-                        'Time', '${DateFormat('HH:mm').format(_bookingSuccessInfo.time!)}, Day ${DateFormat('dd-MM-yyy').format(_bookingSuccessInfo.date!)}'),
+                    _buildInfoRow('Time',
+                        '${DateFormat('HH:mm').format(_bookingSuccessInfo.time!)}, Day ${DateFormat('dd-MM-yyy').format(_bookingSuccessInfo.date!)}'),
                     SizedBox(height: 10),
                     CustomPaint(
                       size: Size(double.infinity, 1),
@@ -106,9 +107,10 @@ class _TransactionSuccessPageState extends State<TransactionSuccessPage> {
                     ),
                     SizedBox(height: 10),
                     if (_bookingSuccessInfo.bookingWaterCorn!.isNotEmpty)
-                      ..._bookingSuccessInfo.bookingWaterCorn!.map((item) =>
-                          _buildInfoRow('${item.name}', 'Quantity ${item.quantity}')
-                      ).toList(),
+                      ..._bookingSuccessInfo.bookingWaterCorn!
+                          .map((item) => _buildInfoRow(
+                              '${item.name}', 'Quantity ${item.quantity}'))
+                          .toList(),
                     SizedBox(height: 10),
                     _buildInfoRow(
                         'Total Price', '${_bookingSuccessInfo.totalPrice} VND'),
@@ -154,18 +156,27 @@ class _TransactionSuccessPageState extends State<TransactionSuccessPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+          Flexible(
+            child: Text(
+              label,
+              style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
-          Text(
-            value,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          Flexible(
+            child: Text(
+              value,
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.right,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ],
       ),
     );
   }
+
+
 }
 
 class DottedLinePainter extends CustomPainter {
