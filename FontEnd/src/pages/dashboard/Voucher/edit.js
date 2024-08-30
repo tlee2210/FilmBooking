@@ -70,6 +70,7 @@ const VoucherCreate = (props) => {
       discountValue: item.discountValue || "",
       usageLimit: item.usageLimit || "",
       minSpend: item.minSpend || "",
+      maxDiscount: item.maxDiscount || "",
     },
     validationSchema: Yup.object({
       // usageLimit: Yup.string().required("Please Enter usage Limit"),
@@ -104,6 +105,7 @@ const VoucherCreate = (props) => {
       }
       formData.append("usageLimit", values.usageLimit);
       formData.append("minSpend", values.minSpend);
+      formData.append("maxDiscount", values.minSpend);
 
       dispatch(updateVoucher(formData, props.router.navigate));
     },
@@ -183,7 +185,7 @@ const VoucherCreate = (props) => {
                       </div>
                     </Col>
                     {/* minSpend */}
-                    <Col md={6}>
+                    <Col md={4}>
                       <div className="mb-3">
                         <Label className="form-label" htmlFor="minSpend">
                           Min Spend
@@ -199,20 +201,49 @@ const VoucherCreate = (props) => {
                           onChange={validation.handleChange}
                           invalid={
                             validation.errors.minSpend &&
-                              validation.touched.minSpend
+                            validation.touched.minSpend
                               ? true
                               : false
                           }
                         />
                         {validation.errors.minSpend &&
-                          validation.touched.minSpend ? (
+                        validation.touched.minSpend ? (
                           <FormFeedback type="invalid">
                             {validation.errors.minSpend}
                           </FormFeedback>
                         ) : null}
                       </div>
                     </Col>
-                    <Col md={6}>
+                    <Col md={4}>
+                      <div className="mb-3">
+                        <Label className="form-label" htmlFor="minSpend">
+                          Max Discount
+                        </Label>
+                        <Input
+                          type="number"
+                          className="form-control"
+                          id="maxDiscount"
+                          placeholder="Enter Min Spend"
+                          name="maxDiscount"
+                          value={validation.values.maxDiscount || ""}
+                          onBlur={validation.handleBlur}
+                          onChange={validation.handleChange}
+                          invalid={
+                            validation.errors.maxDiscount &&
+                            validation.touched.maxDiscount
+                              ? true
+                              : false
+                          }
+                        />
+                        {validation.errors.maxDiscount &&
+                        validation.touched.maxDiscount ? (
+                          <FormFeedback type="invalid">
+                            {validation.errors.maxDiscount}
+                          </FormFeedback>
+                        ) : null}
+                      </div>
+                    </Col>
+                    <Col md={4}>
                       <div className="mb-3">
                         <Label className="form-label" htmlFor="discountValue">
                           Discount Value
@@ -228,46 +259,15 @@ const VoucherCreate = (props) => {
                           onChange={validation.handleChange}
                           invalid={
                             validation.errors.discountValue &&
-                              validation.touched.discountValue
+                            validation.touched.discountValue
                               ? true
                               : false
                           }
                         />
                         {validation.errors.discountValue &&
-                          validation.touched.discountValue ? (
+                        validation.touched.discountValue ? (
                           <FormFeedback type="invalid">
                             {validation.errors.discountValue}
-                          </FormFeedback>
-                        ) : null}
-                      </div>
-                    </Col>
-                    <Col sm={6}>
-                      <div className="mb-3">
-                        <Label className="form-label" htmlFor="discountType">
-                          Discount Type
-                        </Label>
-                        <Select
-                          name="discountType"
-                          options={Option}
-                          id="discountType"
-                          placeholder="Select Role"
-                          classNamePrefix="select"
-                          onChange={(option) => {
-                            const roleValue = option ? option.value : null;
-                            validation.setFieldValue("discountType", roleValue);
-                          }}
-                          onBlur={() =>
-                            validation.setFieldTouched("discountType", true)
-                          }
-                          value={Option.find(
-                            (opt) =>
-                              opt.value === validation.values.discountType
-                          )}
-                        />
-                        {validation.errors.discountType &&
-                          validation.touched.discountType ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.discountType}
                           </FormFeedback>
                         ) : null}
                       </div>

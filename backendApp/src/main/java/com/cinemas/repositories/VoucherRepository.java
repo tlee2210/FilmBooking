@@ -13,6 +13,4 @@ public interface VoucherRepository extends JpaRepository<Voucher, Integer> {
     Voucher findByCode(String code);
     @Query("SELECT v FROM Voucher v WHERE v.code = :code AND v.id != :id")
     Voucher findByCodeAndId(String code, Integer id);
-
-    Voucher checkUsage(Integer id, Integer userId);
 }

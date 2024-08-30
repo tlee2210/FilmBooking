@@ -209,8 +209,10 @@ class _TransactionState extends State<Transaction> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () => handleVoucher(
-                            VoucherRequest(code: promotionController.text)),
+                        onPressed: () => handleVoucher(VoucherRequest(
+                            code: promotionController.text,
+                            price: paymentRequestData.totalPrice! -
+                                calculateDiscount)),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xff12CDD9),
                           padding: const EdgeInsets.symmetric(vertical: 16),

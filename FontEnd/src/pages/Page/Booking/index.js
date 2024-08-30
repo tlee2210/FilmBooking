@@ -271,6 +271,7 @@ const Booking = (props) => {
   const applyPromoCode = () => {
     const formData = new FormData();
     formData.append("code", promoCode);
+    formData.append("price", totalPriceRef.current);
 
     dispatch(ApplyVoucher(formData, props.router.navigate));
   };
@@ -282,7 +283,7 @@ const Booking = (props) => {
     intent: "capture",
   };
 
-  const conversionRate = 23000;
+  const conversionRate = 24875;
   const onCreateOrder = (data, actions) => {
     // const totalPriceInUSD = (totalPrice / conversionRate).toFixed(2);
     // if (totalPriceInUSD <= 0) {

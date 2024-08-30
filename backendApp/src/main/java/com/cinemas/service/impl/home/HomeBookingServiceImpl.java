@@ -180,10 +180,10 @@ public class HomeBookingServiceImpl implements HomeBookingService {
         if (voucher != null && voucher.getUsedCount() >= voucher.getUsageLimit()) {
             throw new AppException(ErrorCode.VOUCHER_USAGE_LIMIT_EXCEEDED);
         }
-        if (voucher != null && bookingRepository.checkUsage(voucher.getId(), user.getId()) != null) {
+        Booking booking = bookingRepository.checkUsage(voucher.getId(), user.getId());
+        if (booking == null) {
             throw new AppException(ErrorCode.VOUCHER_ALREADY_USED);
         }
-//        VOUCHER_USAGE_LIMIT_EXCEEDED
         VoucherResponse voucherResponse = new VoucherResponse();
         ObjectUtils.copyFields(voucher, voucherResponse);
 

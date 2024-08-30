@@ -22,4 +22,6 @@ public class VoucherRequest {
 
     private Double minSpend;
 
+    private Double maxDiscount;
+
 }

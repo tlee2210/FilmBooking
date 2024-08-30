@@ -159,7 +159,7 @@ const BlogIndex = (props) => {
       },
       {
         header: "View",
-        accessorKey: "views",
+        accessorKey: "view",
         enableColumnFilter: false,
         cell: (cell) => {
           const value = cell.getValue();
@@ -195,7 +195,7 @@ const BlogIndex = (props) => {
           const value = cell.getValue();
           return (
             <React.Fragment>
-              {value == "preview" ? (
+              {value == "Preview" ? (
                 <Badge color="success" pill>
                   {value}
                 </Badge>
