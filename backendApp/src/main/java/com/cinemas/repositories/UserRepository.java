@@ -2,6 +2,7 @@ package com.cinemas.repositories;
 
 import com.cinemas.entities.User;
 
+import com.cinemas.entities.Voucher;
 import com.cinemas.enums.RoleType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -34,4 +35,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("SELECT DISTINCT u.role FROM User AS u")
     List<String> findByRole();
+
 }

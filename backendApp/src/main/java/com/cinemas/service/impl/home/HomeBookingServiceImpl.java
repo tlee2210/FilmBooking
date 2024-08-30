@@ -5,6 +5,7 @@ import com.cinemas.dto.request.VoucherApplyRequest;
 import com.cinemas.dto.response.*;
 import com.cinemas.entities.*;
 import com.cinemas.enums.MovieFormat;
+import com.cinemas.enums.StatusVoucher;
 import com.cinemas.exception.AppException;
 import com.cinemas.exception.ErrorCode;
 import com.cinemas.repositories.*;
@@ -33,7 +34,6 @@ public class HomeBookingServiceImpl implements HomeBookingService {
 
     @Autowired
     private ShowTimeResponsitory showTimeResponsitory;
-
     @Autowired
     private FileStorageServiceImpl fileStorageServiceImpl;
 
@@ -169,9 +169,21 @@ public class HomeBookingServiceImpl implements HomeBookingService {
         Voucher voucher = voucherRepository.findByCode(code.getCode());
 
         if (voucher == null) {
-            throw new AppException(ErrorCode.NOT_FOUND);
+            throw new AppException(ErrorCode.VOUCHER_NOT_FOUND);
         }
-
+        if (voucher != null && voucher.getStatusVoucher() == StatusVoucher.EXPIRED) {
+            throw new AppException(ErrorCode.VOUCHER_EXPIRED);
+        }
+        if (voucher != null && voucher.getMinSpend() > code.getPrice()) {
+            throw new AppException(ErrorCode.VOUCHER_NOT_ELIGIBLE);
+        }
+        if (voucher != null && voucher.getUsedCount() >= voucher.getUsageLimit()) {
+            throw new AppException(ErrorCode.VOUCHER_USAGE_LIMIT_EXCEEDED);
+        }
+        if (voucher != null && bookingRepository.checkUsage(voucher.getId(), user.getId()) != null) {
+            throw new AppException(ErrorCode.VOUCHER_ALREADY_USED);
+        }
+//        VOUCHER_USAGE_LIMIT_EXCEEDED
         VoucherResponse voucherResponse = new VoucherResponse();
         ObjectUtils.copyFields(voucher, voucherResponse);
 
@@ -216,7 +228,7 @@ public class HomeBookingServiceImpl implements HomeBookingService {
         BookingTicketResponse bookingTicketResponse = new BookingTicketResponse();
         bookingTicketResponse.setListCity(cinemaRespository.findByCity());
         bookingTicketResponse.setMovieList(new ArrayList<>());
-        if(city != null){
+        if (city != null) {
             List<SelectOptionReponse<?>> cinemaList = cinemaRespository.selectCinema(city);
             List<MovieBookingResponse> movieListOld = new ArrayList<>();
             cinemaList.forEach(cine -> {

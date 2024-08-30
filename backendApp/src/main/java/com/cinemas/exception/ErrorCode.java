@@ -36,8 +36,12 @@ public enum ErrorCode {
 
     NOT_FOUND(HttpStatus.NOT_FOUND, "not found"),
 
+    VOUCHER_NOT_FOUND(HttpStatus.NOT_FOUND, "Voucher not found"),
+    VOUCHER_EXPIRED(HttpStatus.BAD_REQUEST, "Voucher has expired"),
+    VOUCHER_NOT_ELIGIBLE(HttpStatus.BAD_REQUEST, "Voucher is not eligible for use"),
+    VOUCHER_USAGE_LIMIT_EXCEEDED(HttpStatus.BAD_REQUEST, "Voucher usage limit exceeded"),
+    VOUCHER_ALREADY_USED(HttpStatus.BAD_REQUEST, "Voucher has already been used"),
     NOT_FOUND_MOVIE(HttpStatus.NOT_FOUND, "not found movie"),
-
     NOT_FOUND_CINEMA(HttpStatus.NOT_FOUND, "not found cinema"),
 
     NOT_FOUND_ROOM(HttpStatus.NOT_FOUND, "not found room"),

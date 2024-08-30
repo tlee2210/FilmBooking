@@ -106,11 +106,16 @@ class _TransactionSuccessPageState extends State<TransactionSuccessPage> {
                       painter: DottedLinePainter(),
                     ),
                     SizedBox(height: 10),
-                    if (_bookingSuccessInfo.bookingWaterCorn!.isNotEmpty)
+                    if (_bookingSuccessInfo.bookingWaterCorn!.isNotEmpty)...[
                       ..._bookingSuccessInfo.bookingWaterCorn!
                           .map((item) => _buildInfoRow(
-                              '${item.name}', 'Quantity ${item.quantity}'))
+                          '${item.name}', 'x${item.quantity}'))
                           .toList(),
+                      CustomPaint(
+                        size: Size(double.infinity, 1),
+                        painter: DottedLinePainter(),
+                      ),
+                    ],
                     SizedBox(height: 10),
                     _buildInfoRow(
                         'Total Price', '${_bookingSuccessInfo.totalPrice} VND'),

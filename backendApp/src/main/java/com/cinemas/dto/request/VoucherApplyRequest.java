@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class VoucherApplyRequest {
     private String code;
+    private Double price;
 }
