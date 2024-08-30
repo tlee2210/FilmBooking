@@ -149,8 +149,8 @@ const Register = (props) => {
                       <img src={logoLight} alt="" height="70" />
                     </Link>
                   </div>
-                  <p className="mt-3 fs-15 fw-medium">
-                    Premium Admin & Dashboard Template
+                  <p className="mt-3 fs-15 fw-medium" style={{color:'white'}}>
+                   Sign up
                   </p>
                 </div>
               </Col>
@@ -163,7 +163,7 @@ const Register = (props) => {
                     <div className="text-center mt-2">
                       <h5 className="text-primary">Create New Account</h5>
                       <p className="text-muted">
-                        Get your free velzon account now
+                        Get your free CineTicket account now
                       </p>
                     </div>
                     <div className="p-2 mt-4">

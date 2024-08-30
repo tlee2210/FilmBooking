@@ -6,7 +6,7 @@ const ParticlesAuth = ({ children }) => {
     <React.Fragment>
       <div className="auth-page-wrapper pt-5">
         <div className="auth-one-bg-position auth-one-bg" id="auth-particles">
-          <div className="bg-overlay"></div>
+          {/* <div className="bg-overlay"></div> */}
 
           <div className="shape">
             <svg
