@@ -43,7 +43,7 @@ import {
 } from "../../slices/home/bookingHome/thunk";
 
 const homepage = (props) => {
-  document.title = "home";
+  document.title = "Home";
   const dispatch = useDispatch();
   const [selectedMovie, setSelectedMovie] = useState("");
   const [selectedTheater, setSelectedTheater] = useState("");
