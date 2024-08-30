@@ -387,13 +387,13 @@ const Booking = (props) => {
     formData.append("paymentId", data.paymentID);
     formData.append("totalPrice", currentTotalPrice);
     if (currentDoubleSeats) {
-      currentDoubleSeats.forEach((item) => {
-        formData.append("quantityDoubleSeat", item);
+      currentDoubleSeats.forEach((item, index) => {
+        formData.append(`quantityDoubleSeat[${index}]`, item);
       });
     }
     if (currentSingleSeats) {
-      currentSingleSeats.forEach((item) => {
-        formData.append("quantitySeat", item);
+      currentSingleSeats.forEach((item, index) => {
+        formData.append(`quantitySeat[${index}]`, item);
       });
     }
     formData.append("showtimeId", showtimeId);
@@ -867,13 +867,13 @@ const Booking = (props) => {
                           {Object.keys(addedItemIds).length > 0
                             ? Object.keys(addedItemIds).map((itemId, index) => (
                                 <Row key={index}>
-                                  <Col md={9}>
+                                  <Col md={8}>
                                     <p>
                                       {addedItemIds[itemId].quantity}x{"  "}
                                       {addedItemIds[itemId].name}
                                     </p>
                                   </Col>
-                                  <Col md={3}>
+                                  <Col md={4}>
                                     <p className="total">
                                       {addedItemIds[itemId].price *
                                         addedItemIds[itemId].quantity}{" "}

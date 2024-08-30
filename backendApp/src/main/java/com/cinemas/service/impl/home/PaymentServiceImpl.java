@@ -84,7 +84,7 @@ public class PaymentServiceImpl implements PaymentService {
         vnp_Params.put("vnp_CurrCode", "VND");
         vnp_Params.put("vnp_Locale", "vn");
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
-        vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
+        vnp_Params.put("vnp_OrderInfo", vnp_TxnRef);
 
         vnp_Params.put("vnp_OrderType", orderType);
 
@@ -114,11 +114,16 @@ public class PaymentServiceImpl implements PaymentService {
                 waterCorn.setBooking(null);
                 waterCorns.add(waterCorn);
             });
-            bookingWaterRepository.saveAll(waterCorns);
-            vnp_ReturnUrl += "&quantityWater=" + String.join(",", waterCorns.stream()
-                    .map(item -> item.getWaterCorn().getId().toString())
-                    .collect(Collectors.toList()));
+
+            List<BookingWaterCorn> savedWaterCorns = bookingWaterRepository.saveAll(waterCorns);
+
+            List<String> bookingWaterCornIds = savedWaterCorns.stream()
+                    .map(bookingWaterCorn -> String.valueOf(bookingWaterCorn.getId()))
+                    .collect(Collectors.toList());
+
+            vnp_ReturnUrl += "&quantityWater=" + String.join(",", bookingWaterCornIds);
         }
+
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         User user = userRepository
@@ -215,7 +220,7 @@ public class PaymentServiceImpl implements PaymentService {
             vnp_ReturnUrl += "&voucherId=" + String.valueOf(paymentRequest.getVoucherId());
         }
 
-        if (paymentRequest.getQuantityWater() != null && !paymentRequest.getQuantityWater().isEmpty()) {
+        if (paymentRequest.getQuantityWater() != null&& !paymentRequest.getQuantityWater().isEmpty()) {
             List<BookingWaterCorn> waterCorns = new ArrayList<>();
 
             paymentRequest.getQuantityWater().forEach(item -> {
@@ -225,10 +230,14 @@ public class PaymentServiceImpl implements PaymentService {
                 waterCorn.setBooking(null);
                 waterCorns.add(waterCorn);
             });
-            bookingWaterRepository.saveAll(waterCorns);
-            vnp_ReturnUrl += "&quantityWater=" + String.join(",", waterCorns.stream()
-                    .map(item -> item.getWaterCorn().getId().toString())
-                    .collect(Collectors.toList()));
+
+            List<BookingWaterCorn> savedWaterCorns = bookingWaterRepository.saveAll(waterCorns);
+
+            List<String> bookingWaterCornIds = savedWaterCorns.stream()
+                    .map(bookingWaterCorn -> String.valueOf(bookingWaterCorn.getId()))
+                    .collect(Collectors.toList());
+
+            vnp_ReturnUrl += "&quantityWater=" + String.join(",", bookingWaterCornIds);
         }
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 

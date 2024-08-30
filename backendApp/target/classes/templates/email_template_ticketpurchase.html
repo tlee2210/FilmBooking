@@ -70,21 +70,20 @@
                 <strong>Double Seat Quantity:</strong> <span th:text="${quantityDoubleSeat}"></span>
             </li>
 
-            <!--            <li th:if="${bookingWaterCorn != null}">-->
-            <!--                <strong>Water and Corn Orders:</strong>-->
-            <!--                <ul>-->
-            <!--                    <li th:each="item : ${bookingWaterCorn}">-->
-            <!--                        <span th:text="${item.name}"></span> - Quantity: <span th:text="${item.quantity}"></span>-->
-            <!--                    </li>-->
-            <!--                </ul>-->
-            <!--            </li>-->
-<!--            <li><strong>Total Price:</strong> <span th:text="${totalPrice} VND"></span></li>-->
+            <li th:if="${bookingWaterCorn != null}">
+                <strong>Water and Corn Orders:</strong>
+                <ul>
+                    <li th:each="item : ${bookingWaterCorn}">
+                        <span th:text="${item.name}"></span> - Quantity: <span th:text="${item.quantity}"></span>
+                    </li>
+                </ul>
+            </li>
+            <!--            <li><strong>Total Price:</strong> <span th:text="${totalPrice} VND"></span></li>-->
 
-<!--            <li th:if="${totalPrice != null}">-->
-
-<!--                <strong>Total Price:</strong> <span-->
-<!--                    th:text="${#numbers.formatDecimal(totalPrice, 2, 'COMMA', 'POINT')}"></span>-->
-<!--            </li>-->
+            <li th:if="${totalPrice != null}">
+                <strong>Total Price:</strong> <span
+                    th:text="${#numbers.formatDecimal(totalPrice, 2, 'COMMA', 'POINT')}"></span>
+            </li>
         </ul>
         <p>You can view your ticket and event details by clicking the button below:</p>
         <p><a th:href="@{http://localhost:3000/profile}" class="button">View Your Ticket</a></p>
