@@ -1,4 +1,5 @@
 import 'package:fllmbooking_app/ui/MovieDetail/MovieDetail.dart';
+import 'package:fllmbooking_app/ui/News/NewsDetail.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -27,7 +28,7 @@ class _HomeSliderState extends State<HomeSlider> {
               MaterialPageRoute(
                 builder: (context) => isMovie
                     ? MovieDetailPage(slug: image.value)
-                    : PromotionsDetailPage(),
+                    : NewsDetailPage(slug: image.value, type: 'Promotion'),
               ),
             );
           },
