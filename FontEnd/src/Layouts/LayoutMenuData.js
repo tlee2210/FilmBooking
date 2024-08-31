@@ -219,7 +219,7 @@ const Navdata = () => {
       subItems: [
         {
           id: "promotion",
-          label: "promotion Management",
+          label: "Promotion Management",
           link: "/dashboard/promotion",
           parentId: "promotion",
         },

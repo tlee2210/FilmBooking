@@ -550,9 +550,9 @@ const Profile = (props) => {
                             </p>
                           </div>
                         </div>
-                        <div className="transaction-action">
+                        <div className="transaction-action ">
                           <a
-                            style={{ color: "rgb(245, 128, 32)" }}
+                            style={{ color: "rgb(245, 128, 32)",cursor:"pointer" }}
                             onClick={() => tog_center(item?.id)}
                           >
                             Detail
