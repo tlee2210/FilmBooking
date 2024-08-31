@@ -61,21 +61,22 @@ class TransactionCardDetail extends StatelessWidget {
                               const SizedBox(height: 4.0),
                               Row(
                                 children: [
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0, vertical: 2.0),
-                                    decoration: BoxDecoration(
-                                      color: Colors.orange,
-                                      borderRadius: BorderRadius.circular(4.0),
-                                    ),
-                                    child: Text(
-                                      booking.rules,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14.0,
+                                  if(booking.rules.isNotEmpty)
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0, vertical: 2.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.orange,
+                                        borderRadius: BorderRadius.circular(4.0),
+                                      ),
+                                      child: Text(
+                                        booking.rules,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14.0,
+                                        ),
                                       ),
                                     ),
-                                  ),
                                   const SizedBox(width: 8.0),
                                   Text(
                                     booking.movieFormat,

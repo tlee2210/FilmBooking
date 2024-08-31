@@ -174,14 +174,17 @@ public class HomeBookingServiceImpl implements HomeBookingService {
         if (voucher != null && voucher.getStatusVoucher() == StatusVoucher.EXPIRED) {
             throw new AppException(ErrorCode.VOUCHER_EXPIRED);
         }
-        if (voucher != null && voucher.getMinSpend() > code.getPrice()) {
-            throw new AppException(ErrorCode.VOUCHER_NOT_ELIGIBLE);
-        }
-        if (voucher != null && voucher.getUsedCount() >= voucher.getUsageLimit()) {
-            throw new AppException(ErrorCode.VOUCHER_USAGE_LIMIT_EXCEEDED);
-        }
+//        if(voucher != null && voucher.getMinSpend() != null){
+//            if (voucher != null && voucher.getMinSpend() > code.getPrice()) {
+//                throw new AppException(ErrorCode.VOUCHER_NOT_ELIGIBLE);
+//            }
+//        }
+
+//        if (voucher != null && voucher.getUsedCount() >= voucher.getUsageLimit()) {
+//            throw new AppException(ErrorCode.VOUCHER_USAGE_LIMIT_EXCEEDED);
+//        }
         Booking booking = bookingRepository.checkUsage(voucher.getId(), user.getId());
-        if (booking == null) {
+        if (booking != null) {
             throw new AppException(ErrorCode.VOUCHER_ALREADY_USED);
         }
         VoucherResponse voucherResponse = new VoucherResponse();
