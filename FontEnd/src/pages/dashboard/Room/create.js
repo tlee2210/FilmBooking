@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import withRouter from "../../../Components/Common/withRouter";
+import React, { useEffect } from "react"
+import withRouter from "../../../Components/Common/withRouter"
 
 import {
   Card,
@@ -13,28 +13,28 @@ import {
   FormFeedback,
   Form,
   FormGroup,
-} from "reactstrap";
-import { message } from "antd";
-import { clearNotification } from "../../../slices/message/reducer";
+} from "reactstrap"
+import { message } from "antd"
+import { clearNotification } from "../../../slices/message/reducer"
 
-import { createSelector } from "reselect";
-import { useDispatch, useSelector } from "react-redux";
-import BreadCrumb from "../../../Components/Common/BreadCrumb";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { getCreateRoom, CreateRoomMovie } from "../../../slices/Room/thunk";
-import Select from "react-select";
+import { createSelector } from "reselect"
+import { useDispatch, useSelector } from "react-redux"
+import BreadCrumb from "../../../Components/Common/BreadCrumb"
+import { useFormik } from "formik"
+import * as Yup from "yup"
+import { getCreateRoom, CreateRoomMovie } from "../../../slices/Room/thunk"
+import Select from "react-select"
 
 const CreateRoom = (props) => {
-  document.title = "Create Room Movie";
+  document.title = "Create Room Movie"
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getCreateRoom());
-  }, []);
+    dispatch(getCreateRoom())
+  }, [])
 
-  const selectRoomMovieCreateState = (state) => state;
+  const selectRoomMovieCreateState = (state) => state
   const roomMovieCreatepageData = createSelector(
     selectRoomMovieCreateState,
     (state) => ({
@@ -42,19 +42,19 @@ const CreateRoom = (props) => {
       messageError: state.Message.messageError,
       selectOptions: state.RoomMovie.selectOptions,
     })
-  );
+  )
   const { error, messageError, selectOptions } = useSelector(
     roomMovieCreatepageData
-  );
+  )
 
   useEffect(() => {
     if (error) {
       if (messageError != null) {
-        message.error(messageError);
+        message.error(messageError)
       }
     }
-    dispatch(clearNotification());
-  }, [error]);
+    dispatch(clearNotification())
+  }, [error])
 
   const validation = useFormik({
     initialValues: {
@@ -74,40 +74,40 @@ const CreateRoom = (props) => {
       columns: Yup.number()
         .required("Required")
         .min(1, "Columns must be at least 1"),
-      doubleSeatColumns: Yup.number()
-        .required("Required")
-        .min(0, "Double seat columns must be at least 0"),
-      doubleSeatRows: Yup.number()
-        .required("Required")
-        .min(0, "Double seat rows must be at least 0"),
+      // doubleSeatColumns: Yup.number()
+      //   .required("Required")
+      //   .min(0, "Double seat columns must be at least 0"),
+      // doubleSeatRows: Yup.number()
+      //   .required("Required")
+      //   .min(0, "Double seat rows must be at least 0"),
     }),
     onSubmit: (values) => {
-      console.log(values);
-      const formData = new FormData();
-      formData.append("name", values.name);
-      formData.append("SeatRows", values.rows);
-      formData.append("SeatColumns", values.columns);
-      formData.append("doubleSeatColumns", values.doubleSeatColumns);
-      formData.append("doubleSeatRows", values.doubleSeatRows);
-      formData.append("totalColumn", values.totalColumn);
-      formData.append("cinema", values.cinema);
+      console.log(values)
+      const formData = new FormData()
+      formData.append("name", values.name)
+      formData.append("SeatRows", values.rows)
+      formData.append("SeatColumns", values.columns)
+      formData.append("doubleSeatColumns", values.doubleSeatColumns)
+      formData.append("doubleSeatRows", values.doubleSeatRows)
+      formData.append("totalColumn", values.totalColumn)
+      formData.append("cinema", values.cinema)
 
-      dispatch(CreateRoomMovie(formData, props.router.navigate));
+      dispatch(CreateRoomMovie(formData, props.router.navigate))
     },
-  });
+  })
 
   const RowOption = [
     { value: 1, label: "1" },
     { value: 2, label: "2" },
     { value: 3, label: "3" },
-  ];
+  ]
 
   const renderSeats = (numRows, numCols, totalColumns, isDouble = false) => {
     const rows = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
       .split("")
       .slice(0, numRows + (isDouble ? validation.values.rows : 0))
-      .reverse();
-    const seatsPerPart = Math.ceil(numCols / totalColumns);
+      .reverse()
+    const seatsPerPart = Math.ceil(numCols / totalColumns)
     // console.log(seatsPerPart);
     return (
       <div className="seating-grid">
@@ -116,9 +116,9 @@ const CreateRoom = (props) => {
             {[...Array(numCols).keys()].map((i) => {
               const seatNumber = isDouble
                 ? `${row}${i * 2 + 1}-${i * 2 + 2}`
-                : `${row}${i + 1}`;
+                : `${row}${i + 1}`
               const applyMargin =
-                totalColumns !== 1 && i !== 0 && (i + 1) % seatsPerPart === 0;
+                totalColumns !== 1 && i !== 0 && (i + 1) % seatsPerPart === 0
 
               return (
                 <div
@@ -131,13 +131,13 @@ const CreateRoom = (props) => {
                     {seatNumber}
                   </div>
                 </div>
-              );
+              )
             })}
           </div>
         ))}
       </div>
-    );
-  };
+    )
+  }
 
   return (
     <div className="page-content">
@@ -160,7 +160,7 @@ const CreateRoom = (props) => {
                           options={selectOptions}
                           classNamePrefix="select"
                           onChange={(option) => {
-                            validation.setFieldValue("cinema", option.value);
+                            validation.setFieldValue("cinema", option.value)
                           }}
                           onBlur={() =>
                             validation.setFieldTouched("cinema", true)
@@ -228,7 +228,7 @@ const CreateRoom = (props) => {
                             validation.setFieldValue(
                               "totalColumn",
                               option.value
-                            );
+                            )
                           }}
                           onBlur={() =>
                             validation.setFieldTouched("totalColumn", true)
@@ -417,7 +417,7 @@ const CreateRoom = (props) => {
         </Row>
       </Container>
     </div>
-  );
-};
+  )
+}
 
-export default withRouter(CreateRoom);
+export default withRouter(CreateRoom)

@@ -111,6 +111,46 @@ class _CelebDetailPageState extends State<CelebDetailPage> {
                       padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                       child: Container(
                         child: const Text(
+                          "Description",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      // width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+                      child: Text(
+                        parse(utf8.decode(item.description!.codeUnits))
+                            .body!
+                            .text,
+                        style:
+                        const TextStyle(color: Colors.white, fontSize: 16),
+                        maxLines: showFullContent ? null : 7,
+                        overflow: showFullContent
+                            ? TextOverflow.visible
+                            : TextOverflow.ellipsis,
+                      ),
+                    ),
+                    if (item.description!.length > 255)
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            showFullContent = !showFullContent;
+                          });
+                        },
+                        child: Text(
+                          showFullContent ? 'Collapse' : 'Read more',
+                          style: const TextStyle(color: Colors.orange),
+                        ),
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                      child: Container(
+                        child: const Text(
                           "Film has joined",
                           style: TextStyle(
                             color: Colors.white,
