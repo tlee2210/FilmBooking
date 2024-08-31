@@ -19,11 +19,11 @@ class LoginPage extends StatefulWidget {
 class _LoginScreenState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
 
-  // final _emailController = TextEditingController();
-  // final _passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   TokenRepositories tokenRepository = TokenRepositories();
-  final _emailController = TextEditingController(text: 'thienle255@gmail.com');
-  final _passwordController = TextEditingController(text: 'thienle2210');
+  // final _emailController = TextEditingController(text: 'thienle255@gmail.com');
+  // final _passwordController = TextEditingController(text: 'thienle2210');
   bool _obscurePassword = true;
   late LoginViewModel _loginViewModel;
   String? _errorMessage;

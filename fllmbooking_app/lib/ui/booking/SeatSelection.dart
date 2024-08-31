@@ -123,7 +123,7 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
       int currentPosition = splitInterval;
 
       for (int i = 0; i < _showTimeTableResponse!.room.totalColumn; i++) {
-        splitIndices.add(currentPosition + i);
+        splitIndices.add(currentPosition + i + 1);
         currentPosition += splitInterval + (remainingSeats > 0 ? 1 : 0);
         remainingSeats =
             remainingSeats > 0 ? remainingSeats - 1 : remainingSeats;
@@ -135,10 +135,16 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
           _showTimeTableResponse!.room.seatColumns +
               _showTimeTableResponse!.room.totalColumn,
           (col) {
-            String seatLabel = '${String.fromCharCode(65 + row)}${col + 1}';
             if (splitIndices.contains(col)) {
               return SeatState.empty;
-            } else if (soldSeatsSet.contains(seatLabel)) {
+            }
+
+            int adjustedCol =
+                col - splitIndices.where((index) => index <= col).length;
+            String seatLabel =
+                '${String.fromCharCode(65 + row)}${adjustedCol + 1}';
+
+            if (soldSeatsSet.contains(seatLabel)) {
               return SeatState.sold;
             } else {
               return SeatState.unselected;
@@ -370,7 +376,7 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                 children: [
                   const SizedBox(height: 10),
                   Padding(
-                    padding: EdgeInsets.only(left: 15),
+                    padding: EdgeInsets.only(left: 5),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -430,8 +436,7 @@ class _SeatSelectionScreen extends State<SeatSelectionScreen> {
                               pathUnSelectedSeat:
                                   'assets/seats/svg_unselected_bus_seat.svg',
                               rows: _showTimeTableResponse!.room.seatRows,
-                              cols: _showTimeTableResponse!.room.seatColumns +
-                                  _showTimeTableResponse!.room.totalColumn,
+                              cols: _showTimeTableResponse!.room.seatColumns,
                               seatSvgSize: 20,
                               currentSeatsState: currentSeatsState,
                             ),
