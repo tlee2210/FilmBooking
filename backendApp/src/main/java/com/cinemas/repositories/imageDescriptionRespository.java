@@ -17,7 +17,7 @@ public interface imageDescriptionRespository extends JpaRepository<imageDescript
     @Query("SELECT i FROM imageDescription i WHERE i.slug_name = null")
     List<imageDescription> findBySlug_nameNull();
 
-    @Query("SELECT new com.cinemas.dto.response.SelectOptionReponse(i.slug_name, i.url) FROM  imageDescription i JOIN (SELECT MIN(id) as id FROM imageDescription GROUP BY slug_name) subquery " +
+    @Query("SELECT new com.cinemas.dto.response.SelectOptionReponse(i.slug, i.image) FROM  Promotion i JOIN (SELECT MIN(id) as id FROM Promotion GROUP BY slug) subquery " +
             "ON i.id = subquery.id ORDER BY i.id DESC LIMIT 3")
     List<SelectOptionReponse> getImageCarousel();
 }
