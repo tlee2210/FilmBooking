@@ -556,7 +556,6 @@ class _TransactionState extends State<Transaction> {
                     height: 30,
                   ),
                   const SizedBox(width: 10),
-                  // Khoảng cách giữa hình ảnh và văn bản
                   const Text(
                     "VNPAY",
                     style: TextStyle(color: Colors.white),
@@ -695,6 +694,7 @@ class _TransactionState extends State<Transaction> {
                         ),
                       ));
                     }
+                    //payment VN pay
                     if (_selectedPaymentMethod!.contains('VNPAY')) {
                       paymentRequestData.showtimeId = _showTimeTableResponse.id;
                       Navigator.of(context).push(MaterialPageRoute(

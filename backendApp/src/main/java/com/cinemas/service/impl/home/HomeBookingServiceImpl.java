@@ -161,6 +161,35 @@ public class HomeBookingServiceImpl implements HomeBookingService {
 
     @Override
     public VoucherResponse findByCode(VoucherApplyRequest code) {
+//        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        User user = userRepository
+//                .findByEmail(userDetails.getUsername())
+//                .orElseThrow(() -> new AppException(NOT_FOUND));
+//
+//        Voucher voucher = voucherRepository.findByCode(code.getCode());
+//
+//        if (voucher == null) {
+//            throw new AppException(ErrorCode.VOUCHER_NOT_FOUND);
+//        }
+//        if (voucher != null && voucher.getStatusVoucher() == StatusVoucher.EXPIRED) {
+//            throw new AppException(ErrorCode.VOUCHER_EXPIRED);
+//        }
+////        if(voucher != null && voucher.getMinSpend() != null){
+////            if (voucher != null && voucher.getMinSpend() > code.getPrice()) {
+////                throw new AppException(ErrorCode.VOUCHER_NOT_ELIGIBLE);
+////            }
+////        }
+//
+////        if (voucher != null && voucher.getUsedCount() >= voucher.getUsageLimit()) {
+////            throw new AppException(ErrorCode.VOUCHER_USAGE_LIMIT_EXCEEDED);
+////        }
+//        Booking booking = bookingRepository.checkUsage(voucher.getId(), user.getId());
+//        if (booking != null) {
+//            throw new AppException(ErrorCode.VOUCHER_ALREADY_USED);
+//        }
+//        VoucherResponse voucherResponse = new VoucherResponse();
+//        ObjectUtils.copyFields(voucher, voucherResponse);
+
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userRepository
                 .findByEmail(userDetails.getUsername())
@@ -171,22 +200,7 @@ public class HomeBookingServiceImpl implements HomeBookingService {
         if (voucher == null) {
             throw new AppException(ErrorCode.VOUCHER_NOT_FOUND);
         }
-        if (voucher != null && voucher.getStatusVoucher() == StatusVoucher.EXPIRED) {
-            throw new AppException(ErrorCode.VOUCHER_EXPIRED);
-        }
-//        if(voucher != null && voucher.getMinSpend() != null){
-//            if (voucher != null && voucher.getMinSpend() > code.getPrice()) {
-//                throw new AppException(ErrorCode.VOUCHER_NOT_ELIGIBLE);
-//            }
-//        }
 
-//        if (voucher != null && voucher.getUsedCount() >= voucher.getUsageLimit()) {
-//            throw new AppException(ErrorCode.VOUCHER_USAGE_LIMIT_EXCEEDED);
-//        }
-        Booking booking = bookingRepository.checkUsage(voucher.getId(), user.getId());
-        if (booking != null) {
-            throw new AppException(ErrorCode.VOUCHER_ALREADY_USED);
-        }
         VoucherResponse voucherResponse = new VoucherResponse();
         ObjectUtils.copyFields(voucher, voucherResponse);
 

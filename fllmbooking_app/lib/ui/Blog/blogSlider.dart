@@ -1,5 +1,3 @@
-import 'package:fllmbooking_app/data/models/MovieBlog.dart';
-import 'package:fllmbooking_app/data/models/review.dart';
 import 'package:fllmbooking_app/data/responsitories/BlogRepositories.dart';
 import 'package:fllmbooking_app/data/responsitories/ReviewRepositories.dart';
 import 'package:fllmbooking_app/ui/News/NewsDetail.dart';
@@ -7,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../../data/models/item_introduce.dart';
 import '../ProgressBar/getProgressBar.dart';
-import '../Review/reviewDetail.dart';
-import 'blogDetail.dart';
 
 class BlogSlider extends StatefulWidget {
   final List<ItemIntroduce> data;

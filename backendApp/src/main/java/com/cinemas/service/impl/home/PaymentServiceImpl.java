@@ -92,8 +92,8 @@ public class PaymentServiceImpl implements PaymentService {
 //        vnp_Params.put("vnp_Bill_Email", vnp_TxnRef);
 
         String vnp_ReturnUrl = ConfigVNPAY.vnp_ReturnUrl;
-
-        vnp_ReturnUrl += "?showtimeId=" + String.valueOf(paymentRequest.getShowtimeId());
+//logic web create table ==================================================================================
+        vnp_ReturnUrl += "?showtimeId=" + paymentRequest.getShowtimeId();
         if (paymentRequest.getQuantitySeat() != null) {
             vnp_ReturnUrl += "&quantitySeat=" + String.join(",", paymentRequest.getQuantitySeat());
         }
@@ -101,7 +101,7 @@ public class PaymentServiceImpl implements PaymentService {
             vnp_ReturnUrl += "&quantityDoubleSeat=" + String.join(",", paymentRequest.getQuantityDoubleSeat());
         }
         if (paymentRequest.getVoucherId() != null) {
-            vnp_ReturnUrl += "&voucherId=" + String.valueOf(paymentRequest.getVoucherId());
+            vnp_ReturnUrl += "&voucherId=" + paymentRequest.getVoucherId();
         }
 
         if (paymentRequest.getQuantityWater() != null) {
@@ -130,8 +130,9 @@ public class PaymentServiceImpl implements PaymentService {
                 .findByEmail(userDetails.getUsername())
                 .orElseThrow(() -> new AppException(NOT_FOUND));
 
-        vnp_ReturnUrl += "&userId=" + String.valueOf(user.getId());
+        vnp_ReturnUrl += "&userId=" + user.getId();
 
+//        end==========================================================================================================
 
 //        vnp_ReturnUrl += "?quantityWater=" + String.join(",", quantityWater);
 
@@ -155,16 +156,16 @@ public class PaymentServiceImpl implements PaymentService {
         Iterator itr = fieldNames.iterator();
         while (itr.hasNext()) {
             String fieldName = (String) itr.next();
-            String fieldValue = (String) vnp_Params.get(fieldName);
+            String fieldValue = vnp_Params.get(fieldName);
             if ((fieldValue != null) && (fieldValue.length() > 0)) {
                 //Build hash data
                 hashData.append(fieldName);
                 hashData.append('=');
-                hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
+                hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
                 //Build query
-                query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII.toString()));
+                query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII));
                 query.append('=');
-                query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
+                query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
                 if (itr.hasNext()) {
                     query.append('&');
                     hashData.append('&');
@@ -208,8 +209,9 @@ public class PaymentServiceImpl implements PaymentService {
 //        vnp_Params.put("vnp_Bill_Email", vnp_TxnRef);
 
         String vnp_ReturnUrl = ConfigVNPAY.vnp_ReturnUrl2;
+//logic mobie ==================================================================================
 
-        vnp_ReturnUrl += "?showtimeId=" + String.valueOf(paymentRequest.getShowtimeId());
+        vnp_ReturnUrl += "?showtimeId=" + paymentRequest.getShowtimeId();
         if (paymentRequest.getQuantitySeat() != null & !paymentRequest.getQuantitySeat().isEmpty()) {
             vnp_ReturnUrl += "&quantitySeat=" + String.join(",", paymentRequest.getQuantitySeat());
         }
@@ -217,10 +219,10 @@ public class PaymentServiceImpl implements PaymentService {
             vnp_ReturnUrl += "&quantityDoubleSeat=" + String.join(",", paymentRequest.getQuantityDoubleSeat());
         }
         if (paymentRequest.getVoucherId() != null) {
-            vnp_ReturnUrl += "&voucherId=" + String.valueOf(paymentRequest.getVoucherId());
+            vnp_ReturnUrl += "&voucherId=" + paymentRequest.getVoucherId();
         }
 
-        if (paymentRequest.getQuantityWater() != null&& !paymentRequest.getQuantityWater().isEmpty()) {
+        if (paymentRequest.getQuantityWater() != null && !paymentRequest.getQuantityWater().isEmpty()) {
             List<BookingWaterCorn> waterCorns = new ArrayList<>();
 
             paymentRequest.getQuantityWater().forEach(item -> {
@@ -245,8 +247,9 @@ public class PaymentServiceImpl implements PaymentService {
                 .findByEmail(userDetails.getUsername())
                 .orElseThrow(() -> new AppException(NOT_FOUND));
 
-        vnp_ReturnUrl += "&userId=" + String.valueOf(user.getId());
+        vnp_ReturnUrl += "&userId=" + user.getId();
 
+//        end mobie =================================================================================================
 
         vnp_Params.put("vnp_ReturnUrl", vnp_ReturnUrl);
         vnp_Params.put("vnp_IpAddr", request.getRemoteAddr());
@@ -268,16 +271,16 @@ public class PaymentServiceImpl implements PaymentService {
         Iterator itr = fieldNames.iterator();
         while (itr.hasNext()) {
             String fieldName = (String) itr.next();
-            String fieldValue = (String) vnp_Params.get(fieldName);
+            String fieldValue = vnp_Params.get(fieldName);
             if ((fieldValue != null) && (fieldValue.length() > 0)) {
                 //Build hash data
                 hashData.append(fieldName);
                 hashData.append('=');
-                hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
+                hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
                 //Build query
-                query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII.toString()));
+                query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII));
                 query.append('=');
-                query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
+                query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
                 if (itr.hasNext()) {
                     query.append('&');
                     hashData.append('&');
@@ -287,7 +290,6 @@ public class PaymentServiceImpl implements PaymentService {
         String queryUrl = query.toString();
         String vnp_SecureHash = ConfigVNPAY.hmacSHA512(ConfigVNPAY.secretKey, hashData.toString());
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
-
 
         String paymentUrl = ConfigVNPAY.vnp_PayUrl + "?" + queryUrl;
 

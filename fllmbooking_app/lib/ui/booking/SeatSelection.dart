@@ -4,14 +4,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 import '../../data/models/PaymentRequest.dart';
-import '../../data/models/SeatNumber.dart';
 import '../../data/models/WaterCorn.dart';
 import '../../data/models/bookingData.dart';
 import '../../data/models/home_movie_format_response.dart';
 import '../../data/models/home_time_and_room_response.dart';
 import '../../data/responsitories/TokenRepositories.dart';
 import '../../main.dart';
-import '../ProgressBar/getProgressBar.dart';
 import 'ComboSelectionScreen.dart';
 import 'bookingViewModel.dart';
 

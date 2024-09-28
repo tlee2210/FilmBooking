@@ -26,6 +26,12 @@ public class PaymentController {
     @Autowired
     private PaymentService paymentService;
 
+    /**
+     * create url for web
+     * @param paymentRequest
+     * @return
+     * @throws UnsupportedEncodingException
+     */
     @PostMapping("/v1/create_payment_vnpay")
     public APIResponse<String> createpaymentVnpay(@RequestBody PaymentRequest paymentRequest) throws UnsupportedEncodingException {
         APIResponse<String> apiResponse = new APIResponse<>();
@@ -33,6 +39,12 @@ public class PaymentController {
         return apiResponse;
     }
 
+    /**
+     * create url for mobie
+     * @param paymentRequest
+     * @return
+     * @throws UnsupportedEncodingException
+     */
     @PostMapping("/v2/create_payment_vnpay")
     public APIResponse<String> createpaymentVnpay2(@RequestBody PaymentRequest paymentRequest) throws UnsupportedEncodingException {
         APIResponse<String> apiResponse = new APIResponse<>();
@@ -40,6 +52,12 @@ public class PaymentController {
         return apiResponse;
     }
 
+    /**
+     * logic booking paypal
+     * @param paymentRequest
+     * @return
+     * @throws MessagingException
+     */
     @PostMapping("/v1/booking_paypal")
     public APIResponse<BookingSuccessInfo> bookingPaypal(@RequestBody PaymentRequest paymentRequest) throws MessagingException {
         BookingSuccessInfo checkSuccess = paymentService.bookingPaypal(paymentRequest, PaymentType.PAYPAL);
@@ -55,6 +73,20 @@ public class PaymentController {
         throw new AppException(CREATE_FAILED);
     }
 
+    /**
+     * logic booking Vnpay for web
+     * @param vnp_OrderInfo
+     * @param vnp_TransactionNo
+     * @param quantitySeat
+     * @param quantityDoubleSeat
+     * @param vnp_Amount
+     * @param showtimeId
+     * @param voucherId
+     * @param quantityWater
+     * @param userId
+     * @return
+     * @throws MessagingException
+     */
     @GetMapping("/v1/booking_vnpay")
     public RedirectView bookingVnpay(
             @RequestParam(required = false) String vnp_OrderInfo,
@@ -98,6 +130,20 @@ public class PaymentController {
 //        return null;
     }
 
+    /**
+     * logic booking Vnpay for Mobie
+     * @param vnp_OrderInfo
+     * @param vnp_TransactionNo
+     * @param quantitySeat
+     * @param quantityDoubleSeat
+     * @param vnp_Amount
+     * @param showtimeId
+     * @param voucherId
+     * @param quantityWater
+     * @param userId
+     * @return
+     * @throws MessagingException
+     */
     @GetMapping("/v2/booking_vnpay")
     public APIResponse<BookingSuccessInfo> bookingVnpay2(
             @RequestParam(required = false) String vnp_OrderInfo,
