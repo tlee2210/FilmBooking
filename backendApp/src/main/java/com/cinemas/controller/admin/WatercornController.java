@@ -8,6 +8,9 @@ import com.cinemas.entities.WaterCorn;
 import com.cinemas.exception.AppException;
 import com.cinemas.service.admin.WaterCornService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -21,12 +24,12 @@ import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 @RestController
 @RequestMapping("/api/admin/watercorn")
 @Tag(name = "Dashboard Watercorn Controller")
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 public class WatercornController {
-    @Autowired
     WaterCornService waterCornService;
 
     /**
-     *
      * @param search
      * @param pageNo
      * @param pageSize
@@ -34,11 +37,12 @@ public class WatercornController {
      * @return
      */
     @GetMapping("/v1")
-    public APIResponse<Page<WaterCorn>> getAllWaterCorn( @RequestParam(required = false) String search,
-                                                         @RequestParam(required = false, defaultValue = "1") Integer pageNo,
-                                                         @RequestParam(required = false, defaultValue = "15") Integer pageSize,
-                                                         @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort) {
+    public APIResponse<Page<WaterCorn>> getAllWaterCorn(@RequestParam(required = false) String search,
+                                                        @RequestParam(required = false, defaultValue = "1") Integer pageNo,
+                                                        @RequestParam(required = false, defaultValue = "15") Integer pageSize,
+                                                        @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort) {
         SearchRequest searchRequest = new SearchRequest(search, pageNo - 1, pageSize, sort);
+
 
         Page<WaterCorn> watercornList = waterCornService.getAllWaterCorn(searchRequest);
         APIResponse<Page<WaterCorn>> apiResponse = new APIResponse<>();

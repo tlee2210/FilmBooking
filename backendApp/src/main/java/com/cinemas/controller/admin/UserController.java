@@ -8,6 +8,9 @@ import com.cinemas.enums.RoleType;
 import com.cinemas.exception.AppException;
 import com.cinemas.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -21,9 +24,10 @@ import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 @RequestMapping("/api/admin/user")
 @RestController
 @Tag(name = "Dashboard User Controller")
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 public class UserController {
-    @Autowired
-    private UserService userService;
+    UserService userService;
 
     @GetMapping("/v1")
     public APIResponse<Page<UserResponse>> getUser(

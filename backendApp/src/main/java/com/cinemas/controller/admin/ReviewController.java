@@ -10,6 +10,9 @@ import com.cinemas.enums.ReviewType;
 import com.cinemas.exception.AppException;
 import com.cinemas.service.admin.ReviewService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -24,8 +27,9 @@ import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 @RestController
 @RequestMapping("/api/admin/review")
 @Tag(name = "Dashboard Review Controller")
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ReviewController {
-    @Autowired
     ReviewService reviewService;
 
     /**

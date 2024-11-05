@@ -11,6 +11,9 @@ import com.cinemas.enums.StatusCinema;
 import com.cinemas.exception.AppException;
 import com.cinemas.service.admin.CinemaService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -24,9 +27,9 @@ import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 @RestController
 @RequestMapping("/api/admin/cinema")
 @Tag(name = "Dashboard Cinema Controller")
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@RequiredArgsConstructor
 public class CinemaController {
-
-    @Autowired
     CinemaService cinemaService;
 
     /**

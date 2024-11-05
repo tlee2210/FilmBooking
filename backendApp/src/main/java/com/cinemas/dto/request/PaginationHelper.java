@@ -1,6 +1,7 @@
 package com.cinemas.dto.request;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +14,7 @@ import java.util.Objects;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class PaginationHelper {
     private Integer pageNo = 0;
     private Integer pageSize = 15;

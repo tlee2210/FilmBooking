@@ -7,6 +7,9 @@ import com.cinemas.entities.Voucher;
 import com.cinemas.exception.AppException;
 import com.cinemas.service.admin.VoucherService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -20,17 +23,24 @@ import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 @RestController
 @RequestMapping("/api/admin/voucher")
 @Tag(name = "Dashboard Voucher Controller")
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 public class VoucherController {
-    @Autowired
-    private VoucherService voucherService;
+
+    VoucherService voucherService;
 
     @GetMapping("/v1")
     public APIResponse<Page<Voucher>> getAllVoucher(
             @RequestParam(required = false, defaultValue = "1") Integer pageNo,
             @RequestParam(required = false, defaultValue = "15") Integer pageSize,
-            @RequestParam(required = false, defaultValue = "DESC") Sort.Direction sort
-    ) {
-        PaginationHelper paginationHelper = new PaginationHelper(pageNo - 1, pageSize, sort, "id");
+            @RequestParam(required = false, defaultValue = "DESC") Sort.Direction sort) {
+        PaginationHelper paginationHelper =
+                PaginationHelper.builder()
+                        .pageNo(pageNo - 1)
+                        .pageSize(pageSize)
+                        .sort(sort)
+                        .sortByColumn("id")
+                        .build();
         APIResponse<Page<Voucher>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(voucherService.getAllVoucher(paginationHelper));

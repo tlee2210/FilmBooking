@@ -13,6 +13,9 @@ import com.cinemas.repositories.CinemaImageRespository;
 import com.cinemas.repositories.CinemaRespository;
 import com.cinemas.service.admin.CinemaService;
 import com.cinemas.service.impl.FileStorageServiceImpl;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PagedListHolder;
@@ -33,14 +36,13 @@ import java.util.List;
 import static com.cinemas.exception.ErrorCode.*;
 
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 public class CinemaServiceImpl implements CinemaService {
-    @Autowired
-    private CinemaImageRespository cinemaImageRespository;
+    CinemaImageRespository cinemaImageRespository;
 
-    @Autowired
-    private CinemaRespository cinemaRespository;
+    CinemaRespository cinemaRespository;
 
-    @Autowired
     FileStorageServiceImpl fileStorageServiceImpl;
 
     @Override

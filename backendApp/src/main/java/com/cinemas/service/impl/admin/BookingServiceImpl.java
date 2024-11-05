@@ -7,6 +7,9 @@ import com.cinemas.entities.Booking;
 import com.cinemas.entities.Celebrity;
 import com.cinemas.repositories.BookingRepository;
 import com.cinemas.service.admin.BookingService;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PagedListHolder;
@@ -19,9 +22,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
-    @Autowired
-    private BookingRepository bookingRepository;
+    BookingRepository bookingRepository;
 
     @Override
     public Page<BookingTableResponse> getAllMovie(BookingSearchRequest searchRequest) {

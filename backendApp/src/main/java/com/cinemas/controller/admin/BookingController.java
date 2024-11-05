@@ -9,6 +9,9 @@ import com.cinemas.enums.RoleCeleb;
 import com.cinemas.service.admin.BookingService;
 import com.cinemas.service.admin.CelebrityService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -22,9 +25,10 @@ import java.time.LocalDate;
 @RestController
 @RequestMapping("/api/admin/booking")
 @Tag(name = "Dashboard Booking Controller")
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 public class BookingController {
-    @Autowired
-    private BookingService bookingService;
+    BookingService bookingService;
 
     @GetMapping("/v1")
     public APIResponse<Page<BookingTableResponse>> getAllBooking(
@@ -37,6 +41,7 @@ public class BookingController {
             @RequestParam(required = false, defaultValue = "DESC") Sort.Direction sort) {
 
         BookingSearchRequest searchRequest = new BookingSearchRequest(userName, startDay, endDay, movieName, pageNo - 1, pageSize, sort);
+
         Page<BookingTableResponse> bookingList = bookingService.getAllMovie(searchRequest);
         APIResponse<Page<BookingTableResponse>> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);

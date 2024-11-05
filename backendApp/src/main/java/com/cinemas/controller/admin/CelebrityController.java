@@ -10,6 +10,9 @@ import com.cinemas.enums.RoleCeleb;
 import com.cinemas.exception.AppException;
 import com.cinemas.service.admin.CelebrityService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -23,8 +26,9 @@ import static com.cinemas.exception.ErrorCode.*;
 @RestController
 @RequestMapping("/api/admin/celebrity")
 @Tag(name = "Dashboard Celebrity Controller")
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 public class CelebrityController {
-    @Autowired
     CelebrityService celebrityService;
 
     /**

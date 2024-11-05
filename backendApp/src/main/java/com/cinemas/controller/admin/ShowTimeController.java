@@ -7,6 +7,9 @@ import com.cinemas.exception.AppException;
 import com.cinemas.service.admin.ShowTimeService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -20,6 +23,8 @@ import static com.cinemas.exception.ErrorCode.*;
 @RestController
 @RequestMapping("/api/admin/show-time")
 @Tag(name = "Dashboard Show Time Controller")
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ShowTimeController {
     @Autowired
     ShowTimeService showTimeService;
