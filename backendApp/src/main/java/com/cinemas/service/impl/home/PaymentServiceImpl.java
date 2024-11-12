@@ -19,6 +19,10 @@ import com.cinemas.service.home.PaymentService;
 import com.cinemas.service.impl.EmailServiceimpl;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,30 +44,26 @@ import static com.cinemas.exception.ErrorCode.NOT_FOUND;
 import static com.cinemas.service.impl.AuthenticationServiceImpl.optGenerator;
 
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
-    @Autowired
-    private HttpServletRequest request;
+    HttpServletRequest request;
 
-    @Autowired
-    private ShowTimeResponsitory showTimeResponsitory;
+    ShowTimeResponsitory showTimeResponsitory;
 
-    @Autowired
-    private VoucherRepository voucherRepository;
+    VoucherRepository voucherRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
-    @Autowired
-    private BookingRepository bookingRepository;
+    BookingRepository bookingRepository;
 
-    @Autowired
-    private WaterCornRepository waterCornRepository;
+    WaterCornRepository waterCornRepository;
 
-    @Autowired
-    private BookingWaterRepository bookingWaterRepository;
+    BookingWaterRepository bookingWaterRepository;
 
-    @Autowired
-    private EmailServiceimpl emailServiceimpl;
+    EmailServiceimpl emailServiceimpl;
+
+    ModelMapper modelMapper;
 
     @Override
     public String createpaymentVnpay(PaymentRequest paymentRequest) throws UnsupportedEncodingException {
@@ -108,10 +108,14 @@ public class PaymentServiceImpl implements PaymentService {
             List<BookingWaterCorn> waterCorns = new ArrayList<>();
 
             paymentRequest.getQuantityWater().forEach(item -> {
-                BookingWaterCorn waterCorn = new BookingWaterCorn();
-                waterCorn.setQuantity(item.getQuantity());
-                waterCorn.setWaterCorn(waterCornRepository.findById(item.getId()).get());
-                waterCorn.setBooking(null);
+                BookingWaterCorn waterCorn = BookingWaterCorn.builder()
+                        .quantity(item.getQuantity())
+                        .waterCorn(waterCornRepository.findById(item.getId()).get())
+                        .booking(null)
+                        .build();
+//                waterCorn.setQuantity(item.getQuantity());
+//                waterCorn.setWaterCorn(waterCornRepository.findById(item.getId()).get());
+//                waterCorn.setBooking(null);
                 waterCorns.add(waterCorn);
             });
 
@@ -303,59 +307,78 @@ public class PaymentServiceImpl implements PaymentService {
         User user = userRepository
                 .findByEmail(userDetails.getUsername())
                 .orElseThrow(() -> new AppException(NOT_FOUND));
-        Booking booking = new Booking();
-        ObjectUtils.copyFields(paymentRequest, booking);
-        booking.setPaymentType(type);
-        booking.setCreateAt(LocalDate.now());
 
-        booking.setQuantityDoubleSeat(paymentRequest.getQuantityDoubleSeat() != null && !paymentRequest.getQuantityDoubleSeat().isEmpty()
-                ? String.join(", ", paymentRequest.getQuantityDoubleSeat())
-                : "");
+        Booking booking = Booking.builder()
+                .id(paymentRequest.getId())
+                .orderId(paymentRequest.getOrderId())
+                .paymentId(paymentRequest.getPaymentId())
+                .paymentType(type)
+                .quantityDoubleSeat(paymentRequest.getQuantityDoubleSeat() != null && !paymentRequest.getQuantityDoubleSeat().isEmpty()
+                        ? String.join(", ", paymentRequest.getQuantityDoubleSeat())
+                        : "")
+                .quantitySeat(paymentRequest.getQuantitySeat() != null && !paymentRequest.getQuantitySeat().isEmpty()
+                        ? String.join(", ", paymentRequest.getQuantitySeat())
+                        : "")
+                .showtime(showTimeResponsitory.findById(paymentRequest.getShowtimeId()).get())
+                .voucher(paymentRequest.getVoucherId() != null ? voucherRepository.findById(paymentRequest.getVoucherId()).get() : null)
+                .createAt(LocalDate.now())
+                .user(user)
+                .build();
+//        ObjectUtils.copyFields(paymentRequest, booking);
+//        booking.setPaymentType(type);
+//        booking.setCreateAt(LocalDate.now());
+//        booking.setQuantityDoubleSeat(paymentRequest.getQuantityDoubleSeat() != null && !paymentRequest.getQuantityDoubleSeat().isEmpty()
+//                ? String.join(", ", paymentRequest.getQuantityDoubleSeat())
+//                : "");
+//        booking.setQuantitySeat(paymentRequest.getQuantitySeat() != null && !paymentRequest.getQuantitySeat().isEmpty()
+//                ? String.join(", ", paymentRequest.getQuantitySeat())
+//                : "");
+//        booking.setShowtime(showTimeResponsitory.findById(paymentRequest.getShowtimeId()).get());
+//        booking.setVoucher(paymentRequest.getVoucherId() != null ? voucherRepository.findById(paymentRequest.getVoucherId()).get() : null);
+//        booking.setUser(user);
 
-        booking.setQuantitySeat(paymentRequest.getQuantitySeat() != null && !paymentRequest.getQuantitySeat().isEmpty()
-                ? String.join(", ", paymentRequest.getQuantitySeat())
-                : "");
-
-        booking.setShowtime(showTimeResponsitory.findById(paymentRequest.getShowtimeId()).get());
-        booking.setVoucher(paymentRequest.getVoucherId() != null ? voucherRepository.findById(paymentRequest.getVoucherId()).get() : null);
-        booking.setUser(user);
         bookingRepository.save(booking);
 
         List<BookingWaterCorn> waterCorns = new ArrayList<>();
         List<waterCornBookingResponse> cornBookingResponseList = new ArrayList<>();
         if (paymentRequest.getQuantityWater() != null) {
             paymentRequest.getQuantityWater().forEach(item -> {
-                BookingWaterCorn waterCorn = new BookingWaterCorn();
-                waterCorn.setQuantity(item.getQuantity());
-                waterCorn.setWaterCorn(waterCornRepository.findById(item.getId()).get());
-                waterCorn.setBooking(booking);
+                BookingWaterCorn waterCorn = BookingWaterCorn.builder()
+                        .quantity(item.getQuantity())
+                        .waterCorn(waterCornRepository.findById(item.getId()).get())
+                        .booking(booking)
+                        .build();
+
                 bookingWaterRepository.save(waterCorn);
                 waterCorns.add(waterCorn);
 
-                waterCornBookingResponse cornBookingResponse = new waterCornBookingResponse();
-                cornBookingResponse.setId(waterCorn.getId());
-                cornBookingResponse.setName(waterCorn.getWaterCorn().getName());
-                cornBookingResponse.setQuantity(item.getQuantity());
+                waterCornBookingResponse cornBookingResponse = waterCornBookingResponse.builder()
+                        .id(waterCorn.getId())
+                        .name(waterCorn.getWaterCorn().getName())
+                        .quantity(item.getQuantity())
+                        .build();
                 cornBookingResponseList.add(cornBookingResponse);
             });
         }
         booking.setBookingWaterCorn(waterCorns);
         bookingRepository.save(booking);
 
-        BookingSuccessInfo bookingSuccessInfo = new BookingSuccessInfo();
-        bookingSuccessInfo.setId(booking.getId());
-        bookingSuccessInfo.setOrderId(booking.getOrderId());
-        bookingSuccessInfo.setPaymentId(booking.getPaymentId());
-        bookingSuccessInfo.setCinemaName(booking.getShowtime().getCinema().getName());
-        bookingSuccessInfo.setMovieName(booking.getShowtime().getMovie().getName());
-        bookingSuccessInfo.setRoomName(booking.getShowtime().getRoom().getName());
-        bookingSuccessInfo.setTime(LocalTime.parse(booking.getShowtime().getTime().toString(), DateTimeFormatter.ofPattern("HH:mm")));
-        bookingSuccessInfo.setDate(LocalDate.parse(booking.getShowtime().getDate().toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        bookingSuccessInfo.setQuantitySeat(booking.getQuantitySeat());
-        bookingSuccessInfo.setQuantityDoubleSeat(booking.getQuantityDoubleSeat());
-        bookingSuccessInfo.setMovieFormat(booking.getShowtime().getMovieFormat());
-        bookingSuccessInfo.setTotalPrice(paymentRequest.getTotalPrice());
-        bookingSuccessInfo.setBookingWaterCorn(cornBookingResponseList);
+        BookingSuccessInfo bookingSuccessInfo = BookingSuccessInfo.builder()
+                .id(booking.getId())
+                .orderId(booking.getOrderId())
+                .paymentId(booking.getPaymentId())
+                .cinemaName(booking.getShowtime().getCinema().getName())
+                .movieName(booking.getShowtime().getMovie().getName())
+                .roomName(booking.getShowtime().getRoom().getName())
+                .Time(LocalTime.parse(booking.getShowtime().getTime().toString(), DateTimeFormatter.ofPattern("HH:mm")))
+                .date(LocalDate.parse(booking.getShowtime().getDate().toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .quantitySeat(booking.getQuantitySeat())
+                .quantityDoubleSeat(booking.getQuantityDoubleSeat())
+                .movieFormat(booking.getShowtime().getMovieFormat())
+                .totalPrice(paymentRequest.getTotalPrice())
+                .bookingWaterCorn(cornBookingResponseList)
+                .build();
+
 
         sendEmail(bookingSuccessInfo, user);
 
@@ -366,15 +389,27 @@ public class PaymentServiceImpl implements PaymentService {
     public boolean bookingVnpay(PaymentRequest paymentRequest, PaymentType type, String userId) throws MessagingException {
         User user = userRepository.getById(Integer.valueOf(userId));
 
-        Booking booking = new Booking();
-        ObjectUtils.copyFields(paymentRequest, booking);
-        booking.setPaymentType(type);
-        booking.setCreateAt(LocalDate.now());
-        booking.setQuantityDoubleSeat(paymentRequest.getQuantityDoubleSeat() != null ? String.join(", ", paymentRequest.getQuantityDoubleSeat()) : null);
-        booking.setQuantitySeat(paymentRequest.getQuantitySeat() != null ? String.join(", ", paymentRequest.getQuantitySeat()) : null);
-        booking.setShowtime(showTimeResponsitory.findById(paymentRequest.getShowtimeId()).get());
-        booking.setVoucher(paymentRequest.getVoucherId() != null ? voucherRepository.findById(paymentRequest.getVoucherId()).get() : null);
-        booking.setUser(user);
+        Booking booking = Booking.builder()
+                .id(paymentRequest.getId())
+                .orderId(paymentRequest.getOrderId())
+                .paymentId(paymentRequest.getPaymentId())
+                .paymentType(type)
+                .quantityDoubleSeat(paymentRequest.getQuantityDoubleSeat() != null ? String.join(", ", paymentRequest.getQuantityDoubleSeat()) : null)
+                .quantitySeat(paymentRequest.getQuantitySeat() != null ? String.join(", ", paymentRequest.getQuantitySeat()) : null)
+                .showtime(showTimeResponsitory.findById(paymentRequest.getShowtimeId()).get())
+                .voucher(paymentRequest.getVoucherId() != null ? voucherRepository.findById(paymentRequest.getVoucherId()).get() : null)
+                .user(user)
+                .createAt(LocalDate.now())
+                .build();
+
+//        ObjectUtils.copyFields(paymentRequest, booking);
+//        booking.setPaymentType(type);
+//        booking.setCreateAt(LocalDate.now());
+//        booking.setQuantityDoubleSeat(paymentRequest.getQuantityDoubleSeat() != null ? String.join(", ", paymentRequest.getQuantityDoubleSeat()) : null);
+//        booking.setQuantitySeat(paymentRequest.getQuantitySeat() != null ? String.join(", ", paymentRequest.getQuantitySeat()) : null);
+//        booking.setShowtime(showTimeResponsitory.findById(paymentRequest.getShowtimeId()).get());
+//        booking.setVoucher(paymentRequest.getVoucherId() != null ? voucherRepository.findById(paymentRequest.getVoucherId()).get() : null);
+//        booking.setUser(user);
         bookingRepository.save(booking);
 
         List<BookingWaterCorn> waterCorns = new ArrayList<>();
@@ -391,20 +426,21 @@ public class PaymentServiceImpl implements PaymentService {
         booking.setBookingWaterCorn(waterCorns);
         bookingRepository.save(booking);
 
-        BookingSuccessInfo bookingSuccessInfo = new BookingSuccessInfo();
-        bookingSuccessInfo.setId(booking.getId());
-        bookingSuccessInfo.setOrderId(booking.getOrderId());
-        bookingSuccessInfo.setPaymentId(booking.getPaymentId());
-        bookingSuccessInfo.setCinemaName(booking.getShowtime().getCinema().getName());
-        bookingSuccessInfo.setMovieName(booking.getShowtime().getMovie().getName());
-        bookingSuccessInfo.setRoomName(booking.getShowtime().getRoom().getName());
-        bookingSuccessInfo.setTime(LocalTime.parse(booking.getShowtime().getTime().toString(), DateTimeFormatter.ofPattern("HH:mm")));
-        bookingSuccessInfo.setDate(LocalDate.parse(booking.getShowtime().getDate().toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        bookingSuccessInfo.setQuantitySeat(booking.getQuantitySeat());
-        bookingSuccessInfo.setQuantityDoubleSeat(booking.getQuantityDoubleSeat());
-        bookingSuccessInfo.setMovieFormat(booking.getShowtime().getMovieFormat());
-        bookingSuccessInfo.setTotalPrice(booking.getTotalPrice());
-        bookingSuccessInfo.setBookingWaterCorn(cornBookingResponseList);
+        BookingSuccessInfo bookingSuccessInfo = BookingSuccessInfo.builder()
+                .id(booking.getId())
+                .orderId(booking.getOrderId())
+                .paymentId(booking.getPaymentId())
+                .cinemaName(booking.getShowtime().getCinema().getName())
+                .movieName(booking.getShowtime().getMovie().getName())
+                .roomName(booking.getShowtime().getRoom().getName())
+                .Time(LocalTime.parse(booking.getShowtime().getTime().toString(), DateTimeFormatter.ofPattern("HH:mm")))
+                .date(LocalDate.parse(booking.getShowtime().getDate().toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .quantitySeat(booking.getQuantitySeat())
+                .quantityDoubleSeat(booking.getQuantityDoubleSeat())
+                .movieFormat(booking.getShowtime().getMovieFormat())
+                .totalPrice(booking.getTotalPrice())
+                .bookingWaterCorn(cornBookingResponseList)
+                .build();
 
         sendEmail(bookingSuccessInfo, user);
 
@@ -415,15 +451,28 @@ public class PaymentServiceImpl implements PaymentService {
     public BookingSuccessInfo bookingVnpay2(PaymentRequest paymentRequest, PaymentType type, String userId) throws MessagingException {
         User user = userRepository.getById(Integer.valueOf(userId));
 
-        Booking booking = new Booking();
-        ObjectUtils.copyFields(paymentRequest, booking);
-        booking.setPaymentType(type);
-        booking.setCreateAt(LocalDate.now());
-        booking.setQuantityDoubleSeat(paymentRequest.getQuantityDoubleSeat() != null ? String.join(", ", paymentRequest.getQuantityDoubleSeat()) : null);
-        booking.setQuantitySeat(paymentRequest.getQuantitySeat() != null ? String.join(", ", paymentRequest.getQuantitySeat()) : null);
-        booking.setShowtime(showTimeResponsitory.findById(paymentRequest.getShowtimeId()).get());
-        booking.setVoucher(paymentRequest.getVoucherId() != null ? voucherRepository.findById(paymentRequest.getVoucherId()).get() : null);
-        booking.setUser(user);
+        Booking booking = Booking.builder()
+                .id(paymentRequest.getId())
+                .orderId(paymentRequest.getOrderId())
+                .paymentId(paymentRequest.getPaymentId())
+                .paymentType(type)
+                .quantityDoubleSeat(paymentRequest.getQuantityDoubleSeat() != null ? String.join(", ", paymentRequest.getQuantityDoubleSeat()) : null)
+                .quantitySeat(paymentRequest.getQuantitySeat() != null ? String.join(", ", paymentRequest.getQuantitySeat()) : null)
+                .showtime(showTimeResponsitory.findById(paymentRequest.getShowtimeId()).get())
+                .voucher(paymentRequest.getVoucherId() != null ? voucherRepository.findById(paymentRequest.getVoucherId()).get() : null)
+                .user(user)
+                .createAt(LocalDate.now())
+                .build();
+
+//        Booking booking = new Booking();
+//        ObjectUtils.copyFields(paymentRequest, booking);
+//        booking.setPaymentType(type);
+//        booking.setCreateAt(LocalDate.now());
+//        booking.setQuantityDoubleSeat(paymentRequest.getQuantityDoubleSeat() != null ? String.join(", ", paymentRequest.getQuantityDoubleSeat()) : null);
+//        booking.setQuantitySeat(paymentRequest.getQuantitySeat() != null ? String.join(", ", paymentRequest.getQuantitySeat()) : null);
+//        booking.setShowtime(showTimeResponsitory.findById(paymentRequest.getShowtimeId()).get());
+//        booking.setVoucher(paymentRequest.getVoucherId() != null ? voucherRepository.findById(paymentRequest.getVoucherId()).get() : null);
+//        booking.setUser(user);
         bookingRepository.save(booking);
 
         List<BookingWaterCorn> waterCorns = new ArrayList<>();
@@ -441,20 +490,21 @@ public class PaymentServiceImpl implements PaymentService {
         booking.setBookingWaterCorn(waterCorns);
         bookingRepository.save(booking);
 
-        BookingSuccessInfo bookingSuccessInfo = new BookingSuccessInfo();
-        bookingSuccessInfo.setId(booking.getId());
-        bookingSuccessInfo.setOrderId(booking.getOrderId());
-        bookingSuccessInfo.setPaymentId(booking.getPaymentId());
-        bookingSuccessInfo.setCinemaName(booking.getShowtime().getCinema().getName());
-        bookingSuccessInfo.setMovieName(booking.getShowtime().getMovie().getName());
-        bookingSuccessInfo.setRoomName(booking.getShowtime().getRoom().getName());
-        bookingSuccessInfo.setTime(LocalTime.parse(booking.getShowtime().getTime().toString(), DateTimeFormatter.ofPattern("HH:mm")));
-        bookingSuccessInfo.setDate(LocalDate.parse(booking.getShowtime().getDate().toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        bookingSuccessInfo.setQuantitySeat(booking.getQuantitySeat());
-        bookingSuccessInfo.setQuantityDoubleSeat(booking.getQuantityDoubleSeat());
-        bookingSuccessInfo.setMovieFormat(booking.getShowtime().getMovieFormat());
-        bookingSuccessInfo.setTotalPrice(booking.getTotalPrice());
-        bookingSuccessInfo.setBookingWaterCorn(cornBookingResponseList);
+        BookingSuccessInfo bookingSuccessInfo = BookingSuccessInfo.builder()
+                .id(booking.getId())
+                .orderId(booking.getOrderId())
+                .paymentId(booking.getPaymentId())
+                .cinemaName(booking.getShowtime().getCinema().getName())
+                .movieFormat(booking.getShowtime().getMovieFormat())
+                .movieName(booking.getShowtime().getMovie().getName())
+                .roomName(booking.getShowtime().getRoom().getName())
+                .Time(LocalTime.parse(booking.getShowtime().getTime().toString(), DateTimeFormatter.ofPattern("HH:mm")))
+                .date(LocalDate.parse(booking.getShowtime().getDate().toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .quantityDoubleSeat(booking.getQuantityDoubleSeat())
+                .quantitySeat(booking.getQuantitySeat())
+                .totalPrice(booking.getTotalPrice())
+                .bookingWaterCorn(cornBookingResponseList)
+                .build();
 
         sendEmail(bookingSuccessInfo, user);
 
@@ -466,8 +516,7 @@ public class PaymentServiceImpl implements PaymentService {
     public List<BookingWaterRequest> findQuantityWater(List<Integer> quantityWater) {
         List<BookingWaterRequest> bookingWaterRequests = new ArrayList<>();
         quantityWater.forEach(item -> {
-            BookingWaterRequest bookingWaterRequest = new BookingWaterRequest();
-            bookingWaterRequest = bookingWaterRepository.findByIdConvertToBookingWaterRequestById(item);
+            BookingWaterRequest bookingWaterRequest = bookingWaterRepository.findByIdConvertToBookingWaterRequestById(item);
             bookingWaterRequests.add(bookingWaterRequest);
         });
 

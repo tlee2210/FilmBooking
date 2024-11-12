@@ -2,6 +2,7 @@ package com.cinemas.dto.response;
 
 import com.cinemas.enums.MovieFormat;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class BookingSuccessInfo {
     private Integer id;
     private String orderId;
