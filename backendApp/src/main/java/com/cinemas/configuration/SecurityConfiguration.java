@@ -2,7 +2,9 @@ package com.cinemas.configuration;
 
 import com.cinemas.enums.RoleType;
 import com.cinemas.service.UserService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,45 +26,47 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SecurityConfiguration {
-    private final JwtTokenFilter jwtTokenFilter;
-
-    private final UserService userService;
+    JwtTokenFilter jwtTokenFilter;
+    UserService userService;
+    String[] PUBLIC_ENDPOINTS = {"/api/auth/**",
+            "/api/admin/celebrity/**",
+            "/api/admin/cinema/**",
+            "/api/admin/watercorn/**",
+            "/api/admin/movie/**",
+            "/api/admin/movie-genre/**",
+            "/api/admin/user/**",
+            "/api/admin/room/**",
+            "/api/admin/show-time/**",
+            "/api/admin/review/**",
+            "/api/admin/movie-blog/**",
+            "/api/admin/promotion/**",
+            "/api/admin/voucher/**",
+            "/api/admin/booking/**",
+            "/api/home/carousel/**",
+            "/api/admin/file-upload/**",
+            "/api/home/movie/**",
+            "/api/home/celebrity/**",
+            "/api/home/blog/**",
+            "/api/home/review/**",
+            "/api/home/booking/**",
+            "/api/home/home/**",
+            "/api/home/cinema/**",
+            "/api/home/buy-ticket/**",
+            "/api/home/watercorn/**",
+            "/api/home/user/**",
+            "/api/home/movie-genre/**",
+            "/api/payment/**",
+            "/api/home/promotion/**"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(
-                                "/api/auth/**",
-                                "/api/admin/celebrity/**",
-                                "/api/admin/cinema/**",
-                                "/api/admin/watercorn/**",
-                                "/api/admin/movie/**",
-                                "/api/admin/movie-genre/**",
-                                "/api/admin/user/**",
-                                "/api/admin/room/**",
-                                "/api/admin/show-time/**",
-                                "/api/admin/review/**",
-                                "/api/admin/movie-blog/**",
-                                "/api/admin/promotion/**",
-                                "/api/admin/voucher/**",
-                                "/api/admin/booking/**",
-                                "/api/home/carousel/**",
-                                "/api/admin/file-upload/**",
-                                "/api/home/movie/**",
-                                "/api/home/celebrity/**",
-                                "/api/home/blog/**",
-                                "/api/home/review/**",
-                                "/api/home/booking/**",
-                                "/api/home/home/**",
-                                "/api/home/cinema/**",
-                                "/api/home/buy-ticket/**",
-                                "/api/home/watercorn/**",
-                                "/api/home/user/**",
-                                "/api/home/movie-genre/**",
-                                "/api/payment/**",
-                                "/api/home/promotion/**").permitAll()
+                                PUBLIC_ENDPOINTS
+                        ).permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/admin").hasAnyAuthority(RoleType.ADMIN.name())
                         .requestMatchers("/api/user").hasAnyAuthority(RoleType.USER.name())
