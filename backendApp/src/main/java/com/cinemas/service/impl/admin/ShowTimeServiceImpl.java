@@ -225,14 +225,14 @@ public class ShowTimeServiceImpl implements ShowTimeService {
     @Override
     public boolean createShowTime(ShowTimeRequest showTimeRequest) {
 
-        Movie movie = movieRepository.findById(showTimeRequest.getMovieId()).orElseThrow(() -> new AppException(NOT_FOUND_MOVIE));
+        Movie movie = findMovieById(showTimeRequest.getMovieId());
 
-        Cinema cinema = cinemaRespository.findById(showTimeRequest.getCinemaId()).orElseThrow(() -> new AppException(NOT_FOUND_CINEMA));
+        Cinema cinema = findCinemaById(showTimeRequest.getCinemaId());
 
         List<Room> roomList = new ArrayList<>();
 
         showTimeRequest.getRoomId().forEach(roomId -> {
-            roomList.add(roomRepository.findById(roomId).orElseThrow(() -> new AppException(NOT_FOUND_ROOM)));
+            roomList.add(findRoomById(roomId));
         });
 
         List<Showtimes> showtimesList = new ArrayList<>();
@@ -246,7 +246,11 @@ public class ShowTimeServiceImpl implements ShowTimeService {
                     if (overlappingShowtimesList.isEmpty()) {
                         showtimesList.add(new Showtimes(day, time, movie, room, cinema, showTimeRequest.getMovieFormat()));
                     } else {
-                        throw new AppException(CREATE_FAILED, "Showtime conflict detected for room " + room.getName() + " on " + day + " at " + time);
+
+                        throw new AppException(CREATE_FAILED, String.format(
+                                "Showtime conflict detected for room %s on %s at %s",
+                                room.getName(), day, time
+                        ));
                     }
                 });
             });
