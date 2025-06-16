@@ -26,6 +26,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,44 +79,118 @@ public class ShowTimeServiceImpl implements ShowTimeService {
 
     @Override
     public showTimeItemRequet getEdit(Integer id) {
-        Showtimes showtimes = showTimeResponsitory.findById(id).orElseThrow(() -> new AppException(NOT_FOUND));
-        showTimeItemRequet showTimeItemRequet = new showTimeItemRequet();
-        showTimeItemRequet.setId(showtimes.getId());
-        showTimeItemRequet.setTimes(showtimes.getTime());
-        showTimeItemRequet.setDays(showtimes.getDate());
-        showTimeItemRequet.setMovieId(showtimes.getMovie().getId());
-        showTimeItemRequet.setCinemaId(showtimes.getCinema().getId());
-        showTimeItemRequet.setRoomId(showtimes.getRoom().getId());
-        showTimeItemRequet.setMovieFormat(showtimes.getMovieFormat());
+        Showtimes showtimes = showTimeResponsitory.findById(id)
+                .orElseThrow(() -> new AppException(NOT_FOUND));
 
-        return showTimeItemRequet;
+        return showTimeItemRequet.builder()
+                .id(showtimes.getId())
+                .times(showtimes.getTime())
+                .days(showtimes.getDate())
+                .movieId(showtimes.getMovie().getId())
+                .cinemaId(showtimes.getCinema().getId())
+                .roomId(showtimes.getRoom().getId())
+                .movieFormat(showtimes.getMovieFormat())
+                .build();
     }
 
     @Override
     public boolean updateShowTime(showTimeItemRequet showTimeItemRequet) {
-        Showtimes showtimes = showTimeResponsitory.findById(showTimeItemRequet.getId()).orElseThrow(() -> new AppException(NOT_FOUND));
+        Showtimes showtimes = findShowtimesById(showTimeItemRequet.getId());
 
-        Movie movie = movieRepository.findById(showTimeItemRequet.getMovieId()).orElseThrow(() -> new AppException(NOT_FOUND_MOVIE));
+        Movie movie = findMovieById(showTimeItemRequet.getMovieId());
 
-        Cinema cinema = cinemaRespository.findById(showTimeItemRequet.getCinemaId()).orElseThrow(() -> new AppException(NOT_FOUND_CINEMA));
+        Cinema cinema = findCinemaById(showTimeItemRequet.getCinemaId());
 
-        Room room = roomRepository.findById(showTimeItemRequet.getRoomId()).orElseThrow(() -> new AppException(NOT_FOUND_ROOM));
+        Room room = findRoomById(showTimeItemRequet.getRoomId());
+
+        LocalTime startTime = showTimeItemRequet.getTimes();
         LocalTime endTime = showTimeItemRequet.getTimes().plusMinutes(movie.getDuration_movie() + 5);
-        List<Showtimes> overlappingShowtimesList = showTimeResponsitory.findOverlappingShowtimesUpdate(room.getId(), showTimeItemRequet.getDays(), showTimeItemRequet.getTimes(), endTime, showTimeItemRequet.getId());
-        if (overlappingShowtimesList.isEmpty()) {
-            showtimes.setDate(showTimeItemRequet.getDays());
-            showtimes.setTime(showTimeItemRequet.getTimes());
-            showtimes.setCinema(cinema);
-            showtimes.setRoom(room);
-            showtimes.setMovie(movie);
-            showtimes.setMovieFormat(showTimeItemRequet.getMovieFormat());
 
-            showTimeResponsitory.save(showtimes);
+//        List<Showtimes> overlappingShowtimesList =
+//                showTimeResponsitory.findOverlappingShowtimesUpdate(
+//                        room.getId(),
+//                        showTimeItemRequet.getDays(),
+//                        startTime,
+//                        endTime,
+//                        showTimeItemRequet.getId());
 
-            return true;
+        validateNoOverlappingShowtime(
+                room.getId(),
+                showTimeItemRequet.getDays(),
+                startTime,
+                endTime,
+                showTimeItemRequet.getId(),
+                room.getName()
+        );
+
+
+//        if (overlappingShowtimesList.isEmpty()) {
+//            showtimes.setDate(showTimeItemRequet.getDays());
+//            showtimes.setTime(showTimeItemRequet.getTimes());
+//            showtimes.setCinema(cinema);
+//            showtimes.setRoom(room);
+//            showtimes.setMovie(movie);
+//            showtimes.setMovieFormat(showTimeItemRequet.getMovieFormat());
+//
+//            showTimeResponsitory.save(showtimes);
+//
+//            return true;
+//        }
+
+//        throw new AppException(CREATE_FAILED, "Showtime conflict detected for room " + room.getName() + " on " + showTimeItemRequet.getDays() + " at " + showTimeItemRequet.getTimes());
+        updateShowtimeEntity(showtimes, showTimeItemRequet, movie, cinema, room);
+        showTimeResponsitory.save(showtimes);
+
+        return true;
+    }
+
+    private Showtimes findShowtimesById(Integer id) {
+
+        return showTimeResponsitory.findById(id)
+                .orElseThrow(() -> new AppException(NOT_FOUND));
+    }
+
+    private Movie findMovieById(Integer id) {
+
+        return movieRepository.findById(id)
+                .orElseThrow(() -> new AppException(NOT_FOUND_MOVIE));
+    }
+
+    private Cinema findCinemaById(Integer id) {
+
+        return cinemaRespository.findById(id)
+                .orElseThrow(() -> new AppException(NOT_FOUND_CINEMA));
+
+    }
+
+    private Room findRoomById(Integer id) {
+
+        return roomRepository.findById(id)
+                .orElseThrow(() -> new AppException(NOT_FOUND_ROOM));
+    }
+
+    private void validateNoOverlappingShowtime(Integer roomId, LocalDate date, LocalTime startTime, LocalTime endTime, Integer showtimeId, String roomName) {
+        List<Showtimes> overlapping =
+                showTimeResponsitory.findOverlappingShowtimesUpdate(
+                        roomId, date, startTime, endTime, showtimeId
+                );
+
+        if (!overlapping.isEmpty()) {
+            throw new AppException(CREATE_FAILED, String.format(
+                    "Showtime conflict detected for room %s on %s at %s",
+                    roomName, date, startTime
+            ));
         }
+    }
 
-        throw new AppException(CREATE_FAILED, "Showtime conflict detected for room " + room.getName() + " on " + showTimeItemRequet.getDays() + " at " + showTimeItemRequet.getTimes());
+    private void updateShowtimeEntity(Showtimes showtimes, showTimeItemRequet request,
+                                      Movie movie, Cinema cinema, Room room) {
+        showtimes.setDate(request.getDays());
+        showtimes.setTime(request.getTimes());
+        showtimes.setMovie(movie);
+        showtimes.setCinema(cinema);
+        showtimes.setRoom(room);
+        showtimes.setMovieFormat(request.getMovieFormat());
     }
 
     @Override
