@@ -114,63 +114,126 @@ public class CinemaServiceImpl implements CinemaService {
 
     @Override
     public boolean updateCinema(CinemaRequest cinemaRequest) throws IOException {
-        Cinema cinema = cinemaRespository.findById(cinemaRequest.getId()).orElseThrow(() -> new AppException(NOT_FOUND));
+        Cinema cinema = findCinemaById(cinemaRequest.getId());
 
+        // Kiểm tra tên rạp đã tồn tại chưa (trừ chính nó)
         if (cinemaRespository.findByNameWithId(cinemaRequest.getName(), cinemaRequest.getId()) != null) {
             throw new AppException(NAME_EXISTED);
         }
 
+        // Cập nhật thông tin cơ bản
         ObjectUtils.copyFields(cinemaRequest, cinema);
-        cinema.setSlug(cinemaRequest.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
+        cinema.setSlug(generateSlug(cinemaRequest.getName()));
 
-        List<CinemaImages> cinemaImages = cinemaImageRespository.findCinemaImagesByCinema_Id(cinema.getId());
+//        List<CinemaImages> cinemaImages = cinemaImageRespository.findCinemaImagesByCinema_Id(cinema.getId());
+
+        List<CinemaImages> existingImages = cinemaImageRespository.findCinemaImagesByCinema_Id(cinema.getId());
+        handleImageDeletion(cinemaRequest, existingImages);
 
         cinema.setImages(new ArrayList<>());
         cinemaRespository.save(cinema);
 
-        if (cinemaRequest.getImages() != null) {
-            List<Integer> newImageUrls = cinemaRequest.getImages();
-
-            List<CinemaImages> imagesToDelete = cinemaImages.stream().filter(images -> !newImageUrls.contains(images.getUid())).peek(images -> {
-                images.setCinema(null);
-                try {
-                    fileStorageServiceImpl.deleteFile(images.getUrl());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }).collect(Collectors.toList());
-
-            cinemaImageRespository.deleteAll(imagesToDelete);
-        } else {
-            cinemaImages.forEach(images -> {
-                images.setCinema(null);
-                try {
-                    fileStorageServiceImpl.deleteFile(images.getUrl());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            cinemaImageRespository.deleteAll(cinemaImages);
-        }
+//        if (cinemaRequest.getImages() != null) {
+//            List<Integer> newImageUrls = cinemaRequest.getImages();
+//
+//            List<CinemaImages> imagesToDelete = cinemaImages.stream()
+//                    .filter(images -> !newImageUrls.contains(images.getUid()))
+//                    .peek(images -> {
+//                        images.setCinema(null);
+//
+//                        try {
+//                            fileStorageServiceImpl.deleteFile(images.getUrl());
+//                        } catch (IOException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    }).collect(Collectors.toList());
+//
+//            cinemaImageRespository.deleteAll(imagesToDelete);
+//        } else {
+//            cinemaImages.forEach(images -> {
+//                images.setCinema(null);
+//                try {
+//                    fileStorageServiceImpl.deleteFile(images.getUrl());
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//            cinemaImageRespository.deleteAll(cinemaImages);
+//        }
 
         if (cinemaRequest.getFiles() != null) {
-            List<MultipartFile> files = cinemaRequest.getFiles();
+            updateImages(cinemaRequest.getFiles(), cinema);
+//            List<MultipartFile> files = cinemaRequest.getFiles();
 
-            List<CompletableFuture<String>> futureUrls = fileStorageServiceImpl.uploadFilesAsync(files, "cinemas");
-            List<String> urls = futureUrls.stream().map(CompletableFuture::join).collect(Collectors.toList());
+//            List<CompletableFuture<String>> futureUrls = fileStorageServiceImpl.uploadFilesAsync(files, "cinemas");
+//            List<String> urls = futureUrls.stream().map(CompletableFuture::join).collect(Collectors.toList());
 
-            List<CinemaImages> newImages = new ArrayList<>();
-            for (String url : urls) {
-                CinemaImages Images = new CinemaImages();
-                Images.setUrl(url);
-                Images.setCinema(cinema);
-                newImages.add(Images);
-            }
-
-            cinemaImageRespository.saveAll(newImages);
+//            List<CinemaImages> newImages = new ArrayList<>();
+//            for (String url : urls) {
+//
+//                CinemaImages Images = CinemaImages.builder()
+//                        .url(url)
+//                        .cinema(cinema)
+//                        .build();
+//
+//                newImages.add(Images);
+//
+//            }
+//
+//            cinemaImageRespository.saveAll(newImages);
         }
 
         return true;
+    }
+
+    private void handleImageDeletion(CinemaRequest request, List<CinemaImages> existingImages) {
+        List<CinemaImages> imagesToDelete;
+
+        if (request.getImages() != null) {
+            List<Integer> newImageUids = request.getImages();
+            imagesToDelete = existingImages.stream()
+                    .filter(image -> !newImageUids.contains(image.getUid()))
+                    .peek(image -> unlinkAndDeleteImage(image))
+                    .collect(Collectors.toList());
+        } else {
+            imagesToDelete = existingImages.stream()
+                    .peek(this::unlinkAndDeleteImage)
+                    .collect(Collectors.toList());
+        }
+
+        cinemaImageRespository.deleteAll(imagesToDelete);
+    }
+
+    private void unlinkAndDeleteImage(CinemaImages image) {
+        image.setCinema(null);
+        try {
+            fileStorageServiceImpl.deleteFile(image.getUrl());
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to delete image file: " + image.getUrl(), e);
+        }
+    }
+
+
+    private String generateSlug(String name) {
+        return name.toLowerCase()
+                .replaceAll("[^a-z0-9\\s]", "")
+                .replaceAll("\\s+", "-");
+    }
+
+    private void updateImages(List<MultipartFile> fileImages, Cinema cinema) {
+        List<CompletableFuture<String>> futureUrls = fileStorageServiceImpl.uploadFilesAsync(fileImages, "cinemas");
+        List<String> urls = futureUrls.stream().map(CompletableFuture::join).collect(Collectors.toList());
+        List<CinemaImages> newImages = new ArrayList<>();
+        for (String url : urls) {
+            CinemaImages Images = CinemaImages.builder()
+                    .url(url)
+                    .cinema(cinema)
+                    .build();
+
+            newImages.add(Images);
+        }
+
+        cinemaImageRespository.saveAll(newImages);
     }
 
     @Override
@@ -189,7 +252,8 @@ public class CinemaServiceImpl implements CinemaService {
 
         Cinema cinema = new Cinema();
         ObjectUtils.copyFields(cinemaRequest, cinema);
-        cinema.setSlug(cinemaRequest.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
+        cinema.setSlug(generateSlug(cinemaRequest.getName()));
+
         cinema.setStatus(StatusCinema.ACTIVE);
 
         cinemaRespository.save(cinema);

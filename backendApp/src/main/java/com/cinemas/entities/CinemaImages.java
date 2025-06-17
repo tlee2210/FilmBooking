@@ -3,6 +3,7 @@ package com.cinemas.entities;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "cinema_images")
 @JsonIgnoreProperties({"cinema"})
+@Builder
 public class CinemaImages {
     @Id
     @Column(name = "uid")
