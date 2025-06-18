@@ -29,10 +29,9 @@ public class MovieGenreServiceImpl implements MovieGenreService {
     @Override
     public Page<MovieGenre> getAllMovieGenre(SearchRequest searchRequest) {
         List<MovieGenre> movieGenreList;
-        if(searchRequest.getSearchname() != null){
+        if (searchRequest.getSearchname() != null) {
             movieGenreList = movieGenreRepository.searchMovieGenre(searchRequest.getSearchname());
-        }
-        else{
+        } else {
             movieGenreList = movieGenreRepository.findAll();
         }
 
@@ -67,7 +66,8 @@ public class MovieGenreServiceImpl implements MovieGenreService {
         MovieGenre addMovieGenre = new MovieGenre();
 
         ObjectUtils.copyFields(movieGenre, addMovieGenre);
-        addMovieGenre.setSlug(movieGenre.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
+        addMovieGenre.setSlug(generateSlug(movieGenre.getName()));
+//        addMovieGenre.setSlug(movieGenre.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
         movieGenreRepository.save(addMovieGenre);
 
         return true;
@@ -84,12 +84,19 @@ public class MovieGenreServiceImpl implements MovieGenreService {
         }
 
         ObjectUtils.copyFields(movieGenre, movie);
-        String slug = movieGenre.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-");
+        String slug = generateSlug(movieGenre.getName());
+//                movieGenre.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-");
         movie.setSlug(slug);
 
         movieGenreRepository.save(movie);
 
         return true;
+    }
+
+    private String generateSlug(String name) {
+        return name.toLowerCase()
+                .replaceAll("[^a-z0-9\\s]", "")
+                .replaceAll("\\s+", "-");
     }
 
     @Override

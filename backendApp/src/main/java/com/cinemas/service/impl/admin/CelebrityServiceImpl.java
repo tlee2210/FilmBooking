@@ -29,7 +29,7 @@ import java.util.List;
 import static com.cinemas.exception.ErrorCode.*;
 
 @Service
-public class    CelebrityServiceImpl implements CelebrityService {
+public class CelebrityServiceImpl implements CelebrityService {
     @Autowired
     CelebrityRepository celebrityRepository;
     @Autowired
@@ -67,7 +67,8 @@ public class    CelebrityServiceImpl implements CelebrityService {
         }
 
         ObjectUtils.copyFields(celebrity, addCeleb);
-        String slug = celebrity.getName().toLowerCase().replaceAll("\\s+", "-");
+        String slug = generateSlug(celebrity.getName());
+//                celebrity.getName().toLowerCase().replaceAll("\\s+", "-");
         addCeleb.setSlug(slug);
         int CountryId = Integer.parseInt(celebrity.getNationality());
         Country Country = countryRepository.findById(CountryId);
@@ -123,13 +124,15 @@ public class    CelebrityServiceImpl implements CelebrityService {
     @Override
     public boolean updateCelebrity(CelebrityRequest celebrity) throws IOException {
 
-        Celebrity cele = celebrityRepository
-                .findById(celebrity.getId())
-                .orElseThrow(() -> new AppException(NOT_FOUND));
+//        Celebrity cele = celebrityRepository
+//                .findById(celebrity.getId())
+//                .orElseThrow(() -> new AppException(NOT_FOUND));
 
-        if (celebrityRepository.findByNameWithId(celebrity.getName(), celebrity.getId()) != null) {
-            throw new AppException(NAME_EXISTED);
-        }
+//        if (celebrityRepository.findByNameWithId(celebrity.getName(), celebrity.getId()) != null) {
+//            throw new AppException(NAME_EXISTED);
+//        }
+        Celebrity cele = findCelebrityById(celebrity.getId());
+        validateCelebrityNameUnique(celebrity.getName(), celebrity.getId());
 
         if (celebrity.getFile() != null) {
             fileStorageServiceImpl.deleteFile(cele.getImage());
@@ -137,11 +140,31 @@ public class    CelebrityServiceImpl implements CelebrityService {
         }
 
         ObjectUtils.copyFields(celebrity, cele);
-        String slug = celebrity.getName().toLowerCase().replaceAll("\\s+", "-");
+        String slug = generateSlug(celebrity.getName());
+//        celebrity.getName().toLowerCase().replaceAll("\\s+", "-");
         cele.setSlug(slug);
 
         celebrityRepository.save(cele);
 
         return true;
+    }
+
+    private String generateSlug(String name) {
+        return name.toLowerCase()
+                .replaceAll("[^a-z0-9\\s]", "")
+                .replaceAll("\\s+", "-");
+    }
+
+    private void validateCelebrityNameUnique(String name, int id) {
+        if (celebrityRepository.findByNameWithId(name, id) != null) {
+            throw new AppException(NAME_EXISTED);
+        }
+    }
+
+    private Celebrity findCelebrityById(Integer id) {
+
+        return celebrityRepository
+                .findById(id)
+                .orElseThrow(() -> new AppException(NOT_FOUND));
     }
 }

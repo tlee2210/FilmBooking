@@ -72,7 +72,10 @@ public class PromotionServiceImpl implements PromotionService {
 
         ObjectUtils.copyFields(promotionRequest, promotion);
 
-        promotion.setSlug(promotionRequest.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
+//        generateSlug
+        promotion.setSlug(generateSlug(promotionRequest.getName()));
+//        promotion.setSlug(
+//                promotionRequest.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
 
         List<imageDescription> imageDescriptionList = new ArrayList<>();
 
@@ -116,8 +119,8 @@ public class PromotionServiceImpl implements PromotionService {
 
         ObjectUtils.copyFields(promotionRequest, promotion);
 
-        String slug = promotionRequest.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-");
-        promotion.setSlug(slug);
+//        String slug = promotionRequest.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-");
+        promotion.setSlug(generateSlug(promotionRequest.getName()));
 
         List<imageDescription> imageDescriptionList = imageDescriptionRespository.findBySlug_name(slugOld);
 
@@ -148,6 +151,12 @@ public class PromotionServiceImpl implements PromotionService {
         promotionRepository.save(promotion);
 
         return true;
+    }
+
+    private String generateSlug(String name) {
+        return name.toLowerCase()
+                .replaceAll("[^a-z0-9\\s]", "")
+                .replaceAll("\\s+", "-");
     }
 
     @Override

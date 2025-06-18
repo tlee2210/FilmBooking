@@ -71,8 +71,8 @@ public class MovieBlogServiceImpl implements MovieBlogService {
         blog.setThumbnail(fileStorageServiceImpl.uploadFile(movieBlogRequest.getFile(), "blogThumbnail"));
         ObjectUtils.copyFields(movieBlogRequest, blog);
 
-        blog.setSlug(movieBlogRequest.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
-
+//        blog.setSlug(movieBlogRequest.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
+        blog.setSlug(generateSlug(movieBlogRequest.getName()));
         List<imageDescription> imageDescriptionList = new ArrayList<>();
 
         if (movieBlogRequest.getUrl() != null) {
@@ -115,7 +115,8 @@ public class MovieBlogServiceImpl implements MovieBlogService {
 
         ObjectUtils.copyFields(movieBlogRequest, blog);
 
-        String slug = movieBlogRequest.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-");
+        String slug = generateSlug(movieBlogRequest.getName());
+//        movieBlogRequest.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-");
         blog.setSlug(slug);
         List<imageDescription> imageDescriptionList = imageDescriptionRespository.findBySlug_name(slugOld);
 
@@ -146,6 +147,12 @@ public class MovieBlogServiceImpl implements MovieBlogService {
         movieBlogRepository.save(blog);
 
         return true;
+    }
+
+    private String generateSlug(String name) {
+        return name.toLowerCase()
+                .replaceAll("[^a-z0-9\\s]", "")
+                .replaceAll("\\s+", "-");
     }
 
     @Override
