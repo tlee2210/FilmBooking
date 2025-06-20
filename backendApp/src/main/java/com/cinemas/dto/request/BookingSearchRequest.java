@@ -9,7 +9,6 @@ import org.springframework.data.domain.Sort;
 import java.time.LocalDate;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookingSearchRequest extends PaginationHelper{

@@ -96,7 +96,6 @@ public class MovieServiceImpl implements MovieService {
 //                    .build());
 //        }
         List<SelectOptionReponse> optionsCategory = getMovieGenreOptions();
-
 //        List<SelectOptionReponse> optionsActor = new ArrayList<>();
 //        List<Celebrity> actors = celebrityRepository.findByRole(RoleCeleb.ACTOR);
 
@@ -108,7 +107,6 @@ public class MovieServiceImpl implements MovieService {
 //                    .build());
 //        }
         List<SelectOptionReponse> optionsActor = getCelebrityOptions(RoleCeleb.ACTOR);
-
 //        List<SelectOptionReponse> optionsDirector = new ArrayList<>();
 //        List<Celebrity> directors = celebrityRepository.findByRole(RoleCeleb.DIRECTOR);
 //
@@ -120,7 +118,6 @@ public class MovieServiceImpl implements MovieService {
 //                    .build());
 //        }
         List<SelectOptionReponse> optionsDirector = getCelebrityOptions(RoleCeleb.DIRECTOR);
-
 //        List<SelectOptionReponse> optionsStatus = new ArrayList<>();
 //
 //        for (MovieStatus movieStatus : MovieStatus.values()) {
@@ -130,9 +127,7 @@ public class MovieServiceImpl implements MovieService {
 //                    .label(movieStatus.getValue())
 //                    .build());
 //        }
-
         List<SelectOptionReponse> optionsStatus = getMovieStatusOptions();
-
 //        List<Country> countryList = countryRepository.findAll();
 //        List<SelectOptionReponse> optionsCountries = new ArrayList<>();
 //
@@ -159,7 +154,6 @@ public class MovieServiceImpl implements MovieService {
         movie.setImagePortrait(fileStorageServiceImpl.uploadFile(movieRequest.getImagePortrait(), "movie"));
 
         populateMovieEntity(movie, movieRequest);
-
 //        ObjectUtils.copyFields(movieRequest, movie);
 //        movie.setStatus(movieRequest.getStatus());
 //        movie.setSlug(generateSlug(movieRequest.getName()));
@@ -194,7 +188,6 @@ public class MovieServiceImpl implements MovieService {
 //
 //            movie.setPriceMovies(prices);
 //        }
-
         movieRepository.save(movie);
 
         return true;
@@ -219,14 +212,12 @@ public class MovieServiceImpl implements MovieService {
         if (movie == null) throw new AppException(NOT_FOUND);
         movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
         movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
-
 //        List<SelectOptionReponse> optionsCategory = new ArrayList<>();
 //        List<MovieGenre> categories = movieGenreRepository.findAll();
 //
 //        for (MovieGenre category : categories) {
 //            optionsCategory.add(new SelectOptionReponse(category.getId(), category.getName()));
 //        }
-
         List<SelectOptionReponse> optionsCategory = getMovieGenreOptions();
 //        List<SelectOptionReponse> optionsActor = new ArrayList<>();
 //        List<Celebrity> actors = celebrityRepository.findByRole(RoleCeleb.ACTOR);
@@ -234,7 +225,6 @@ public class MovieServiceImpl implements MovieService {
 //        for (Celebrity actor : actors) {
 //            optionsActor.add(new SelectOptionReponse(actor.getId(), actor.getName()));
 //        }
-
         List<SelectOptionReponse> optionsActor = getCelebrityOptions(RoleCeleb.ACTOR);
 //        List<SelectOptionReponse> optionsDirector = new ArrayList<>();
 //        List<Celebrity> directors = celebrityRepository.findByRole(RoleCeleb.DIRECTOR);
@@ -242,14 +232,12 @@ public class MovieServiceImpl implements MovieService {
 //        for (Celebrity director : directors) {
 //            optionsDirector.add(new SelectOptionReponse(director.getId(), director.getName()));
 //        }
-
         List<SelectOptionReponse> optionsDirector = getCelebrityOptions(RoleCeleb.DIRECTOR);
 //        List<SelectOptionReponse> optionsStatus = new ArrayList<>();
 //
 //        for (MovieStatus movieStatus : MovieStatus.values()) {
 //            optionsStatus.add(new SelectOptionReponse(movieStatus.name(), movieStatus.getValue()));
 //        }
-
         List<SelectOptionReponse> optionsStatus = getMovieStatusOptions();
 //        List<Country> countryList = countryRepository.findAll();
 //        List<SelectOptionReponse> optionsCountries = new ArrayList<>();
@@ -257,7 +245,6 @@ public class MovieServiceImpl implements MovieService {
 //        for (Country country : countryList) {
 //            optionsCountries.add(new SelectOptionReponse(country.getId(), country.getName()));
 //        }
-
         return new SelectOptionMovie<>(optionsCategory, optionsDirector, optionsActor, optionsStatus, getCountryOptions(), movie);
     }
 
