@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,41 +85,66 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public SelectOptionMovie<?> getCreateMovie() {
-        List<SelectOptionReponse> optionsCategory = new ArrayList<>();
-        List<MovieGenre> categories = movieGenreRepository.findAll();
+//        List<SelectOptionReponse> optionsCategory = new ArrayList<>();
+//        List<MovieGenre> categories = movieGenreRepository.findAll();
+//
+//        for (MovieGenre category : categories) {
+////            optionsCategory.add(new SelectOptionReponse(category.getId(), category.getName()));
+//            optionsCategory.add(SelectOptionReponse.builder()
+//                    .value(category.getId())
+//                    .label(category.getName())
+//                    .build());
+//        }
+        List<SelectOptionReponse> optionsCategory = getMovieGenreOptions();
 
-        for (MovieGenre category : categories) {
-            optionsCategory.add(new SelectOptionReponse(category.getId(), category.getName()));
-        }
+//        List<SelectOptionReponse> optionsActor = new ArrayList<>();
+//        List<Celebrity> actors = celebrityRepository.findByRole(RoleCeleb.ACTOR);
 
-        List<SelectOptionReponse> optionsActor = new ArrayList<>();
-        List<Celebrity> actors = celebrityRepository.findByRole(RoleCeleb.ACTOR);
+//        for (Celebrity actor : actors) {
+////            optionsActor.add(new SelectOptionReponse(actor.getId(), actor.getName()));
+//            optionsActor.add(SelectOptionReponse.builder()
+//                    .value(actor.getId())
+//                    .label(actor.getName())
+//                    .build());
+//        }
+        List<SelectOptionReponse> optionsActor = getCelebrityOptions(RoleCeleb.ACTOR);
 
-        for (Celebrity actor : actors) {
-            optionsActor.add(new SelectOptionReponse(actor.getId(), actor.getName()));
-        }
+//        List<SelectOptionReponse> optionsDirector = new ArrayList<>();
+//        List<Celebrity> directors = celebrityRepository.findByRole(RoleCeleb.DIRECTOR);
+//
+//        for (Celebrity director : directors) {
+////            optionsDirector.add(new SelectOptionReponse(director.getId(), director.getName()));
+//            optionsDirector.add(SelectOptionReponse.builder()
+//                    .value(director.getId())
+//                    .label(director.getName())
+//                    .build());
+//        }
+        List<SelectOptionReponse> optionsDirector = getCelebrityOptions(RoleCeleb.DIRECTOR);
 
-        List<SelectOptionReponse> optionsDirector = new ArrayList<>();
-        List<Celebrity> directors = celebrityRepository.findByRole(RoleCeleb.DIRECTOR);
+//        List<SelectOptionReponse> optionsStatus = new ArrayList<>();
+//
+//        for (MovieStatus movieStatus : MovieStatus.values()) {
+////            optionsStatus.add(new SelectOptionReponse(movieStatus.name(), movieStatus.getValue()));
+//            optionsStatus.add(SelectOptionReponse.builder()
+//                    .value(movieStatus.name())
+//                    .label(movieStatus.getValue())
+//                    .build());
+//        }
 
-        for (Celebrity director : directors) {
-            optionsDirector.add(new SelectOptionReponse(director.getId(), director.getName()));
-        }
+        List<SelectOptionReponse> optionsStatus = getMovieStatusOptions();
 
-        List<SelectOptionReponse> optionsStatus = new ArrayList<>();
+//        List<Country> countryList = countryRepository.findAll();
+//        List<SelectOptionReponse> optionsCountries = new ArrayList<>();
+//
+//        for (Country country : countryList) {
+////            optionsCountries.add(new SelectOptionReponse(country.getId(), country.getName()));
+//            optionsCountries.add(SelectOptionReponse.builder()
+//                    .value(country.getId())
+//                    .label(country.getName())
+//                    .build());
+//        }
 
-        for (MovieStatus movieStatus : MovieStatus.values()) {
-            optionsStatus.add(new SelectOptionReponse(movieStatus.name(), movieStatus.getValue()));
-        }
-
-        List<Country> countryList = countryRepository.findAll();
-        List<SelectOptionReponse> optionsCountries = new ArrayList<>();
-
-        for (Country country : countryList) {
-            optionsCountries.add(new SelectOptionReponse(country.getId(), country.getName()));
-        }
-
-        return new SelectOptionMovie<>(optionsCategory, optionsDirector, optionsActor, optionsStatus, optionsCountries);
+        return new SelectOptionMovie<>(optionsCategory, optionsDirector, optionsActor, optionsStatus, getCountryOptions());
     }
 
     @Override
@@ -129,44 +155,45 @@ public class MovieServiceImpl implements MovieService {
         }
 
         //set image
-        String ImageLandscape = fileStorageServiceImpl.uploadFile(movieRequest.getImageLandscape(), "movie");
-        movie.setImageLandscape(ImageLandscape);
+        movie.setImageLandscape(fileStorageServiceImpl.uploadFile(movieRequest.getImageLandscape(), "movie"));
+        movie.setImagePortrait(fileStorageServiceImpl.uploadFile(movieRequest.getImagePortrait(), "movie"));
 
-        String ImagePortrait = fileStorageServiceImpl.uploadFile(movieRequest.getImagePortrait(), "movie");
-        movie.setImagePortrait(ImagePortrait);
+        populateMovieEntity(movie, movieRequest);
 
-        ObjectUtils.copyFields(movieRequest, movie);
-        movie.setStatus(movieRequest.getStatus());
-        //set slug
-        movie.setSlug(movieRequest.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
-
-
-        movie.setCountry(countryRepository.findById(movieRequest.getCountryId()));
-
-        //set movie genre
-        List<MovieGenre> genres = movieRequest.getCategoriesIds().stream().map(id -> movieGenreRepository.getById(id))
-                .collect(Collectors.toList());
-        movie.setCategories(genres);
-
-        //set celebrity
-        List<Celebrity> actors = movieRequest.getActorId().stream().map(id -> celebrityRepository.getById(id))
-                .collect(Collectors.toList());
-        movie.setActor(actors);
-
-        List<Celebrity> directors = movieRequest.getDirectorId().stream().map(id -> celebrityRepository.getById(id))
-                .collect(Collectors.toList());
-        movie.setDirector(directors);
-
-        if (movieRequest.getPrices() != null) {
-            List<PriceMovie> prices = new ArrayList<>();
-            movieRequest.getPrices().forEach(price -> {
-                PriceMovie priceMovie = new PriceMovie(price.getDate(), price.getPrice());
-                priceMovie.setMovie(movie);
-                prices.add(priceMovie);
-            });
-
-            movie.setPriceMovies(prices);
-        }
+//        ObjectUtils.copyFields(movieRequest, movie);
+//        movie.setStatus(movieRequest.getStatus());
+//        movie.setSlug(generateSlug(movieRequest.getName()));
+//        movie.setCountry(countryRepository.findById(movieRequest.getCountryId()));
+//
+//        //set movie genre
+//        List<MovieGenre> genres = movieRequest.getCategoriesIds().stream().map(id -> movieGenreRepository.getById(id))
+//                .collect(Collectors.toList());
+//        movie.setCategories(genres);
+//
+//        //set celebrity
+//        List<Celebrity> actors = movieRequest.getActorId().stream().map(id -> celebrityRepository.getById(id))
+//                .collect(Collectors.toList());
+//        movie.setActor(actors);
+//
+//        List<Celebrity> directors = movieRequest.getDirectorId().stream().map(id -> celebrityRepository.getById(id))
+//                .collect(Collectors.toList());
+//        movie.setDirector(directors);
+//
+//        if (movieRequest.getPrices() != null) {
+//            List<PriceMovie> prices = new ArrayList<>();
+//
+//            movieRequest.getPrices().forEach(price -> {
+////                PriceMovie priceMovie = new PriceMovie(price.getDate(), price.getPrice());
+//                PriceMovie priceMovie = PriceMovie.builder()
+//                        .date(price.getDate())
+//                        .price(price.getPrice())
+//                        .movie(movie)
+//                        .build();
+//                prices.add(priceMovie);
+//            });
+//
+//            movie.setPriceMovies(prices);
+//        }
 
         movieRepository.save(movie);
 
@@ -193,41 +220,81 @@ public class MovieServiceImpl implements MovieService {
         movie.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(movie.getImagePortrait()));
         movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
 
-        List<SelectOptionReponse> optionsCategory = new ArrayList<>();
-        List<MovieGenre> categories = movieGenreRepository.findAll();
+//        List<SelectOptionReponse> optionsCategory = new ArrayList<>();
+//        List<MovieGenre> categories = movieGenreRepository.findAll();
+//
+//        for (MovieGenre category : categories) {
+//            optionsCategory.add(new SelectOptionReponse(category.getId(), category.getName()));
+//        }
 
-        for (MovieGenre category : categories) {
-            optionsCategory.add(new SelectOptionReponse(category.getId(), category.getName()));
-        }
+        List<SelectOptionReponse> optionsCategory = getMovieGenreOptions();
+//        List<SelectOptionReponse> optionsActor = new ArrayList<>();
+//        List<Celebrity> actors = celebrityRepository.findByRole(RoleCeleb.ACTOR);
+//
+//        for (Celebrity actor : actors) {
+//            optionsActor.add(new SelectOptionReponse(actor.getId(), actor.getName()));
+//        }
 
-        List<SelectOptionReponse> optionsActor = new ArrayList<>();
-        List<Celebrity> actors = celebrityRepository.findByRole(RoleCeleb.ACTOR);
+        List<SelectOptionReponse> optionsActor = getCelebrityOptions(RoleCeleb.ACTOR);
+//        List<SelectOptionReponse> optionsDirector = new ArrayList<>();
+//        List<Celebrity> directors = celebrityRepository.findByRole(RoleCeleb.DIRECTOR);
+//
+//        for (Celebrity director : directors) {
+//            optionsDirector.add(new SelectOptionReponse(director.getId(), director.getName()));
+//        }
 
-        for (Celebrity actor : actors) {
-            optionsActor.add(new SelectOptionReponse(actor.getId(), actor.getName()));
-        }
+        List<SelectOptionReponse> optionsDirector = getCelebrityOptions(RoleCeleb.DIRECTOR);
+//        List<SelectOptionReponse> optionsStatus = new ArrayList<>();
+//
+//        for (MovieStatus movieStatus : MovieStatus.values()) {
+//            optionsStatus.add(new SelectOptionReponse(movieStatus.name(), movieStatus.getValue()));
+//        }
 
-        List<SelectOptionReponse> optionsDirector = new ArrayList<>();
-        List<Celebrity> directors = celebrityRepository.findByRole(RoleCeleb.DIRECTOR);
+        List<SelectOptionReponse> optionsStatus = getMovieStatusOptions();
+//        List<Country> countryList = countryRepository.findAll();
+//        List<SelectOptionReponse> optionsCountries = new ArrayList<>();
+//
+//        for (Country country : countryList) {
+//            optionsCountries.add(new SelectOptionReponse(country.getId(), country.getName()));
+//        }
 
-        for (Celebrity director : directors) {
-            optionsDirector.add(new SelectOptionReponse(director.getId(), director.getName()));
-        }
+        return new SelectOptionMovie<>(optionsCategory, optionsDirector, optionsActor, optionsStatus, getCountryOptions(), movie);
+    }
 
-        List<SelectOptionReponse> optionsStatus = new ArrayList<>();
+    private List<SelectOptionReponse> getMovieGenreOptions() {
+        return movieGenreRepository.findAll().stream()
+                .map(category -> SelectOptionReponse.builder()
+                        .value(category.getId())
+                        .label(category.getName())
+                        .build())
+                .collect(Collectors.toList());
+    }
 
-        for (MovieStatus movieStatus : MovieStatus.values()) {
-            optionsStatus.add(new SelectOptionReponse(movieStatus.name(), movieStatus.getValue()));
-        }
+    private List<SelectOptionReponse> getCelebrityOptions(RoleCeleb role) {
+        return celebrityRepository.findByRole(role).stream()
+                .map(celeb -> SelectOptionReponse.builder()
+                        .value(celeb.getId())
+                        .label(celeb.getName())
+                        .build())
+                .collect(Collectors.toList());
+    }
 
-        List<Country> countryList = countryRepository.findAll();
-        List<SelectOptionReponse> optionsCountries = new ArrayList<>();
+    private List<SelectOptionReponse> getMovieStatusOptions() {
+        return Arrays.stream(MovieStatus.values())
+                .map(status -> SelectOptionReponse.builder()
+                        .value(status.name())
+                        .label(status.getValue())
+                        .build())
+                .collect(Collectors.toList());
+    }
 
-        for (Country country : countryList) {
-            optionsCountries.add(new SelectOptionReponse(country.getId(), country.getName()));
-        }
-
-        return new SelectOptionMovie<>(optionsCategory, optionsDirector, optionsActor, optionsStatus, optionsCountries, movie);
+    private List<SelectOptionReponse> getCountryOptions() {
+        return countryRepository.findAll().stream()
+                .map(country -> SelectOptionReponse.builder()
+                        .value(country.getId())
+                        .label(country.getName())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -256,40 +323,83 @@ public class MovieServiceImpl implements MovieService {
             movie.setImagePortrait(ImagePortrait);
         }
 
-        //set slug
-        movie.setSlug(movieRequest.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
+        populateMovieEntity(movie, movieRequest);
 
-        //set country
-        movie.setCountry(countryRepository.findById(movieRequest.getCountryId()));
+//        //set slug
+////        movie.setSlug(movieRequest.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
+//        movie.setSlug(generateSlug(movieRequest.getName()));
+//        //set country
+//        movie.setCountry(countryRepository.findById(movieRequest.getCountryId()));
+//
+//        //set movie genre
+//        List<MovieGenre> genres = movieRequest.getCategoriesIds().stream().map(id -> movieGenreRepository.getById(id))
+//                .collect(Collectors.toList());
+//        movie.setCategories(genres);
+//
+//        //set actors
+//        List<Celebrity> actors = movieRequest.getActorId().stream().map(id -> celebrityRepository.getById(id))
+//                .collect(Collectors.toList());
+//        movie.setActor(actors);
+//
+//        //set directors
+//        List<Celebrity> directors = movieRequest.getDirectorId().stream().map(id -> celebrityRepository.getById(id))
+//                .collect(Collectors.toList());
+//        movie.setDirector(directors);
+//
+//        if (movieRequest.getPrices() != null) {
+//            movie.getPriceMovies().clear();
+//
+//            movieRequest.getPrices().forEach(price -> {
+////                PriceMovie priceMovie = new PriceMovie(price.getDate(), price.getPrice());
+////                priceMovie.setMovie(movie);
+//                PriceMovie priceMovie = PriceMovie.builder()
+//                        .date(price.getDate())
+//                        .price(price.getPrice())
+//                        .movie(movie)
+//                        .build();
+//
+//                movie.getPriceMovies().add(priceMovie);
+//            });
+//        }
 
-        //set movie genre
-        List<MovieGenre> genres = movieRequest.getCategoriesIds().stream().map(id -> movieGenreRepository.getById(id))
+        movieRepository.save(movie);
+
+        return true;
+    }
+
+    private void populateMovieEntity(Movie movie, MovieRequest request) {
+        ObjectUtils.copyFields(request, movie);
+        movie.setSlug(generateSlug(request.getName()));
+        movie.setStatus(request.getStatus());
+        movie.setCountry(countryRepository.findById(request.getCountryId()));
+
+        List<MovieGenre> genres = request.getCategoriesIds().stream()
+                .map(movieGenreRepository::getById)
                 .collect(Collectors.toList());
         movie.setCategories(genres);
 
-        //set actors
-        List<Celebrity> actors = movieRequest.getActorId().stream().map(id -> celebrityRepository.getById(id))
+        List<Celebrity> actors = request.getActorId().stream()
+                .map(celebrityRepository::getById)
                 .collect(Collectors.toList());
         movie.setActor(actors);
 
-        //set directors
-        List<Celebrity> directors = movieRequest.getDirectorId().stream().map(id -> celebrityRepository.getById(id))
+        List<Celebrity> directors = request.getDirectorId().stream()
+                .map(celebrityRepository::getById)
                 .collect(Collectors.toList());
         movie.setDirector(directors);
 
-        if (movieRequest.getPrices() != null) {
-            movie.getPriceMovies().clear();
-
-            movieRequest.getPrices().forEach(price -> {
-                PriceMovie priceMovie = new PriceMovie(price.getDate(), price.getPrice());
-                priceMovie.setMovie(movie);
-                movie.getPriceMovies().add(priceMovie);
-            });
+        if (request.getPrices() != null) {
+            List<PriceMovie> prices = request.getPrices().stream()
+                    .map(price -> PriceMovie.builder()
+                            .date(price.getDate())
+                            .price(price.getPrice())
+                            .movie(movie)
+                            .build())
+                    .collect(Collectors.toList());
+            movie.setPriceMovies(prices);
         }
-
-        movieRepository.save(movie);
-        return true;
     }
+
 
     @Override
     public Movie findMovieById(Integer id) {
@@ -297,6 +407,12 @@ public class MovieServiceImpl implements MovieService {
         movie.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
 
         return movie;
+    }
+
+    private String generateSlug(String name) {
+        return name.toLowerCase()
+                .replaceAll("[^a-z0-9\\s]", "")
+                .replaceAll("\\s+", "-");
     }
 
 }

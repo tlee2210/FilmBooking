@@ -68,7 +68,8 @@ public class WaterCornServiceImpl implements WaterCornService {
 
         ObjectUtils.copyFields(watercorn, addWaterCorn);
 
-        addWaterCorn.setSlug(watercorn.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
+//        addWaterCorn.setSlug(watercorn.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
+        addWaterCorn.setSlug(generateSlug((watercorn.getName())));
 
         addWaterCorn.setImage(fileStorageServiceImpl.uploadFile(watercorn.getFile(), "waterCorn"));
         waterCornRepository.save(addWaterCorn);
@@ -117,10 +118,17 @@ public class WaterCornServiceImpl implements WaterCornService {
         }
 
         ObjectUtils.copyFields(watercorn, wat);
-        wat.setSlug(watercorn.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
+        wat.setSlug(generateSlug((watercorn.getName())));
+//        wat.setSlug(watercorn.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
 
         waterCornRepository.save(wat);
 
         return true;
+    }
+
+    private String generateSlug(String name) {
+        return name.toLowerCase()
+                .replaceAll("[^a-z0-9\\s]", "")
+                .replaceAll("\\s+", "-");
     }
 }
