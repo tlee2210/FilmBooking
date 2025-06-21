@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.cinemas.exception.ErrorCode.NAME_EXISTED;
 import static com.cinemas.exception.ErrorCode.NOT_FOUND;
@@ -60,11 +61,24 @@ public class RoomServiceImpl implements RoomService {
 
         Page<RoomTableReponse> rooms = new PageImpl<>(pageList, new PaginationHelper().getPageable(roomRequest), roomList.size());
 
-        List<Cinema> cinemaList = cinemaRespository.findAll();
-        List<SelectOptionReponse> optionsCountries = new ArrayList<>();
-        for (Cinema cinema : cinemaList) {
-            optionsCountries.add(new SelectOptionReponse(cinema.getId(), cinema.getName()));
-        }
+//        List<Cinema> cinemaList = cinemaRespository.findAll();
+//        List<SelectOptionReponse> optionsCountries = new ArrayList<>();
+//        for (Cinema cinema : cinemaList) {
+//            optionsCountries.add(SelectOptionReponse
+//                    .builder()
+//                    .value(cinema.getId())
+//                    .label(cinema.getName())
+//                    .build());
+//        }
+
+        List<SelectOptionReponse> optionsCountries = cinemaRespository.findAll()
+                .stream().map(options -> SelectOptionReponse
+                        .builder()
+                        .value(options.getId())
+                        .label(options.getName())
+                        .build())
+                .collect(Collectors.toList());
+
 
         return new SelectOptionAndModelReponse<>(optionsCountries, rooms);
     }
@@ -73,23 +87,42 @@ public class RoomServiceImpl implements RoomService {
     public SelectOptionAndModelReponse<RoomTableReponse> getEditRoom(Integer id) {
         Room room = roomRepository.findById(id).orElseThrow(() -> new AppException(NOT_FOUND));
 
-        RoomTableReponse roomTableReponse = new RoomTableReponse();
-        roomTableReponse.setId(room.getId());
-        roomTableReponse.setName(room.getName());
-        roomTableReponse.setSeatColumns(room.getSeatColumns());
-        roomTableReponse.setSeatRows(room.getSeatRows());
-        roomTableReponse.setDoubleSeatColumns(room.getDoubleSeatColumns());
-        roomTableReponse.setDoubleSeatRows(room.getDoubleSeatRows());
-        roomTableReponse.setTotalColumn(room.getTotalColumn());
-        roomTableReponse.setCinemaId(room.getCinema().getId());
+//        RoomTableReponse roomTableReponse = new RoomTableReponse();
+        RoomTableReponse roomTableReponse = RoomTableReponse.builder()
+                .id(room.getId())
+                .name(room.getName())
+                .SeatColumns(room.getSeatColumns())
+                .SeatRows(room.getSeatRows())
+                .doubleSeatColumns(room.getDoubleSeatColumns())
+                .doubleSeatRows(room.getDoubleSeatRows())
+                .totalColumn(room.getTotalColumn())
+                .cinemaId(room.getCinema().getId())
+                .build();
 
-        List<Cinema> cinemaList = cinemaRespository.findAll();
+//        roomTableReponse.setId(room.getId());
+//        roomTableReponse.setName(room.getName());
+//        roomTableReponse.setSeatColumns(room.getSeatColumns());
+//        roomTableReponse.setSeatRows(room.getSeatRows());
+//        roomTableReponse.setDoubleSeatColumns(room.getDoubleSeatColumns());
+//        roomTableReponse.setDoubleSeatRows(room.getDoubleSeatRows());
+//        roomTableReponse.setTotalColumn(room.getTotalColumn());
+//        roomTableReponse.setCinemaId(room.getCinema().getId());
 
-        List<SelectOptionReponse> optionsCinema = new ArrayList<>();
+//        List<Cinema> cinemaList = cinemaRespository.findAll();
+//
+//        List<SelectOptionReponse> optionsCinema = new ArrayList<>();
+//
+//        for (Cinema cinema : cinemaList) {
+//            optionsCinema.add(new SelectOptionReponse(cinema.getId(), cinema.getName()));
+//        }
+        List<SelectOptionReponse> optionsCinema = cinemaRespository.findAll()
+                .stream()
+                .map(Option -> SelectOptionReponse.builder()
+                        .value(Option.getId())
+                        .label(Option.getName())
+                        .build())
+                .collect(Collectors.toList());
 
-        for (Cinema cinema : cinemaList) {
-            optionsCinema.add(new SelectOptionReponse(cinema.getId(), cinema.getName()));
-        }
         SelectOptionAndModelReponse<RoomTableReponse> SelectOptionAndModelReponse = new SelectOptionAndModelReponse<>(optionsCinema, roomTableReponse);
 
         return SelectOptionAndModelReponse;
@@ -123,16 +156,25 @@ public class RoomServiceImpl implements RoomService {
     public SelectOptionAndModelReponse getAllRoomAndStatusByCinemaId(Integer id) {
         SelectOptionAndModelReponse optionAndModelReponse = new SelectOptionAndModelReponse();
 
-        List<Room> rooms = roomRepository.getRoomByCinemaId(id);
-        List<SelectOptionReponse> selectOptionReponses = new ArrayList<>();
+//        List<Room> rooms = roomRepository.getRoomByCinemaId(id);
+//        List<SelectOptionReponse> selectOptionReponses = new ArrayList<>();
+//
+//        rooms.forEach(room -> {
+//            selectOptionReponses.add(new SelectOptionReponse<>(room.getId(), room.getName()));
+//        });
+        List<SelectOptionReponse> selectOptionReponses =
+                roomRepository.getRoomByCinemaId(id)
+                        .stream()
+                        .map(Option -> SelectOptionReponse.builder()
+                        .value(Option.getId())
+                        .label(Option.getName())
+                        .build())
+                .collect(Collectors.toList());
 
-        rooms.forEach(room -> {
-            selectOptionReponses.add(new SelectOptionReponse<>(room.getId(), room.getName()));
-        });
         optionAndModelReponse.setSelectOptionReponse(selectOptionReponses);
 
         List<SelectOptionReponse> selectOptionReponseStatus = new ArrayList<>();
-        for (MovieFormat movieFormat : MovieFormat.values()){
+        for (MovieFormat movieFormat : MovieFormat.values()) {
             selectOptionReponseStatus.add(new SelectOptionReponse<>(movieFormat.getValue(), movieFormat.getValue()));
         }
         optionAndModelReponse.setSelectOptionStatus(selectOptionReponseStatus);

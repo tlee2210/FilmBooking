@@ -363,6 +363,7 @@ public class MovieServiceImpl implements MovieService {
         List<MovieGenre> genres = request.getCategoriesIds().stream()
                 .map(movieGenreRepository::getById)
                 .collect(Collectors.toList());
+
         movie.setCategories(genres);
 
         List<Celebrity> actors = request.getActorId().stream()
