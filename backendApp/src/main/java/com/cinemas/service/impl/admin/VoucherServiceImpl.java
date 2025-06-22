@@ -34,18 +34,31 @@ public class VoucherServiceImpl implements VoucherService {
     @Override
     public boolean createVoucher(VoucherRequest voucherRequest) {
 
-        if(voucherRepository.findByCode(voucherRequest.getCode()) != null){
+        if (voucherRepository.findByCode(voucherRequest.getCode()) != null) {
             throw new AppException(NAME_EXISTED);
         }
 
-        if (voucherRequest.getCode() == null || voucherRequest.getCode().isEmpty()){
+        if (voucherRequest.getCode() == null || voucherRequest.getCode().isEmpty()) {
             voucherRequest.setCode(UUID.randomUUID().toString().replace("-", "").substring(0, 10));
         }
 
-        Voucher voucher = new Voucher();
-        ObjectUtils.copyFields(voucherRequest, voucher);
-        voucher.setUsedCount(0);
-        voucher.setStatusVoucher(StatusVoucher.ACTIVE);
+//        Voucher voucher = new Voucher();
+//        ObjectUtils.copyFields(voucherRequest, voucher);
+//        voucher.setUsedCount(0);
+//        voucher.setStatusVoucher(StatusVoucher.ACTIVE);
+
+        Voucher voucher = Voucher.builder()
+                .id(voucherRequest.getId())
+                .code(voucherRequest.getCode())
+                .discountType(voucherRequest.getDiscountType())
+                .discountValue(voucherRequest.getDiscountValue())
+                .expirationDate(voucherRequest.getExpirationDate())
+                .usageLimit(voucherRequest.getUsageLimit())
+                .usedCount(0)
+                .minSpend(voucherRequest.getMinSpend())
+                .maxDiscount(voucherRequest.getMaxDiscount())
+                .statusVoucher(StatusVoucher.ACTIVE)
+                .build();
 
         voucherRepository.save(voucher);
         return true;
@@ -81,7 +94,7 @@ public class VoucherServiceImpl implements VoucherService {
     public boolean updateVoucher(VoucherRequest voucherRequest) {
         Voucher voucher = voucherRepository.findById(voucherRequest.getId()).orElseThrow(() -> new AppException(NOT_FOUND));
 
-        if(voucherRepository.findByCodeAndId(voucherRequest.getCode(), voucherRequest.getId()) != null){
+        if (voucherRepository.findByCodeAndId(voucherRequest.getCode(), voucherRequest.getId()) != null) {
             throw new AppException(NAME_EXISTED);
         }
 

@@ -30,6 +30,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.cinemas.exception.ErrorCode.*;
 
@@ -60,12 +61,20 @@ public class ShowTimeServiceImpl implements ShowTimeService {
 
         Page<ShowTimeTableResponse> showtimesPage = new PageImpl<>(pageList, new PaginationHelper().getPageable(paginationHelper), showtimesList.size());
 
-        List<Cinema> cinemaList = cinemaRespository.findAll();
+//        List<Cinema> cinemaList = cinemaRespository.findAll();
+//
+//        List<SelectOptionReponse> optionsCountries = new ArrayList<>();
+//        for (Cinema cinema : cinemaList) {
+//            optionsCountries.add(new SelectOptionReponse(cinema.getSlug(), cinema.getName()));
+//        }
 
-        List<SelectOptionReponse> optionsCountries = new ArrayList<>();
-        for (Cinema cinema : cinemaList) {
-            optionsCountries.add(new SelectOptionReponse(cinema.getSlug(), cinema.getName()));
-        }
+        List<SelectOptionReponse> optionsCountries = cinemaRespository.findAll().stream()
+                .map(Option -> SelectOptionReponse.builder()
+                        .value(Option.getSlug())
+                        .label(Option.getName())
+                        .build())
+                .collect(Collectors.toList());
+
         return new SelectOptionAndModelReponse<>(optionsCountries, showtimesPage);
     }
 
@@ -195,29 +204,59 @@ public class ShowTimeServiceImpl implements ShowTimeService {
 
     @Override
     public ShowTimeCreateResponse getcreate() {
-        List<Cinema> cinemaList = cinemaRespository.findAll();
-        List<Movie> movieList = movieRepository.findAllMovieSetTime();
-        List<SelectOptionReponse> optionsCinema = new ArrayList<>();
-        List<SelectOptionReponse> optionsMovie = new ArrayList<>();
+//        List<Cinema> cinemaList = cinemaRespository.findAll();
+//        List<Movie> movieList = movieRepository.findAllMovieSetTime();
+//        List<SelectOptionReponse> optionsCinema = new ArrayList<>();
+//        List<SelectOptionReponse> optionsMovie = new ArrayList<>();
 
-        cinemaList.forEach(cinema -> {
-            optionsCinema.add(new SelectOptionReponse(cinema.getId(), cinema.getName()));
-        });
-        movieList.forEach(movie -> {
-            optionsMovie.add(new SelectOptionReponse(movie.getId(), movie.getName()));
-        });
+//        cinemaList.forEach(cinema -> {
+//            optionsCinema.add(new SelectOptionReponse(cinema.getId(), cinema.getName()));
+//        });
+
+
+//        movieList.forEach(movie -> {
+//            optionsMovie.add(new SelectOptionReponse(movie.getId(), movie.getName()));
+//        });
+
+        List<SelectOptionReponse> optionsCinema = cinemaRespository.findAll()
+                .stream().map(Option -> SelectOptionReponse
+                        .builder()
+                        .value(Option.getId())
+                        .label(Option.getName())
+                        .build())
+                .collect(Collectors.toList());
+
+        List<SelectOptionReponse> optionsMovie = movieRepository.findAllMovieSetTime()
+                .stream().map(Option -> SelectOptionReponse
+                        .builder()
+                        .value(Option.getId())
+                        .label(Option.getName())
+                        .build())
+                .collect(Collectors.toList());
 
         return new ShowTimeCreateResponse(optionsMovie, optionsCinema);
     }
 
     @Override
     public List<SelectOptionReponse> getRoomCreate(Integer idCinema) {
-        List<SelectOptionReponse> optionsRoom = new ArrayList<>();
-        List<Room> rooms = roomRepository.getRoomByCinemaId(idCinema);
+//        List<SelectOptionReponse> optionsRoom = new ArrayList<>();
+//        List<Room> rooms = roomRepository.getRoomByCinemaId(idCinema);
+//
+//        rooms.forEach(room -> {
+//            optionsRoom.add(new SelectOptionReponse(room.getId(), room.getName()));
+//        });
 
-        rooms.forEach(room -> {
-            optionsRoom.add(new SelectOptionReponse(room.getId(), room.getName()));
-        });
+
+//        return optionsRoom;
+
+        List<SelectOptionReponse> optionsRoom = roomRepository.getRoomByCinemaId(idCinema)
+                .stream()
+                .map(Option -> SelectOptionReponse
+                        .builder()
+                        .value(Option.getId())
+                        .label(Option.getName())
+                        .build())
+                .collect(Collectors.toList());
 
         return optionsRoom;
     }
@@ -229,11 +268,15 @@ public class ShowTimeServiceImpl implements ShowTimeService {
 
         Cinema cinema = findCinemaById(showTimeRequest.getCinemaId());
 
-        List<Room> roomList = new ArrayList<>();
+//        List<Room> roomList = new ArrayList<>();
+//
+//        showTimeRequest.getRoomId().forEach(roomId -> {
+//            roomList.add(findRoomById(roomId));
+//        });
 
-        showTimeRequest.getRoomId().forEach(roomId -> {
-            roomList.add(findRoomById(roomId));
-        });
+        List<Room> roomList =  showTimeRequest.getRoomId().stream()
+                .map(roomId ->findRoomById(roomId))
+                .collect(Collectors.toList());
 
         List<Showtimes> showtimesList = new ArrayList<>();
 
@@ -244,7 +287,23 @@ public class ShowTimeServiceImpl implements ShowTimeService {
                     List<Showtimes> overlappingShowtimesList = showTimeResponsitory.findOverlappingShowtimes(room.getId(), day, time, endTime);
 
                     if (overlappingShowtimesList.isEmpty()) {
-                        showtimesList.add(new Showtimes(day, time, movie, room, cinema, showTimeRequest.getMovieFormat()));
+//                        showtimesList.add(new Showtimes(
+//                                day,
+//                                time,
+//                                movie,
+//                                room, cinema, showTimeRequest.getMovieFormat()));
+
+                        showtimesList.add(
+                                Showtimes.builder()
+                                        .date(day)
+                                        .time(time)
+                                        .movie(movie)
+                                        .room(room)
+                                        .cinema(cinema)
+                                        .movieFormat(showTimeRequest.getMovieFormat())
+                                        .build()
+                        );
+
                     } else {
 
                         throw new AppException(CREATE_FAILED, String.format(

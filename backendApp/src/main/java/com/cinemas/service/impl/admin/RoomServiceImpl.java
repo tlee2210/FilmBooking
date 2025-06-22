@@ -38,7 +38,6 @@ public class RoomServiceImpl implements RoomService {
     @Autowired
     RoomRepository roomRepository;
 
-
     @Override
     public SelectOptionAndModelReponse<Page<RoomTableReponse>> getAllRoom(SearchRoomRequest roomRequest) {
         List<Room> roomList = roomRepository.searchByNameAndAndCinemaId(roomRequest.getName(), roomRequest.getCinemaId());
@@ -166,10 +165,10 @@ public class RoomServiceImpl implements RoomService {
                 roomRepository.getRoomByCinemaId(id)
                         .stream()
                         .map(Option -> SelectOptionReponse.builder()
-                        .value(Option.getId())
-                        .label(Option.getName())
-                        .build())
-                .collect(Collectors.toList());
+                                .value(Option.getId())
+                                .label(Option.getName())
+                                .build())
+                        .collect(Collectors.toList());
 
         optionAndModelReponse.setSelectOptionReponse(selectOptionReponses);
 
@@ -184,12 +183,20 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<SelectOptionReponse<?>> getCreate() {
-        List<Cinema> cinemaList = cinemaRespository.findAll();
-        List<SelectOptionReponse<?>> selectOptionReponses = new ArrayList<>();
-        cinemaList.forEach(cinema -> {
-            selectOptionReponses.add(new SelectOptionReponse<>(cinema.getId(), cinema.getName()));
-        });
-        return selectOptionReponses;
+//        List<Cinema> cinemaList = cinemaRespository.findAll();
+//        List<SelectOptionReponse<?>> selectOptionReponses = new ArrayList<>();
+//        cinemaList.forEach(cinema -> {
+//            selectOptionReponses.add(new SelectOptionReponse<>(cinema.getId(), cinema.getName()));
+//        });
+//        return selectOptionReponses;
+
+        return cinemaRespository.findAll().stream()
+//                .map(cinema -> new SelectOptionReponse<>(cinema.getId(), cinema.getName()))
+                .map(Option -> SelectOptionReponse.builder()
+                        .value(Option.getId())
+                        .label(Option.getName())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     @Override

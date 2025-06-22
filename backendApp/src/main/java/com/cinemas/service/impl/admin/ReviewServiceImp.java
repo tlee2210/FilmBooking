@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,7 +82,9 @@ public class ReviewServiceImp implements ReviewService {
         ObjectUtils.copyFields(review, addReview);
         addReview.setMovie(movieRepository.getById(review.getMovieId()));
 
-        addReview.setSlug(review.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
+//        addReview.setSlug(review.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
+        addReview.setSlug(generateSlug(review.getName()));
+
         addReview.setThumbnail(fileStorageServiceImpl.uploadFile(review.getFile(), "review"));
         List<imageDescription> imageDescriptionList = new ArrayList<>();
 
@@ -139,11 +142,20 @@ public class ReviewServiceImp implements ReviewService {
         optionAndModelReponse.setModel(reviewResponse);
 
         review.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(review.getThumbnail()));
-        List<SelectOptionReponse> selectOptionReponses = new ArrayList<>();
+//        List<SelectOptionReponse> selectOptionReponses = new ArrayList<>();
+//
+//        for (ReviewType reviewType : ReviewType.values()) {
+//            selectOptionReponses.add(new SelectOptionReponse(
+//            reviewType.getValue(), reviewType.getValue()));
+//        }
 
-        for (ReviewType reviewType : ReviewType.values()) {
-            selectOptionReponses.add(new SelectOptionReponse(reviewType.getValue(), reviewType.getValue()));
-        }
+        List<SelectOptionReponse> selectOptionReponses =
+                Arrays.stream(ReviewType.values())
+                        .map(type -> SelectOptionReponse.builder()
+                                .value(type.getValue())
+                                .label(type.getValue())
+                                .build())
+                        .collect(Collectors.toList());
 
         optionAndModelReponse.setSelectOptionStatus(selectOptionReponses);
 
@@ -169,7 +181,8 @@ public class ReviewServiceImp implements ReviewService {
         String slugOld = wat.getSlug();
 
         ObjectUtils.copyFields(review, wat);
-        wat.setSlug(review.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
+//        wat.setSlug(review.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
+        wat.setSlug(generateSlug(review.getName()));
         wat.setType(review.getType());
 
         wat.setMovie(movieRepository.getById(review.getMovieId()));
@@ -218,5 +231,11 @@ public class ReviewServiceImp implements ReviewService {
         optionAndModelReponse.setModel(movieRepository.SelectOptionNameAndid());
 
         return optionAndModelReponse;
+    }
+
+    private String generateSlug(String name) {
+        return name.toLowerCase()
+                .replaceAll("[^a-z0-9\\s]", "")
+                .replaceAll("\\s+", "-");
     }
 }

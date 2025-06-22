@@ -64,14 +64,21 @@ public class WaterCornServiceImpl implements WaterCornService {
         if (waterCornRepository.findByName(watercorn.getName()) != null) {
             throw new AppException(NAME_EXISTED);
         }
-        WaterCorn addWaterCorn = new WaterCorn();
-
-        ObjectUtils.copyFields(watercorn, addWaterCorn);
-
+//        WaterCorn addWaterCorn = new WaterCorn();
+//        ObjectUtils.copyFields(watercorn, addWaterCorn);
 //        addWaterCorn.setSlug(watercorn.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
-        addWaterCorn.setSlug(generateSlug((watercorn.getName())));
+//        addWaterCorn.setSlug(generateSlug((watercorn.getName())));
+//        addWaterCorn.setImage(fileStorageServiceImpl.uploadFile(watercorn.getFile(), "waterCorn"));
 
-        addWaterCorn.setImage(fileStorageServiceImpl.uploadFile(watercorn.getFile(), "waterCorn"));
+        WaterCorn addWaterCorn = WaterCorn.builder()
+                .id(watercorn.getId())
+                .name(watercorn.getName())
+                .slug(generateSlug((watercorn.getName())))
+                .price(watercorn.getPrice())
+                .description(watercorn.getDescription())
+                .image(fileStorageServiceImpl.uploadFile(watercorn.getFile(), "waterCorn"))
+                .build();
+
         waterCornRepository.save(addWaterCorn);
 
         return true;
@@ -97,7 +104,6 @@ public class WaterCornServiceImpl implements WaterCornService {
         if (waterCorn == null) throw new AppException(NOT_FOUND);
         waterCorn.setImage(fileStorageServiceImpl.getUrlFromPublicId(waterCorn.getImage()));
 
-
         return waterCorn;
     }
 
@@ -120,6 +126,7 @@ public class WaterCornServiceImpl implements WaterCornService {
         ObjectUtils.copyFields(watercorn, wat);
         wat.setSlug(generateSlug((watercorn.getName())));
 //        wat.setSlug(watercorn.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
+
 
         waterCornRepository.save(wat);
 
