@@ -26,6 +26,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.cinemas.exception.ErrorCode.NOT_FOUND;
 
@@ -61,23 +62,35 @@ public class HomeCelebServiceImpl implements HomeCelebService {
 
         Page<Celebrity> celebrities = new PageImpl<>(pageList, new PaginationHelper().getPageable(searchCelebRequest), celebrityList.size());
 
-        List<Country> countryList = countryRepository.findAll();
-        List<SelectOptionReponse> optionsCountries = new ArrayList<>();
+//        List<Country> countryList = countryRepository.findAll();
+//        List<SelectOptionReponse> optionsCountries = new ArrayList<>();
+//
+//        for (Country country : countryList) {
+//            optionsCountries.add(new SelectOptionReponse(country.getSlug(), country.getName()));
+//        }
 
-        for (Country country : countryList) {
-            optionsCountries.add(new SelectOptionReponse(country.getSlug(), country.getName()));
-        }
+        List<SelectOptionReponse> optionsCountries = countryRepository.findAll().stream()
+                .map(country -> SelectOptionReponse.builder()
+                        .value(country.getSlug())
+                        .label(country.getName())
+                        .build())
+                .collect(Collectors.toList());
 
         return new SelectOptionCeleb<>(celebrities, optionsCountries);
     }
 
     @Override
     public SelectOptionCeleb<Page<Celebrity>> getAllDirector(SearchCelebRequest searchCelebRequest) {
-        List<Celebrity> celebrityList = celebrityRepository.searchCelebAndCountry(RoleCeleb.DIRECTOR, searchCelebRequest.getSlugCountry());
+//        List<Celebrity> celebrityList = celebrityRepository.searchCelebAndCountry(RoleCeleb.DIRECTOR, searchCelebRequest.getSlugCountry());
+//
+//        celebrityList.forEach(celebrity -> {
+//            celebrity.setImage(fileStorageServiceImpl.getUrlFromPublicId(celebrity.getImage()));
+//        });
 
-        celebrityList.forEach(celebrity -> {
-            celebrity.setImage(fileStorageServiceImpl.getUrlFromPublicId(celebrity.getImage()));
-        });
+        List<Celebrity> celebrityList = celebrityRepository.searchCelebAndCountry(RoleCeleb.DIRECTOR, searchCelebRequest.getSlugCountry())
+                .stream()
+                .peek(celebrity -> celebrity.setImage(fileStorageServiceImpl.getUrlFromPublicId(celebrity.getImage())))
+                .collect(Collectors.toList());
 
         PagedListHolder<Celebrity> pagedListHolder = new PagedListHolder<Celebrity>(celebrityList);
         pagedListHolder.setPage(searchCelebRequest.getPageNo());
@@ -89,12 +102,19 @@ public class HomeCelebServiceImpl implements HomeCelebService {
 
         Page<Celebrity> celebrities = new PageImpl<>(pageList, new PaginationHelper().getPageable(searchCelebRequest), celebrityList.size());
 
-        List<Country> countryList = countryRepository.findAll();
-        List<SelectOptionReponse> optionsCountries = new ArrayList<>();
+//        List<Country> countryList = countryRepository.findAll();
+//        List<SelectOptionReponse> optionsCountries = new ArrayList<>();
+//
+//        for (Country country : countryList) {
+//            optionsCountries.add(new SelectOptionReponse(country.getSlug(), country.getName()));
+//        }
 
-        for (Country country : countryList) {
-            optionsCountries.add(new SelectOptionReponse(country.getSlug(), country.getName()));
-        }
+        List<SelectOptionReponse> optionsCountries = countryRepository.findAll().stream()
+                .map(country -> SelectOptionReponse.builder()
+                        .value(country.getSlug())
+                        .label(country.getName())
+                        .build())
+                .collect(Collectors.toList());
 
         return new SelectOptionCeleb<>(celebrities, optionsCountries);
     }
@@ -111,10 +131,9 @@ public class HomeCelebServiceImpl implements HomeCelebService {
         ObjectUtils.copyFields(celebrity, celebResponse);
 
         List<Movie> movieList = new ArrayList<>();
-        if(celebrity.getRole() == RoleCeleb.ACTOR){
+        if (celebrity.getRole() == RoleCeleb.ACTOR) {
             movieList = celebrity.getMoviesActor();
-        }
-        else{
+        } else {
             movieList = celebrity.getMoviesDirector();
         }
 
@@ -128,6 +147,7 @@ public class HomeCelebServiceImpl implements HomeCelebService {
         celebResponse.setMovieList(movieCelebList);
         return celebResponse;
     }
+
     @Override
     public void incrementViewCount(String slug) {
         Celebrity celebrity = celebrityRepository.findBySlug(slug);

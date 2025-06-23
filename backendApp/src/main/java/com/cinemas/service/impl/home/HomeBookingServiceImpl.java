@@ -21,6 +21,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.cinemas.exception.ErrorCode.NOT_FOUND;
 
@@ -55,45 +56,68 @@ public class HomeBookingServiceImpl implements HomeBookingService {
     @Override
     public bookTicketsResponse getTimeForMovie(String slug, String city, String cinema) {
         List<String> cityList = cinemaRespository.findByCity();
-        List<bookingShowTimeResponse> showtimes = showTimeResponsitory.findDayByMovie_Slug(slug, city, cinema);
+//        List<bookingShowTimeResponse> showtimes = showTimeResponsitory.findDayByMovie_Slug(slug, city, cinema);
         LocalTime currentTimePlus15 = LocalTime.now().plusMinutes(15);
+//        showtimes.forEach(item -> {
+//            item.setCinemaTimeMovies(showTimeResponsitory.findByDayAndMovie_Slug(item.getDay(), slug, currentTimePlus15, city, cinema));
+//        });
+
+        List<bookingShowTimeResponse> showtimes = showTimeResponsitory.findDayByMovie_Slug(slug, city, cinema)
+                .stream()
+                .peek(item -> item.setCinemaTimeMovies(showTimeResponsitory.findByDayAndMovie_Slug(item.getDay(), slug, currentTimePlus15, city, cinema)))
+                .collect(Collectors.toList());
 
         showtimes.forEach(item -> {
-            item.setCinemaTimeMovies(showTimeResponsitory.findByDayAndMovie_Slug(item.getDay(), slug, currentTimePlus15, city, cinema));
-        });
-
-        showtimes.forEach(item -> {
-
             item.getCinemaTimeMovies().forEach(timeMovies -> {
-                List<MovieFormat> listMovieFormat = showTimeResponsitory.findMovieFormat(item.getDay(), slug, currentTimePlus15, timeMovies.getName());
-
-                List<HomeMovieFormatResponse> homeMovieFormatResponses = new ArrayList<>();
-
-                listMovieFormat.forEach(name -> {
-                    HomeMovieFormatResponse homeMovieFormatResponse = new HomeMovieFormatResponse();
-                    homeMovieFormatResponse.setName(name.getValue());
-                    homeMovieFormatResponse.setTimes(showTimeResponsitory.findMovieTimes(item.getDay(), slug, currentTimePlus15, timeMovies.getName(), name));
-
-                    homeMovieFormatResponses.add(homeMovieFormatResponse);
-                });
+//                List<MovieFormat> listMovieFormat = showTimeResponsitory.findMovieFormat(item.getDay(), slug, currentTimePlus15, timeMovies.getName());
+//
+//                List<HomeMovieFormatResponse> homeMovieFormatResponses = new ArrayList<>();
+//
+//                listMovieFormat.forEach(name -> {
+//                    HomeMovieFormatResponse homeMovieFormatResponse = new HomeMovieFormatResponse();
+//                    homeMovieFormatResponse.setName(name.getValue());
+//                    homeMovieFormatResponse.setTimes(showTimeResponsitory.findMovieTimes(item.getDay(), slug, currentTimePlus15, timeMovies.getName(), name));
+//
+//                    homeMovieFormatResponses.add(homeMovieFormatResponse);
+//                });
+//
+//                timeMovies.setMovieFormat(homeMovieFormatResponses);
+                List<HomeMovieFormatResponse> homeMovieFormatResponses = showTimeResponsitory.findMovieFormat(item.getDay(), slug, currentTimePlus15, timeMovies.getName())
+                        .stream()
+                        .map(name -> HomeMovieFormatResponse.builder()
+                                .name(name.getValue())
+                                .times(showTimeResponsitory.findMovieTimes(item.getDay(), slug, currentTimePlus15, timeMovies.getName(), name))
+                                .build())
+                        .collect(Collectors.toList());
 
                 timeMovies.setMovieFormat(homeMovieFormatResponses);
             });
         });
 
-        List<SelectOptionReponse> options = new ArrayList<>();
-        cityList.forEach(item -> {
-            options.add(new SelectOptionReponse(item, item));
-        });
+//        List<SelectOptionReponse> options = new ArrayList<>();
+//        cityList.forEach(item -> {
+//            options.add(new SelectOptionReponse(item, item));
+//        });
+
+        List<SelectOptionReponse> options = cityList.stream()
+                .map(item -> SelectOptionReponse.builder()
+                        .value(item)
+                        .label(item)
+                        .build())
+                .collect(Collectors.toList());
 
 
-        bookTicketsResponse bookTicketsResponse = new bookTicketsResponse();
+        bookTicketsResponse bookticketsResponse = bookTicketsResponse.builder()
+                .city(options)
+                .cinema(cinemaRespository.selectCinema(city))
+                .bookingShowTimeResponses(showtimes)
+                .build();
+//
+//        bookTicketsResponse.setCity(options);
+//        bookTicketsResponse.setCinema(cinemaRespository.selectCinema(city));
+//        bookTicketsResponse.setBookingShowTimeResponses(showtimes);
 
-        bookTicketsResponse.setCity(options);
-        bookTicketsResponse.setCinema(cinemaRespository.selectCinema(city));
-        bookTicketsResponse.setBookingShowTimeResponses(showtimes);
-
-        return bookTicketsResponse;
+        return bookticketsResponse;
     }
 
     @Override
@@ -106,15 +130,25 @@ public class HomeBookingServiceImpl implements HomeBookingService {
             response.setPrice(priceMovie.getPrice());
         }
         LocalTime timeNow = LocalTime.now().plusMinutes(15);
-        List<HomeMovieFormatResponse> homeMovieFormatResponses = new ArrayList<>();
-        List<MovieFormat> listMovieFormat = showTimeResponsitory.findMovieFormat(response.getDate(), timeNow, response.getMovieName(), response.getCinemaName());
-        listMovieFormat.forEach(item -> {
-            HomeMovieFormatResponse homeMovieFormatResponse = new HomeMovieFormatResponse();
-            homeMovieFormatResponse.setName(item.getValue());
-            homeMovieFormatResponse.setTimes(showTimeResponsitory.findshowtimes(response.getDate(), timeNow, response.getMovieName(), response.getCinemaName(), item));
+//        List<HomeMovieFormatResponse> homeMovieFormatResponses = new ArrayList<>();
+//        List<MovieFormat> listMovieFormat = showTimeResponsitory.findMovieFormat(response.getDate(), timeNow, response.getMovieName(), response.getCinemaName());
+//        listMovieFormat.forEach(item -> {
+//            HomeMovieFormatResponse homeMovieFormatResponse = new HomeMovieFormatResponse();
+//            homeMovieFormatResponse.setName(item.getValue());
+//            homeMovieFormatResponse.setTimes(showTimeResponsitory.findshowtimes(response.getDate(), timeNow, response.getMovieName(), response.getCinemaName(), item));
+//
+//            homeMovieFormatResponses.add(homeMovieFormatResponse);
+//        });
 
-            homeMovieFormatResponses.add(homeMovieFormatResponse);
-        });
+
+        List<HomeMovieFormatResponse> homeMovieFormatResponses =
+                showTimeResponsitory.findMovieFormat(response.getDate(), timeNow, response.getMovieName(), response.getCinemaName())
+                        .stream()
+                        .map(item -> HomeMovieFormatResponse.builder()
+                                .name(item.getValue())
+                                .times(showTimeResponsitory.findshowtimes(response.getDate(), timeNow, response.getMovieName(), response.getCinemaName(), item))
+                                .build())
+                        .collect(Collectors.toList());
 
         response.setMovieformats(homeMovieFormatResponses);
 
@@ -123,40 +157,69 @@ public class HomeBookingServiceImpl implements HomeBookingService {
 
     @Override
     public BuyTicketResponse getInfoTicket(String slugmovie, String slugcinema, LocalDate date) {
-        List<Movie> movies = movieRepository.getListBySlug();
+//        BuyTicketResponse buyTicketFast = new BuyTicketResponse();
+        LocalTime currentTimePlus15 = LocalTime.now().plusMinutes(15);
+//        List<Movie> movies = movieRepository.getListBySlug();
+//        List<SelectOptionReponse> movieList = new ArrayList<>();
+//        movies.forEach(movie -> {
+//            movieList.add(new SelectOptionReponse<>(movie.getSlug(), movie.getName()));
+//        });
+        List<SelectOptionReponse> movieList = movieRepository.getListBySlug()
+                .stream()
+                .map(movie -> SelectOptionReponse.builder()
+                        .value(movie.getSlug())
+                        .label(movie.getName())
+                        .build())
+                .collect(Collectors.toList());
+//        buyTicketFast.setMovieList(movieList);
+//        List<SelectOptionReponse> cinemaList = new ArrayList<>();
+//        List<Cinema> cinemas = showTimeResponsitory.findCinemasByMovieSlug(slugmovie);
+//
+//        cinemas.forEach(cinema -> {
+//            cinemaList.add(new SelectOptionReponse<>(cinema.getSlug(), cinema.getName()));
+//        });
+        List<SelectOptionReponse> cinemaList = showTimeResponsitory.findCinemasByMovieSlug(slugmovie).stream()
+                .map(cinema -> SelectOptionReponse.builder()
+                        .value(cinema.getSlug())
+                        .label(cinema.getName())
+                        .build())
+                .collect(Collectors.toList());
+//        buyTicketFast.setCinemaList(cinemaList);
 
-        BuyTicketResponse buyTicketFast = new BuyTicketResponse();
+//        buyTicketFast.setDateList(showTimeResponsitory.findDates(slugcinema, slugmovie));
 
-        List<SelectOptionReponse> movieList = new ArrayList<>();
-        movies.forEach(movie -> {
-            movieList.add(new SelectOptionReponse<>(movie.getSlug(), movie.getName()));
-        });
-        buyTicketFast.setMovieList(movieList);
+//        List<HomeMovieFormatResponse> movieFormatList = new ArrayList<>();
+//        List<MovieFormat> movieFormatName = showTimeResponsitory.getMovieFormatName(slugmovie, slugcinema, date, currentTimePlus15);
+//
+//        movieFormatName.forEach(item -> {
+//            HomeMovieFormatResponse homeMovieFormatResponse = new HomeMovieFormatResponse();
+//            homeMovieFormatResponse.setName(item.getValue());
+//            homeMovieFormatResponse.setTimes(showTimeResponsitory.getTimes(slugmovie, slugcinema, date, currentTimePlus15, item));
+//
+//            movieFormatList.add(homeMovieFormatResponse);
+//        });
+        List<HomeMovieFormatResponse> movieFormatList = showTimeResponsitory.getMovieFormatName(slugmovie, slugcinema, date, currentTimePlus15)
+                .stream()
+                .map(item -> HomeMovieFormatResponse.builder()
+                        .name(item.getValue())
+                        .times(showTimeResponsitory.getTimes(
+                                slugmovie,
+                                slugcinema,
+                                date,
+                                currentTimePlus15,
+                                item
+                        ))
+                        .build())
+                .collect(Collectors.toList());
 
-        List<SelectOptionReponse> cinemaList = new ArrayList<>();
-        List<Cinema> cinemas = showTimeResponsitory.findCinemasByMovieSlug(slugmovie);
+//        buyTicketFast.setMovieFormat(movieFormatList);
 
-        cinemas.forEach(cinema -> {
-            cinemaList.add(new SelectOptionReponse<>(cinema.getSlug(), cinema.getName()));
-        });
-        buyTicketFast.setCinemaList(cinemaList);
-
-        buyTicketFast.setDateList(showTimeResponsitory.findDates(slugcinema, slugmovie));
-
-        List<HomeMovieFormatResponse> movieFormatList = new ArrayList<>();
-        List<MovieFormat> movieFormatName = showTimeResponsitory.getMovieFormatName(slugmovie, slugcinema, date, LocalTime.now().plusMinutes(15));
-
-        movieFormatName.forEach(item -> {
-            HomeMovieFormatResponse homeMovieFormatResponse = new HomeMovieFormatResponse();
-            homeMovieFormatResponse.setName(item.getValue());
-            homeMovieFormatResponse.setTimes(showTimeResponsitory.getTimes(slugmovie, slugcinema, date, LocalTime.now().plusMinutes(15), item));
-
-            movieFormatList.add(homeMovieFormatResponse);
-        });
-
-        buyTicketFast.setMovieFormat(movieFormatList);
-
-        return buyTicketFast;
+        return BuyTicketResponse.builder()
+                .movieList(movieList)
+                .cinemaList(cinemaList)
+                .dateList(showTimeResponsitory.findDates(slugcinema, slugmovie))
+                .movieFormat(movieFormatList)
+                .build();
     }
 
     @Override
@@ -189,7 +252,6 @@ public class HomeBookingServiceImpl implements HomeBookingService {
 //        }
 //        VoucherResponse voucherResponse = new VoucherResponse();
 //        ObjectUtils.copyFields(voucher, voucherResponse);
-
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userRepository
                 .findByEmail(userDetails.getUsername())
@@ -260,30 +322,42 @@ public class HomeBookingServiceImpl implements HomeBookingService {
                 }
             });
         }
-
-        List<bookingShowTimeResponse> showtimes = showTimeResponsitory.findDayByMovie_Slug(slugMovie);
         LocalTime currentTimePlus15 = LocalTime.now().plusMinutes(15);
 
-        showtimes.forEach(item -> {
-            item.setCinemaTimeMovies(showTimeResponsitory.findByDayAndMovie_Slug(item.getDay(), slugMovie, currentTimePlus15));
-        });
+//        List<bookingShowTimeResponse> showtimes = showTimeResponsitory.findDayByMovie_Slug(slugMovie);
+//        showtimes.forEach(item -> {
+//            item.setCinemaTimeMovies(showTimeResponsitory.findByDayAndMovie_Slug(item.getDay(), slugMovie, currentTimePlus15));
+//        });
+
+        List<bookingShowTimeResponse> showtimes = showTimeResponsitory.findDayByMovie_Slug(slugMovie)
+                .stream()
+                .peek(item -> item.setCinemaTimeMovies(showTimeResponsitory.findByDayAndMovie_Slug(item.getDay(), slugMovie, currentTimePlus15)))
+                .collect(Collectors.toList());
 
         showtimes.forEach(item -> {
-
             item.getCinemaTimeMovies().forEach(timeMovies -> {
-                List<MovieFormat> listMovieFormat = showTimeResponsitory.findMovieFormat(item.getDay(), slugMovie, currentTimePlus15, timeMovies.getName());
-
-                List<HomeMovieFormatResponse> homeMovieFormatResponses = new ArrayList<>();
-
-                listMovieFormat.forEach(name -> {
-                    HomeMovieFormatResponse homeMovieFormatResponse = new HomeMovieFormatResponse();
-                    homeMovieFormatResponse.setName(name.getValue());
-                    homeMovieFormatResponse.setTimes(showTimeResponsitory.findMovieTimes(item.getDay(), slugMovie, currentTimePlus15, timeMovies.getName(), name));
-
-                    homeMovieFormatResponses.add(homeMovieFormatResponse);
-                });
+//                List<MovieFormat> listMovieFormat = showTimeResponsitory.findMovieFormat(item.getDay(), slugMovie, currentTimePlus15, timeMovies.getName());
+//
+//                List<HomeMovieFormatResponse> homeMovieFormatResponses = new ArrayList<>();
+//
+//                listMovieFormat.forEach(name -> {
+//                    HomeMovieFormatResponse homeMovieFormatResponse = HomeMovieFormatResponse.builder()
+//                            .name(name.getValue())
+//                            .times(showTimeResponsitory.findMovieTimes(item.getDay(), slugMovie, currentTimePlus15, timeMovies.getName(), name))
+//                            .build();
+//
+//                    homeMovieFormatResponses.add(homeMovieFormatResponse);
+//                });
+                List<HomeMovieFormatResponse> homeMovieFormatResponses = showTimeResponsitory.findMovieFormat(item.getDay(), slugMovie, currentTimePlus15, timeMovies.getName())
+                        .stream()
+                        .map(name -> HomeMovieFormatResponse.builder()
+                                .name(name.getValue())
+                                .times(showTimeResponsitory.findMovieTimes(item.getDay(), slugMovie, currentTimePlus15, timeMovies.getName(), name))
+                                .build())
+                        .collect(Collectors.toList());
 
                 timeMovies.setMovieFormat(homeMovieFormatResponses);
+
             });
         });
 

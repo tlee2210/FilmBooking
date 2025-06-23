@@ -19,6 +19,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.cinemas.exception.ErrorCode.NOT_FOUND;
 
@@ -83,11 +84,16 @@ public class HomeBlogServiceImpl implements HomeBlogService {
     }
 
     public List<MovieBlog> getAllBlog2(String name) {
-        List<MovieBlog> blogs = movieBlogRepository.findListByName(name);
+//        List<MovieBlog> blogs = movieBlogRepository.findListByName(name);
+//
+//        blogs.forEach(item -> {
+//            item.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(item.getThumbnail()));
+//        });
 
-        blogs.forEach(item -> {
-            item.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(item.getThumbnail()));
-        });
+        List<MovieBlog> blogs = movieBlogRepository.findListByName(name)
+                .stream()
+                .peek(item -> item.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(item.getThumbnail())))
+                .collect(Collectors.toList());
 
         return blogs;
     }
