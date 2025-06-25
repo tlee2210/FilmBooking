@@ -22,11 +22,12 @@ public class Promotion {
     @Column
     private String name;
 
+    @Column
+    private String slug;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column
-    private String slug;
     @Column
     private Integer view = 0;
 

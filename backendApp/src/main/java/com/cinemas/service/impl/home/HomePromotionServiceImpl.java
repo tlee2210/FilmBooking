@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.cinemas.exception.ErrorCode.NOT_FOUND;
 
@@ -32,21 +33,37 @@ public class HomePromotionServiceImpl implements HomePromotionService {
 
     @Override
     public Page<ItemIntroduce> getAllPromotion(PaginationHelper paginationHelper) {
-        List<Promotion> promotions = promotionRepository.findAll();
+//        List<Promotion> promotions = promotionRepository.findAll();
+//
+//        promotions.forEach(promotion -> {
+//            String imageUrl = fileStorageServiceImpl.getUrlFromPublicId(promotion.getImage());
+//            promotion.setImage(imageUrl);
+//        });
 
-        promotions.forEach(promotion -> {
-            String imageUrl = fileStorageServiceImpl.getUrlFromPublicId(promotion.getImage());
-            promotion.setImage(imageUrl);
-        });
+        List<Promotion> promotions = promotionRepository.findAll().stream()
+                .peek(promotion -> promotion.setImage(
+                        fileStorageServiceImpl.getUrlFromPublicId(promotion.getImage())))
+                .toList();
 
-        List<ItemIntroduce> items = new ArrayList<>();
-        promotions.forEach(promotion -> {
-            ItemIntroduce item = new ItemIntroduce();
-            ObjectUtils.copyFields(promotion, item);
-            item.setDescription(null);
-            item.setImagePortrait(promotion.getImage());
-            items.add(item);
-        });
+//        List<ItemIntroduce> items = new ArrayList<>();
+//        promotions.forEach(promotion -> {
+//            ItemIntroduce item = new ItemIntroduce();
+//            ObjectUtils.copyFields(promotion, item);
+//            item.setDescription(null);
+//            item.setImagePortrait(promotion.getImage());
+//            items.add(item);
+//        });
+
+        List<ItemIntroduce> items = promotions.stream()
+                .map(promotion -> ItemIntroduce.builder()
+                        .id(promotion.getId())
+                        .name(promotion.getName())
+                        .slug(promotion.getSlug())
+                        .description(null)
+                        .imagePortrait(promotion.getImage())
+                        .build())
+                .collect(Collectors.toList());
+
 
         PagedListHolder<ItemIntroduce> pagedListHolder = new PagedListHolder<ItemIntroduce>(items);
         pagedListHolder.setPage(paginationHelper.getPageNo());
@@ -63,10 +80,17 @@ public class HomePromotionServiceImpl implements HomePromotionService {
 
     @Override
     public List<Promotion> getAllPromotion2(String name) {
-        List<Promotion> promotions = promotionRepository.searchByName(name);
-        promotions.forEach(promotion -> {
-            promotion.setImage(fileStorageServiceImpl.getUrlFromPublicId(promotion.getImage()));
-        });
+//        List<Promotion> promotions = promotionRepository.searchByName(name);
+//        promotions.forEach(promotion -> {
+//            promotion.setImage(fileStorageServiceImpl.getUrlFromPublicId(promotion.getImage()));
+//        });
+
+
+
+        List<Promotion> promotions = promotionRepository.searchByName(name).stream()
+                .peek(promotion -> promotion.setImage(fileStorageServiceImpl.getUrlFromPublicId(promotion.getImage())))
+                .collect(Collectors.toList());
+
         return promotions;
     }
 
@@ -80,13 +104,22 @@ public class HomePromotionServiceImpl implements HomePromotionService {
         promotion.setView(promotion.getView() + 1);
         promotionRepository.save(promotion);
 
-        HomePromotionResponse homePromotionResponse = new HomePromotionResponse();
-        homePromotionResponse.setPromotion(promotion);
-        homePromotionResponse.setPromotionRelate(promotionRepository.promotionRelate());
+//        HomePromotionResponse homePromotionResponse = new HomePromotionResponse();
+//        homePromotionResponse.setPromotion(promotion);
+//        homePromotionResponse.setPromotionRelate(promotionRepository.promotionRelate());
+//
+//        homePromotionResponse.getPromotionRelate().forEach(item -> {
+//            item.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(item.getImagePortrait()));
+//        });
 
-        homePromotionResponse.getPromotionRelate().forEach(item -> {
-            item.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(item.getImagePortrait()));
-        });
+        HomePromotionResponse homePromotionResponse = HomePromotionResponse.builder()
+                .promotion(promotion)
+                .promotionRelate(
+                        promotionRepository.promotionRelate().stream()
+                                .peek(item -> item.setImagePortrait(
+                                        fileStorageServiceImpl.getUrlFromPublicId(item.getImagePortrait())))
+                                .toList())
+                .build();
 
         return homePromotionResponse;
     }

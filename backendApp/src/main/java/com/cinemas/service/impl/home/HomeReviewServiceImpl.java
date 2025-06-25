@@ -20,7 +20,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.cinemas.exception.ErrorCode.NOT_FOUND;
 
@@ -34,11 +36,16 @@ public class HomeReviewServiceImpl implements HomeReviewService {
 
     @Override
     public SelectOptionAndModelReponse<Page<Review>> getAllReviews(SearchReviewRequest searchReviewRequest) {
-        List<Review> reviewList = reviewRepository.findByType(searchReviewRequest.type);
+//        List<Review> reviewList = reviewRepository.findByType(searchReviewRequest.type);
+//
+//        reviewList.forEach(item -> {
+//            item.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(item.getThumbnail()));
+//        });
 
-        reviewList.forEach(item -> {
-            item.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(item.getThumbnail()));
-        });
+        List<Review> reviewList = reviewRepository.findByType(searchReviewRequest.type)
+                .stream()
+                .peek(item -> item.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(item.getThumbnail())))
+                .toList();
 
         PagedListHolder<Review> pagedListHolder = new PagedListHolder<Review>(reviewList);
         pagedListHolder.setPage(searchReviewRequest.getPageNo());
@@ -50,28 +57,54 @@ public class HomeReviewServiceImpl implements HomeReviewService {
 
         Page<Review> reviews = new PageImpl<>(pageList, new PaginationHelper().getPageable(searchReviewRequest), reviewList.size());
 
-        List<SelectOptionReponse> optionsTypes = new ArrayList<>();
+//        List<SelectOptionReponse> optionsTypes = new ArrayList<>();
+//
+//        for (ReviewType reviewType : ReviewType.values()) {
+//            optionsTypes.add(new SelectOptionReponse(reviewType.name(), reviewType.getValue()));
+//        }
+//
+        List<SelectOptionReponse> optionsTypes = Arrays.stream(ReviewType.values())
+                .map(Option -> SelectOptionReponse.builder()
+                        .value(Option.name())
+                        .label(Option.name())
+                        .build())
+                .collect(Collectors.toList());
 
-        for (ReviewType reviewType : ReviewType.values()) {
-            optionsTypes.add(new SelectOptionReponse(reviewType.name(), reviewType.getValue()));
-        }
         return new SelectOptionAndModelReponse<>(optionsTypes, reviews);
     }
 
     @Override
     public List<ReviewResponse2> getAllReviews2(String name) {
-        List<Review> reviewList = reviewRepository.findListByName(name);
+//        List<Review> reviewList = reviewRepository.findListByName(name);
+//
+//        reviewList.forEach(item -> {
+//            item.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(item.getThumbnail()));
+//        });
 
-        reviewList.forEach(item -> {
-            item.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(item.getThumbnail()));
-        });
+        List<Review> reviewList = reviewRepository.findListByName(name)
+                .stream()
+                .peek(item -> item.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(item.getThumbnail())))
+                .toList();
 
-        List<ReviewResponse2> reviews = new ArrayList<>();
-        for (Review review : reviewList) {
-            ReviewResponse2 response = new ReviewResponse2();
-            ObjectUtils.copyFields(review, response);
-            reviews.add(response);
-        }
+//        List<ReviewResponse2> reviews = new ArrayList<>();
+//        for (Review review : reviewList) {
+//            ReviewResponse2 response = new ReviewResponse2();
+//            ObjectUtils.copyFields(review, response);
+//            reviews.add(response);
+//        }
+
+        List<ReviewResponse2> reviews = reviewList.stream()
+                .map(item -> ReviewResponse2.builder()
+                        .id(item.getId())
+                        .name(item.getName())
+                        .type(item.getType())
+                        .view(item.getView())
+                        .slug(item.getSlug())
+                        .description(item.getDescription())
+                        .thumbnail(item.getThumbnail())
+                        .movie(item.getMovie())
+                        .build())
+                .collect(Collectors.toList());
 
         return reviews;
     }
@@ -85,13 +118,23 @@ public class HomeReviewServiceImpl implements HomeReviewService {
         review.setView(review.getView() + 1);
         reviewRepository.save(review);
 
-        HomeReviewResponse homeReviewResponse = new HomeReviewResponse();
-        homeReviewResponse.setReview(review);
-        homeReviewResponse.setReviewList(reviewRepository.reviewRelate(review.getType()));
+//        HomeReviewResponse homeReviewResponse = new HomeReviewResponse();
+//        homeReviewResponse.setReview(review);
+//        homeReviewResponse.setReviewList(reviewRepository.reviewRelate(review.getType()));
+//
+//        homeReviewResponse.getReviewList().forEach(item -> {
+//            item.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(item.getImagePortrait()));
+//        });
 
-        homeReviewResponse.getReviewList().forEach(item -> {
-            item.setImagePortrait(fileStorageServiceImpl.getUrlFromPublicId(item.getImagePortrait()));
-        });
+        HomeReviewResponse homeReviewResponse = HomeReviewResponse
+                .builder()
+                .review(review)
+                .reviewList(reviewRepository.reviewRelate(review.getType())
+                        .stream()
+                        .peek(item -> item.setImagePortrait(
+                                fileStorageServiceImpl.getUrlFromPublicId(item.getImagePortrait())))
+                        .toList())
+                .build();
 
         return homeReviewResponse;
     }
@@ -103,8 +146,21 @@ public class HomeReviewServiceImpl implements HomeReviewService {
         review.setThumbnail(fileStorageServiceImpl.getUrlFromPublicId(review.getThumbnail()));
         review.setView(review.getView() + 1);
         reviewRepository.save(review);
-        ReviewResponse2 reviewResponse2 = new ReviewResponse2();
-        ObjectUtils.copyFields(review, reviewResponse2);
-        return reviewResponse2;
+
+//        ReviewResponse2 reviewResponse = new ReviewResponse2();
+//        ObjectUtils.copyFields(review, reviewResponse2);
+
+        ReviewResponse2 reviewResponse = ReviewResponse2.builder()
+                .id(review.getId())
+                .name(review.getName())
+                .type(review.getType())
+                .view(review.getView())
+                .slug(review.getSlug())
+                .description(review.getDescription())
+                .thumbnail(review.getThumbnail())
+                .movie(review.getMovie())
+                .build();
+
+        return reviewResponse;
     }
 }
