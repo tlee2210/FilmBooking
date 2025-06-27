@@ -32,8 +32,4 @@ public class PriceMovie {
     @JsonIgnore
     Movie movie;
 
-    public PriceMovie(LocalDate date, Float price) {
-        this.date = date;
-        this.price = price;
-    }
 }

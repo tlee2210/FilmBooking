@@ -47,6 +47,9 @@ public class MovieServiceImpl implements MovieService {
     private MovieGenreRepository movieGenreRepository;
 
     @Autowired
+    private PriceMovieResponsetory priceMovieResponsetory;
+
+    @Autowired
     FileStorageServiceImpl fileStorageServiceImpl;
 
     @Override
@@ -292,26 +295,17 @@ public class MovieServiceImpl implements MovieService {
             throw new AppException(NAME_EXISTED);
         }
 
-        String ImagePortrait = movie.getImagePortrait();
-        String ImageLandscape = movie.getImageLandscape();
-
-        ObjectUtils.copyFields(movieRequest, movie);
         if (movieRequest.getImageLandscape() != null && !movieRequest.getImageLandscape().isEmpty()) {
             fileStorageServiceImpl.deleteFile(movie.getImageLandscape());
             movie.setImageLandscape(fileStorageServiceImpl.uploadFile(movieRequest.getImageLandscape(), "movie"));
-        } else {
-            movie.setImageLandscape(ImageLandscape);
         }
 
         if (movieRequest.getImagePortrait() != null && !movieRequest.getImagePortrait().isEmpty()) {
             fileStorageServiceImpl.deleteFile(movie.getImagePortrait());
             movie.setImagePortrait(fileStorageServiceImpl.uploadFile(movieRequest.getImagePortrait(), "movie"));
-        } else {
-            movie.setImagePortrait(ImagePortrait);
         }
 
         populateMovieEntity(movie, movieRequest);
-
 //        //set slug
 ////        movie.setSlug(movieRequest.getName().toLowerCase().replaceAll("[^a-z0-9\\s]", "").replaceAll("\\s+", "-"));
 //        movie.setSlug(generateSlug(movieRequest.getName()));
@@ -348,14 +342,13 @@ public class MovieServiceImpl implements MovieService {
 //                movie.getPriceMovies().add(priceMovie);
 //            });
 //        }
-
         movieRepository.save(movie);
 
         return true;
     }
 
     private void populateMovieEntity(Movie movie, MovieRequest request) {
-        ObjectUtils.copyFields(request, movie);
+//        ObjectUtils.copyFields(request, movie);
         movie.setSlug(generateSlug(request.getName()));
         movie.setStatus(request.getStatus());
         movie.setCountry(countryRepository.findById(request.getCountryId()));
@@ -377,17 +370,19 @@ public class MovieServiceImpl implements MovieService {
         movie.setDirector(directors);
 
         if (request.getPrices() != null) {
-            List<PriceMovie> prices = request.getPrices().stream()
-                    .map(price -> PriceMovie.builder()
-                            .date(price.getDate())
-                            .price(price.getPrice())
-                            .movie(movie)
-                            .build())
-                    .collect(Collectors.toList());
-            movie.setPriceMovies(prices);
+            movie.getPriceMovies().clear();
+
+            for (var priceRequest : request.getPrices()) {
+                PriceMovie priceMovie = PriceMovie.builder()
+                        .date(priceRequest.getDate())
+                        .price(priceRequest.getPrice())
+                        .movie(movie)
+                        .build();
+
+                movie.getPriceMovies().add(priceMovie);
+            }
         }
     }
-
 
     @Override
     public Movie findMovieById(Integer id) {
