@@ -852,16 +852,16 @@ const MovieEdit = (props) => {
                             onChange={([selectedDate]) => {
                               validation.setFieldValue("endDate", selectedDate)
                             }}
-                            options={{
-                              minDate: validation.values.releaseDate
-                                ? new Date(
-                                    new Date(
-                                      validation.values.releaseDate
-                                    ).getTime() +
-                                      30 * 24 * 60 * 60 * 1000
-                                  )
-                                : new Date().fp_incr(45),
-                            }}
+                            // options={{
+                            //   minDate: validation.values.releaseDate
+                            //     ? new Date(
+                            //         new Date(
+                            //           validation.values.releaseDate
+                            //         ).getTime() +
+                            //           30 * 24 * 60 * 60 * 1000
+                            //       )
+                            //     : new Date().fp_incr(45),
+                            // }}
                           />
                           {validation.errors.endDate &&
                           validation.touched.endDate ? (
