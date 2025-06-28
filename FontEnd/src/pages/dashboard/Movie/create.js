@@ -254,7 +254,7 @@ const MovieCreate = (props) => {
       ),
     }),
     onSubmit: (values) => {
-      // console.log(values);
+      console.log(values);
       const formData = new FormData()
       formData.append("name", values.name)
       formData.append("duration_movie", values.duration_movie)
