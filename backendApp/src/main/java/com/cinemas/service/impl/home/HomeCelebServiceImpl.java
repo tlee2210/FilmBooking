@@ -144,7 +144,9 @@ public class HomeCelebServiceImpl implements HomeCelebService {
             movieCelebResponse.setImageLandscape(fileStorageServiceImpl.getUrlFromPublicId(movie.getImageLandscape()));
             movieCelebList.add(movieCelebResponse);
         }
+
         celebResponse.setMovieList(movieCelebList);
+
         return celebResponse;
     }
 

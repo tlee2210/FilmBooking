@@ -30,7 +30,8 @@ import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 public class CinemaController {
-    CinemaService cinemaService;
+    @Autowired
+    CinemaService cinemaServices;
 
     /**
      * get all list or search Cinema
@@ -43,7 +44,7 @@ public class CinemaController {
      * @param sort
      * @return
      */
-    @GetMapping("/v1")
+    @GetMapping("/v1/cinemas")
     public APIResponse<SelectOptionAndModelReponse<Page<Cinema>>> getAllCinema(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) StatusCinema status,
@@ -53,7 +54,7 @@ public class CinemaController {
             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sort) {
 
         cinemaSearchRequest cinemaSearchRequest = new cinemaSearchRequest(search, status, city, pageNo - 1, pageSize, sort);
-        SelectOptionAndModelReponse<Page<Cinema>> cinemaList = cinemaService.getAllCinema(cinemaSearchRequest);
+        SelectOptionAndModelReponse<Page<Cinema>> cinemaList = cinemaServices.getAllCinema(cinemaSearchRequest);
         APIResponse<SelectOptionAndModelReponse<Page<Cinema>>> apiResponse = new APIResponse<>();
         apiResponse.setResult(cinemaList);
         apiResponse.setCode(200);
@@ -70,7 +71,7 @@ public class CinemaController {
      */
     @PostMapping("/v1/create")
     public APIResponse<String> CreateCinema(@ModelAttribute CinemaRequest cinemaRequest) throws IOException {
-        boolean check = cinemaService.createCinema(cinemaRequest);
+        boolean check = cinemaServices.createCinema(cinemaRequest);
 
         if (check) {
             APIResponse<String> apiResponse = new APIResponse<>();
@@ -92,7 +93,7 @@ public class CinemaController {
     @GetMapping("/v1/{slug}/edit")
     public APIResponse<Cinema> getCinemaEdit(@PathVariable String slug) {
 
-        Cinema cinema = cinemaService.getCinemaEdit(slug);
+        Cinema cinema = cinemaServices.getCinemaEdit(slug);
 
         APIResponse<Cinema> cinemaAPIResponse = new APIResponse<>();
         cinemaAPIResponse.setCode(200);
@@ -111,7 +112,7 @@ public class CinemaController {
     @PutMapping("/v1/update")
     public APIResponse<String> updateCinema(@ModelAttribute CinemaRequest cinemaRequest) throws IOException {
 
-        boolean checkUpdate = cinemaService.updateCinema(cinemaRequest);
+        boolean checkUpdate = cinemaServices.updateCinema(cinemaRequest);
         if (checkUpdate) {
             APIResponse<String> apiResponse = new APIResponse();
             apiResponse.setCode(200);
@@ -132,7 +133,7 @@ public class CinemaController {
      */
     @DeleteMapping("/v1/delete/{slug}")
     public APIResponse<Integer> deleteCinema(@PathVariable String slug) throws IOException {
-        int id = cinemaService.deleteCinema(slug);
+        int id = cinemaServices.deleteCinema(slug);
         if (id > 0) {
             APIResponse<Integer> apiResponse = new APIResponse();
             apiResponse.setCode(200);
@@ -147,7 +148,7 @@ public class CinemaController {
 
     @GetMapping("/v1/{id}")
     public APIResponse<Cinema> getCinemaById(@PathVariable Integer id) {
-        Cinema cinema = cinemaService.findCinemaById(id);
+        Cinema cinema = cinemaServices.findCinemaById(id);
         APIResponse<Cinema> apiResponse = new APIResponse<>();
         apiResponse.setCode(200);
         apiResponse.setResult(cinema);
