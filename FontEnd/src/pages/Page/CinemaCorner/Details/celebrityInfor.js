@@ -104,7 +104,7 @@ const ActorInfor = (props) => {
                                 <Link to={`/movie/${movie.slug}/details`}>
                                   <div className="movie-item-ActorInfor hadow-lg p-3 bg-white rounded">
                                     <img
-                                      src={movie.image || "default_image_url"}
+                                      src={movie.imageLandscape || "default_image_url"}
                                       alt={movie.name}
                                       className="img-fluid"
                                     />
