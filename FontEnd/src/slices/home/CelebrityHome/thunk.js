@@ -23,7 +23,7 @@ export const getcelebrityDetails = (slug, history) => async (dispatch) => {
   await axios
     .get(`http://localhost:8081/api/home/celebrity/v1/detail/${slug}`)
     .then((response) => {
-      // console.log(response);
+      console.log(response);
       dispatch(setItem({ data: response?.data?.result }));
     })
     .catch((error) => {
