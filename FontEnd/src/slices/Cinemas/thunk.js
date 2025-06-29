@@ -5,7 +5,7 @@ import axios from "axios";
 export const getCinema =
   (search, status, city, pageNo, pageSize) => async (dispatch) => {
     await axios
-      .get(`http://localhost:8081/api/admin/cinema/v1`, {
+      .get(`http://localhost:8081/api/admin/cinema/v1/cinemas`, {
         params: { search, status, city, pageNo, pageSize },
       })
       .then((response) => {
