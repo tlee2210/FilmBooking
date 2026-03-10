@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +25,13 @@ import java.util.Map;
 public class FileUploadController {
     UploadFileService uploadFileService;
 
+    /**
+     *
+     * @param file
+     * @param type
+     * @return
+     * @throws IOException
+     */
     @PostMapping("/v1")
     public ResponseEntity<Map<String, String>> uploadFileReview(
             @RequestParam("upload") MultipartFile file,
