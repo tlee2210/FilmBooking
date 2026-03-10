@@ -146,6 +146,11 @@ public class CinemaController {
         throw new AppException(CREATE_FAILED);
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     @GetMapping("/v1/{id}")
     public APIResponse<Cinema> getCinemaById(@PathVariable Integer id) {
         Cinema cinema = cinemaServices.findCinemaById(id);
