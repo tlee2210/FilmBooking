@@ -28,6 +28,14 @@ import static com.cinemas.exception.ErrorCode.UPDATE_FAILED;
 public class MovieBlogController {
     MovieBlogService movieBlogService;
 
+    /**
+     *
+     * @param name
+     * @param pageNo
+     * @param pageSize
+     * @param sort
+     * @return
+     */
     @GetMapping("/v1")
     public APIResponse<Page<MovieBlog>> getAllMovieBlog(
             @RequestParam(required = false) String name,
