@@ -30,6 +30,17 @@ import java.time.LocalDate;
 public class BookingController {
     BookingService bookingService;
 
+    /**
+     *
+     * @param userName
+     * @param startDay
+     * @param endDay
+     * @param movieName
+     * @param pageNo
+     * @param pageSize
+     * @param sort
+     * @return
+     */
     @GetMapping("/v1")
     public APIResponse<Page<BookingTableResponse>> getAllBooking(
             @RequestParam(required = false) String userName,
